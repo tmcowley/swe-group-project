@@ -18,12 +18,12 @@ Back-end: [Java Spark](https://sparkjava.com/)
 
 Compile:
 ```
-cd app; mvn compile // compile
+cd app; mvn compile 
 ```
 
 Exec:
 ```
-mvn exec:java // execute
+mvn exec:java 
 ```
 
 Render Website: 

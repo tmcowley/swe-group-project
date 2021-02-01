@@ -6,6 +6,7 @@ An application allowing for real-time event feedback
 * See the project specification [here](https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs261/)
 * Authors: George Denny, Alexander Price, Moustafa Eladawy, Yang Tang, Thomas Cowley (@tmcowley)
 * Project Tutor: Mahshid Mehr Nezhad
+* Date: January to March, 2021
 
 ## Solution Overview
 Web-based application, Android application, emulated iOS application

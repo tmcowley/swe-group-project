@@ -15,6 +15,9 @@ Web-based application, Android application, emulated iOS application
 Front-end: [React](https://reactjs.org/)<br>
 Back-end: [Java Spark](https://sparkjava.com/)
 
+### Mobile-app
+Built with: React Native
+
 ## Set-up and Initialization
 
 Compile:

@@ -14,8 +14,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <exec.mainClass>app.App</exec.mainClass>
   </properties>
 
   <dependencies>
@@ -75,6 +76,10 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <!-- <configuration>
+            <mainClass>app</mainClass>
+        </configuration> -->
+        
       </plugins>
     </pluginManagement>
   </build>

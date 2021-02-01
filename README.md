@@ -10,6 +10,10 @@ An application allowing for real-time event feedback
 ## Solution Overview
 Web-based application, Android application, emulated iOS application
 
+### Web-app
+Front-end: [React]{https://reactjs.org/}
+Back-end: [Java Spark]{https://sparkjava.com/}
+
 ## Set-up and Initialization
 
 ## Demonstration

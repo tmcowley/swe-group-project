@@ -16,4 +16,19 @@ Back-end: [Java Spark](https://sparkjava.com/)
 
 ## Set-up and Initialization
 
+Compile:
+```
+cd app; mvn compile // compile
+```
+
+Exec:
+```
+mvn exec:java // execute
+```
+
+Render Website: 
+```
+http://localhost:4567/hello
+```
+
 ## Demonstration

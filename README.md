@@ -16,7 +16,7 @@ Front-end: [React](https://reactjs.org/)<br>
 Back-end: [Java Spark](https://sparkjava.com/)
 
 ### Mobile-app
-Built with: React Native
+Built with: [React Native](https://reactnative.dev/)
 
 ## Set-up and Initialization
 

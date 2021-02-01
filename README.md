@@ -1,4 +1,4 @@
-# *Live Event Feedback* Project
+# ResMus: A *Live Event Feedback* Project
 An application allowing for real-time event feedback
 
 ## Context

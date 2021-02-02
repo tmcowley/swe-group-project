@@ -40,10 +40,10 @@ CREATE TABLE event(
     eventCode   VARCHAR(4)
         CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
     hostID      SERIAL,
-    FOREIGN KEY (hostID)
-        REFERNCES host(hostID)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
+    -- FOREIGN KEY (hostID)
+    --     REFERNCES host(hostID)
+    --     ON UPDATE CASCADE
+    --     ON DELETE CASCADE,
     PRIMARY KEY (eventID)
 );
 COMMENT ON TABLE event IS 'storage of an event';

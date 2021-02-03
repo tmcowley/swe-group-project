@@ -14,14 +14,13 @@ package app;
 
 import static spark.Spark.*;
 
+import app.Event;
+
 public class App {
     public static void main(String[] args) {
         get("/hello", (req, res) -> "Hello World");
         get("/yoitworkd", (req, res) -> "hello there");
         get("/hola", (req, res) -> "holla");
-
-        Validator vTest = new Validator();
     }
-
 
 }

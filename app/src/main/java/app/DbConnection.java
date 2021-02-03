@@ -9,8 +9,7 @@ import java.sql.ResultSet;
 import app.Validator;
 import app.Event;
 
-// dependencies (see Maven: pom.xml)
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils; // eventCode generation
 
 public class DbConnection{
 
@@ -150,20 +149,6 @@ public class DbConnection{
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
         return event;
-    } 
-
-    /**
-     * Generate a unique event code 
-     * (4-didit, case insensitive alpha-numeric String)
-     * @return the generated event code
-     */
-    private String generateUniqueEventCode(){
-        String eventCode = null;
-        do {
-            eventCode = RandomStringUtils.randomAlphanumeric(4).toUpperCase();
-        } while (eventCodeExists(eventCode));
-
-        return eventCode;
     }
 
     /**
@@ -193,6 +178,20 @@ public class DbConnection{
         }
 
         return codeExists;
+    }
+
+    /**
+     * Generate a unique event code 
+     * (4-didit, case insensitive alpha-numeric String)
+     * @return the generated event code
+     */
+    protected String generateUniqueEventCode(){
+        String eventCode = null;
+        while (eventCode == null || eventCodeExists(eventCode)){
+            eventCode = RandomStringUtils.randomAlphanumeric(4).toUpperCase();
+        }
+
+        return eventCode;
     }
 
 }

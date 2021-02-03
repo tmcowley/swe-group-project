@@ -7,7 +7,6 @@ public class Validator {
     // public static void main(String[] args) {}
 
     public Validator(){
-
         // tests
         System.out.println("Validation tests: t, f, t, f");
         System.out.println(checkEventCode("CCCC"));

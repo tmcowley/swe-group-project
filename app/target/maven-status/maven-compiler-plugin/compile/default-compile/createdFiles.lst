@@ -1,3 +1,4 @@
+app/Validator.class
 app/Event.class
 app/DbConnection.class
 app/App.class

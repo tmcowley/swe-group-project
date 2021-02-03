@@ -19,5 +19,9 @@ public class App {
         get("/hello", (req, res) -> "Hello World");
         get("/yoitworkd", (req, res) -> "hello there");
         get("/hola", (req, res) -> "holla");
+
+        Validator vTest = new Validator();
     }
+
+
 }

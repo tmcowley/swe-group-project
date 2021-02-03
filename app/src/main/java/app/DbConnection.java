@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
+import app.Validator;
 import app.Event;
 
 // dependencies (see Maven: pom.xml)
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 
 public class DbConnection{
 
@@ -85,7 +85,7 @@ public class DbConnection{
      * @return Event object corresponding to eventCode
      */
     public Event getEventFromEventCode(String eventCode){
-        eventCode = sanitizeEventCode(eventCode);
+        eventCode = Validator.sanitizeEventCode(eventCode);
         if (eventCode == null)
             return null;
         if (!eventCodeExists(eventCode)) 
@@ -193,22 +193,6 @@ public class DbConnection{
         }
 
         return codeExists;
-    }
-
-    /**
-     * Sanitize an event code to ensure it is:
-     * non-null, 4-digits in length, alpha-numeric
-     * @param eventCode event code to be sanitized
-     * @return event code in upper case, null if fails
-     */
-    private String sanitizeEventCode(String eventCode){
-        if (eventCode == null)
-            return null;
-        if (eventCode.length() != 4)
-            return null;
-        if (!StringUtils.isAlphanumeric(eventCode.toUpperCase()))
-            return null;
-        return eventCode.toUpperCase();
     }
 
 }

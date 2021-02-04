@@ -12,38 +12,61 @@ CREATE TYPE eventType AS ENUM ('lecture', 'seminar', 'conference', 'workshop', '
  --   SCHEMA   --
 ------------------
 
--- CREATE TABLE participant(
---     participantID   SERIAL,
---     address         INET,
---     fName           VARCHAR(35),
---     lName           VARCHAR(35),
---     sysBan          BOOLEAN
---         DEFAULT 0,
--- );
+CREATE TABLE participant(
+    participantID   SERIAL           NOT NULL,
+    address         INET             NOT NULL,
+    fName           VARCHAR(35)      NOT NULL,
+    lName           VARCHAR(35)      NOT NULL,
+    sysBan          BOOLEAN          DEFAULT 0,
+    PRIMARY KEY (participantID)
+);
 
 CREATE TABLE host(
-    hostID          SERIAL,
-    address         INET,
-    eAddress        citext UNIQUE,
-    fName           VARCHAR(35),
-    lName           VARCHAR(35),
-    sysBan          BOOLEAN
-        DEFAULT 0,
+    hostID          SERIAL           NOT NULL,
+    address         INET             NOT NULL,
+    eAddress        citext UNIQUE    NOT NULL,
+    fName           VARCHAR(35)      NOT NULL,
+    lName           VARCHAR(35)      NOT NULL,
+				sysBan          BOOLEAN          DEFAULT 0,
     PRIMARY KEY (hostID)
 );
 
 CREATE TABLE event(
-    eventID     SERIAL,
-    title       VARCHAR(32) NOT NULL,
-    desc        VARCHAR(128) NOT NULL,
-    type        eventType NOT NULL,
-    eventCode   VARCHAR(4)
-        CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
+    eventID     SERIAL               NOT NULL,
+    title       VARCHAR(32)          NOT NULL,
+    desc        VARCHAR(128)         NOT NULL,
+    type        eventType            NOT NULL,
+    eventCode   VARCHAR(4)           CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
     hostID      SERIAL,
-    -- FOREIGN KEY (hostID)
-    --     REFERNCES host(hostID)
-    --     ON UPDATE CASCADE
-    --     ON DELETE CASCADE,
+    FOREIGN KEY (hostID) REFERNCES host(hostID) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (eventID)
 );
+
+CREATE TABLE feedback(
+    feedbackID        SERIAL         NOT NULL,
+    participantID     SERIAL         NOT NULL,
+    eventID           SERIAL         NOT NULL,
+    data              VARCHAR(200)   NOT NULL,
+    sentiment         VARCHAR(40)    NOT NULL,
+    FOREIGN KEY (participantID) REFERENCES participant(participantID) ON DELETE CASCADE,
+    FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
+    PRIMARY KEY (feedbackID)
+);
+
+CREATE TABLE template(
+    templateID      SERIAL           NOT NULL,
+    eventID         SERIAL           NOT NULL,
+    data            VARCHAR(200)     NOT NULL,
+    FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
+    PRIMARY KEY (templateID)
+);
+
+CREATE TABLE participantInEvent(
+    participantID      SERIAL           NOT NULL,
+    eventID            SERIAL           NOT NULL,
+    FOREIGN KEY (participantID) REFERENCES event(participantID) ON DELETE CASCADE,
+    FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
+    PRIMARY KEY (participantID,eventID)
+);
+
 COMMENT ON TABLE event IS 'storage of an event';

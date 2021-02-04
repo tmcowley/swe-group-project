@@ -47,6 +47,7 @@ CREATE TABLE feedback(
     participantID     SERIAL         NOT NULL,
     eventID           SERIAL         NOT NULL,
     data              VARCHAR(200)   NOT NULL,
+    mood              VARCHAR(40)    NOT NULL,
     sentiment         VARCHAR(40)    NOT NULL,
     FOREIGN KEY (participantID) REFERENCES participant(participantID) ON DELETE CASCADE,
     FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,

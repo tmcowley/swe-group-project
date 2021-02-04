@@ -38,7 +38,7 @@ CREATE TABLE event(
     description   VARCHAR(128)         NOT NULL,
     type          eventType            NOT NULL,
     eventCode     VARCHAR(4)           CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
-    FOREIGN KEY (hostID) REFERNCES host(hostID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (hostID) REFERENCES host(hostID) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (eventID)
 );
 

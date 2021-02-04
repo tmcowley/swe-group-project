@@ -1,4 +1,4 @@
-# ResModus: A *Live Event Feedback* Project
+# ResModus: A *Live Event Feedback* System
 An application allowing for real-time event feedback
 
 ## Context
@@ -36,6 +36,3 @@ http://localhost:4567/hello
 ```
 
 ## Demonstration
-
-## beer was here
-looks like someone spilt some beer here...

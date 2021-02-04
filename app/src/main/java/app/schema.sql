@@ -14,7 +14,7 @@ CREATE TYPE eventType AS ENUM ('lecture', 'seminar', 'conference', 'workshop', '
 
 CREATE TABLE participant(
     participantID   SERIAL           NOT NULL,
-    ipaddress       INET             NOT NULL,
+    ipAddress       INET             NOT NULL,
     fName           VARCHAR(35)      NOT NULL,
     lName           VARCHAR(35)      NOT NULL,
     sysBan          BOOLEAN          DEFAULT 0,
@@ -23,7 +23,7 @@ CREATE TABLE participant(
 
 CREATE TABLE host(
     hostID          SERIAL           NOT NULL,
-    ipaddress       INET             NOT NULL,
+    ipAddress       INET             NOT NULL,
     eAddress        citext UNIQUE    NOT NULL,
     fName           VARCHAR(35)      NOT NULL,
     lName           VARCHAR(35)      NOT NULL,

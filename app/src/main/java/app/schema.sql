@@ -34,6 +34,7 @@ CREATE TABLE host(
 CREATE TABLE event(
     eventID       SERIAL               NOT NULL,
     hostID        SERIAL               NOT NULL,
+    templateID    SERIAL               NOT NULL,
     title         VARCHAR(32)          NOT NULL,
     description   VARCHAR(128)         NOT NULL,
     type          eventType            NOT NULL,
@@ -59,26 +60,13 @@ CREATE TABLE feedback(
 
 CREATE TABLE template(
     templateID      SERIAL           NOT NULL,
+    hostID          SERIAL           NOT NULL,
     data            VARCHAR(200)     NOT NULL,
-    FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
+    FOREIGN KEY (hostID) REFERENCES host(hostID) ON DELETE CASCADE,
     PRIMARY KEY (templateID)
 );
 
-CREATE TABLE templateInEvent(
-    templateID         SERIAL           NOT NULL,
-    eventID            SERIAL           NOT NULL,
-    FOREIGN KEY (templateID) REFERENCES template(templateID) ON DELETE CASCADE,
-    FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
-    PRIMARY KEY (templateID,eventID)
-);
 
-CREATE TABLE templateInHost(
-    templateID         SERIAL           NOT NULL,
-    hostID             SERIAL           NOT NULL,
-    FOREIGN KEY (templateID) REFERENCES template(templateID) ON DELETE CASCADE,
-    FOREIGN KEY (hostID) REFERENCES host(hostID) ON DELETE CASCADE,
-    PRIMARY KEY (templateID,hostID)
-);
 
 CREATE TABLE participantInEvent(
     participantID      SERIAL           NOT NULL,

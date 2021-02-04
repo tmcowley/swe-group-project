@@ -40,6 +40,7 @@ CREATE TABLE event(
     type          eventType            NOT NULL,
     timestamp     TIMESTAMP            NOT NULL,
     eventCode     VARCHAR(4)           CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
+    FOREIGN KEY (templateID) REFERENCES template(templateID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (hostID) REFERENCES host(hostID) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (eventID)
 );

@@ -9,7 +9,7 @@ An application allowing for real-time event feedback
 * Date: January to March, 2021
 
 ## Solution Overview
-Web-based application, Android application, emulated iOS application
+Web-based client, native Android application, native iOS application
 
 ### Web-app
 Front-end: [React](https://reactjs.org/)<br>
@@ -25,7 +25,7 @@ Compile:
 cd app; mvn compile 
 ```
 
-Exec:
+Execute:
 ```
 mvn exec:java 
 ```

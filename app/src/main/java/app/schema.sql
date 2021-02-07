@@ -38,10 +38,24 @@ CREATE TABLE event(
     title         VARCHAR(32)          NOT NULL,
     description   VARCHAR(128)         NOT NULL,
     type          eventType            NOT NULL,
-    timestamp     TIMESTAMP            NOT NULL,
+    startTime     TIMESTAMP            NOT NULL,
+    endTime       TIMESTAMP            NOT NULL,
     eventCode     VARCHAR(4)           CHECK (eventCode ~* '^[A-Z0-9]+$'), -- simulate upper alphanumeric
-    FOREIGN KEY (templateID) REFERENCES template(templateID) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (hostID) REFERENCES host(hostID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (templateID) REFERENCES template(templateID) ON DELETE CASCADE,
+    FOREIGN KEY (hostID) REFERENCES host(hostID) ON DELETE CASCADE,
+    PRIMARY KEY (eventID)
+);
+
+CREATE TABLE archivedEvent(
+    eventID       SERIAL               NOT NULL,
+    hostID        SERIAL               NOT NULL,
+    totalMood     VARCHAR(40)          NOT NULL,
+    title         VARCHAR(32)          NOT NULL,
+    description   VARCHAR(128)         NOT NULL,
+    type          eventType            NOT NULL,
+    startTime     TIMESTAMP            NOT NULL,
+    endTime       TIMESTAMP            NOT NULL,
+    FOREIGN KEY (hostID) REFERENCES host(hostID) ON DELETE CASCADE,
     PRIMARY KEY (eventID)
 );
 
@@ -50,7 +64,6 @@ CREATE TABLE feedback(
     participantID     SERIAL         NOT NULL,
     eventID           SERIAL         NOT NULL,
     data              VARCHAR(200)   NOT NULL,
-    mood              VARCHAR(40)    NOT NULL,
     sentiment         VARCHAR(40)    NOT NULL,
     anonymous         BOOLEAN        DEFAULT 0,
     timestamp         TIMESTAMP      NOT NULL,
@@ -67,8 +80,6 @@ CREATE TABLE template(
     PRIMARY KEY (templateID)
 );
 
-
-
 CREATE TABLE participantInEvent(
     participantID      SERIAL           NOT NULL,
     eventID            SERIAL           NOT NULL,
@@ -77,5 +88,3 @@ CREATE TABLE participantInEvent(
     FOREIGN KEY (eventID) REFERENCES event(eventID) ON DELETE CASCADE,
     PRIMARY KEY (participantID,eventID)
 );
-
-COMMENT ON TABLE event IS 'storage of an event';

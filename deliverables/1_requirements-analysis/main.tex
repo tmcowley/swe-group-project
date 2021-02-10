@@ -1,0 +1,341 @@
+\documentclass[9pt, titlepage]{extarticle}
+\usepackage[utf8]{inputenc} % allows UTF-8, support special characters
+\usepackage[UKenglish]{babel} % use UK English hyphenation rules
+\usepackage{csquotes} % recommended by babel, better quotes
+\usepackage[a4paper, margin=2.15cm]{geometry} % smaller margins
+\usepackage{graphicx} % allows images
+\usepackage{hyperref} % automatically links references within the document
+
+
+\usepackage[style=numeric, sorting=none]{biblatex}
+\renewcommand*{\bibfont}{\small}
+\setlength\bibitemsep{1mm}
+\addbibresource{ref.bib} % links bibiography file
+
+\usepackage{tabularx}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+
+% \title{\Huge{Requirements Analysis Document}}
+% \author{
+% \LARGE{
+% \textbf{Group 32} \\\\
+% Module Organiser: Dr. James Archbold \\
+% Tutor: Mahshid Mehr Nezhad \\\\
+% Alexander Price \\
+% Thomas Cowley \\
+% George Denny \\
+% Yang Tang \\
+% Moustafa Eladawy
+% }}
+% \date{January 2021}
+
+\begin{document}
+\Large{
+\emph{Requirements Analysis Document, Group 32}
+\hfill
+February 2021}
+\normalsize{}
+\section{Preface}
+
+%This document details the requirements of the system and is to be read by the stakeholders, the development team, and the assessor (Dr. James Archbold). 
+%This document details and justifies the nature of the solution and its features, project development principles, group management, project and system evolution, and project constraints.
+%changed to remove redundancy of 'this document details'
+This document presents the requirements of the solution and is to be read by the stakeholders, the development team, and the assessor (Dr. James Archbold). 
+It details and justifies the nature of the solution and its features, project development principles, group management, project and system evolution, and project constraints.
+
+\section{Introduction}
+% how our system meets needs w/ outline
+The client requires a live-feedback system where event participants can submit real-time feedback to the event host. 
+Hosts of such events are provided with sentiment-based analytics and live feedback. See the project’s full brief and specification here \autocite{web:spec}.\newline
+
+The client’s existing systems collect feedback after an event; this leads to both a sub-standard participant experience and inadequate feedback. 
+The live feedback paradigm allows hosts to rectify event-related issues in real-time, improving event quality and participant experience. 
+With such a system, feedback now has a direct influence over event experience. Consequently, participants are inclined to provide more feedback. 
+User-created templates will provide a framework for event feedback, increasing the applicability and quality of feedback. 
+% Standardised sentiment analysis will provide hosts allow hosts to quickly derive the content of feedback during events.
+
+\section{Glossary}
+
+\begin{tabularx}{\linewidth}{ l X }
+    
+    {Template:}         & A framework for feedback, structured with form components.\\
+    % & A feedback framework allowing for structured submission.\\
+    {Generic event:}    & Common real-world events for which the solution is likely to be used.\\
+                        % Some features will be designed specifically for one or more generic event type.\\
+    {Sentiment:}        & An estimate of the overall opinion(s) of a particular instance of feedback.\\
+    {Mood:}             & An estimate of the overall opinion(s) of a group of feedback instances.\\
+    %                                               ^opinion/s (originally)
+    {MoSCoW:}       & An order of requirement implementation priorities: Must, Could, Should, Won’t.\\
+    {C/D:}          & Customer / Developer Facing Requirement\\
+    {GDPR:}         & General Data Protection Regulation\\
+    {NLP:}          & Natural Language Processing\\
+    % \emph{API:}     & Application Programming Interface\
+    % \emph{D:}       & Developer Facing Requirement\\
+\end{tabularx}
+
+\section{Requirements Validation}
+
+Each requirement was subject to a five-part test, with collated requirements subject to a four-part test. 
+These assessments ensure requirement quality and are derived from common industry standards outlined in `Writing Quality Requirements' \autocite{reqs}.\\ 
+
+Testing against requirements considers correctness, feasibility, necessity, ambiguity, and verifiability. 
+Every requirement has passed this test. 
+Testing requirements as a whole evaluates prioritisation, consistency, modifiability, and traceability. The Moscow system is used to prioritise requirements.
+The requirements have been checked and found to be internally consistent. 
+All requirements are subject to evolution and revisions; changes will be noted in the final report. 
+Every requirement has had its source analysed when checking for necessity, and requirements will be referenced in subsequent documents to ensure traceability. 
+Given these requirements have passed internal validation, they provide a sound basis for solution design and development.
+
+\section{User Requirements Design}
+
+\begin{enumerate}[leftmargin=*]
+ \item Users (Hosts and Participants)
+ \begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] Users must be able to access the solution from their mobile devices and personal computers.
+ \item[1.D -] There must be a web-app, and native Android and iOS mobile apps, on which users can access the solution.
+ \end{enumerate}
+
+ \item Hosts
+ \begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] For host authentication, host accounts must be accessed with a private word list (generated at host creation). This is traceable to the customer's interest in withstanding hostile acts and influences \autocite{web:spec}.
+ \item[1.D -] The solution must generate a unique, host account specific word list upon host creation.
+ \end{enumerate}
+
+ \item Participants
+ \begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] Participants must be able to submit feedback against the event they are attending (including via host-defined templates). This is traceable to specification point 3 \autocite{web:spec}.
+ \item[1.D -] The solution must provide the participant with a template to submit feedback.
+ \vspace*{1mm}
+ \item[2.C -] Participants must be able to join events with an event-specific access code. This ensures only invited participants can join events. This is traceable to specification point 2 \autocite{web:spec}.
+ \item[2.D -] The solution must implement an event-specific access token system. %four-digit case-insensitive alphanumeric
+ \vspace*{1mm}
+ \item[3.C -] Participants should have the option to submit a name when first joining an event, prior to feedback-submission.
+ \item[3.D -] The solution should offer a name input option upon joining an event, if a name is given it should be stored.
+ \vspace*{1mm}
+ \item[4.C -] For each feedback instance, all participants should be able to submit feedback anonymously to the host. 
+ \item[] This is necessary as it is traceable to point 4 of the specification \autocite{web:spec}.
+ \item[4.D -] Feedback submitted anonymously should not store the name of the submitting participant. 
+ \item[] This is verifiable by user acceptance testing (Test if host users trace anonymous feedback).
+\end{enumerate}
+
+\end{enumerate}
+
+\section{System Requirements Specification}
+% TODO: justify reqs in-line
+
+\subsection*{Non-Functional Requirements} \label{sec:req:nf}
+
+\vspace*{1mm}
+
+\begin{enumerate}[leftmargin=*]
+\setcounter{enumi}{3}
+\item The solution should be reliable and secure.
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] The solution should consistently perform as expected.
+ \item[] This is traceable to the customers interest in reliability \autocite{web:spec}.
+ \item[1.D -] The solution should be able to withstand and recover from minor component failure.
+ \vspace*{1mm}
+ \item[2.C -] The solution should be able to withstand hostile acts and influences.  \item[] This is traceable to the customers interest in security \autocite{web:spec}.
+ \item[2.D -] All inputs must be sanitised, to prevent code injection (attacks). Database interactions must be parameterised (with values bound against fixed types) to avoid SQL injection. Verifiable using test data in unit testing.
+ \vspace*{1mm}
+ \item[3.C -] The solution should be proven to consistently perform as expected.
+ \item[3.D -] The reliability of the solution should be validated through user acceptance testing.
+\end{enumerate}
+
+\item The solution should be efficient, performant, and scalable. 
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] The solution should remain responsive.
+ \item[1.D -] User experience should not be impacted by system latency. 
+ \item[] The solution should scale to satisfy a dynamic user-population.
+ \item[] The performance of the solution should be validated using time complexity analysis within system testing. 
+ \item[2.C -] The solution should be hardware independent and portable across hardware architectures.
+ \item[2.D -] The software should not be designed for any one particular hardware architecture.
+ 
+\end{enumerate}
+
+\item The solution should be usable and accessible.
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] The solution should be intuitive, require little to no training, and be suitable for users who are inexperienced with technology. This is traceable to project brief non-functional point 1 \autocite{web:spec}. 
+ \item[1.D -] The solution should explain any complex functions, and have a clear and intuitive interface.
+ \item[] This is verifiable by user acceptance testing.
+ \vspace*{1mm}
+ \item[2.C -] The solution should be available for use on every working day of the year. 
+  \item[] This is necessary to fulfill the customers desire for an accessible service.
+ \item[2.D -] The solution should be able to run continuously for five days. Verifiable through system testing.
+\end{enumerate}
+
+\item The solution should be maintainable.
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] Code should be well organised, and be fully and concisely commented.
+ \item[1.D -] Code within the solution's code-base should be fully and concisely commented, and should conform to code etiquette standards and language style guides.
+ Developers should be using static code analysis tools (linters).\vspace*{1mm}
+ \item[2.C -] Solution components should be well and concisely documented. Documentation should be client accessible.
+ \item[2.D -] Component development should be well documented in each scrum cycle. 
+ \vspace*{1mm}
+ \item[3.C -] Code-base and project development should be tracked to improve maintainability, as future developers can refer to such logs and gain valuable insight.
+ \item[3.D -] Solution development should make use of version control software to track changes.
+\end{enumerate}
+
+%(Legislative constraints)
+\item The solution must comply with all relevant legal regulations. 
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] The solution must comply with applicable data protection and privacy laws.
+ \item[1.D -] The solution must satisfy GDPR \autocite{web:gdpr}, when operating in the UK and EU.
+ \vspace*{1mm}
+ \item[2.C -] The solution must comply with applicable copyright laws.
+ \item[2.D -] Any external frameworks and libraries used by the solution must have a valid license.
+ \item[] The solution must reference any externally sourced code.
+ \vspace*{1mm}
+ \item[3.C -] The solution must comply with applicable accessibility regulations.
+ \item[3.D -] The solution must comply with the 2018 Accessibility Regulations and the 2010 Equality Act, when operating in the UK \autocite{web:gov-guidance}.
+\end{enumerate}
+
+\item Research
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+ \item[1.C -] Effective and thorough research should be employed when designing the solution, and elsewhere when relevant. This is traceable to the customers desire for accessibility and user satisfaction \autocite{web:spec}.
+ \item[1.D -] Research should use the following techniques: rapid prototyping, existing product research.
+ \item[] Research could use the following techniques: potential user consultation, potential user questionnaires.
+ \item[] Primary research areas include the graphical user interface, generic event types, default templates, template design, and feature explanation.
+\end{enumerate}
+\end{enumerate}
+
+
+\subsection*{Functional Requirements} \label{req:f}
+% TODO: reference Spec points where relevant
+
+\vspace*{1mm}
+\begin{enumerate}[leftmargin=*]
+\setcounter{enumi}{9}
+
+\item Events
+% TODO: communicate that there must be at most one concurrent event run by any host.
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+\item[1.C -] Hosts must be able to create events, and specify the event's details: title, description, template in-use. 
+\item[] This is traceable to specification point 1 \autocite{web:spec}.
+\item[1.D -] The system must only allow hosts to create events, and provide fine-tuned control over events.
+\vspace*{1mm}
+\item[2.C -] Hosts should be able to select and edit default events (based on generic events) when creating an event.
+\item[2.D -] The system should provide an event-creation interface, and a predefined set of editable, generic events.
+\end{enumerate}
+
+\item Templates
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+\item[1.C -] Hosts should be able to create usable templates by choosing form elements. 
+\item[] This is traceable to specification point 8 \autocite{web:spec}.
+\item[1.D -] The system should implement template-generation functionality while ensuring template usability. 
+\item[] This is verifiable by user acceptance testing.
+\vspace*{1mm}
+\item[2.C -] Hosts should be able to select and edit default templates when creating an event. 
+\item[] This is traceable to specification point 8 \autocite{web:spec}.
+\item[2.D -] The template-generation functionality should have a predefined set of editable, generic templates.
+\vspace*{1mm}
+\item[3.C -] Hosts should be able to create templates that allow participants to include the general feeling and context of their feedback. This is traceable to specification point 8 \autocite{web:spec}.
+\item[3.D -] The system should implement form elements as described in 11.3.C into template-generation functionality. 
+\end{enumerate}
+
+\item Sentiment and Mood Calculation
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+\item[1.C -] For each instance of feedback, the solution must derive an individual sentiment. 
+\item[] This is traceable to specification points 5 and 7 \autocite{web:spec}.
+\item[1.D -] Sentiment is calculated to be the weighted mean of scores taken from both NLP and responses to queries with pre-defined inputs. Weighting depends on the template. Verifiable using test data within unit testing.
+\item[2.C -] The solution must derive a common sentiment (mood) from any period of time across an events duration. 
+\item[] This is traceable to specification point 7 \autocite{web:spec}.
+\vspace*{1mm} 
+\item[2.D -] For any period of time across an events duration, the solution must be able to calculate the mean of the mean sentiments of every feedback instance with a common author. Verifiable using test data within unit testing.
+\end{enumerate}
+
+\item Feedback Data 
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+\item[1.C -] Hosts must be able to view any instance of (non-muted) feedback, and its sentiment, in real-time. 
+\item[] This is traceable to specification point 6 \autocite{web:spec}.
+\item[1.D -] Hosts must be able to view all instances of (non-muted) feedback (and their individual sentiments) stored against their ongoing events.
+Updates to event feedback will occur during feedback analysis.
+\vspace*{1mm}
+\item[2.C -] Hosts must be able to view the mood of all feedback stored against their ongoing events. 
+\item[] This includes real-time mood, average mood, average mood over time, and mood over time. 
+\item[] Mood metrics are likely to evolve during the project.
+\item[2.D -] The system must send feedback and mood-related data to the host in real-time.
+\vspace*{1mm}
+\item[3.C -] Hosts should be able to view mood metrics (see \hyperref[req:f]{13.2.C}) relating to past events.
+\item[3.D -] The mood metrics of an event should be host-accessible and persist after event completion.
+\vspace*{1mm}
+%WTF does this mean? Acc come up with a design for it then change req to fit that.
+\item[4.C -] Hosts could be able to view repeated and popular feedback against their past and current events.
+\item[4.D -] Repeated requests against a host could be stored after event completion, and be accessible to said host.
+\end{enumerate}
+
+\item Misuse Protection
+\begin{enumerate}[noitemsep, topsep=0pt, leftmargin=9mm]
+\item[1.C -] Hosts could be able to mute any participant within their running event; to prevent abuse by participants. 
+\item[1.D -] Hosts could have the option to mute the sender of any given feedback instance.
+\vspace*{1mm}
+\item[2.C -] Participants could be prevented from automating feedback submissions (e.g. via CSRF \autocite{owasp-csrf} attacks). 
+\item[] This is to prevent malicious behaviour.
+\item[2.D -] The system could allocate unique tokens for feedback instances (these would also identify participants).
+\item[] The system could only accept one feedback instance per token. 
+\vspace*{1mm}
+\item[3.C -] At event creation, hosts could be able to blacklist words and phrases from feedback to prevent abuse.
+\item[3.D -] Feedback containing blacklisted words could be discarded and not considered within sentiment analysis.
+\item[] The solution could implement a host-configurable feedback-text exclusion system.
+\item[] This exclusion system won't be dynamic: editable by hosts after event creation.
+\vspace*{1mm}
+\item[4.C -] Hosts could be able to implement spam filters at event creation; to prevent malicious user attacks.
+\item[4.D -] The system could implement host-specified rate limiting against said host's event.
+\item[] The system won't implement group spam filtering.
+\vspace*{1mm}
+\item[5.C -] Frequently mentioned feedback against an event won't be filtered out from the host's view. 
+\item[] This avoids redundancy: once a host is aware of feedback, said feedback is no longer relevant. 
+\item[5.D -] The solution won't implement a system that excludes repeated feedback. 
+\end{enumerate}
+
+\end{enumerate}
+
+\section{System Evolution}
+\textbf{Assumptions}\newline
+The solution assumes the client has the necessary infrastructure to deploy the system and its services to their employees. 
+This deployment need not be restricted to the client's internal network, as event access is controlled via private access codes. 
+It is assumed the client's infrastructure is capable of storing all relevant past, current, and future system data. 
+Client infrastructure must also be reliable: the system must be accessible on every working day of the year. 
+An assumption is that system users have the hardware that satisfies `Microsoft defined industry standard web application requirements' \autocite{hardware} (not listed here for readability). They should also have one of the following web browsers: Google Chrome \texttt{v.88}, Mozilla Firefox \texttt{v.84}, Microsoft Edge \texttt{v.88}, Opera \texttt{v.72}, or Safari \texttt{v.14}. Users should have both an internet connection that meets `FCC international standards' \autocite{speed} (minimum \texttt{1Mbps} up/down), and some experience with computer software and web applications. The system assumes hosts can distribute invite codes to participants and that participant feedback accurately represents their actual event experience.\newline
+
+% assume host codes are kept secret/ private to the host
+
+\textbf{Changing User Needs}\newline
+The system front-end is subject to review for every `major software update' for each of the aforementioned browsers (signified by a change in a version or release number \autocite{major}) to check browser compatibility. These reviews must also ensure the user-interface conforms with modern design practices. The solution software will be clearly documented as will the design process and project history. These will allow future developers to effectively evolve the solution as customer needs evolve.
+% is this user focused? --> On the other hand, barring requests for new major features, the back-end would largely stay the same.
+\newline
+
+% TODO - cite req
+\textbf{Hardware Evolution}\newline
+Web applications are hardware independent, meaning desktop hardware evolution is not a major concern. On mobile devices the app must be checked with every `major software update' to the OS, to ensure it is compatible with the current OS. The proposed system's back-end technologies will be portable across hardware architectures, ensuring the solution can be deployed to the clients hardware (assuming it meets the criteria outlined in assumptions).
+
+\section{Group Management}
+
+\subsection*{Team Roles}
+\vspace*{1mm}\hline\vspace*{1mm}
+\begin{center}
+\begin{tabular}{lllll}
+    \textbf{Name}   & \textbf{Primary Role} & \textbf{Secondary Role}   & \textbf{Development Lead}\\
+    Thomas Cowley   & Project Manager       &Developer                  & Testing\\
+    Alexander Price & Business Analyst      &Developer                  & Sentiment Analysis\\ % + float
+    George Denny    & Developer                                         && Front-end, UI and UX\\
+    Moustafa Eladawy& Developer                                         && Back-end Development\\
+    Yang Tang       & Developer                                         && Mobile Development\\ % + Back-end, DB
+    % Tom Cowley (CS) Project Manager (+Developer: Testing)
+    % Alexander Price (CS) Business Analyst (+Developer: Float, SA)
+    % George Denny (CS) Developer (Front-end)
+    % Moustafa Eladawy (CSE) Developer (Back-end)
+    % Yang Tang (CS) Developer (Mobile, Back-end: DBs)
+\end{tabular}
+\end{center}
+\vspace*{-2mm}
+\hline
+\vspace*{1em}
+
+Role allocation within the group was mutually agreed and chosen to best utilise the available human capital. Naturally, primary roles are prioritised over those that are secondary. Development began in Week 4; development meetings will be held three times each week, at 10 am to noon, on Mondays, Wednesdays, and Fridays. Before development, meetings were held bi-weekly on Tuesdays and Thursdays, both at 10 am to noon. Details relating to methodology and logistics can be found in our Planning and Design Document.
+
+\printbibliography[heading=bibintoc]
+
+\end{document}

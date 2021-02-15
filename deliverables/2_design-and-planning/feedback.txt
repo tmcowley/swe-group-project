@@ -1,0 +1,24 @@
+CS261 Feedback for Student ID 1807654
+------------------------------------------
+
+Requirements Analysis:
+Readability: 4/5 
+Requirement Quality: 3/5 
+Requirement Appropriateness: 4/5 
+Project Management: 3/5 
+Justification / Understanding of Specification: 3/5 
+Comments:A good report overall, though the d-facing requirements could have included more detail as many read as slightly re-worded versions of their c-facing counterpart. The system produced from these requirements would fulfil the customers needs, but there could have been more evidence of the justifications for some requirements. Team roles are clear - though each member has up to three roles, which is a lot of responsibility to manage. 
+Total Mark = 17/25 
+
+
+Planning and Design Document:
+Readability: 4/5 
+Suitability: 4/5 
+Design Quality: 3/5 
+Methodology: 3/5 
+Justification of choices: 4/5 
+Comments:A high quality design report, that discusses the key components in detail, along with sensible reasoning behind most choices. Although your activity diagram is far too general - they should focus on a single activity. There are some questionable statements (5 days is the longest series of working days?) but overall, the design is suitable and appropriate. There are some issues with the methodology chosen - namely there is no discussion of how the needed access to the customer will be achieved. 
+Total Mark = 18/25 
+
+
+Final Mark (incorporating team feedback):70%

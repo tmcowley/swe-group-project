@@ -42,6 +42,8 @@ public class App {
     public static void main(String[] args) {
         get("/", (req, res) -> "Hello World");
 
+        // Validator v = new Validator();
+
         //get("/", servePage);
     }
 

@@ -14,6 +14,7 @@ import app.Event;
 // IO for word-list import
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.io.FileReader;
 
 import org.apache.commons.lang3.RandomStringUtils; // eventCode generation
@@ -40,6 +41,21 @@ public class DbConnection{
 
         // store host-code word list
         getWordlist();
+
+        // run tests (move in future)
+        //runTests();
+    }
+
+    private void runTests(){
+        System.out.println("10 unique event codes:");
+        for (int i = 0; i < 10; i++){
+            System.out.print(generateUniqueEventCode());
+        }
+
+        System.out.println("10 unique template codes:");
+        for (int i = 0; i < 10; i++){
+            System.out.print(generateUniqueTemplateCode());
+        }
     }
 
     /**
@@ -182,20 +198,19 @@ public class DbConnection{
     }
 
     /**
-     * Check if a given event code exists
-     * @param eventCode pre-sanitized event code
-     * @return existence state of the given event code
+     * Check if the given event code exists
+     * @param eventCode the event code
+     * @return existence state of eventCode
      */
     private boolean eventCodeExists(String eventCode){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;
         try{
-            String createEvent = ""
+            String queryEventCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM event WHERE eventCode=?);";
-            stmt = this.conn.prepareStatement(createEvent);
+            stmt = this.conn.prepareStatement(queryEventCodeExists);
             stmt.setString(1, eventCode);
-
             rs = stmt.executeQuery();
             if (rs.next()) {
                 codeExists = rs.getBoolean(1);
@@ -206,9 +221,63 @@ public class DbConnection{
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-
         return codeExists;
     }
+
+    /**
+     * Check if the given template code exists
+     * @param templateCode template code
+     * @return existence state of templateCode
+     */
+    private boolean templateCodeExists(String templateCode){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean codeExists = null;
+        try{
+            String queryTemplateCodeExists = ""
+                + "SELECT EXISTS(SELECT 1 FROM template WHERE templateCode=?);";
+            stmt = this.conn.prepareStatement(queryTemplateCodeExists);
+            stmt.setString(1, templateCode);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                codeExists = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return codeExists;
+    }
+
+    /**
+     * Check if the given host code exists
+     * @param hostCode host code
+     * @return existence state of hostCode
+     */
+    private boolean hostCodeExists(String hostCode){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean codeExists = null;
+        try{
+            String queryHostCodeExists = ""
+                + "SELECT EXISTS(SELECT 1 FROM host WHERE hostCode=?);";
+            stmt = this.conn.prepareStatement(queryHostCodeExists);
+            stmt.setString(1, hostCode);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                codeExists = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return codeExists;
+    }
+
 
     /**
      * Generate a unique event code 
@@ -218,10 +287,41 @@ public class DbConnection{
     protected String generateUniqueEventCode(){
         String eventCode = null;
         while (eventCode == null || eventCodeExists(eventCode)){
-            eventCode = RandomStringUtils.randomAlphanumeric(4).toUpperCase();
+            eventCode = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
         }
-
         return eventCode;
+    }
+
+    /**
+     * Generate a unique template code 
+     * (6-digit, case insensitive alpha-numeric String)
+     * @return the generated template code
+     */
+    protected String generateUniqueTemplateCode(){
+        String templateCode = null;
+        while (templateCode == null || templateCodeExists(templateCode)){
+            templateCode = RandomStringUtils.randomAlphanumeric(6).toLowerCase();
+        }
+        return templateCode;
+    }
+
+    /**
+     * Generate a unique host code 
+     * (four-word subset of wordlist)
+     * @return the generated host code
+     */
+    protected String generateUniqueHostCode(){
+        String hostCode = null;
+        SecureRandom rand = new SecureRandom();
+        while (hostCode == null || hostCodeExists(hostCode)){
+            String[] hostCodeWords = new String[4];
+            for (int index=0; index < 4; index++){
+                int randomWordIndex = rand.nextInt(wordList.size());
+                hostCodeWords[index] = wordList.get(randomWordIndex);
+            }
+            hostCode = String.join(" ", hostCodeWords);
+        }
+        return hostCode;
     }
 
 }

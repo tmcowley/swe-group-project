@@ -36,25 +36,25 @@ public class DbConnection{
      */
     public DbConnection() throws SQLException {
         // see: jdbs.postgres.org/documentation/head/connect.html
-        String url = "jdbc:postgresql:database.db";
+        String url = "jdbc:postgresql:database";
         this.conn = DriverManager.getConnection(url);
 
         // store host-code word list
         getWordlist();
 
         // run tests (move in future)
-        //runTests();
+        runTests();
     }
 
     private void runTests(){
         System.out.println("10 unique event codes:");
         for (int i = 0; i < 10; i++){
-            System.out.print(generateUniqueEventCode());
+            System.out.println(generateUniqueEventCode());
         }
 
         System.out.println("10 unique template codes:");
         for (int i = 0; i < 10; i++){
-            System.out.print(generateUniqueTemplateCode());
+            System.out.println(generateUniqueTemplateCode());
         }
     }
 
@@ -174,18 +174,18 @@ public class DbConnection{
             // (title, desc, eventType, eventCode, hostID)
             String createEvent = ""
                 + "SELECT * FROM event "
-                + "WHERE event.eventID = ? "
+                + "WHERE event.event_id = ? "
                 + "LIMIT 1;";
             stmt = this.conn.prepareStatement(createEvent);
             stmt.setInt(1, eventID);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
-                int hostID = rs.getInt("hostID");
+                int hostID = rs.getInt("host_id");
                 String title = rs.getString("title");
                 String desc = rs.getString("desc");
                 String type = rs.getString("type");
-                String eventCode = rs.getString("eventCode");
+                String eventCode = rs.getString("event_code");
                 event = new Event(eventID, hostID, title, desc, type, eventCode);
             }
         } catch (SQLException e){
@@ -208,7 +208,7 @@ public class DbConnection{
         Boolean codeExists = null;
         try{
             String queryEventCodeExists = ""
-                + "SELECT EXISTS(SELECT 1 FROM event WHERE eventCode=?);";
+                + "SELECT EXISTS(SELECT 1 FROM event WHERE event_code=?);";
             stmt = this.conn.prepareStatement(queryEventCodeExists);
             stmt.setString(1, eventCode);
             rs = stmt.executeQuery();
@@ -235,7 +235,7 @@ public class DbConnection{
         Boolean codeExists = null;
         try{
             String queryTemplateCodeExists = ""
-                + "SELECT EXISTS(SELECT 1 FROM template WHERE templateCode=?);";
+                + "SELECT EXISTS(SELECT 1 FROM template WHERE template_code=?);";
             stmt = this.conn.prepareStatement(queryTemplateCodeExists);
             stmt.setString(1, templateCode);
             rs = stmt.executeQuery();
@@ -262,7 +262,7 @@ public class DbConnection{
         Boolean codeExists = null;
         try{
             String queryHostCodeExists = ""
-                + "SELECT EXISTS(SELECT 1 FROM host WHERE hostCode=?);";
+                + "SELECT EXISTS(SELECT 1 FROM host WHERE host_code=?);";
             stmt = this.conn.prepareStatement(queryHostCodeExists);
             stmt.setString(1, hostCode);
             rs = stmt.executeQuery();

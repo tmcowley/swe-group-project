@@ -41,7 +41,7 @@ public class App {
         try{        
             DbConnection db = new DbConnection();
         } catch (Exception e){
-            ;
+            System.out.println(e.getMessage());
         }
         
         //paths

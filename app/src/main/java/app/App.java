@@ -37,6 +37,12 @@ public class App {
         // tell the Spark framework where to find static files
         staticFiles.location("/static");
         Spark.port(4567);
+
+        try{        
+            DbConnection db = new DbConnection();
+        } catch (Exception e){
+            ;
+        }
         
         //paths
         get("/hello", (req, res) -> "Hello World");

@@ -124,7 +124,7 @@ public class Validator {
         return true; // host code is valid
     }
 
-    
+
     /**
      * Sanitize an event code to ensure it is:
      * valid, and lower-case

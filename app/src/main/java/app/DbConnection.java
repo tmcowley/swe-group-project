@@ -47,15 +47,30 @@ public class DbConnection{
     }
 
     private void runTests(){
+        Validator v = new Validator();
         System.out.println("10 unique event codes:");
         for (int i = 0; i < 10; i++){
-            System.out.println(generateUniqueEventCode());
+            String eventCode = generateUniqueEventCode();
+            System.out.print(eventCode);
+            System.out.print(" | is valid: "+ Validator.eventCodeIsValid(eventCode) +"\n");
         }
+        System.out.println();
+
+        System.out.println("10 unique host codes:");
+        for (int i = 0; i < 10; i++){
+            String hostCode = generateUniqueHostCode();
+            System.out.print(hostCode);
+            System.out.print(" | is valid: "+ v.hostCodeIsValid(hostCode) +"\n");
+        }
+        System.out.println();
 
         System.out.println("10 unique template codes:");
         for (int i = 0; i < 10; i++){
-            System.out.println(generateUniqueTemplateCode());
+            String templateCode = generateUniqueTemplateCode();
+            System.out.print(templateCode);
+            System.out.print(" | is valid: "+ Validator.templateCodeIsValid(templateCode) +"\n");
         }
+        System.out.println();
     }
 
     /**

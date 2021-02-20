@@ -32,7 +32,7 @@ mvn exec:java
 
 Render Website: 
 ```
-http://localhost:4567/hello
+http://localhost:4567/
 ```
 
 ## Demonstration

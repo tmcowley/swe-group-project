@@ -1,17 +1,5 @@
 package app;
 
-// /**
-//  * Hello world!
-//  *
-//  */
-// public class App 
-// {
-//     public static void main( String[] args )
-//     {
-//         System.out.println( "Hello World!" );
-//     }
-// }
-
 import static spark.Spark.*;
 
 import org.apache.velocity.app.*;
@@ -41,12 +29,20 @@ import java.nio.file.Paths;
 import org.eclipse.jetty.http.*;
 
 import app.Event;
+import app.controllers.*;
+import app.util.*;
 
 public class App {
     public static void main(String[] args) {
-        get("/", (req, res) -> "Hello World");
-
-        // Validator v = new Validator();
-
+        // tell the Spark framework where to find static files
+        staticFiles.location("/static");
+        Spark.port(4567);
+        
+        //paths
+        get("/hello", (req, res) -> "Hello World");
+        get("/", IndexController.serveIndexPage);
+        
+        awaitInitialization();
+        System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());
     }
 }

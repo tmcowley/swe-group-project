@@ -11,14 +11,26 @@ An application allowing for real-time event feedback
 ## Solution Overview
 Web-based client, native Android application, native iOS application
 
-### Web-app
-Front-end: [React](https://reactjs.org/)<br>
-Back-end: [Java Spark](https://sparkjava.com/)
+### Front-end
+Web: [React](https://reactjs.org/)<br>
+Mobile: [React Native](https://reactnative.dev/)
 
-### Mobile-app
-Built with: [React Native](https://reactnative.dev/)
+### Back-end
+[Spark Java](https://sparkjava.com/)<br>
+Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ## Set-up and Initialization
+
+### Database
+```
+pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
+```
+
+```
+psql postgres
+```
+
+### Start-up
 
 Compile:
 ```
@@ -34,5 +46,6 @@ Render Website:
 ```
 http://localhost:4567/
 ```
+
 
 ## Demonstration

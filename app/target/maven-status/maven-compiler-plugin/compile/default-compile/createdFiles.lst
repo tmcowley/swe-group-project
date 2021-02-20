@@ -1,4 +1,6 @@
-app/Validator.class
+app/util/ViewUtil.class
 app/Event.class
+app/controllers/IndexController.class
 app/DbConnection.class
 app/App.class
+app/Validator.class

@@ -6,8 +6,15 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
+import java.util.ArrayList;
+
 import app.Validator;
 import app.Event;
+
+// IO for word-list import
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileReader;
 
 import org.apache.commons.lang3.RandomStringUtils; // eventCode generation
 
@@ -15,6 +22,10 @@ public class DbConnection{
 
     // MULTI-THREADING NOT SUPPORTED 
     private Connection conn;
+
+    // ArrayList to store the host-code word list
+    ArrayList<String> wordList = new ArrayList<String>(578);
+
 
     // public static void main(String args[]){};
 
@@ -26,6 +37,9 @@ public class DbConnection{
         // see: jdbs.postgres.org/documentation/head/connect.html
         String url = "jdbc:postgresql:database.db";
         this.conn = DriverManager.getConnection(url);
+
+        // store host-code word list
+        getWordlist();
     }
 
     /**
@@ -34,6 +48,22 @@ public class DbConnection{
      */
     public void closeConnection() throws SQLException{
         this.conn.close();
+    }
+
+    /**
+     * Store the host code word list in an array list DS
+     */
+    private void getWordlist(){
+        try{
+            BufferedReader in = new BufferedReader(new FileReader("resources/wordlist.txt"));
+            String str;
+            while((str = in.readLine()) != null){
+                wordList.add(str);
+            }
+        } catch (IOException ex){
+            // ensure file: wordlist.txt is in /app/resources/
+            System.out.println(ex.getMessage());
+        }
     }
 
     /**

@@ -1,7 +1,6 @@
 <html>
     <body>
-        This is text from the vm file.
-        $test1
+        This is text from the vm file, $test1
         <img width="800px" src="/gantt.png" />
     </body>
 </html>

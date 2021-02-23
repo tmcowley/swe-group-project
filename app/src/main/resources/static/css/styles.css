@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    background-color: #886C91;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2em;
+    padding-bottom: 20px;
+}
+
+p {
+    font-size: 0.9em;
+    padding-bottom: 15px;
+}
+
+header {
+    background-color: black;
+    width: 100%;
+    color: white;
+    padding: 10px 20px;
+    overflow: auto;
+    z-index: 99;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+#headerLeft {
+    float: left;
+}
+
+#headerRight {
+    float: right;
+}
+
+#mainBodyContainer {
+    flex: 1;
+    display: grid;
+    grid-template-columns: auto 450px;
+    overflow: auto;
+}
+
+#mainFormSection {
+    background-color: #886C91;
+    overflow-y: scroll;
+    padding: 0 20px;
+}
+
+#mainForm {
+    min-height: 100%;
+    max-width: 1000px;
+    background-color: white;
+    padding: 30px;
+    margin: 40px auto 0;
+    border-radius: 40px 40px 0 0;
+    box-shadow: 5px 5px 5px #585858;
+    border: 1px solid #b7b7b7;
+}
+
+#infoSection {
+    background-color: #552d62;
+    border-left: solid 1px #33143e;
+    padding: 40px 20px;
+    color: white;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+#infoSection h1 {}
+
+#infoSection p {}
+
+textarea {
+    max-width: 100%;
+    min-width: 100%;
+    margin-bottom: 20px;
+    height: 200px;
+    padding: 10px;
+    font-family: Helvetica, sans-serif;
+}
+
+.feelingRadioContainer {
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.feelingRadio {
+    display: block;
+    float: left;
+    font-size: 3.5em;
+    position: relative;
+    margin: 0 20px;
+    padding: 10px;
+}
+
+.feelingRadioImg {
+    border-radius: 26px;
+    transition: background-color .5s;
+    padding: 10px;
+}
+
+.feelingRadio:hover .feelingRadioImg {
+    background-color: #d3d3d3;
+}
+
+.feelingRadio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.feelingRadio input:checked~.feelingRadioImg {
+    background-color: #40c256;
+}
+
+.feelingRadioImg.happy::after {
+    content: "😀";
+}
+
+.feelingRadioImg.ok::after {
+    content: "😑";
+}
+
+.feelingRadioImg.sad::after {
+    content: "😢";
+}
+
+#sumbitButtonContainer {
+    display: inline-block;
+    background-color: #886c91;
+    padding: 10px 40px;
+    border-radius: 40px;
+    border: 1px solid #451c52;
+    position: relative;
+    width: 355px;
+    height: 40px;
+}
+
+#submitButton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #552d62;
+    color: white;
+    border: 1px solid #451c52;
+    border-radius: 40px;
+    padding: 0 40px;
+    cursor: pointer;
+}
+
+#submitAnonymous {
+    position: absolute;
+    right: 25px;
+}

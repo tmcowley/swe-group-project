@@ -251,10 +251,39 @@ public class DbConnection{
         return getArchivedEvent(event_id);
     }
 
-    // // TODO
-    // public Feedback createFeedback(){
-    //     return getFeedback(feedback_id);
-    // }
+    // TODO
+    public Feedback createFeedback(int participant_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp time_stamp){
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer feedback_id = null;
+        try{
+            String createArchivedEvent = ""
+                + "INSERT INTO feedback(participant_id, event_id, data, sentiment, anonymous, time_stamp) "
+                + "VALUES(?, ?, ?, ?, ?, ?) "
+                + "RETURNING feedback_id";
+            stmt = this.conn.prepareStatement(createArchivedEvent);
+
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            stmt.setString(3, data);
+            stmt.setString(4, sentiment);
+            stmt.setBoolean(5, anonymous);
+            stmt.setTimestamp(6, time_stamp);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                feedback_id = rs.getInt("feedback_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        return getFeedback(feedback_id);
+    }
 
     // // TODO
     // public addParticipantToEvent(){
@@ -354,7 +383,7 @@ public class DbConnection{
                 String e_address = rs.getString("e_address");
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
-                Boolean sys_ban = rs.getBoolean("sys_ban");
+                boolean sys_ban = rs.getBoolean("sys_ban");
 
                 host = new Host(host_id, host_code, ip_address, e_address, f_name, l_name, sys_ban);
             }
@@ -479,10 +508,39 @@ public class DbConnection{
         return archivedEvent;
     }
 
-    // // TODO
-    // public Feedback getFeedback(int feedback_id){
-    //     return null;
-    // }
+    // TODO
+    public Feedback getFeedback(int feedback_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Feedback feedback = null;
+        try{
+            String selectFeedbackByID = ""
+                + "SELECT * FROM feedback "
+                + "WHERE feedback.feedback_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectFeedbackByID);
+            stmt.setInt(1, feedback_id);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                feedback_id = rs.getInt("feedback_id");
+                int participant_id = rs.getInt("participant_id");
+                int event_id = rs.getInt("event_id");
+                String data = rs.getString("data");
+                String sentiment = rs.getString("sentiment");
+                boolean anonymous = rs.getBoolean("anonymous");
+                Timestamp time_stamp = rs.getTimestamp("time_stamp");
+
+                feedback = new Feedback(feedback_id, participant_id, event_id, data, sentiment, anonymous, time_stamp);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return feedback;
+    }
 
     /**
      * Check if the given event code exists, 

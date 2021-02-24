@@ -3,6 +3,7 @@ app/controllers/indexController.class
 app/Host.class
 app/Event.class
 app/DbConnection.class
+app/Feedback.class
 app/Template.class
 app/ArchivedEvent.class
 app/App.class

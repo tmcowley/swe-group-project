@@ -22,7 +22,6 @@ public class Event{
     protected Timestamp end_time;
     protected String eventCode;
 
-
     public Event(int event_id, int host_id, int template_id, String title, String description, String type, Timestamp start_time, Timestamp end_time, String eventCode){
         this.event_id    = event_id; 
         this.host_id     = host_id;

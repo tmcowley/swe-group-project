@@ -111,7 +111,7 @@ public class DbConnection{
      * @return
      */
     public Host createHost(String f_name, String l_name, String ip_address, String e_address){
-        // generate unique eventCode
+        // generate unique host code
         String host_code = generateUniqueHostCode();
 
         PreparedStatement stmt = null;
@@ -144,8 +144,40 @@ public class DbConnection{
         return getHost(host_id);
     }
 
+    public Template createTemplate(int host_id, String data){
+        // generate unique template code
+        String template_code = generateUniqueTemplateCode();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer template_id = null;
+        try{
+            String createTemplate = ""
+                + "INSERT INTO template(host_id, template_code, data) "
+                + "VALUES(?, ?, ?) "
+                + "RETURNING template_id";
+            stmt = this.conn.prepareStatement(createTemplate);
+            stmt.setInt(1, host_id);
+            stmt.setString(2, template_code);
+            stmt.setString(3, data);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                template_id = rs.getInt("template_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Template object by ID
+        return getTemplate(template_id);
+    }
+
     public Event createEvent(int host_id, int template_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
-        // generate unique eventCode
+        // generate unique event code
         String event_code = generateUniqueEventCode();
 
         PreparedStatement stmt = null;
@@ -252,6 +284,36 @@ public class DbConnection{
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
         return host;
+    }
+
+    private Template getTemplate(int template_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Template template = null;
+        try{
+            String selectTemplateByID = ""
+                + "SELECT * FROM template "
+                + "WHERE template.template_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectTemplateByID);
+            stmt.setInt(1, template_id);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                template_id = rs.getInt("template_id");
+                int host_id = rs.getInt("host_id");
+                String template_code = rs.getString("template_code");
+                String data = rs.getString("data");
+
+                template = new Template(template_id, host_id, template_code, data);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return template;
     }
 
     /**

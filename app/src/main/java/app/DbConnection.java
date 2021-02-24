@@ -18,7 +18,8 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.io.FileReader;
 
-import org.apache.commons.lang3.RandomStringUtils; // eventCode generation
+// event code generation
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class DbConnection{
 
@@ -51,9 +52,9 @@ public class DbConnection{
         Validator v = new Validator();
         System.out.println("10 unique event codes:");
         for (int i = 0; i < 10; i++){
-            String eventCode = generateUniqueEventCode();
-            System.out.print(eventCode);
-            System.out.print(" | is valid: "+ Validator.eventCodeIsValid(eventCode) +"\n");
+            String event_code = generateUniqueEventCode();
+            System.out.print(event_code);
+            System.out.print(" | is valid: "+ Validator.eventCodeIsValid(event_code) +"\n");
         }
         System.out.println();
 
@@ -143,36 +144,31 @@ public class DbConnection{
         return getHost(host_id);
     }
 
-    /**
-     * Create an event in the database
-     * @param title
-     * @param desc
-     * @param eventType
-     * @param hostID
-     * @return
-     */
-    public Event createEvent(String title, String desc, String eventType, int hostID){
+    public Event createEvent(int host_id, int template_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique eventCode
-        String eventCode = generateUniqueEventCode();
+        String event_code = generateUniqueEventCode();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Integer eventID = null;
+        Integer event_id = null;
         try{
             String createEvent = ""
-                + "INSERT INTO event(title, desc, eventType, eventCode, hostID) "
-                + "VALUES(?, ?, ?, ?, ?) "
-                + "RETURNING eventID";
+                + "INSERT INTO event(host_id, template_id, title, description, type, start_time, end_time, event_code) "
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?) "
+                + "RETURNING event_id";
             stmt = this.conn.prepareStatement(createEvent);
-            stmt.setString(1, title);
-            stmt.setString(2, desc);
-            stmt.setString(3, eventType);
-            stmt.setString(4, eventCode);
-            stmt.setInt(5, eventID);
+            stmt.setInt(1, host_id);
+            stmt.setInt(2, template_id);
+            stmt.setString(3, title);
+            stmt.setString(4, desc);
+            stmt.setString(5, type);
+            stmt.setTimestamp(6, start_time);
+            stmt.setTimestamp(7, end_time);
+            stmt.setString(8, event_code);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
-                eventID = rs.getInt("eventID");
+                event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
             //throw e;
@@ -181,8 +177,8 @@ public class DbConnection{
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
 
-        // get Event from eventID
-        return getEvent(eventID);
+        // get Event by ID
+        return getEvent(event_id);
     }
 
     /**
@@ -304,7 +300,7 @@ public class DbConnection{
      * @param eventCode the event code
      * @return existence state of eventCode
      */
-    private boolean eventCodeExists(String eventCode){
+    private boolean eventCodeExists(String event_code){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;
@@ -312,7 +308,7 @@ public class DbConnection{
             String queryEventCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM event WHERE event_code=?);";
             stmt = this.conn.prepareStatement(queryEventCodeExists);
-            stmt.setString(1, eventCode);
+            stmt.setString(1, event_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 codeExists = rs.getBoolean(1);
@@ -387,11 +383,11 @@ public class DbConnection{
      * @return the generated event code
      */
     protected String generateUniqueEventCode(){
-        String eventCode = null;
-        while (eventCode == null || eventCodeExists(eventCode)){
-            eventCode = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
+        String event_code = null;
+        while (event_code == null || eventCodeExists(event_code)){
+            event_code = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
         }
-        return eventCode;
+        return event_code;
     }
 
     /**

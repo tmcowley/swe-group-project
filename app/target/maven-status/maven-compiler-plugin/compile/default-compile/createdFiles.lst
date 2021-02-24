@@ -4,5 +4,6 @@ app/Host.class
 app/Event.class
 app/DbConnection.class
 app/Template.class
+app/ArchivedEvent.class
 app/App.class
 app/Validator.class

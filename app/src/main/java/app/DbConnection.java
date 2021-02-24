@@ -218,10 +218,38 @@ public class DbConnection{
         return getEvent(event_id);
     }
 
-    // // TODO
-    // public Event createArchivedEvent(){
-    //     return getArchivedEvent(event_id);
-    // }
+    public ArchivedEvent createArchivedEvent(int host_id, String total_mood, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer event_id = null;
+        try{
+            String createArchivedEvent = ""
+                + "INSERT INTO archived_event(host_id, total_mood, title, description, type, start_time, end_time) "
+                + "VALUES(?, ?, ?, ?, ?, ?, ?) "
+                + "RETURNING event_id";
+            stmt = this.conn.prepareStatement(createArchivedEvent);
+            stmt.setInt(1, host_id);
+            stmt.setString(2, total_mood);
+            stmt.setString(3, title);
+            stmt.setString(4, desc);
+            stmt.setString(5, type);
+            stmt.setTimestamp(6, start_time);
+            stmt.setTimestamp(7, end_time);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                event_id = rs.getInt("event_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        return getArchivedEvent(event_id);
+    }
 
     // // TODO
     // public Feedback createFeedback(){
@@ -415,10 +443,41 @@ public class DbConnection{
         return event;
     }
 
-    // // TODO
-    // public Event getArchivedEvent(int event_id){
-    //     return null;
-    // }
+    // TODO
+    public ArchivedEvent getArchivedEvent(int event_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArchivedEvent archivedEvent = null;
+        try{
+            String selectArchivedEventByID = ""
+                + "SELECT * FROM archived_event "
+                + "WHERE archived_event.event_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectArchivedEventByID);
+            stmt.setInt(1, event_id);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                event_id = rs.getInt("event_id");
+                int host_id = rs.getInt("host_id");
+                String total_mood = rs.getString("total_mood");
+
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                String type = rs.getString("type");
+                Timestamp start_time = rs.getTimestamp("start_time");
+                Timestamp end_time = rs.getTimestamp("end_time");
+
+                archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return archivedEvent;
+    }
 
     // // TODO
     // public Feedback getFeedback(int feedback_id){
@@ -426,7 +485,8 @@ public class DbConnection{
     // }
 
     /**
-     * Check if the given event code exists
+     * Check if the given event code exists, 
+     * and is against an active event
      * @param eventCode the event code
      * @return existence state of eventCode
      */

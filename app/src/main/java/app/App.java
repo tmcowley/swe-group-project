@@ -45,10 +45,18 @@ public class App {
         }
         
         //paths
-        get("/hello", (req, res) -> "Hello World");
+        // get("/hello", (req, res) -> "Hello World");
         get("/", pageController.serveIndexPage);
-        get("/event/", pageController.serveIndexPage);
-        get("/", pageController.serveIndexPage);
+        get("/event/join/code", null);
+        get("/host/login", null);
+        get("/host/get-code", null);
+        get("/host/home", null);
+        get("/host/create-event", null);
+        get("/event/host/code", null);
+        get("/host/templates", null);
+        get("/host/templates/new", null);
+        get("/host/templates/edit/code", null);
+        get("/", null);
         
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

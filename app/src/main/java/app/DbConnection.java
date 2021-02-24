@@ -3,6 +3,7 @@ package app;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
@@ -93,8 +94,53 @@ public class DbConnection{
             }
         } catch (IOException ex){
             // ensure file: wordlist.txt is in /app/resources/
-            System.out.println(ex.getMessage());
+            System.out.println(
+                "Error: Getting word list failed" + 
+                "       " + "Ensure wordlist.txt is in /app/resources");
+            //System.out.println(ex.getMessage());
         }
+    }
+
+    /**
+     * Create a host in the database
+     * @param f_name
+     * @param l_name
+     * @param ip_address
+     * @param e_address
+     * @return
+     */
+    public Host createHost(String f_name, String l_name, String ip_address, String e_address){
+        // generate unique eventCode
+        String host_code = generateUniqueHostCode();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer host_id = null;
+        try{
+            String createHost = ""
+                + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
+                + "VALUES(?, ?, ?, ?, ?) "
+                + "RETURNING host_id";
+            stmt = this.conn.prepareStatement(createHost);
+            stmt.setString(1, f_name);
+            stmt.setString(2, l_name);
+            stmt.setString(3, ip_address);
+            stmt.setString(4, e_address);
+            stmt.setString(5, host_code);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                host_id = rs.getInt("host_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Host object from host_id
+        return getHost(host_id);
     }
 
     /**
@@ -122,7 +168,7 @@ public class DbConnection{
             stmt.setString(2, desc);
             stmt.setString(3, eventType);
             stmt.setString(4, eventCode);
-            stmt.setInt(4, hostID);
+            stmt.setInt(5, eventID);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -141,27 +187,25 @@ public class DbConnection{
 
     /**
      * Get an event ID from an event code.
-     * @param eventCode 4-digit alphanumeric event code
+     * @param event_code 4-digit alphanumeric event code
      * @return Event object corresponding to eventCode
      */
-    public Event getEventFromEventCode(String eventCode){
-        eventCode = Validator.sanitizeEventCode(eventCode);
-        if (eventCode == null)
-            return null;
-        if (!eventCodeExists(eventCode)) 
-            return null;
+    public Event getEventFromEventCode(String event_code){
+        event_code = sanitizeEventCode(event_code);
+        if (!eventCodeIsValid(event_code)) return null;
+        if (!eventCodeExists(event_code)) return null;
 
-        // eventCode sanitized and exists --> query db
+        // eventCode valid and exists --> query db
         PreparedStatement stmt = null;
         Integer eventID = null;
         ResultSet rs = null;
         try{
-            String queryEventID = "SELECT eventID FROM event WHERE eventCode=? LIMIT 1;";
+            String queryEventID = "SELECT event_id FROM event WHERE event_code=? LIMIT 1;";
             stmt = this.conn.prepareStatement(queryEventID);
-            stmt.setString(1, eventCode);
+            stmt.setString(1, event_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                eventID = rs.getInt("eventID");
+                event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
             //throw e;
@@ -170,38 +214,81 @@ public class DbConnection{
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
         
-        // get Event from eventID
-        return getEvent(eventID);
+        // get Event from event ID
+        return getEvent(event_id);
     }
 
     // PRIVATE METHODS
 
     /**
-     * Get an Event object from an eventID
-     * @param eventID event ID
-     * @return Event object with ID of eventID
+     * Get an Host object from a host ID
+     * @param host_id host ID
+     * @return Event object with ID of host_id
      */
-    private Event getEvent(int eventID){
+    private Host getHost(int host_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Host host = null;
+        try{
+            String selectHostByID = ""
+                + "SELECT * FROM host "
+                + "WHERE host.host_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectHostByID);
+            stmt.setInt(1, host_id);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                host_id = rs.getInt("host_id");
+                String host_code = rs.getString("host_code");
+                String ip_address = rs.getString("ip_address");
+                String e_address = rs.getString("e_address");
+                String f_name = rs.getString("f_name");
+                String l_name = rs.getString("l_name");
+                String sys_ban = rs.getString("sys_ban");
+
+                host = new Host(host_id, host_code, ip_address, e_address, f_name, l_name, sys_ban);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return host;
+    }
+
+    /**
+     * Get an Event object from an event ID
+     * @param event_id event ID
+     * @return Event object with ID of event_id
+     */
+    private Event getEvent(int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Event event = null;
         try{
-            // (title, desc, eventType, eventCode, hostID)
-            String createEvent = ""
+            String selectEventByID = ""
                 + "SELECT * FROM event "
                 + "WHERE event.event_id = ? "
                 + "LIMIT 1;";
-            stmt = this.conn.prepareStatement(createEvent);
-            stmt.setInt(1, eventID);
+            stmt = this.conn.prepareStatement(selectEventByID);
+            stmt.setInt(1, event_id);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
-                int hostID = rs.getInt("host_id");
+                event_id = rs.getInt("event_id");
+                int host_id = rs.getInt("host_id");
+                int template_id = rs.getInt("template_id");
+
                 String title = rs.getString("title");
-                String desc = rs.getString("desc");
+                String description = rs.getString("description");
                 String type = rs.getString("type");
+                Timestamp start_time = rs.getTimestamp("start_time");
+                Timestamp end_time = rs.getTimestamp("end_time");
                 String eventCode = rs.getString("event_code");
-                event = new Event(eventID, hostID, title, desc, type, eventCode);
+
+                event = new Event(event_id, host_id, template_id, title, description, type, start_time, end_time, event_code);
             }
         } catch (SQLException e){
             //throw e;

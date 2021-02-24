@@ -46,7 +46,9 @@ public class App {
         
         //paths
         get("/hello", (req, res) -> "Hello World");
-        get("/", IndexController.serveIndexPage);
+        get("/", pageController.serveIndexPage);
+        get("/event/", pageController.serveIndexPage);
+        get("/", pageController.serveIndexPage);
         
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

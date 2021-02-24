@@ -176,6 +176,11 @@ public class DbConnection{
         return getTemplate(template_id);
     }
 
+    // // TODO:
+    // public Participant createParticipant(){
+    //     return getParticipant(participant_id);
+    // }
+
     public Event createEvent(int host_id, int template_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique event code
         String event_code = generateUniqueEventCode();
@@ -213,12 +218,60 @@ public class DbConnection{
         return getEvent(event_id);
     }
 
+    // // TODO
+    // public Event createArchivedEvent(){
+    //     return getArchivedEvent(event_id);
+    // }
+
+    // // TODO
+    // public Feedback createFeedback(){
+    //     return getFeedback(feedback_id);
+    // }
+
+    // // TODO
+    // public addParticipantToEvent(){
+    //     return null;
+    // }
+
+    // // TODO
+    // public boolean participantInEvent(int participant_id, int event_id){
+    //     return null;
+    // }
+
     /**
-     * Get an event ID from an event code.
+     * Get a Host object by its code.
+     * @param host_code host code
+     * @return Host object corresponding to its code
+     */
+    public Host getHostByCode(String host_code){
+
+        // TODO
+        // 1. get ID of host
+        // 2. use getHost(host_id)
+
+        return null;
+    }
+
+    /**
+     * Get a Template object by its code.
+     * @param template_code template code
+     * @return Template object corresponding to its code
+     */
+    public Template getTemplateByCode(String template_code){
+
+        // TODO
+        // 1. get ID of template
+        // 2. use getTemplate(template)
+
+        return null;
+    }
+
+    /**
+     * Get an Event object by its code.
      * @param event_code 4-digit alphanumeric event code
      * @return Event object corresponding to eventCode
      */
-    public Event getEventFromEventCode(String event_code){
+    public Event getEventByCode(String event_code){
         event_code = Validator.sanitizeEventCode(event_code);
         if (!Validator.eventCodeIsValid(event_code)) return null;
         if (!eventCodeExists(event_code)) return null;
@@ -316,6 +369,11 @@ public class DbConnection{
         return template;
     }
 
+    // // TODO
+    // public Participant getParticipant(int participant_id){
+    //     return null;
+    // }
+
     /**
      * Get an Event object from an event ID
      * @param event_id event ID
@@ -356,6 +414,16 @@ public class DbConnection{
         }
         return event;
     }
+
+    // // TODO
+    // public Event getArchivedEvent(int event_id){
+    //     return null;
+    // }
+
+    // // TODO
+    // public Feedback getFeedback(int feedback_id){
+    //     return null;
+    // }
 
     /**
      * Check if the given event code exists

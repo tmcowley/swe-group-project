@@ -1,5 +1,7 @@
 package app;
 
+import java.sql.Timestamp;
+
 // enum eventType {
 //     lecture, 
 //     seminar, 
@@ -25,7 +27,6 @@ public class Event{
         this.event_id    = event_id; 
         this.host_id     = host_id;
         this.template_id = template_id;
-
         this.title          = title;
         this.description    = description;
         this.type           = type;

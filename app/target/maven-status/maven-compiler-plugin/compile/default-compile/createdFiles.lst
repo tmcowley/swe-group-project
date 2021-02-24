@@ -1,6 +1,7 @@
 app/util/ViewUtil.class
+app/controllers/indexController.class
+app/Host.class
 app/Event.class
-app/controllers/IndexController.class
 app/DbConnection.class
 app/App.class
 app/Validator.class

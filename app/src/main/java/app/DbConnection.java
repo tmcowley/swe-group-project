@@ -191,13 +191,13 @@ public class DbConnection{
      * @return Event object corresponding to eventCode
      */
     public Event getEventFromEventCode(String event_code){
-        event_code = sanitizeEventCode(event_code);
-        if (!eventCodeIsValid(event_code)) return null;
+        event_code = Validator.sanitizeEventCode(event_code);
+        if (!Validator.eventCodeIsValid(event_code)) return null;
         if (!eventCodeExists(event_code)) return null;
 
         // eventCode valid and exists --> query db
         PreparedStatement stmt = null;
-        Integer eventID = null;
+        Integer event_id = null;
         ResultSet rs = null;
         try{
             String queryEventID = "SELECT event_id FROM event WHERE event_code=? LIMIT 1;";
@@ -245,7 +245,7 @@ public class DbConnection{
                 String e_address = rs.getString("e_address");
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
-                String sys_ban = rs.getString("sys_ban");
+                Boolean sys_ban = rs.getBoolean("sys_ban");
 
                 host = new Host(host_id, host_code, ip_address, e_address, f_name, l_name, sys_ban);
             }
@@ -286,7 +286,7 @@ public class DbConnection{
                 String type = rs.getString("type");
                 Timestamp start_time = rs.getTimestamp("start_time");
                 Timestamp end_time = rs.getTimestamp("end_time");
-                String eventCode = rs.getString("event_code");
+                String event_code = rs.getString("event_code");
 
                 event = new Event(event_id, host_id, template_id, title, description, type, start_time, end_time, event_code);
             }

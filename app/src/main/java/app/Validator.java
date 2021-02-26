@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils; // for event code sanitization
 
 public class Validator {
 
-    // public static void main(String[] args) {}
+    // public void main(String[] args) {}
 
     HashSet<String> wordlistHashSet = new HashSet<String>(1000);
     int peakWordSizeInList = 11;
@@ -58,7 +58,7 @@ public class Validator {
      * @param eventCode event code to be checked
      * @return event code validity state
      */
-    public static boolean eventCodeIsValid(String eventCode){
+    public boolean eventCodeIsValid(String eventCode){
         return alphanumericIsValid(eventCode, 4);
     }
 
@@ -68,7 +68,7 @@ public class Validator {
      * @param templateCode template code to be checked
      * @return template code validity state
      */
-    public static boolean templateCodeIsValid(String templateCode){
+    public boolean templateCodeIsValid(String templateCode){
         return alphanumericIsValid(templateCode, 6);
     }
 
@@ -79,7 +79,7 @@ public class Validator {
      * @param len valid length of string
      * @return string validity state
      */
-    public static boolean alphanumericIsValid(String str, int len){
+    public boolean alphanumericIsValid(String str, int len){
         if (str == null)
             return false;
         if (str.length() != len)
@@ -117,7 +117,7 @@ public class Validator {
 
         String[] hostCodeArray = hostCode.split(" ");
         for (String word : hostCodeArray){
-            if (! wordlistHashSet.contains(word))
+            if (!wordlistHashSet.contains(word))
                 return false;
         }
 
@@ -131,7 +131,7 @@ public class Validator {
      * @param eventCode event code to be sanitized
      * @return lower-case event code (null if invalid)
      */
-    public static String sanitizeEventCode(String eventCode){
+    public String sanitizeEventCode(String eventCode){
         if (!eventCodeIsValid(eventCode))
             return null;
         return eventCode.toLowerCase();
@@ -143,7 +143,7 @@ public class Validator {
      * @param eventCode event code to be sanitized
      * @return lower-case template code (null if invalid)
      */
-    public static String sanitizeTemplateCode(String templateCode){
+    public String sanitizeTemplateCode(String templateCode){
         if (!templateCodeIsValid(templateCode))
             return null;
         return templateCode.toLowerCase();

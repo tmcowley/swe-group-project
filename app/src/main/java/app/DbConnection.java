@@ -25,6 +25,8 @@ public class DbConnection{
     // MULTI-THREADING NOT SUPPORTED 
     private Connection conn;
 
+    private Validator validator;
+
     // ArrayList to store the host-code word list
     ArrayList<String> wordList = new ArrayList<String>(578);
 
@@ -43,17 +45,19 @@ public class DbConnection{
         // store host-code word list
         getWordlist();
 
+        // Instantiate Validator for DBConn instance
+        validator = new Validator();
+
         // run tests (move in future)
         runTests();
     }
 
     private void runTests(){
-        Validator v = new Validator();
         System.out.println("10 unique event codes:");
         for (int i = 0; i < 10; i++){
             String event_code = generateUniqueEventCode();
             System.out.print(event_code);
-            System.out.print(" | is valid: "+ Validator.eventCodeIsValid(event_code) +"\n");
+            System.out.print(" | is valid: "+ validator.eventCodeIsValid(event_code) +"\n");
         }
         System.out.println();
 
@@ -61,7 +65,7 @@ public class DbConnection{
         for (int i = 0; i < 10; i++){
             String hostCode = generateUniqueHostCode();
             System.out.print(hostCode);
-            System.out.print(" | is valid: "+ v.hostCodeIsValid(hostCode) +"\n");
+            System.out.print(" | is valid: "+ validator.hostCodeIsValid(hostCode) +"\n");
         }
         System.out.println();
 
@@ -69,7 +73,7 @@ public class DbConnection{
         for (int i = 0; i < 10; i++){
             String templateCode = generateUniqueTemplateCode();
             System.out.print(templateCode);
-            System.out.print(" | is valid: "+ Validator.templateCodeIsValid(templateCode) +"\n");
+            System.out.print(" | is valid: "+ validator.templateCodeIsValid(templateCode) +"\n");
         }
         System.out.println();
     }
@@ -325,12 +329,31 @@ public class DbConnection{
      * @return Host object corresponding to its code
      */
     public Host getHostByCode(String host_code){
+        host_code = validator.sanitizeHostCode(host_code);
+        if (!validator.templateCodeIsValid(host_code)) return null;
+        if (!templateCodeExists(host_code)) return null;
 
-        // TODO
-        // 1. get ID of host
-        // 2. use getHost(host_id)
-
-        return null;
+        // host code valid and exists --> query db
+        PreparedStatement stmt = null;
+        Integer host_id = null;
+        ResultSet rs = null;
+        try{
+            String queryHostByCode = "SELECT host_id FROM host WHERE host_code=? LIMIT 1;";
+            stmt = this.conn.prepareStatement(queryHostByCode);
+            stmt.setString(1, host_code);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                host_id = rs.getInt("host_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        // get Host by ID
+        return getHost(host_id);
     }
 
     /**
@@ -339,12 +362,31 @@ public class DbConnection{
      * @return Template object corresponding to its code
      */
     public Template getTemplateByCode(String template_code){
+        template_code = validator.sanitizeTemplateCode(template_code);
+        if (!validator.templateCodeIsValid(template_code)) return null;
+        if (!templateCodeExists(template_code)) return null;
 
-        // TODO
-        // 1. get ID of template
-        // 2. use getTemplate(template)
-
-        return null;
+        // template code valid and exists --> query db
+        PreparedStatement stmt = null;
+        Integer template_id = null;
+        ResultSet rs = null;
+        try{
+            String queryTemplateByCode = "SELECT template_id FROM template WHERE template_code=? LIMIT 1;";
+            stmt = this.conn.prepareStatement(queryTemplateByCode);
+            stmt.setString(1, template_code);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                template_id = rs.getInt("template_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        // get Template by ID
+        return getTemplate(template_id);
     }
 
     /**
@@ -353,8 +395,8 @@ public class DbConnection{
      * @return Event object corresponding to eventCode
      */
     public Event getEventByCode(String event_code){
-        event_code = Validator.sanitizeEventCode(event_code);
-        if (!Validator.eventCodeIsValid(event_code)) return null;
+        event_code = validator.sanitizeEventCode(event_code);
+        if (!validator.eventCodeIsValid(event_code)) return null;
         if (!eventCodeExists(event_code)) return null;
 
         // eventCode valid and exists --> query db
@@ -362,8 +404,8 @@ public class DbConnection{
         Integer event_id = null;
         ResultSet rs = null;
         try{
-            String queryEventID = "SELECT event_id FROM event WHERE event_code=? LIMIT 1;";
-            stmt = this.conn.prepareStatement(queryEventID);
+            String queryEventByCode = "SELECT event_id FROM event WHERE event_code=? LIMIT 1;";
+            stmt = this.conn.prepareStatement(queryEventByCode);
             stmt.setString(1, event_code);
             rs = stmt.executeQuery();
             if (rs.next()) {

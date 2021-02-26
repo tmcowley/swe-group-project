@@ -1,6 +1,7 @@
 app/util/ViewUtil.class
 app/controllers/indexController.class
 app/Host.class
+app/Participant.class
 app/Event.class
 app/DbConnection.class
 app/Feedback.class

@@ -9,8 +9,7 @@ import java.sql.ResultSet;
 
 import java.util.ArrayList;
 
-import app.Validator;
-import app.Event;
+import app.Objects.*;
 
 // IO for word-list import
 import java.io.BufferedReader;
@@ -176,11 +175,35 @@ public class DbConnection{
         return getTemplate(template_id);
     }
 
-    // // TODO:
-    // public Participant createParticipant(){
-    //     return getParticipant(participant_id);
-    // }
+    // TODO COMMENT
+    public Participant createParticipant(String ip_address, String f_name, String l_name){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer participant_id = null;
+        try{
+            String createParticipant = ""
+                + "INSERT INTO participant(ip_address, f_name, l_name) "
+                + "VALUES(?, ?, ?) "
+                + "RETURNING participant_id";
+            stmt = this.conn.prepareStatement(createParticipant);
+            stmt.setString(1, ip_address);
+            stmt.setString(2, f_name);
+            stmt.setString(3, l_name);
 
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                participant_id = rs.getInt("participant_id");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return getParticipant(participant_id);
+    }
+
+    // TODO COMMENT
     public Event createEvent(int host_id, int template_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique event code
         String event_code = generateUniqueEventCode();
@@ -218,6 +241,7 @@ public class DbConnection{
         return getEvent(event_id);
     }
 
+    // TODO COMMENT
     public ArchivedEvent createArchivedEvent(int host_id, String total_mood, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
 
         PreparedStatement stmt = null;
@@ -251,7 +275,7 @@ public class DbConnection{
         return getArchivedEvent(event_id);
     }
 
-    // TODO
+    // TODO comment
     public Feedback createFeedback(int participant_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp time_stamp){
 
         PreparedStatement stmt = null;
@@ -396,6 +420,12 @@ public class DbConnection{
         return host;
     }
 
+    /**
+     * TODO COMMENT
+     * Get Template by ID
+     * @param template_id
+     * @return
+     */
     private Template getTemplate(int template_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -426,10 +456,42 @@ public class DbConnection{
         return template;
     }
 
-    // // TODO
-    // public Participant getParticipant(int participant_id){
-    //     return null;
-    // }
+    /**
+     * TODO COMMENT
+     * Get participant by ID
+     * @param participant_id
+     * @return
+     */
+    public Participant getParticipant(int participant_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Participant participant = null;
+        try{
+            String getParticipantByID = ""
+                + "SELECT * FROM participant "
+                + "WHERE participant.participant_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(getParticipantByID);
+            stmt.setInt(1, participant_id);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                participant_id = rs.getInt("participant_id");
+                String ip_address = rs.getString("ip_address");
+                String f_name = rs.getString("f_name");
+                String l_name = rs.getString("l_name");
+                boolean sys_ban = rs.getBoolean("sys_ban");
+
+                participant = new Participant(participant_id, ip_address, f_name, l_name, sys_ban);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return participant;
+    }
 
     /**
      * Get an Event object from an event ID

@@ -365,6 +365,10 @@ public class DbConnection{
         return state;
     }
 
+    // public Boolean participantIsMuted(){}
+
+    // public Boolean muteParticipant(){}
+
     /**
      * Get a Host object by its code.
      * @param host_code host code

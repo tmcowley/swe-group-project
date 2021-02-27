@@ -313,15 +313,57 @@ public class DbConnection{
         return getFeedback(feedback_id);
     }
 
-    // // TODO
-    // public addParticipantToEvent(){
-    //     return null;
-    // }
+    // TODO comment
+    public Boolean addParticipantToEvent(int participant_id, int event_id){
 
-    // // TODO
-    // public boolean participantInEvent(int participant_id, int event_id){
-    //     return null;
-    // }
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try{
+            String addParticipantToEvent = ""
+                + "INSERT INTO participant_in_event(participant_id, event_id) "
+                + "VALUES(?, ?) ";
+            stmt = this.conn.prepareStatement(addParticipantToEvent);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // return success state (select query)
+        return participantInEvent(participant_id, event_id);
+    }
+    // TODO comment
+    public Boolean participantInEvent(int participant_id, int event_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean state = null;
+        try{
+            String queryParticipantInEvent = ""
+                + "SELECT EXISTS "
+                + "(SELECT 1 FROM participant_in_event WHERE "                
+                + "participant_in_event.participant_id=? "
+                + "AND "
+                + "participant_in_event.event_id=? " 
+                + ");";
+            stmt = this.conn.prepareStatement(queryParticipantInEvent);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                state = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return state;
+    }
 
     /**
      * Get a Host object by its code.
@@ -650,9 +692,9 @@ public class DbConnection{
      * Check if the given event code exists, 
      * and is against an active event
      * @param eventCode the event code
-     * @return existence state of eventCode
+     * @return existence state of eventCode, null if fails
      */
-    private boolean eventCodeExists(String event_code){
+    private Boolean eventCodeExists(String event_code){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;

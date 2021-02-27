@@ -279,7 +279,16 @@ public class DbConnection{
         return getArchivedEvent(event_id);
     }
 
-    // TODO comment
+    /**
+     * Create an instance of feedback against an event
+     * @param participant_id
+     * @param event_id
+     * @param data
+     * @param sentiment
+     * @param anonymous
+     * @param time_stamp
+     * @return Feedback instance representing stored data
+     */
     public Feedback createFeedback(int participant_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp time_stamp){
 
         PreparedStatement stmt = null;
@@ -313,9 +322,13 @@ public class DbConnection{
         return getFeedback(feedback_id);
     }
 
-    // TODO comment
+    /**
+     * Add a participant (by ID) to an event (by ID)
+     * @param participant_id participant ID
+     * @param event_id event ID
+     * @return success state
+     */
     public Boolean addParticipantToEvent(int participant_id, int event_id){
-
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -337,7 +350,12 @@ public class DbConnection{
         return participantInEvent(participant_id, event_id);
     }
 
-    // TODO comment
+    /**
+     * Check if a participant is in an event
+     * @param participant_id participant ID
+     * @param event_id event ID
+     * @return method success state
+     */
     public Boolean participantInEvent(int participant_id, int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -366,7 +384,12 @@ public class DbConnection{
         return state;
     }
 
-    // TODO comment
+    /**
+     * Check if a given participant is muted in the given event
+     * @param participant_id participant
+     * @param event_id event containing participant
+     * @return method success state 
+     */
     public Boolean participantInEventIsMuted(int participant_id, int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -394,25 +417,36 @@ public class DbConnection{
         return muted;
     }
 
-    // TODO: COMPLETE, COMMENT
-    // public Boolean muteParticipantInEvent(int participant_id, int event_id){
-    //     PreparedStatement stmt = null;
-    //     ResultSet rs = null;
-    //     Boolean success = null;
-    //     try{
-    //         String muteParticipant = "";
-    //         stmt = this.conn.prepareStatement(queryMutedState);
-    //         stmt.setInt(1, participant_id);
-    //         stmt.setInt(2, event_id);
-    //         stmt.executeUpdate();
-    //     } catch (SQLException e){
-    //         //throw e;
-    //     } finally {
-    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-    //     }
-    //     return participantInEventIsMuted(participant_id, event_id);
-    // }
+    /**
+     * Mute a participant in an event
+     * @param participant_id participant to be muted
+     * @param event_id event in which participant is muted
+     * @return method success state 
+     */
+    public Boolean muteParticipantInEvent(int participant_id, int event_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try{
+            String muteParticipant = ""
+                + "UPDATE participant_in_event "
+                + "SET muted = TRUE"
+                + "WHERE "
+                + "participant_in_event.participant_id=? "
+                + "AND "
+                + "participant_in_event.event_id=? " 
+                + ");";
+            stmt = this.conn.prepareStatement(muteParticipant);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return participantInEventIsMuted(participant_id, event_id);
+    }
 
     /**
      * Get a Host object by its code.

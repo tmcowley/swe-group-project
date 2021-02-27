@@ -336,6 +336,7 @@ public class DbConnection{
         // return success state (select query)
         return participantInEvent(participant_id, event_id);
     }
+
     // TODO comment
     public Boolean participantInEvent(int participant_id, int event_id){
         PreparedStatement stmt = null;
@@ -365,9 +366,53 @@ public class DbConnection{
         return state;
     }
 
-    // public Boolean participantIsMuted(){}
+    // TODO comment
+    public Boolean participantInEventIsMuted(int participant_id, int event_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean muted = null;
+        try{
+            String queryMutedState = ""
+                + "SELECT muted FROM participant_in_event WHERE "                
+                + "participant_in_event.participant_id=? "
+                + "AND "
+                + "participant_in_event.event_id=? " 
+                + ");";
+            stmt = this.conn.prepareStatement(queryMutedState);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                muted = rs.getBoolean("muted");
+            }
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return muted;
+    }
 
-    // public Boolean muteParticipant(){}
+    // TODO: COMPLETE, COMMENT
+    // public Boolean muteParticipantInEvent(int participant_id, int event_id){
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     Boolean success = null;
+    //     try{
+    //         String muteParticipant = "";
+    //         stmt = this.conn.prepareStatement(queryMutedState);
+    //         stmt.setInt(1, participant_id);
+    //         stmt.setInt(2, event_id);
+    //         stmt.executeUpdate();
+    //     } catch (SQLException e){
+    //         //throw e;
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+    //     return participantInEventIsMuted(participant_id, event_id);
+    // }
 
     /**
      * Get a Host object by its code.

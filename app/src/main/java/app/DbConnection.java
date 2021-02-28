@@ -34,11 +34,11 @@ public class DbConnection{
     // public static void main(String args[]){};
 
     /**
-     * Constructor, initializes db connection
+     * Constructor; initializes db connection
      * @throws SQLException
      */
     public DbConnection() throws SQLException {
-        // see: jdbs.postgres.org/documentation/head/connect.html
+        // see: jdbc.postgresql.org/documentation/head/connect.html
         String url = "jdbc:postgresql:database";
         this.conn = DriverManager.getConnection(url);
 
@@ -91,11 +91,12 @@ public class DbConnection{
      */
     private void getWordlist(){
         try{
-            BufferedReader in = new BufferedReader(new FileReader("resources/wordlist.txt"));
+            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordlist.txt"));
             String str;
-            while((str = in.readLine()) != null){
+            while((str = readIn.readLine()) != null){
                 wordList.add(str);
             }
+            readIn.close();
         } catch (IOException ex){
             // ensure file: wordlist.txt is in /app/resources/
             System.out.println(
@@ -107,8 +108,8 @@ public class DbConnection{
 
     /**
      * Create a host in the database
-     * @param f_name Firstname
-     * @param l_name Lastname
+     * @param f_name First name
+     * @param l_name Last name
      * @param ip_address Ip address
      * @param e_address Email address
      * @return Host instance representing stored data
@@ -189,8 +190,8 @@ public class DbConnection{
     /**
      * Create a participant in the database
      * @param ip_address Ip address
-     * @param f_name Firstname
-     * @param l_name Lastname
+     * @param f_name First name
+     * @param l_name Last name
      * @return Participant instance representing stored data
      */
     public Participant createParticipant(String ip_address, String f_name, String l_name){
@@ -318,7 +319,7 @@ public class DbConnection{
      * @param event_id Event id of the event which this feedback is written for
      * @param data Feedback content
      * @param sentiment Sentiment
-     * @param anonymous Wheather this feedback is anonymous
+     * @param anonymous Whether this feedback is anonymous
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
@@ -895,7 +896,7 @@ public class DbConnection{
 
     /**
      * Generate a unique event code 
-     * (4-didit, case insensitive alpha-numeric String)
+     * (4-digit, case insensitive alpha-numeric String)
      * @return the generated event code
      */
     protected String generateUniqueEventCode(){
@@ -921,7 +922,7 @@ public class DbConnection{
 
     /**
      * Generate a unique host code 
-     * (four-word subset of wordlist)
+     * (four-word subset of word list)
      * @return the generated host code
      */
     protected String generateUniqueHostCode(){

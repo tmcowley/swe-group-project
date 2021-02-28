@@ -107,11 +107,11 @@ public class DbConnection{
 
     /**
      * Create a host in the database
-     * @param f_name
-     * @param l_name
-     * @param ip_address
-     * @param e_address
-     * @return
+     * @param f_name Firstname
+     * @param l_name Lastname
+     * @param ip_address Ip address
+     * @param e_address Email address
+     * @return Host instance representing stored data
      */
     public Host createHost(String f_name, String l_name, String ip_address, String e_address){
         // generate unique host code
@@ -147,6 +147,13 @@ public class DbConnection{
         return getHost(host_id);
     }
 
+    /**
+     * Create a template in the database
+     * @param host_id Host id that it belongs to
+     * @param template_code template code
+     * @param data content
+     * @return Template instance representing stored data
+     */
     public Template createTemplate(int host_id, String data){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
@@ -179,7 +186,13 @@ public class DbConnection{
         return getTemplate(template_id);
     }
 
-    // TODO COMMENT
+    /**
+     * Create a participant in the database
+     * @param ip_address Ip address
+     * @param f_name Firstname
+     * @param l_name Lastname
+     * @return Participant instance representing stored data
+     */
     public Participant createParticipant(String ip_address, String f_name, String l_name){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -206,8 +219,18 @@ public class DbConnection{
         }
         return getParticipant(participant_id);
     }
-
-    // TODO COMMENT
+    
+    /**
+     * Create a event in the database
+     * @param host_id Host id of its host
+     * @param template_id Template id it used
+     * @param title Event title
+     * @param desc Event description
+     * @param type Event type
+     * @param start_time Start time of the event
+     * @param end_time End time of the event
+     * @return Event instance representing stored data
+     */
     public Event createEvent(int host_id, int template_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique event code
         String event_code = generateUniqueEventCode();
@@ -245,7 +268,17 @@ public class DbConnection{
         return getEvent(event_id);
     }
 
-    // TODO COMMENT
+    /**
+     * Create an archived event in the database
+     * @param host_id Host id of its host
+     * @param total_mood Mood of participants in this event
+     * @param title Event title
+     * @param desc Event description
+     * @param type Event type
+     * @param start_time Start time of the event
+     * @param end_time End time of the event
+     * @return Event instance representing stored data
+     */
     public ArchivedEvent createArchivedEvent(int host_id, String total_mood, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
 
         PreparedStatement stmt = null;
@@ -281,12 +314,12 @@ public class DbConnection{
 
     /**
      * Create an instance of feedback against an event
-     * @param participant_id
-     * @param event_id
-     * @param data
-     * @param sentiment
-     * @param anonymous
-     * @param time_stamp
+     * @param participant_id Participant id of the participant who created this feedback
+     * @param event_id Event id of the event which this feedback is written for
+     * @param data Feedback content
+     * @param sentiment Sentiment
+     * @param anonymous Wheather this feedback is anonymous
+     * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
     public Feedback createFeedback(int participant_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp time_stamp){

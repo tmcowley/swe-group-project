@@ -38,6 +38,7 @@ public class App {
         staticFiles.location("/static");
         Spark.port(4567);
 
+        // create a db connection
         try{        
             DbConnection db = new DbConnection();
         } catch (Exception e){

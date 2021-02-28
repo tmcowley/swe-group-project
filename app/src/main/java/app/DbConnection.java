@@ -585,7 +585,7 @@ public class DbConnection{
     /**
      * Get an Host object from a host ID
      * @param host_id host ID
-     * @return Event object with ID of host_id
+     * @return Host object with ID of host_id
      */
     private Host getHost(int host_id){
         PreparedStatement stmt = null;
@@ -621,10 +621,9 @@ public class DbConnection{
     }
 
     /**
-     * TODO COMMENT
-     * Get Template by ID
-     * @param template_id
-     * @return
+     * Get an Template object from an template ID
+     * @param template_id template ID
+     * @return Template object with ID of template_id
      */
     private Template getTemplate(int template_id){
         PreparedStatement stmt = null;
@@ -657,10 +656,9 @@ public class DbConnection{
     }
 
     /**
-     * TODO COMMENT
-     * Get participant by ID
-     * @param participant_id
-     * @return
+     * Get an Participant object from an participant ID
+     * @param participant_id participant ID
+     * @return Participant object with ID of participant_id
      */
     public Participant getParticipant(int participant_id){
         PreparedStatement stmt = null;
@@ -734,7 +732,11 @@ public class DbConnection{
         return event;
     }
 
-    // TODO
+    /**
+     * Get an archived Event object from an event ID
+     * @param event_id event ID
+     * @return ArchivedEvent object with ID of event_id
+     */
     public ArchivedEvent getArchivedEvent(int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -770,7 +772,11 @@ public class DbConnection{
         return archivedEvent;
     }
 
-    // TODO
+    /**
+     * Get a feedback object from an feedback ID
+     * @param feedback_id feedback ID
+     * @return Feedback object with ID of feedback_id
+     */
     public Feedback getFeedback(int feedback_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;

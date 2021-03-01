@@ -48,7 +48,7 @@ public class App {
         //paths
         // get("/hello", (req, res) -> "Hello World");
         get("/", indexController.serveIndexPage);
-        get("/event/join/code", null);
+        get("/event/join/code", joinController.serveJoinPage);
         get("/host/login", null);
         get("/host/get-code", null);
         get("/host/home", null);

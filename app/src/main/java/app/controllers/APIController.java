@@ -15,11 +15,18 @@ public class APIController {
     //     return ViewUtil.render(request, model, "/velocity/index.vm");
     // };
 
-    public static Route authHost = (Request request, Response response) -> {
+    public static Route createHost = (Request request, Response response) -> {
     };
 
-    public static Route authParticipant = (Request request, Response response) -> {
+    public static Route createEvent = (Request request, Response response) -> {
     };
 
+    public static Route joinEvent = (Request request, Response response) -> {
+    };
 
+    public static Route createParticipant = (Request request, Response response) -> {
+    };
+
+    public static Route createFeedback = (Request request, Response response) -> {
+    };
 }

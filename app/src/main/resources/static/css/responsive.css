@@ -1,0 +1,69 @@
+@media screen and (max-width: 1200px) {
+    #mainBodyContainer {
+        grid-template-columns: auto 350px;
+    }
+}
+
+@media screen and (max-width: 930px) {
+    #infoSection {
+        display: none;
+    }
+    #mainBodyContainer {
+        grid-template-columns: 100% auto;
+    }
+    #mainForm {
+        margin: 70px auto 0;
+    }
+    #exitButtonMobile, #infoButtonMobile {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 590px) {
+    .feelingRadioContainer {
+        justify-content: center;
+    }
+    .feelingRadio {
+        margin: 0 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .feelingRadio {
+        font-size: 2.5em;
+        margin: 0 2px;
+        padding: 0px;
+    }
+    .feelingRadioImg {
+        padding: 5px;
+    }
+
+    #submitAnonymous {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-bottom: 10px;
+    }
+    #submitAnonymous label {
+        text-align: center;
+        display: block;
+    }
+    #submitButton {
+        width: 100%;
+        height: 50%;
+    }
+    #sumbitButtonContainer {
+        border-radius: 20px;
+        width: 100%;
+        height: 80px;
+    }
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 0.8em;
+    }
+}

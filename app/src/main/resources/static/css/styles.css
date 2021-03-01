@@ -32,7 +32,7 @@ header {
     color: white;
     padding: 10px 20px;
     overflow: auto;
-    z-index: 99;
+    z-index: 1;
     font-weight: bold;
     font-size: 0.8em;
 }
@@ -56,6 +56,7 @@ header {
     background-color: #886C91;
     overflow-y: scroll;
     padding: 0 20px;
+    position: relative;
 }
 
 #mainForm {
@@ -172,4 +173,55 @@ textarea {
 #submitAnonymous {
     position: absolute;
     right: 25px;
+    cursor: pointer;
+}
+
+#submitAnonymous input {
+    margin-right: 5px;
+}
+
+#submitAnonymous label {
+    cursor: pointer;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    background-color: #552d62;
+    border-left: solid 1px #33143e;
+    color: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 60px 0;
+    transition: 0.5s;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: white;
+    text-decoration: none;
+}
+
+#exitButtonMobile {
+    display: none;
+    position: absolute;
+    left: 30px;
+    top: 20px;
+    cursor: pointer;
+}
+
+#infoButtonMobile {
+    display: none;
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    cursor: pointer;
 }

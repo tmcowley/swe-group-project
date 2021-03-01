@@ -1,5 +1,6 @@
 package app;
 
+// SQL packages
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -52,35 +53,6 @@ public class DbConnection{
 
         // Instantiate Validator for DBConn instance
         validator = new Validator();
-
-        // run tests (move in future)
-        runTests();
-    }
-
-    private void runTests(){
-        System.out.println("10 unique event codes:");
-        for (int i = 0; i < 10; i++){
-            String event_code = generateUniqueEventCode();
-            System.out.print(event_code);
-            System.out.print(" | is valid: "+ validator.eventCodeIsValid(event_code) +"\n");
-        }
-        System.out.println();
-
-        System.out.println("10 unique host codes:");
-        for (int i = 0; i < 10; i++){
-            String host_code = generateUniqueHostCode();
-            System.out.print(host_code);
-            System.out.print(" | is valid: "+ validator.hostCodeIsValid(host_code) +"\n");
-        }
-        System.out.println();
-
-        System.out.println("10 unique template codes:");
-        for (int i = 0; i < 10; i++){
-            String template_code = generateUniqueTemplateCode();
-            System.out.print(template_code);
-            System.out.print(" | is valid: "+ validator.templateCodeIsValid(template_code) +"\n");
-        }
-        System.out.println();
     }
 
     /**

@@ -4,8 +4,8 @@ app/objects/Participant.class
 app/objects/Feedback.class
 app/DbConnection.class
 app/objects/Event.class
-app/objects/ArchivedEvent.class
 app/controllers/joinController.class
+app/objects/ArchivedEvent.class
 app/App.class
 app/objects/Host.class
 app/Validator.class

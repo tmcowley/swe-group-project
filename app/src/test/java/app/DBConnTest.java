@@ -6,9 +6,8 @@ import org.junit.Test;
 
 import app.DbConnection;
 
-// Unit tests against App.
-public class DBConnTest 
-{
+// Unit tests against DBConnection.java
+public class DBConnTest {
 
     DbConnection db;
     Validator validator;

@@ -18,24 +18,6 @@ public class Validator {
     public Validator(){
         // store word list (hash-set for O(1) lookup)
         getWordList();
-
-        // run tests (MOVE TO UTs IN /TEST)
-        runTests();
-    }
-
-    private void runTests(){
-        // System.out.println("Validation tests: t, f, t, f");
-        // System.out.println(eventCodeIsValid("CCCC"));
-        // System.out.println(eventCodeIsValid("AAAAAA"));
-        // System.out.println(eventCodeIsValid("33SA"));
-        // System.out.println(eventCodeIsValid("[[[[]]]]"));
-        System.out.println(hostCodeIsValid("fish-bird-brother-map"));
-        System.out.println(sanitizeHostCode("fish-bird-brother-MAP"));
-        System.out.println(hostCodeIsValid("xxxx-bird-brother-map"));
-        System.out.println(hostCodeIsValid("xxxx-bird-brother-ma p"));
-        System.out.println(hostCodeIsValid("xxxx-bird-brother map"));
-        System.out.println(hostCodeIsValid("map bird brother xxx"));
-        System.out.println("bird in wordList: "+wordListHashSet.contains("bird"));
     }
 
     /**

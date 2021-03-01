@@ -124,6 +124,53 @@ public class Validator {
         return true; // host code is valid
     }
 
+    // // TODO
+    // public boolean ipAddressIsValid(String ip_address){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean eAddressIsValid(String e_address){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean fNameIsValid(String f_name){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean lNameIsValid(String l_name){
+    //     return fNameIsValid(l_name);
+    // }
+
+    // // TODO; LATER IN DEV
+    // public boolean templateDataIsValid(String data){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean eventTitleIsValid(String data){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean eventDescriptionIsValid(String data){
+    //     return false;
+    // }
+
+    // // TODO
+    // public boolean eventTypeIsValid(String data){
+    //     return false;
+    // }
+
+    // // TODO; LATER IN DEV
+    // public boolean sentimentIsValid(String data){
+    //     return false;
+    // }
+
+    // TODO (*6): FOR EACH Object IN OBJECTS, create method isObjectValid
+
 
     /**
      * Sanitize an event code to ensure it is:

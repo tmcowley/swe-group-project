@@ -6,7 +6,7 @@ import java.io.*;
 import spark.*;
 import app.util.*;
 
-public class joinController {
+public class JoinController {
     /** Serve the join page (GET request) */
     public static Route serveJoinPage = (Request request, Response response) -> {
         Map<String, Object> model = new HashMap<>();

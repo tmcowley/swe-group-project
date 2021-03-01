@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 
 import org.eclipse.jetty.http.*;
 
-import app.Event;
+import app.objects.*;
 import app.controllers.*;
 import app.util.*;
 

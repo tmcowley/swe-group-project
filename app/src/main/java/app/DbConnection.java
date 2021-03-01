@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 import java.util.ArrayList;
 
-import app.Objects.*;
+import app.objects.*;
 
 // IO for word-list import
 import java.io.BufferedReader;

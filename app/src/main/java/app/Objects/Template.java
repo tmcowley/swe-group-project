@@ -1,4 +1,4 @@
-package app;
+package app.Objects;
 
 public class Template{
 

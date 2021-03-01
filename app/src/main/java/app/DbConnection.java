@@ -939,4 +939,24 @@ public class DbConnection{
         return hostCode;
     }
 
+    // TODO
+    protected Boolean banHost(){
+        return null;
+    }
+
+    // TODO
+    protected Boolean banParticipant(){
+        return null;
+    }
+
+    // TODO
+    protected Boolean addDataToTemplate(){
+        return null;
+    }
+
+    // TODO
+    protected Boolean archiveEvent(){
+        return null;
+    }
+
 }

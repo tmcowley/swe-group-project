@@ -12,45 +12,49 @@ public class Validator {
 
     // public void main(String[] args) {}
 
-    HashSet<String> wordlistHashSet = new HashSet<String>(1000);
+    HashSet<String> wordListHashSet = new HashSet<String>(1000);
     int peakWordSizeInList = 11;
 
     public Validator(){
         // store word list (hash-set for O(1) lookup)
-        getWordlist();
+        getWordList();
 
         // run tests (MOVE TO UTs IN /TEST)
-        //runTests();
+        runTests();
     }
 
     private void runTests(){
-        System.out.println("Validation tests: t, f, t, f");
-        System.out.println(eventCodeIsValid("CCCC"));
-        System.out.println(eventCodeIsValid("AAAAAA"));
-        System.out.println(eventCodeIsValid("33SA"));
-        System.out.println(eventCodeIsValid("[[[[]]]]"));
-        System.out.println(hostCodeIsValid("fish bird brother map"));
-        System.out.println(hostCodeIsValid("map bird brother asdfasdf"));
-        System.out.println("bird in wordlist: "+wordlistHashSet.contains("bird"));
+        // System.out.println("Validation tests: t, f, t, f");
+        // System.out.println(eventCodeIsValid("CCCC"));
+        // System.out.println(eventCodeIsValid("AAAAAA"));
+        // System.out.println(eventCodeIsValid("33SA"));
+        // System.out.println(eventCodeIsValid("[[[[]]]]"));
+        System.out.println(hostCodeIsValid("fish-bird-brother-map"));
+        System.out.println(sanitizeHostCode("fish-bird-brother-MAP"));
+        System.out.println(hostCodeIsValid("xxxx-bird-brother-map"));
+        System.out.println(hostCodeIsValid("xxxx-bird-brother-ma p"));
+        System.out.println(hostCodeIsValid("xxxx-bird-brother map"));
+        System.out.println(hostCodeIsValid("map bird brother xxx"));
+        System.out.println("bird in wordList: "+wordListHashSet.contains("bird"));
     }
 
     /**
-     * Store the host code wordlist in a hash-set DS
+     * Store the host code wordList in a hash-set DS
      * Lookup (w/ contains()) is O(1): constant time
      */
-    private void getWordlist(){
+    private void getWordList(){
         try{
-            BufferedReader in = new BufferedReader(new FileReader("resources/wordlist.txt"));
+            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordList.txt"));
             String str;
-            while((str = in.readLine()) != null){
-                wordlistHashSet.add(str);
+            while((str = readIn.readLine()) != null){
+                wordListHashSet.add(str);
             }
+            readIn.close();
         } catch (IOException ex){
-            // ensure file: wordlist.txt is in /app/resources/
+            // ensure file: wordList.txt is in /app/resources/
             System.out.println(ex.getMessage());
         }
     }
-
 
     /**
      * Check if the given event code is valid:
@@ -92,8 +96,8 @@ public class Validator {
 
     /**
      * Check if the given host code is valid:
-     * non-null, alpha-numeric (and space) characters only, 
-     * of the form [word word word word] with each word in wordlist
+     * non-null, alpha-numeric (and dash) characters only, 
+     * of the form [word-word-word-word] with each word in wordList
      * @param hostCode host code to be checked
      * @return host code validity state
      */
@@ -101,26 +105,20 @@ public class Validator {
         if (StringUtils.isBlank(hostCode))
             // host code is null, empty or whitespace only
             return false;
-
         if (hostCode.length() > (peakWordSizeInList*4 + 3))
             // host code exceeds upper-bound
             return false;
-
-        if (StringUtils.countMatches(hostCode, " ") != 3)
-            // host code not of format: [word word word word]
+        if (StringUtils.containsWhitespace(hostCode))
+            // host code contains illegal whitespace character
             return false;
-
-        if (!StringUtils.isAlphaSpace(hostCode)){
-            // illegal character in host code
+        if (StringUtils.countMatches(hostCode, "-") != 3)
+            // host code not of format: [word-word-word-word]
             return false;
-        }
-
-        String[] hostCodeArray = hostCode.split(" ");
+        String[] hostCodeArray = hostCode.split("-");
         for (String word : hostCodeArray){
-            if (!wordlistHashSet.contains(word))
+            if (!wordListHashSet.contains(word.toLowerCase()))
                 return false;
         }
-
         return true; // host code is valid
     }
 
@@ -208,3 +206,34 @@ public class Validator {
         return hostCode.toLowerCase();
     }
 }
+
+// DEPRECIATED METHODS
+
+// /**
+//  * Check if the given host code is valid:
+//  * non-null, alpha-numeric (and space) characters only, 
+//  * of the form [word word word word] with each word in wordList
+//  * @param hostCode host code to be checked
+//  * @return host code validity state
+//  */
+// public boolean hostCodeIsValid(String hostCode){
+//     if (StringUtils.isBlank(hostCode))
+//         // host code is null, empty or whitespace only
+//         return false;
+//     if (hostCode.length() > (peakWordSizeInList*4 + 3))
+//         // host code exceeds upper-bound
+//         return false;
+//     if (StringUtils.countMatches(hostCode, " ") != 3)
+//         // host code not of format: [word word word word]
+//         return false;
+//     if (!StringUtils.isAlphaSpace(hostCode)){
+//         // illegal character in host code
+//         return false;
+//     }
+//     String[] hostCodeArray = hostCode.split(" ");
+//     for (String word : hostCodeArray){
+//         if (!wordListHashSet.contains(word))
+//             return false;
+//     }
+//     return true; // host code is valid
+// }

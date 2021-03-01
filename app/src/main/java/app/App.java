@@ -15,12 +15,14 @@ public class App {
         staticFiles.location("/static");
         Spark.port(4567);
 
-        // create a db connection
         try{        
+            // instantiate db connection
             DbConnection db = new DbConnection();
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
+
+        Validator v = new Validator();
         
         //paths
         // get("/hello", (req, res) -> "Hello World");

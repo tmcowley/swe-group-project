@@ -9,4 +9,5 @@ app/controllers/joinController.class
 app/App.class
 app/objects/Host.class
 app/Validator.class
+app/controllers/APIController.class
 app/objects/Template.class

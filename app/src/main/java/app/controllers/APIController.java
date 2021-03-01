@@ -1,9 +1,9 @@
 package app.controllers;
 
- import java.util.*;
- import java.sql.SQLException;
- import spark.*;
- import static spark.Spark.*;
+import java.util.*;
+import java.sql.SQLException;
+import spark.*;
+import static spark.Spark.*;
 import java.net.*;
 import java.io.*;
 
@@ -16,17 +16,22 @@ public class APIController {
     // };
 
     public static Route createHost = (Request request, Response response) -> {
+        return null;
     };
 
     public static Route createEvent = (Request request, Response response) -> {
+        return null;
     };
 
     public static Route joinEvent = (Request request, Response response) -> {
+        return null;
     };
 
     public static Route createParticipant = (Request request, Response response) -> {
+        return null;
     };
 
     public static Route createFeedback = (Request request, Response response) -> {
+        return null;
     };
 }

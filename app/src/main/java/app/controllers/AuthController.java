@@ -16,9 +16,11 @@ public class AuthController {
     // };
 
     public static Route authHost = (Request request, Response response) -> {
+        return null;
     };
 
     public static Route authParticipant = (Request request, Response response) -> {
+        return null;
     };
 
 }

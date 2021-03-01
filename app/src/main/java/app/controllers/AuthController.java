@@ -7,7 +7,7 @@ package app.controllers;
 import java.net.*;
 import java.io.*;
 
-public class APIController {
+public class AuthController {
     // /** Serve the index page (GET request) */
     // public static Route serveIndexPage = (Request request, Response response) -> {
     //     Map<String, Object> model = new HashMap<>();

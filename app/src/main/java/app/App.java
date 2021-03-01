@@ -9,19 +9,18 @@ import app.controllers.*;
 import app.objects.*;
 import app.util.*;
 
+// 
+import java.sql.SQLException;
+
 public class App {
     public static void main(String[] args) {
         // tell the Spark framework where to find static files
         staticFiles.location("/static");
         Spark.port(4567);
 
-        // create a db connection
-        try{        
-            DbConnection db = new DbConnection();
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        
+        // instantiate DB connection
+        DbConnection db = new DbConnection();
+
         //paths
         // get("/hello", (req, res) -> "Hello World");
         get("/", indexController.serveIndexPage);

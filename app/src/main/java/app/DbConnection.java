@@ -35,15 +35,20 @@ public class DbConnection{
 
     /**
      * Constructor; initializes db connection
-     * @throws SQLException
      */
-    public DbConnection() throws SQLException {
-        // see: jdbc.postgresql.org/documentation/head/connect.html
-        String url = "jdbc:postgresql:database";
-        this.conn = DriverManager.getConnection(url);
+    public DbConnection() {
+        try{
+            // see: jdbc.postgresql.org/documentation/head/connect.html
+            String url = "jdbc:postgresql:database";
+            this.conn = DriverManager.getConnection(url);
+        } catch (SQLException e){
+            System.out.println("Error: DB failed to connect; ensure server is running");
+            System.out.println(e.getMessage() + "\n");
+            return;
+        }
 
         // store host-code word list
-        getWordlist();
+        getWordList();
 
         // Instantiate Validator for DBConn instance
         validator = new Validator();
@@ -63,17 +68,17 @@ public class DbConnection{
 
         System.out.println("10 unique host codes:");
         for (int i = 0; i < 10; i++){
-            String hostCode = generateUniqueHostCode();
-            System.out.print(hostCode);
-            System.out.print(" | is valid: "+ validator.hostCodeIsValid(hostCode) +"\n");
+            String host_code = generateUniqueHostCode();
+            System.out.print(host_code);
+            System.out.print(" | is valid: "+ validator.hostCodeIsValid(host_code) +"\n");
         }
         System.out.println();
 
         System.out.println("10 unique template codes:");
         for (int i = 0; i < 10; i++){
-            String templateCode = generateUniqueTemplateCode();
-            System.out.print(templateCode);
-            System.out.print(" | is valid: "+ validator.templateCodeIsValid(templateCode) +"\n");
+            String template_code = generateUniqueTemplateCode();
+            System.out.print(template_code);
+            System.out.print(" | is valid: "+ validator.templateCodeIsValid(template_code) +"\n");
         }
         System.out.println();
     }
@@ -89,19 +94,19 @@ public class DbConnection{
     /**
      * Store the host code word list in an array list DS
      */
-    private void getWordlist(){
+    private void getWordList(){
         try{
-            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordlist.txt"));
+            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordList.txt"));
             String str;
             while((str = readIn.readLine()) != null){
                 wordList.add(str);
             }
             readIn.close();
         } catch (IOException ex){
-            // ensure file: wordlist.txt is in /app/resources/
+            // ensure file: wordList.txt is in /app/resources/
             System.out.println(
                 "Error: Getting word list failed" + 
-                "       " + "Ensure wordlist.txt is in /app/resources");
+                "       " + "Ensure wordList.txt is in /app/resources");
             //System.out.println(ex.getMessage());
         }
     }
@@ -814,10 +819,11 @@ public class DbConnection{
     /**
      * Check if the given event code exists, 
      * and is against an active event
-     * @param eventCode the event code
+     * @param event_code the event code
      * @return existence state of eventCode, null if fails
      */
     private Boolean eventCodeExists(String event_code){
+        event_code = validator.sanitizeEventCode(event_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;
@@ -841,10 +847,11 @@ public class DbConnection{
 
     /**
      * Check if the given template code exists
-     * @param templateCode template code
-     * @return existence state of templateCode
+     * @param template_code template code
+     * @return existence state of template_code
      */
-    private boolean templateCodeExists(String templateCode){
+    private boolean templateCodeExists(String template_code){
+        template_code = validator.sanitizeTemplateCode(template_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;
@@ -852,7 +859,7 @@ public class DbConnection{
             String queryTemplateCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM template WHERE template_code=?);";
             stmt = this.conn.prepareStatement(queryTemplateCodeExists);
-            stmt.setString(1, templateCode);
+            stmt.setString(1, template_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 codeExists = rs.getBoolean(1);
@@ -868,10 +875,11 @@ public class DbConnection{
 
     /**
      * Check if the given host code exists
-     * @param hostCode host code
-     * @return existence state of hostCode
+     * @param host_code code
+     * @return existence state of host_code
      */
-    private boolean hostCodeExists(String hostCode){
+    private boolean hostCodeExists(String host_code){
+        host_code = validator.sanitizeHostCode(host_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Boolean codeExists = null;
@@ -879,7 +887,7 @@ public class DbConnection{
             String queryHostCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM host WHERE host_code=?);";
             stmt = this.conn.prepareStatement(queryHostCodeExists);
-            stmt.setString(1, hostCode);
+            stmt.setString(1, host_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 codeExists = rs.getBoolean(1);
@@ -913,30 +921,30 @@ public class DbConnection{
      * @return the generated template code
      */
     protected String generateUniqueTemplateCode(){
-        String templateCode = null;
-        while (templateCode == null || templateCodeExists(templateCode)){
-            templateCode = RandomStringUtils.randomAlphanumeric(6).toLowerCase();
+        String template_code = null;
+        while (template_code == null || templateCodeExists(template_code)){
+            template_code = RandomStringUtils.randomAlphanumeric(6).toLowerCase();
         }
-        return templateCode;
+        return template_code;
     }
 
     /**
      * Generate a unique host code 
      * (four-word subset of word list)
-     * @return the generated host code
+     * @return generated host code
      */
     protected String generateUniqueHostCode(){
-        String hostCode = null;
+        String host_code = null;
         SecureRandom rand = new SecureRandom();
-        while (hostCode == null || hostCodeExists(hostCode)){
+        while (host_code == null || hostCodeExists(host_code)){
             String[] hostCodeWords = new String[4];
             for (int index=0; index < 4; index++){
                 int randomWordIndex = rand.nextInt(wordList.size());
                 hostCodeWords[index] = wordList.get(randomWordIndex);
             }
-            hostCode = String.join(" ", hostCodeWords);
+            host_code= String.join("-", hostCodeWords);
         }
-        return hostCode;
+        return host_code;
     }
 
     // TODO

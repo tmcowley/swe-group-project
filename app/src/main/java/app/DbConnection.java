@@ -397,7 +397,7 @@ public class DbConnection{
 
     /**
      * Check if a given participant is muted in the given event
-     * @param participant_id participant
+     * @param participant_id participant ID
      * @param event_id event containing participant
      * @return method success state 
      */
@@ -929,7 +929,12 @@ public class DbConnection{
         return null;
     }
 
-    // TODO
+    /**
+     * Update data in templates 
+     * @template_id templateID of template that needs to be changed
+     * @data updated data
+     * @return data change status
+     */
     protected Boolean addDataToTemplate(int template_id, String data){
         PreparedStatement stmt = null;
         int templateFound = 0;
@@ -951,13 +956,23 @@ public class DbConnection{
         if (templateFound == 1) {
             return true;
         }
-        
+
         return false;
     }
 
-    // TODO
-    protected Boolean archiveEvent(){
-        return null;
+    /**
+     * Delete finished events and add it to archivedEvents 
+     * @event_id eventID of event that has already finished
+     * @total_mood mood of participants in this event
+     * @return added archiveEvent status
+     */
+    protected Boolean archiveEvent(int event_id, String total_mood){
+        Event event = getEvent(event_id);
+        ArchivedEvent archivedEvent = createArchivedEvent(event.getHostID(), total_mood, event.getTitle(), event.getDescription(), event.getType(), event.getStartTime(), event.getEndTime());
+        if (validator.isArchivedEventValid(archivedEvent)) {
+            return true;
+        }
+        return false;
     }
 
 }

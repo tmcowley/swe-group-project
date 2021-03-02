@@ -4,13 +4,13 @@ import java.sql.Timestamp;
 
 public class Feedback{
 
-    protected int feedback_id;
-    protected int host_id;
-    protected int event_id;
-    protected String data;
-    protected String sentiment;
-    protected boolean anonymous;
-    protected Timestamp timestamp;
+    private int feedback_id;
+    private int host_id;
+    private int event_id;
+    private String data;
+    private String sentiment;
+    private boolean anonymous;
+    private Timestamp timestamp;
 
     public Feedback(int feedback_id, int host_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp timestamp){
         this.feedback_id    = feedback_id; 

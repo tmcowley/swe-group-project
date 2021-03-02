@@ -2,11 +2,11 @@ package app.objects;
 
 public class Participant{
 
-    protected int participant_id;
-    protected String ip_address;
-    protected String f_name;
-    protected String l_name;
-    protected boolean sys_ban;
+    private int participant_id;
+    private String ip_address;
+    private String f_name;
+    private String l_name;
+    private boolean sys_ban;
 
     public Participant(int participant_id, String ip_address, String f_name, String l_name, boolean sys_ban){
         this.participant_id = participant_id;

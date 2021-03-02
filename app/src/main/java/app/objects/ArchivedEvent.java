@@ -12,14 +12,14 @@ import java.sql.Timestamp;
 
 public class ArchivedEvent{
 
-    protected int event_id;
-    protected int host_id;
-    protected String total_mood;
-    protected String title;
-    protected String description;
-    protected String type;
-    protected Timestamp start_time;
-    protected Timestamp end_time;
+    private int event_id;
+    private int host_id;
+    private String total_mood;
+    private String title;
+    private String description;
+    private String type;
+    private Timestamp start_time;
+    private Timestamp end_time;
 
     public ArchivedEvent(int event_id, int host_id, String total_mood, String title, String description, String type, Timestamp start_time, Timestamp end_time){
         this.event_id       = event_id; 

@@ -1,6 +1,9 @@
 package app.controllers;
 
 import java.util.*;
+
+import app.util.ViewUtil;
+
 import java.sql.SQLException;
 import spark.*;
 import static spark.Spark.*;
@@ -24,7 +27,9 @@ public class APIController {
     };
 
     public static Route joinEvent = (Request request, Response response) -> {
-        return null;
+        Map<String, Object> model = new HashMap<>();
+        model.put("test1", "this is a test variable!");
+        return ViewUtil.render(request, model, "/velocity/joinEvent.vm");
     };
 
     public static Route createParticipant = (Request request, Response response) -> {

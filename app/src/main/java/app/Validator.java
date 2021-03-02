@@ -104,45 +104,122 @@ public class Validator {
         return true; // host code is valid
     }
 
-    // // TODO
-    // public boolean ipAddressIsValid(String ip_address){
-    //     return false;
-    // }
+    /**
+     * Check if IP address is valid
+     * @param ip_address IP address to be checked
+     * @return IP address validity state
+     */
+    public boolean ipAddressIsValid(String ip_address){
+        if (ip_address != null && !ip_address.isEmpty()) {
+			// ip address regular expression
+			String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 
-    // // TODO
-    // public boolean eAddressIsValid(String e_address){
-    //     return false;
-    // }
+            // return true if ip matches with the regular expression
+            if (ip_address.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    // // TODO
-    // public boolean fNameIsValid(String f_name){
-    //     return false;
-    // }
+    /**
+     * Check if email address is valid
+     * @param e_address email address to be checked
+     * @return email address validity state
+     */
+    public boolean eAddressIsValid(String e_address){
+        if (e_address != null && !e_address.isEmpty()) {
+			// email address regular expression
+			String regex = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
 
-    // // TODO
-    // public boolean lNameIsValid(String l_name){
-    //     return fNameIsValid(l_name);
-    // }
+            // return true if email matches with the regular expression
+            if (e_address.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if both first name and last name are valid:
+     * starts with capital letter and contains alphabet characters only
+     * @param name name to be checked
+     * @return name validity state
+     */
+    public boolean nameIsValid(String name){
+        if (name != null && !name.isEmpty()) {
+			// first name regular expression
+			String regex = "^[A-Z][a-z]+$";
+
+            // return true if name matches with the regular expression
+            if (name.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // // TODO; LATER IN DEV
     // public boolean templateDataIsValid(String data){
     //     return false;
     // }
 
-    // // TODO
-    // public boolean eventTitleIsValid(String data){
-    //     return false;
-    // }
+    /**
+     * Check if event title is valid:
+     * contains alpha-numeric (and blank) characters only
+     * @param data title to be checked
+     * @return title validity state
+     */
+    public boolean eventTitleIsValid(String data){
+        if (data != null && !data.isEmpty()) {
+			// title regular expression
+			String regex = "^\\w+( \\w+)*";
 
-    // // TODO
-    // public boolean eventDescriptionIsValid(String data){
-    //     return false;
-    // }
+            // return true if title matches with the regular expression
+            if (data.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    // // TODO
-    // public boolean eventTypeIsValid(String data){
-    //     return false;
-    // }
+    /**
+     * Check if event description is valid:
+     * contains all characters exclude '\r\n'
+     * @param data description to be checked
+     * @return description validity state
+     */
+    public boolean eventDescriptionIsValid(String data){
+        if (data != null && !data.isEmpty()) {
+			// description regular expression
+			String regex = "^.+( .)*";
+
+            // return true if description matches with the regular expression
+            if (data.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if event type is valid:
+     * event only allows five types 'lecture', 'seminar', 'conference', 'workshop', 'other'
+     * @param data type to be checked
+     * @return type validity state
+     */
+    public boolean eventTypeIsValid(String data){
+        if (data.equals("lecture")||
+            data.equals("seminar")||
+            data.equals("conference")||
+            data.equals("workshop")||
+            data.equals("other")) {
+            return true;
+        }
+        return false;
+    }
 
     // // TODO; LATER IN DEV
     // public boolean sentimentIsValid(String data){

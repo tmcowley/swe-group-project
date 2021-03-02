@@ -1040,14 +1040,203 @@ public class DbConnection{
         return false;
     }
 
-    // TODO * 7
-    protected Boolean deleteHost(int host_id){return null;}
-    protected Boolean deleteTemplate(int template_id){return null;}
-    protected Boolean deleteParticipant(int participant_id){return null;}
-    protected Boolean deleteEvent(int event_id){return null;}
-    protected Boolean deleteArchivedEvent(int event_id){return null;}
-    protected Boolean deleteFeedback(int feedback_id){return null;}
-    protected Boolean deleteParticipantInEvent(int participant_id, int event_id){return null;}
+    /**
+     * Delete host by ID
+     * @host_id host ID of the host needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteHost(int host_id){
+        PreparedStatement stmt = null;
+        int hostDeleted = 0;
+        try{
+            String deleteHost = ""
+                + "DELETE FROM host "
+                + "WHERE host_id = ?;";
+            stmt = this.conn.prepareStatement(deleteHost);
+            stmt.setInt(1, host_id);
+            hostDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (hostDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete template by ID
+     * @template_id template ID of the template needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteTemplate(int template_id){
+        PreparedStatement stmt = null;
+        int templateDeleted = 0;
+        try{
+            String deleteTemplate = ""
+                + "DELETE FROM template "
+                + "WHERE template_id = ?;";
+            stmt = this.conn.prepareStatement(deleteTemplate);
+            stmt.setInt(1, template_id);
+            templateDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (templateDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant by ID
+     * @participant_id participant ID of the participant needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteParticipant(int participant_id){
+        PreparedStatement stmt = null;
+        int participantDeleted = 0;
+        try{
+            String deleteParticipant = ""
+                + "DELETE FROM participant "
+                + "WHERE participant_id = ?;";
+            stmt = this.conn.prepareStatement(deleteParticipant);
+            stmt.setInt(1, participant_id);
+            participantDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (participantDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete event by ID
+     * @event_id event ID of archived event needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteEvent(int event_id){
+        PreparedStatement stmt = null;
+        int eventDeleted = 0;
+        try{
+            String deleteEvent = ""
+                + "DELETE FROM event "
+                + "WHERE event_id = ?;";
+            stmt = this.conn.prepareStatement(deleteEvent);
+            stmt.setInt(1, event_id);
+            eventDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (eventDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete archived event by ID
+     * @event_id event ID of archived event needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteArchivedEvent(int event_id){
+        PreparedStatement stmt = null;
+        int eventDeleted = 0;
+        try{
+            String deleteEvent = ""
+                + "DELETE FROM archived_event "
+                + "WHERE event_id = ?;";
+            stmt = this.conn.prepareStatement(deleteEvent);
+            stmt.setInt(1, event_id);
+            eventDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (eventDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant and event pair by ID
+     * @feedback_id feedback ID of the feedback needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteFeedback(int feedback_id){
+        PreparedStatement stmt = null;
+        int feedbackDeleted = 0;
+        try{
+            String deleteFeedback = ""
+                + "DELETE FROM feedback "
+                + "WHERE feedback_id = ?;";
+            stmt = this.conn.prepareStatement(deleteFeedback);
+            stmt.setInt(1, feedback_id);
+            feedbackDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (feedbackDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant and event pair by IDs
+     * @participant_id participant ID of the pair needed to be deleted
+     * @event_id event ID of the pair needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteParticipantInEvent(int participant_id, int event_id){
+        PreparedStatement stmt = null;
+        int deletedLink = 0;
+        try{
+            String participantInEventDeleted = ""
+                + "DELETE FROM participant_in_event "
+                + "WHERE participant_id = ? AND event_id = ?;";
+            stmt = this.conn.prepareStatement(participantInEventDeleted);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(1, event_id);
+            deletedLink = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (deletedLink != 0) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Delete finished events and add it to archivedEvents 

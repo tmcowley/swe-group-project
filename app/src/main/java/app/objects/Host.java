@@ -2,13 +2,13 @@ package app.objects;
 
 public class Host{
 
-    protected int host_id;
-    protected String host_code;
-    protected String ip_address;
-    protected String e_address;
-    protected String f_name;
-    protected String l_name;
-    protected boolean sys_ban;
+    private int host_id;
+    private String host_code;
+    private String ip_address;
+    private String e_address;
+    private String f_name;
+    private String l_name;
+    private boolean sys_ban;
 
     public Host(int host_id, String host_code, String ip_address, String e_address, String f_name, String l_name, boolean sys_ban){
         this.host_id = host_id;
@@ -20,4 +20,32 @@ public class Host{
         this.sys_ban = sys_ban;
     }
 
+    public int getHostID(){
+        return this.host_id;
+    }
+    
+    public String getHostCode(){
+        return this.host_code;
+    }
+
+    public String getIPAddress(){
+        return this.ip_address;
+    }
+
+    public String getEAddress(){
+        return this.e_address;
+    }
+
+    public String getFName(){
+        return this.f_name;
+    }
+
+    public String getLName(){
+        return this.l_name;
+    }
+
+    public boolean getSysBan(){
+        return this.sys_ban;
+    }
+    
 }

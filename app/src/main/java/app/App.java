@@ -23,8 +23,8 @@ public class App {
 
         //paths
         // get("/hello", (req, res) -> "Hello World");
-        get("/", participantEventController.servePage);
-        get("/event/join/code", joinController.servePage);
+        get("/", IndexController.serveIndexPage);
+        get("/event/join/code", APIController.joinEvent);
         get("/host/login", null);
         get("/host/get-code", null);
         get("/host/home", null);

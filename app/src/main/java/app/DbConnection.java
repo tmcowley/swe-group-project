@@ -1,5 +1,6 @@
 package app;
 
+// SQL packages
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -52,35 +53,6 @@ public class DbConnection{
 
         // Instantiate Validator for DBConn instance
         validator = new Validator();
-
-        // run tests (move in future)
-        runTests();
-    }
-
-    private void runTests(){
-        System.out.println("10 unique event codes:");
-        for (int i = 0; i < 10; i++){
-            String event_code = generateUniqueEventCode();
-            System.out.print(event_code);
-            System.out.print(" | is valid: "+ validator.eventCodeIsValid(event_code) +"\n");
-        }
-        System.out.println();
-
-        System.out.println("10 unique host codes:");
-        for (int i = 0; i < 10; i++){
-            String host_code = generateUniqueHostCode();
-            System.out.print(host_code);
-            System.out.print(" | is valid: "+ validator.hostCodeIsValid(host_code) +"\n");
-        }
-        System.out.println();
-
-        System.out.println("10 unique template codes:");
-        for (int i = 0; i < 10; i++){
-            String template_code = generateUniqueTemplateCode();
-            System.out.print(template_code);
-            System.out.print(" | is valid: "+ validator.templateCodeIsValid(template_code) +"\n");
-        }
-        System.out.println();
     }
 
     /**
@@ -425,7 +397,7 @@ public class DbConnection{
 
     /**
      * Check if a given participant is muted in the given event
-     * @param participant_id participant
+     * @param participant_id participant ID
      * @param event_id event containing participant
      * @return method success state 
      */
@@ -947,24 +919,338 @@ public class DbConnection{
         return host_code;
     }
 
-    // TODO
-    protected Boolean banHost(){
-        return null;
+    /**
+     * ban host using host ID 
+     * @host_id banned hostID
+     * @return ban status
+     */
+    protected Boolean banHost(int host_id){
+        PreparedStatement stmt = null;
+        int bannedHost = 0;
+        try{
+            String banHost = ""
+                + "UPDATE host "
+                + "SET sys_ban = ? "
+                + "WHERE host_id = ?;";
+            stmt = this.conn.prepareStatement(banHost);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, host_id);
+            bannedHost = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedHost == 1) {
+            return true;
+        }
+
+        return false;
     }
 
-    // TODO
-    protected Boolean banParticipant(){
-        return null;
+    /**
+     * ban host using email address 
+     * @host_id banned hostID
+     * @return ban status
+     */
+    protected Boolean banHost(String eAddress){
+        PreparedStatement stmt = null;
+        int bannedHost = 0;
+        try{
+            String banHost = ""
+                + "UPDATE host "
+                + "SET sys_ban = ? "
+                + "WHERE e_address = ?;";
+            stmt = this.conn.prepareStatement(banHost);
+            stmt.setBoolean(1, true);
+            stmt.setString(2, eAddress);
+            bannedHost = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedHost == 1) {
+            return true;
+        }
+
+        return false;
     }
 
-    // TODO
-    protected Boolean addDataToTemplate(){
-        return null;
+    /**
+     * ban participant using participant ID 
+     * @participant_id banned participantID
+     * @return ban status
+     */
+    protected Boolean banParticipant(int participant_id){
+        PreparedStatement stmt = null;
+        int bannedParticipant = 0;
+        try{
+            String banParticipant = ""
+                + "UPDATE participant "
+                + "SET sys_ban = ? "
+                + "WHERE participant_id = ?;";
+            stmt = this.conn.prepareStatement(banParticipant);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, participant_id);
+            bannedParticipant = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedParticipant == 1) {
+            return true;
+        }
+
+        return false;
     }
 
-    // TODO
-    protected Boolean archiveEvent(){
-        return null;
+    /**
+     * Update data in templates 
+     * @template_id templateID of template that needs to be changed
+     * @data updated data
+     * @return data change status
+     */
+    protected Boolean addDataToTemplate(int template_id, String data){
+        PreparedStatement stmt = null;
+        int templateFound = 0;
+        try{
+            String updateTemplate = ""
+                + "UPDATE template "
+                + "SET data = ? "
+                + "WHERE template_id = ?;";
+            stmt = this.conn.prepareStatement(updateTemplate);
+            stmt.setString(1, data);
+            stmt.setInt(2, template_id);
+            templateFound = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (templateFound == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete host by ID
+     * @host_id host ID of the host needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteHost(int host_id){
+        PreparedStatement stmt = null;
+        int hostDeleted = 0;
+        try{
+            String deleteHost = ""
+                + "DELETE FROM host "
+                + "WHERE host_id = ?;";
+            stmt = this.conn.prepareStatement(deleteHost);
+            stmt.setInt(1, host_id);
+            hostDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (hostDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete template by ID
+     * @template_id template ID of the template needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteTemplate(int template_id){
+        PreparedStatement stmt = null;
+        int templateDeleted = 0;
+        try{
+            String deleteTemplate = ""
+                + "DELETE FROM template "
+                + "WHERE template_id = ?;";
+            stmt = this.conn.prepareStatement(deleteTemplate);
+            stmt.setInt(1, template_id);
+            templateDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (templateDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant by ID
+     * @participant_id participant ID of the participant needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteParticipant(int participant_id){
+        PreparedStatement stmt = null;
+        int participantDeleted = 0;
+        try{
+            String deleteParticipant = ""
+                + "DELETE FROM participant "
+                + "WHERE participant_id = ?;";
+            stmt = this.conn.prepareStatement(deleteParticipant);
+            stmt.setInt(1, participant_id);
+            participantDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (participantDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete event by ID
+     * @event_id event ID of archived event needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteEvent(int event_id){
+        PreparedStatement stmt = null;
+        int eventDeleted = 0;
+        try{
+            String deleteEvent = ""
+                + "DELETE FROM event "
+                + "WHERE event_id = ?;";
+            stmt = this.conn.prepareStatement(deleteEvent);
+            stmt.setInt(1, event_id);
+            eventDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (eventDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete archived event by ID
+     * @event_id event ID of archived event needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteArchivedEvent(int event_id){
+        PreparedStatement stmt = null;
+        int eventDeleted = 0;
+        try{
+            String deleteEvent = ""
+                + "DELETE FROM archived_event "
+                + "WHERE event_id = ?;";
+            stmt = this.conn.prepareStatement(deleteEvent);
+            stmt.setInt(1, event_id);
+            eventDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (eventDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant and event pair by ID
+     * @feedback_id feedback ID of the feedback needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteFeedback(int feedback_id){
+        PreparedStatement stmt = null;
+        int feedbackDeleted = 0;
+        try{
+            String deleteFeedback = ""
+                + "DELETE FROM feedback "
+                + "WHERE feedback_id = ?;";
+            stmt = this.conn.prepareStatement(deleteFeedback);
+            stmt.setInt(1, feedback_id);
+            feedbackDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (feedbackDeleted != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete participant and event pair by IDs
+     * @participant_id participant ID of the pair needed to be deleted
+     * @event_id event ID of the pair needed to be deleted
+     * @return delete status
+     */
+    protected Boolean deleteParticipantInEvent(int participant_id, int event_id){
+        PreparedStatement stmt = null;
+        int deletedLink = 0;
+        try{
+            String participantInEventDeleted = ""
+                + "DELETE FROM participant_in_event "
+                + "WHERE participant_id = ? AND event_id = ?;";
+            stmt = this.conn.prepareStatement(participantInEventDeleted);
+            stmt.setInt(1, participant_id);
+            stmt.setInt(1, event_id);
+            deletedLink = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (deletedLink != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete finished events and add it to archivedEvents 
+     * @event_id eventID of event that has already finished
+     * @total_mood mood of participants in this event
+     * @return added archiveEvent status
+     */
+    protected Boolean archiveEvent(int event_id, String total_mood){
+        Event event = getEvent(event_id);
+        ArchivedEvent archivedEvent = createArchivedEvent(event.getHostID(), total_mood, event.getTitle(), event.getDescription(), event.getType(), event.getStartTime(), event.getEndTime());
+        if (validator.isArchivedEventValid(archivedEvent)) {
+            return true;
+        }
+        return false;
     }
 
 }

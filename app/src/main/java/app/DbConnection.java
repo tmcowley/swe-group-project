@@ -930,8 +930,29 @@ public class DbConnection{
     }
 
     // TODO
-    protected Boolean addDataToTemplate(){
-        return null;
+    protected Boolean addDataToTemplate(int template_id, String data){
+        PreparedStatement stmt = null;
+        int templateFound = 0;
+        try{
+            String updateTemplate = ""
+                + "UPDATE template "
+                + "SET data = ? "
+                + "WHERE template_id = ?;";
+            stmt = this.conn.prepareStatement(updateTemplate);
+            stmt.setString(1, data);
+            stmt.setInt(2, template_id);
+            templateFound = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (templateFound == 1) {
+            return true;
+        }
+        
+        return false;
     }
 
     // TODO

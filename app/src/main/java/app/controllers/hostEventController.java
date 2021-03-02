@@ -6,7 +6,7 @@ import java.io.*;
 import spark.*;
 import app.util.*;
 
-public class IndexController {
+public class hostEventController {
     /** Serve the index page (GET request) */
     public static Route servePage = (Request request, Response response) -> {
         Map<String, Object> model = new HashMap<>();

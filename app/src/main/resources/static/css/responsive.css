@@ -1,3 +1,10 @@
+@media screen and (max-width: 1350px) {
+    #hostGrid {
+        display: grid;
+        grid-template-columns: 100%;
+    }
+}
+
 @media screen and (max-width: 1200px) {
     #mainBodyContainer {
         grid-template-columns: auto 350px;
@@ -16,6 +23,9 @@
     }
     #exitButtonMobile, #infoButtonMobile {
         display: block;
+    }
+    #mainHostEventBodyContainer {
+        grid-template-columns: 100%;
     }
 }
 

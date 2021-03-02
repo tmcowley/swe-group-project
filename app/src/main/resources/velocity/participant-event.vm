@@ -64,8 +64,8 @@
 </header>
 <div id="mainBodyContainer">
     <div id="mainFormSection">
-        <span id="exitButtonMobile"><img src="./images/exit-icon.png"></span>
-        <span id="infoButtonMobile" onclick="openNav()"><img src="./images/info-icon.png"></span>
+        <span id="exitButtonMobile"><img src="/images/exit-icon.png"></span>
+        <span id="infoButtonMobile" onclick="openNav()"><img src="/images/info-icon.png"></span>
         <div id="mainForm">
             <form>
                 <h1>How are you finding the meeting?</h1>

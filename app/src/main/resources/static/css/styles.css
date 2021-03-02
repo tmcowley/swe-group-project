@@ -52,6 +52,13 @@ header {
     overflow: auto;
 }
 
+#mainHostEventBodyContainer {
+    flex: 1;
+    display: grid;
+    grid-template-columns: auto 50%;
+    overflow: auto;
+}
+
 #mainFormSection {
     background-color: #886C91;
     overflow-y: scroll;
@@ -224,4 +231,44 @@ textarea {
     right: 30px;
     top: 20px;
     cursor: pointer;
+}
+
+#formSectionTitle {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.feedbackBox {
+    max-width: 1000px;
+    background-color: white;
+    padding: 30px;
+    margin: 0 auto 20px;
+    border-radius: 40px;
+    box-shadow: 5px 5px 5px #585858;
+    border: 1px solid #b7b7b7;
+}
+
+.feedbackBox h2 {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+#hostGrid {
+    display: grid;
+    grid-template-columns: 50% auto;
+}
+
+#hostGrid > div {
+    background-color: #552d62;
+    height: 200px;
+    border: 1px solid #450b57;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.hostGridPlaceholder {
+    font-family: cursive;
+    color: magenta;
 }

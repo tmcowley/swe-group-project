@@ -23,13 +23,13 @@ public class App {
 
         //paths
         // get("/hello", (req, res) -> "Hello World");
-        get("/", indexController.serveIndexPage);
-        get("/event/join/code", joinController.serveJoinPage);
+        get("/", participantEventController.servePage);
+        get("/event/join/code", joinController.servePage);
         get("/host/login", null);
         get("/host/get-code", null);
         get("/host/home", null);
         get("/host/create-event", null);
-        get("/event/host/code", null);
+        get("/event/host/code", hostEventController.servePage);
         get("/host/templates", null);
         get("/host/templates/new", null);
         get("/host/templates/edit/code", null);

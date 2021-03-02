@@ -16,4 +16,24 @@ public class Participant{
         this.sys_ban = sys_ban;
     }
 
+    public int getParticipantID(){
+        return this.participant_id;
+    }
+
+    public String getIPAddress(){
+        return this.ip_address;
+    }
+
+    public String getFName(){
+        return this.f_name;
+    }
+
+    public String getLName(){
+        return this.l_name;
+    }
+
+    public boolean getSysBan(){
+        return this.sys_ban;
+    }
+
 }

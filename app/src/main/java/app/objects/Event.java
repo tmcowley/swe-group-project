@@ -33,4 +33,40 @@ public class Event{
         this.end_time       = end_time;
         this.eventCode      = eventCode;
     }
+
+    public int getEventID(){
+        return this.event_id;
+    }
+
+    public int getHostID(){
+        return this.host_id;
+    }
+
+    public int getTemplateID(){
+        return this.template_id;
+    }
+
+    public String getTitle(){
+        return this.title;
+    }
+
+    public String getDescription(){
+        return this.description;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public Timestamp getStartTime(){
+        return this.start_time;
+    }
+
+    public Timestamp getEndTime(){
+        return this.end_time;
+    }
+
+    public String getEventCode(){
+        return this.eventCode;
+    }
 }

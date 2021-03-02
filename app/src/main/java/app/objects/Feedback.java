@@ -21,4 +21,33 @@ public class Feedback{
         this.anonymous      = anonymous;
         this.timestamp      = timestamp;
     }
+
+    public int getFeedbackID(){
+        return this.feedback_id;
+    }
+
+    public int getEventID(){
+        return this.event_id;
+    }
+
+    public int getHostID(){
+        return this.host_id;
+    }
+
+    public String getData(){
+        return this.data;
+    }
+
+    public String getSentiment(){
+        return this.sentiment;
+    }
+
+    public boolean getAnonymous(){
+        return this.anonymous;
+    }
+
+    public Timestamp getTimestamp(){
+        return this.timestamp;
+    }
+    
 }

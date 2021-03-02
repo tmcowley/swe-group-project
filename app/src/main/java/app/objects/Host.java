@@ -20,4 +20,32 @@ public class Host{
         this.sys_ban = sys_ban;
     }
 
+    public int getHostID(){
+        return this.host_id;
+    }
+    
+    public String getHostCode(){
+        return this.host_code;
+    }
+
+    public String getIPAddress(){
+        return this.ip_address;
+    }
+
+    public String getEAddress(){
+        return this.e_address;
+    }
+
+    public String getFName(){
+        return this.f_name;
+    }
+
+    public String getLName(){
+        return this.l_name;
+    }
+
+    public boolean getSysBan(){
+        return this.sys_ban;
+    }
+    
 }

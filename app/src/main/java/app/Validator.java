@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.util.HashSet; // import the HashSet class
 import org.apache.commons.lang3.StringUtils; // for event code sanitization
 
+import app.objects.*;
+
 public class Validator {
 
     // public void main(String[] args) {}
@@ -162,9 +164,9 @@ public class Validator {
     }
 
     // // TODO; LATER IN DEV
-    // public boolean templateDataIsValid(String data){
-    //     return false;
-    // }
+    public boolean templateDataIsValid(String data){
+        return false;
+    }
 
     /**
      * Check if event title is valid:
@@ -215,19 +217,116 @@ public class Validator {
             data.equals("seminar")||
             data.equals("conference")||
             data.equals("workshop")||
-            data.equals("other")) {
+            data.equals("other")
+            ) {
             return true;
         }
         return false;
     }
 
     // // TODO; LATER IN DEV
-    // public boolean sentimentIsValid(String data){
-    //     return false;
-    // }
+    public boolean sentimentIsValid(String data){
+        return false;
+    }
 
     // TODO (*6): FOR EACH Object IN OBJECTS, create method isObjectValid
 
+    /** TODO: vaildate more data inside
+     * Check if ArchivedEvent is valid:
+     * check every data inside
+     * @param archivedEvent ArchivedEvent instance to be checked
+     * @return ArchivedEvent validity state
+     */
+    public boolean isArchivedEventValid(ArchivedEvent archivedEvent){
+        if (eventTitleIsValid(archivedEvent.getTitle())&&
+            eventDescriptionIsValid(archivedEvent.getDescription())&&
+            eventDescriptionIsValid(archivedEvent.getType())
+            ) {
+            return true;
+        }
+        return false;
+    }
+
+    /** TODO: vaildate more data inside
+     * Check if Event is valid:
+     * check every data inside
+     * @param event Event instance to be checked
+     * @return Event validity state
+     */
+    public boolean isEventValid(Event event){
+        if (eventTitleIsValid(event.getTitle())&&
+            eventDescriptionIsValid(event.getDescription())&&
+            eventDescriptionIsValid(event.getType())&&
+            eventCodeIsValid(event.getEventCode())
+            ) {
+            return true;
+        }
+        return false;
+    }
+
+    /** TODO: vaildate more data inside
+     * Check if Feedback is valid:
+     * check every data inside
+     * @param feedback Feedback instance to be checked
+     * @return Feedback validity state
+     */
+    public boolean isFeedbackValid(Feedback feedback){
+        if (eventDescriptionIsValid(feedback.getSentiment())&&
+            sentimentIsValid(feedback.getSentiment())
+            ) {
+            return true;
+        }
+        return false;
+    }
+
+    /** TODO: vaildate more data inside
+     * Check if Host is valid:
+     * check every data inside
+     * @param host Host instance to be checked
+     * @return Host validity state
+     */
+    public boolean isHostValid(Host host){
+        if (hostCodeIsValid(host.getHostCode())&&
+            ipAddressIsValid(host.getIPAddress())&&
+            eAddressIsValid(host.getEAddress())&&
+            nameIsValid(host.getFName())&&
+            nameIsValid(host.getLName())
+            ) {
+            return true;
+        }
+        return false;
+    }
+
+    /** TODO: vaildate more data inside
+     * Check if Participant is valid:
+     * check every data inside
+     * @param participant Participant instance to be checked
+     * @return Participant validity state
+     */
+    public boolean isParticipantValid(Participant participant){
+        if (ipAddressIsValid(participant.getIPAddress())&&
+            nameIsValid(participant.getFName())&&
+            nameIsValid(participant.getLName())
+            ) {
+            return true;
+        }
+        return false;
+    }
+
+    /** TODO: vaildate more data inside
+     * Check if Template is valid:
+     * check every data inside
+     * @param template Template instance to be checked
+     * @return Template validity state
+     */
+    public boolean isTemplateValid(Template template){
+        if (templateCodeIsValid(template.getTemplateCode())&&
+            templateDataIsValid(template.getData())
+            ) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Sanitize an event code to ensure it is:

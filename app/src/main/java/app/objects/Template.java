@@ -14,4 +14,20 @@ public class Template{
         this.data = data;
     }
 
+    public int getTemplateID(){
+        return this.template_id;
+    }
+
+    public int getHostID(){
+        return this.host_id;
+    }
+
+    public String getTemplateCode(){
+        return this.template_code;
+    }
+
+    public String getData(){
+        return this.data;
+    }
+    
 }

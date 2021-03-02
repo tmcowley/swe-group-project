@@ -919,14 +919,94 @@ public class DbConnection{
         return host_code;
     }
 
-    // TODO
-    protected Boolean banHost(){
-        return null;
+    /**
+     * ban host using host ID 
+     * @host_id banned hostID
+     * @return ban status
+     */
+    protected Boolean banHost(int host_id){
+        PreparedStatement stmt = null;
+        int bannedHost = 0;
+        try{
+            String banHost = ""
+                + "UPDATE host "
+                + "SET sys_ban = ? "
+                + "WHERE host_id = ?;";
+            stmt = this.conn.prepareStatement(banHost);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, host_id);
+            bannedHost = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedHost == 1) {
+            return true;
+        }
+
+        return false;
     }
 
-    // TODO
-    protected Boolean banParticipant(){
-        return null;
+    /**
+     * ban host using email address 
+     * @host_id banned hostID
+     * @return ban status
+     */
+    protected Boolean banHost(String eAddress){
+        PreparedStatement stmt = null;
+        int bannedHost = 0;
+        try{
+            String banHost = ""
+                + "UPDATE host "
+                + "SET sys_ban = ? "
+                + "WHERE e_address = ?;";
+            stmt = this.conn.prepareStatement(banHost);
+            stmt.setBoolean(1, true);
+            stmt.setString(2, eAddress);
+            bannedHost = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedHost == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * ban participant using participant ID 
+     * @participant_id banned participantID
+     * @return ban status
+     */
+    protected Boolean banParticipant(int participant_id){
+        PreparedStatement stmt = null;
+        int bannedParticipant = 0;
+        try{
+            String banParticipant = ""
+                + "UPDATE participant "
+                + "SET sys_ban = ? "
+                + "WHERE participant_id = ?;";
+            stmt = this.conn.prepareStatement(banParticipant);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, participant_id);
+            bannedParticipant = stmt.executeUpdate();
+        } catch (SQLException e){
+            //throw e;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        
+        if (bannedParticipant == 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -1040,6 +1040,15 @@ public class DbConnection{
         return false;
     }
 
+    // TODO * 7
+    protected Boolean deleteHost(int host_id){return null;}
+    protected Boolean deleteTemplate(int template_id){return null;}
+    protected Boolean deleteParticipant(int participant_id){return null;}
+    protected Boolean deleteEvent(int event_id){return null;}
+    protected Boolean deleteArchivedEvent(int event_id){return null;}
+    protected Boolean deleteFeedback(int feedback_id){return null;}
+    protected Boolean deleteParticipantInEvent(int participant_id, int event_id){return null;}
+
     /**
      * Delete finished events and add it to archivedEvents 
      * @event_id eventID of event that has already finished

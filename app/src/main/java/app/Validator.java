@@ -229,9 +229,7 @@ public class Validator {
         return false;
     }
 
-    // TODO (*6): FOR EACH Object IN OBJECTS, create method isObjectValid
-
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if ArchivedEvent is valid:
      * check every data inside
      * @param archivedEvent ArchivedEvent instance to be checked
@@ -247,7 +245,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if Event is valid:
      * check every data inside
      * @param event Event instance to be checked
@@ -264,7 +262,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked
@@ -279,7 +277,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if Host is valid:
      * check every data inside
      * @param host Host instance to be checked
@@ -297,7 +295,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if Participant is valid:
      * check every data inside
      * @param participant Participant instance to be checked
@@ -313,7 +311,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: vaildate more data inside
+    /** TODO: validate more data inside
      * Check if Template is valid:
      * check every data inside
      * @param template Template instance to be checked

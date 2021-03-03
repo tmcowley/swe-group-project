@@ -72,12 +72,19 @@ public class DBConnTest {
 
         // test feedback creation
         Feedback testFeedback = db.createFeedback(testPartID, testEventID, "data", "sentiment", false, new Timestamp(System.currentTimeMillis()));
+        int testFeedbackID = testFeedback.getFeedbackID();
 
         // test participant_in_event creation
         Boolean partInEvent = db.addParticipantToEvent(testPartID, testEventID);
         
-        // TODO: clear all objects from DB
-
+        // clear all testing objects from DB
+        db.deleteHost(testHostID);
+        db.deleteTemplate(testTemplateID);
+        db.deleteParticipant(testPartID);
+        db.deleteEvent(testEventID);
+        db.deleteArchivedEvent(testArchivedEventID);
+        db.deleteFeedback(testFeedbackID);
+        db.removeParticipantFromEvent(testPartID, testEventID);
 
         // assertions
         assertFalse(testHost == null);
@@ -86,6 +93,8 @@ public class DBConnTest {
         assertFalse(testEvent == null);
         assertFalse(testFeedback == null);
         assertFalse(partInEvent == null || partInEvent == false);
+
+        //assertFalse(true);
 
     }
 }

@@ -23,7 +23,7 @@ public class App{
             DbConnection db = new DbConnection();
         } catch (SQLException e){
             System.out.println(e.getMessage());
-            throw e;
+            //throw e;
         }
 
         //paths

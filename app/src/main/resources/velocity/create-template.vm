@@ -1,0 +1,7 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<form>
+    <input type="text" id="templateName" name="templateName" placeholder="Template Name">
+    <input type="submit" value="Submit">
+</form>
+#end

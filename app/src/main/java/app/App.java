@@ -35,10 +35,10 @@ public class App{
         get("/host/login", HostLoginController.servePage);
         get("/host/get-code", null);
         get("/host/home", null);
-        get("/host/create-event", null);
+        get("/host/create-event", EventCreateController.servePage);
         get("/event/host/code", hostEventController.servePage);
         get("/host/templates", null);
-        get("/host/templates/new", null);
+        get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", null);
         get("/", null);
         

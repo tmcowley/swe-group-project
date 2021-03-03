@@ -14,4 +14,10 @@ public class participantEventController {
         return ViewUtil.render(request, model, "/velocity/participant-event.vm");
     };
 
+    public static Route eventEntryPage = (Request request, Response response) -> {
+        Map<String, Object> model = new HashMap<>();
+        model.put("test1", "this is a test variable!");
+        return ViewUtil.render(request, model, "/velocity/joinEvent.vm");
+    };
+
 }

@@ -26,10 +26,11 @@ public class App{
             //throw e;
         }
 
+        // for each currently running event, generate /event/join/<code>
+
         //paths
-        // get("/hello", (req, res) -> "Hello World");
         get("/", participantEventController.servePage);
-        get("/event/join/code", APIController.joinEvent);
+        get("/event/join/code", participantEventController.eventEntryPage);
         get("/host/login", null);
         get("/host/get-code", null);
         get("/host/home", null);

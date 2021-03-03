@@ -254,7 +254,7 @@ public class Validator {
     public boolean isEventValid(Event event){
         if (eventTitleIsValid(event.getTitle())&&
             eventDescriptionIsValid(event.getDescription())&&
-            eventDescriptionIsValid(event.getType())&&
+            eventTypeIsValid(event.getType())&&
             eventCodeIsValid(event.getEventCode())
             ) {
             return true;

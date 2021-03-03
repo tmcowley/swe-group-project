@@ -29,7 +29,8 @@ public class App{
         // for each currently running event, generate /event/join/<code>
 
         //paths
-        get("/", participantEventController.servePage);
+        //get("/", participantEventController.servePage);
+        get("/", IndexController.servePage);
         get("/event/join/code", participantEventController.eventEntryPage);
         get("/host/login", null);
         get("/host/get-code", null);

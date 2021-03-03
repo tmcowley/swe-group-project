@@ -256,9 +256,10 @@ textarea {
 #hostGrid {
     display: grid;
     grid-template-columns: 50% auto;
+    border: 1px solid #450b57;
 }
 
-#hostGrid > div {
+#hostGrid>div {
     background-color: #552d62;
     height: 200px;
     border: 1px solid #450b57;
@@ -271,4 +272,67 @@ textarea {
 .hostGridPlaceholder {
     font-family: cursive;
     color: magenta;
+}
+
+#landingMain {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#landingContainer {
+    padding: 60px;
+    background-color: #552d62;
+    border-radius: 40px;
+    box-shadow: 5px 5px 5px #3e3e3e;
+    text-align: center;
+    color: white;
+    margin: 0 20px;
+}
+
+#landingJoinContainer {
+    background-color: #886c91;
+    border-radius: 40px;
+}
+
+#landingContainer h1 {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
+#landingJoinContainer form {
+    padding: 40px 40px 0 40px;
+    background-color: #704d7b;
+    border-radius: 40px;
+}
+
+#participantName {
+    padding: 10px;
+    width: 70%;
+}
+
+#participantCode {
+    padding: 10px;
+    width: 25%;
+}
+
+#landingJoinButton, #landingHostButton {
+    margin: 20px auto;
+    display: block;
+    background-color: #552d62;
+    color: white;
+    border-radius: 40px;
+    padding: 10px 35px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid #451c52;
+}
+
+#landingJoinButton {
+    width: 75%;
+}
+
+#landingHostButton {
+    width: 70%;
 }

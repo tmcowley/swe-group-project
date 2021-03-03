@@ -47,5 +47,16 @@ public class Host{
     public boolean getSysBan(){
         return this.sys_ban;
     }
+
+    public boolean equals(Host that){
+        if(this.host_id != that.getHostID()) return false;
+        if(this.host_code != that.getHostCode()) return false;
+        if(this.ip_address != that.getIPAddress()) return false;
+        if(this.e_address != that.getEAddress()) return false;
+        if(this.f_name != that.getFName()) return false;
+        if(this.l_name != that.getLName()) return false;
+        if(this.sys_ban != that.getSysBan()) return false;
+        return true;
+    }
     
 }

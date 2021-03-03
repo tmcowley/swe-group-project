@@ -29,5 +29,13 @@ public class Template{
     public String getData(){
         return this.data;
     }
+
+    public boolean equals(Template that){
+        if(this.template_id != that.getTemplateID()) return false;
+        if(this.host_id != that.getHostID()) return false;
+        if(this.template_code != that.getTemplateCode()) return false;
+        if(this.data != that.getData()) return false;
+        return true;
+    }
     
 }

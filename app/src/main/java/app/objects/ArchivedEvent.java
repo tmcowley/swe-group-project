@@ -29,7 +29,7 @@ public class ArchivedEvent{
         this.description    = description;
         this.type           = type;
         this.start_time     = start_time;
-        this.end_time       = end_time;
+        this.end_time     = end_time;
     }
 
     public int getEventID(){
@@ -62,5 +62,17 @@ public class ArchivedEvent{
     
     public Timestamp getEndTime(){
         return this.end_time;
+    }
+
+    public boolean equals(ArchivedEvent that){
+        if(this.event_id != that.getEventID()) return false;
+        if(this.host_id != that.getHostID()) return false;
+        if(this.total_mood != that.getMood()) return false;
+        if(this.title != that.getTitle()) return false;
+        if(this.description != that.getDescription()) return false;
+        if(this.type != that.getType()) return false;
+        if(this.start_time != that.getStartTime()) return false;
+        if(this.end_time != that.getEndTime()) return false;
+        return true;
     }
 }

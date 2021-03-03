@@ -50,4 +50,14 @@ public class Feedback{
         return this.timestamp;
     }
     
+    public boolean equals(Feedback that){
+        if(this.event_id != that.getEventID()) return false;
+        if(this.host_id != that.getHostID()) return false;
+        if(this.feedback_id != that.getFeedbackID()) return false;
+        if(this.data != that.getData()) return false;
+        if(this.sentiment != that.getSentiment()) return false;
+        if(this.anonymous != that.getAnonymous()) return false;
+        if(this.timestamp != that.getTimestamp()) return false;
+        return true;
+    }
 }

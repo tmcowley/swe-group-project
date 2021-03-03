@@ -69,4 +69,17 @@ public class Event{
     public String getEventCode(){
         return this.eventCode;
     }
+
+    public boolean equals(Event that){
+        if(this.event_id != that.getEventID()) return false;
+        if(this.host_id != that.getHostID()) return false;
+        if(this.template_id != that.getTemplateID()) return false;
+        if(this.title != that.getTitle()) return false;
+        if(this.description != that.getDescription()) return false;
+        if(this.type != that.getType()) return false;
+        if(this.start_time != that.getStartTime()) return false;
+        if(this.end_time != that.getEndTime()) return false;
+        if(this.eventCode != that.getEventCode()) return false;
+        return true;
+    }
 }

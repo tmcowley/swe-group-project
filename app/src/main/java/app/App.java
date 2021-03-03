@@ -32,7 +32,7 @@ public class App{
         //get("/", participantEventController.servePage);
         get("/", IndexController.servePage);
         get("/event/join/code", participantEventController.eventEntryPage);
-        get("/host/login", null);
+        get("/host/login", HostLoginController.servePage);
         get("/host/get-code", null);
         get("/host/home", null);
         get("/host/create-event", null);

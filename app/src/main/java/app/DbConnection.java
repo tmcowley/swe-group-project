@@ -36,16 +36,16 @@ public class DbConnection{
 
     /**
      * Constructor; initializes db connection
+     * @throws SQLException
      */
-    public DbConnection() {
+    public DbConnection() throws SQLException {
         try{
             // see: jdbc.postgresql.org/documentation/head/connect.html
             String url = "jdbc:postgresql:database";
             this.conn = DriverManager.getConnection(url);
         } catch (SQLException e){
-            System.out.println("Error: DB failed to connect; ensure server is running");
-            System.out.println(e.getMessage() + "\n");
-            return;
+            SQLException updatedException = new SQLException("Error: DB failed to connect; ensure server is running", e);
+            throw updatedException;
         }
 
         // store host-code word list

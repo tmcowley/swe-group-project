@@ -1,8 +1,12 @@
 package app;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import app.DbConnection;
 import app.objects.*;
@@ -13,8 +17,13 @@ public class DBConnTest {
     DbConnection db;
     Validator validator;
 
-    public DBConnTest(){
-        db = new DbConnection();
+    public DBConnTest() throws SQLException{
+        try{
+            db = new DbConnection();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
         validator = new Validator();
     }
 
@@ -58,7 +67,7 @@ public class DBConnTest {
         int testEventID = testEvent.getEventID();
 
         // test archived_event creation
-        ArchivedEvent testArchivedEvent = db.createEvent(testHostID, testTemplateID, "event title", "event desc", "seminar", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+        ArchivedEvent testArchivedEvent = db.createArchivedEvent(testHostID, "", "event title", "event desc", "seminar", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         int testArchivedEventID = testArchivedEvent.getEventID();
 
         // test feedback creation

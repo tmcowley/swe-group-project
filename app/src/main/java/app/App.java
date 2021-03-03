@@ -12,14 +12,19 @@ import app.util.*;
 // 
 import java.sql.SQLException;
 
-public class App {
-    public static void main(String[] args) {
+public class App{
+    public static void main (String[] args) throws SQLException {
         // tell the Spark framework where to find static files
         staticFiles.location("/static");
         Spark.port(4567);
 
-        // instantiate DB connection
-        DbConnection db = new DbConnection();
+        try{
+            // instantiate DB connection
+            DbConnection db = new DbConnection();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
 
         //paths
         // get("/hello", (req, res) -> "Hello World");

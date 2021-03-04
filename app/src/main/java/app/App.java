@@ -31,7 +31,7 @@ public class App{
         //paths
         //get("/", participantEventController.servePage);
         get("/", IndexController.servePage);
-        get("/event/join/code", participantEventController.eventEntryPage);
+        get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
         get("/host/get-code", null);
         get("/host/home", null);

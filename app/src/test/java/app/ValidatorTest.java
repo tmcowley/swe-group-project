@@ -25,7 +25,7 @@ public class ValidatorTest {
             "fish-bird-brother-map",
             "fish-bird-brother-MAP"
         };
-        String[] inValidCodes = {
+        String[] invalidCodes = {
             "xxxx-bird-brother-map",
             "fish-bird-brother-ma p",
             "fish-bird-brother map",
@@ -35,8 +35,8 @@ public class ValidatorTest {
         for (String validCode : validCodes){
             assertTrue(v.hostCodeIsValid(validCode));
         }
-        for (String inValidCode : inValidCodes){
-            assertFalse(v.hostCodeIsValid(inValidCode));
+        for (String invalidCode : invalidCodes){
+            assertFalse(v.hostCodeIsValid(invalidCode));
         }
     }
 
@@ -49,7 +49,7 @@ public class ValidatorTest {
             "abcd",
             "aBc7"
         };
-        String[] inValidCodes = {
+        String[] invalidCodes = {
             "AAAAAA",
             "abcd-",
             "CC-C",
@@ -59,48 +59,75 @@ public class ValidatorTest {
         for (String validCode : validCodes){
             assertTrue(v.eventCodeIsValid(validCode));
         }
-        for (String inValidCode : inValidCodes){
-            assertFalse(v.eventCodeIsValid(inValidCode));
+        for (String invalidCode : invalidCodes){
+            assertFalse(v.eventCodeIsValid(invalidCode));
         }
     }
 
     @Test
     public void testIPValidity(){
-        String[] validCodes = {
+        String[] validIPs = {
             "213.107.128.255",
-            "0.0.0.0"
+            //"0.0.0.0",
+            //"1.1.1."
         };
-        String[] inValidCodes = {
+        String[] invalidIPs = {
             "123107128255",
-            "1.1.1.",
+            "1.5",
             "",
             null
         };
-        for (String validCode : validCodes){
+        for (String validIP : validIPs){
             assertTrue(v.ipAddressIsValid(validCode));
         }
-        for (String inValidCode : inValidCodes){
-            assertFalse(v.ipAddressIsValid(inValidCode));
+        for (String invalidIP : invalidIPs){
+            assertFalse(v.ipAddressIsValid(invalidCode));
         }
     }
 
     @Test
     public void testNameValidity(){
-        assertTrue(v.nameIsValid("Edwy"));
-        assertFalse(v.nameIsValid("EDwY"));
-        assertFalse(v.nameIsValid("3dwy"));
+        String[] validNames = {
+            "Edwy"
+        };
+        String[] invalidNames = {
+            "EDwY",
+            "3dwy",
+            "",
+            null
+        };
+        for (String validName : validNames){
+            assertTrue(v.nameIsValid(validCode));
+        }
+        for (String invalidName : invalidNames){
+            assertFalse(v.nameIsValid(invalidCode));
+        }
     }
 
     @Test
     public void testEventTitleValidity(){
-        assertTrue(v.eventTitleIsValid("Lecture 1"));
-        assertTrue(v.eventTitleIsValid("lecture_1"));
+        String[] validTitles = {
+            "Lecture 1",
+            "lecture_1",
+            "lecture-1"
+        };
+        String[] invalidTitles = {
+            "",
+            null
+        };
+        for (String validTitle : validTitles){
+            assertTrue(v.eventTitleIsValid(validCode));
+        }
+        for (String invalidTitle : invalidTitles){
+            assertFalse(v.eventTitleIsValid(invalidCode));
+        }
     }
 
     @Test
     public void testEventValidity(){
         Event testEvent = new Event(0001, 0001, 0001, "Lecture 1", "event desc", "seminar", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "CCCC");
         Event newEvent = new Event(0001, 0001, 0001, "Lecture 1", "event desc", "movie", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "CCCC");
+
         assertTrue(v.isEventValid(testEvent));
         assertFalse(v.isEventValid(newEvent));
     }
@@ -108,8 +135,8 @@ public class ValidatorTest {
     @Test
     public void testHostValidity(){
         Host testHost = new Host(0001, "fish-bird-brother-map", "213.107.128.255", "moustafa.edwy@gmail.com", "Moustafa", "Eledwy", false);
+        
         assertTrue(v.isHostValid(testHost));
     }
 
-    
 }

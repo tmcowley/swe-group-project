@@ -107,23 +107,36 @@ public class Validator {
     }
 
     /**
+     * Check if a given ID is valid
+     * no upper-bound check needed since: 
+     * upper-bound(java int) > upper-bound(SQLite int)
+     * @param id ID to be checked
+     * @return validity state of id
+     */
+    public boolean idIsValid(int id){
+        boolean isPositive = (id >= 0);
+        return (isPositive);
+    }
+
+    /**
      * Check if IP address is valid
      * @param ip_address IP address to be checked
      * @return IP address validity state
      */
     public boolean ipAddressIsValid(String ip_address){
-        if (ip_address != null && !ip_address.isEmpty()) {
-			// ip address regular expression
-			String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
-            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
-            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 
-            // return true if ip matches with the regular expression
-            if (ip_address.matches(regex)) {
-                return true;
-            }
-        }
-        return false;
+        if (StringUtils.isBlank(ip_address))
+            return false;
+        
+        // ip-address regular expression - source? ...
+        String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+
+        if (!ip_address.matches(regex))
+            return false;
+        
+        return true;
     }
 
     /**

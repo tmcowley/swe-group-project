@@ -38,6 +38,8 @@ public class DBConnTest {
         // Test ten unique host codes
         for (int i = 0; i < 10; i++){
             String host_code = db.generateUniqueHostCode();
+            // java.lang.IllegalArgumentException: bound must be positive
+            // at app.DBConnTest.testCodeGeneration(DBConnTest.java:40)
             assertTrue(validator.hostCodeIsValid(host_code));
         }
 
@@ -49,7 +51,7 @@ public class DBConnTest {
     }
 
     //@Test
-    public void testCreation(){
+    public void testCreationDeletion(){
         // test host creation
         Host testHost = db.createHost("testFName", "testLName", "127.0.0.1", "test@test.com");
         int testHostID = testHost.getHostID();
@@ -86,13 +88,13 @@ public class DBConnTest {
         db.deleteFeedback(testFeedbackID);
         db.removeParticipantFromEvent(testPartID, testEventID);
 
-//         // assertions
-//         assertFalse(testHost == null);
-//         assertFalse(testTemplate == null);
-//         assertFalse(testPart == null);
-//         assertFalse(testEvent == null);
-//         assertFalse(testFeedback == null);
-//         assertFalse(partInEvent == null || partInEvent == false);
+        // assertions
+        assertFalse(testHost == null);
+        assertFalse(testTemplate == null);
+        assertFalse(testPart == null);
+        assertFalse(testEvent == null);
+        assertFalse(testFeedback == null);
+        assertFalse(partInEvent == null || partInEvent == false);
 
         //assertFalse(true);
 

@@ -23,19 +23,19 @@ public class Validator {
     }
 
     /**
-     * Store the host code wordList in a hash-set DS
+     * Store the host code word-list in a hash-set DS
      * Lookup (w/ contains()) is O(1): constant time
      */
     private void getWordList(){
         try{
-            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordList.txt"));
+            BufferedReader readIn = new BufferedReader(new FileReader("resources/word-list.txt"));
             String str;
             while((str = readIn.readLine()) != null){
                 wordListHashSet.add(str);
             }
             readIn.close();
         } catch (IOException ex){
-            // ensure file: wordList.txt is in /app/resources/
+            // ensure file: word-list.txt is in /app/resources/
             System.out.println(ex.getMessage());
         }
     }
@@ -81,7 +81,7 @@ public class Validator {
     /**
      * Check if the given host code is valid:
      * non-null, alpha-numeric (and dash) characters only, 
-     * of the form [word-word-word-word] with each word in wordList
+     * of the form [word-word-word-word] with each word in word-list
      * @param hostCode host code to be checked
      * @return host code validity state
      */
@@ -368,7 +368,7 @@ public class Validator {
 // /**
 //  * Check if the given host code is valid:
 //  * non-null, alpha-numeric (and space) characters only, 
-//  * of the form [word word word word] with each word in wordList
+//  * of the form [word word word word] with each word in word-list
 //  * @param hostCode host code to be checked
 //  * @return host code validity state
 //  */

@@ -73,17 +73,17 @@ public class DbConnection{
      */
     private void getWordList(){
         try{
-            BufferedReader readIn = new BufferedReader(new FileReader("resources/wordList.txt"));
+            BufferedReader readIn = new BufferedReader(new FileReader("resources/word-list.txt"));
             String str;
             while((str = readIn.readLine()) != null){
                 wordList.add(str);
             }
             readIn.close();
         } catch (IOException ex){
-            // ensure file: wordList.txt is in /app/resources/
+            // ensure file: word-list.txt is in /app/resources/
             System.out.println(
                 "Error: Getting word list failed" + 
-                "       " + "Ensure wordList.txt is in /app/resources");
+                "       " + "Ensure word-list.txt is in /app/resources");
             //System.out.println(ex.getMessage());
         }
     }

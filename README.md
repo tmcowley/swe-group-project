@@ -61,15 +61,8 @@ cd app; mvn compile
 mvn exec:java 
 ```
 
-Execute:
-```
-mvn exec:java 
-```
+Run tests: ```mvn test```
 
-Render Website: 
-```
-http://localhost:4567/
-```
-
+Render Website: Visit ```http://localhost:4567/```
 
 ## Demonstration

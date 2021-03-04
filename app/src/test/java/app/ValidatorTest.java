@@ -20,7 +20,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void test_templateCodeIsValid(){
+    public void test_eventCodeIsValid(){
         String[] validCodes = {
             "CCCC",
             "4RF5",
@@ -87,10 +87,10 @@ public class ValidatorTest {
             null
         };
         for (String validIP : validIPs){
-            assertTrue(v.ipAddressIsValid(validCode));
+            assertTrue(v.ipAddressIsValid(validIP));
         }
         for (String invalidIP : invalidIPs){
-            assertFalse(v.ipAddressIsValid(invalidCode));
+            assertFalse(v.ipAddressIsValid(invalidIP));
         }
     }
 
@@ -109,10 +109,10 @@ public class ValidatorTest {
             null
         };
         for (String validName : validNames){
-            assertTrue(v.nameIsValid(validCode));
+            assertTrue(v.nameIsValid(validName));
         }
         for (String invalidName : invalidNames){
-            assertFalse(v.nameIsValid(invalidCode));
+            assertFalse(v.nameIsValid(invalidName));
         }
     }
 
@@ -124,17 +124,17 @@ public class ValidatorTest {
         String[] validTitles = {
             "Lecture 1",
             "lecture_1",
-            "lecture-1"
+            "lecture1"
         };
         String[] invalidTitles = {
             "",
             null
         };
         for (String validTitle : validTitles){
-            assertTrue(v.eventTitleIsValid(validCode));
+            assertTrue(v.eventTitleIsValid(validTitle));
         }
         for (String invalidTitle : invalidTitles){
-            assertFalse(v.eventTitleIsValid(invalidCode));
+            assertFalse(v.eventTitleIsValid(invalidTitle));
         }
     }
 

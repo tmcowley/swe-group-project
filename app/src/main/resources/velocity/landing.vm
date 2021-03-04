@@ -1,0 +1,16 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<div id="landingMain">
+    <div id="landingContainer">
+        <h1>Resmodus</h1>
+        <div id="landingJoinContainer">
+            <form name="joinInfo" action="/event/join/code" method="get">
+                <input type="text" id="participantName" name="participantName" placeholder="Your Name">
+                <input type="text" id="participantCode" name="participantCode" placeholder="Code">
+                <input type="submit" value="Join Event" id="landingJoinButton">
+            </form>
+            <a href="#" id="landingHostButton">Host Event</a>
+        </div>
+    </div>
+</div>
+#end

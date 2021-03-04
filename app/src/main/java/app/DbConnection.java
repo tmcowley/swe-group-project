@@ -1209,12 +1209,12 @@ public class DbConnection{
     }
 
     /**
-     * Delete participant and event pair by IDs
+     * Remove participant from event (by IDs)
      * @participant_id participant ID of the pair needed to be deleted
      * @event_id event ID of the pair needed to be deleted
      * @return delete status
      */
-    protected Boolean deleteParticipantInEvent(int participant_id, int event_id){
+    protected Boolean removeParticipantFromEvent(int participant_id, int event_id){
         PreparedStatement stmt = null;
         int deletedLink = 0;
         try{

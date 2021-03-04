@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
+
+import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import app.Validator;
 //import jdk.jfr.Timestamp;
@@ -15,42 +17,71 @@ public class ValidatorTest {
 
     public ValidatorTest(){
         v = new Validator();
-
     }
 
-    // to split
     @Test
-    public void tests(){
-
-        assertTrue(v.eventCodeIsValid("CCCC"));
-        assertFalse(v.eventCodeIsValid("AAAAAA"));
-        assertTrue(v.eventCodeIsValid("33SA"));
-        assertFalse(v.eventCodeIsValid("[[[[]]]]"));
-
-        assertTrue(v.hostCodeIsValid("fish-bird-brother-map"));
-        assertTrue(v.hostCodeIsValid("fish-bird-brother-MAP"));
-        assertFalse(v.hostCodeIsValid("xxxx-bird-brother-map"));
-        assertFalse(v.hostCodeIsValid("fish-bird-brother-ma p"));
-        assertFalse(v.hostCodeIsValid("xxxx-bird-brother map"));
-        assertFalse(v.hostCodeIsValid("map bird brother map"));
-
-
+    public void testHostCodeValidity(){
+        String[] validCodes = {
+            "fish-bird-brother-map",
+            "fish-bird-brother-MAP"
+        };
+        String[] inValidCodes = {
+            "xxxx-bird-brother-map",
+            "fish-bird-brother-ma p",
+            "fish-bird-brother map",
+            "",
+            null
+        };
+        for (String validCode : validCodes){
+            assertTrue(v.hostCodeIsValid(validCode));
+        }
+        for (String inValidCode : inValidCodes){
+            assertFalse(v.hostCodeIsValid(inValidCode));
+        }
     }
 
     @Test
     public void testEventCodeValidity(){
-        assertTrue(v.eventCodeIsValid("CCCC"));
-        assertFalse(v.eventCodeIsValid("AAAAAA"));
-        assertFalse(v.eventCodeIsValid("CC-C"));
-        assertFalse(v.eventCodeIsValid(null));
+        String[] validCodes = {
+            "CCCC",
+            "4RF5",
+            "ac4r",
+            "abcd",
+            "aBc7"
+        };
+        String[] inValidCodes = {
+            "AAAAAA",
+            "abcd-",
+            "CC-C",
+            "",
+            null
+        };
+        for (String validCode : validCodes){
+            assertTrue(v.eventCodeIsValid(validCode));
+        }
+        for (String inValidCode : inValidCodes){
+            assertFalse(v.eventCodeIsValid(inValidCode));
+        }
     }
 
     @Test
     public void testIPValidity(){
-        assertTrue(v.ipAddressIsValid("213.107.128.255"));
-        assertFalse(v.ipAddressIsValid("0.0.0.0"));
-        assertFalse(v.ipAddressIsValid(null));
-        assertFalse(v.ipAddressIsValid("123107128255"));
+        String[] validCodes = {
+            "213.107.128.255",
+            "0.0.0.0"
+        };
+        String[] inValidCodes = {
+            "123107128255",
+            "1.1.1.",
+            "",
+            null
+        };
+        for (String validCode : validCodes){
+            assertTrue(v.ipAddressIsValid(validCode));
+        }
+        for (String inValidCode : inValidCodes){
+            assertFalse(v.ipAddressIsValid(inValidCode));
+        }
     }
 
     @Test

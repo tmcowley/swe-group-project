@@ -81,10 +81,7 @@ public class DbConnection{
             readIn.close();
         } catch (IOException ex){
             // ensure file: word-list.txt is in /app/resources/
-            System.out.println(
-                "Error: Getting word list failed" + 
-                "       " + "Ensure word-list.txt is in /app/resources");
-            //System.out.println(ex.getMessage());
+            System.out.println(ex.getMessage());
         }
     }
 

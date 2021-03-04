@@ -12,14 +12,30 @@ An application allowing for real-time event feedback
 Web-based client, native Android application, native iOS application
 
 ### Technologies
-Web Front-end: [React](https://reactjs.org/)<br>
-Mobile Front-end: [React Native](https://reactnative.dev/)<br>
+Web Front-end (old): [React](https://reactjs.org/)<br>
+Mobile Front-end (old): [React Native](https://reactnative.dev/)<br>
 Back-end: [Spark Java](https://sparkjava.com/)<br>
-Database: [PostgreSQL v13.2](https://www.postgresql.org/)
+Database (old): [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ## Set-up and Initialization
 
 ### Database
+Query database:
+```
+sqlite3 file.db
+```
+
+Apply schema to database:
+```
+sqlite3 file.db < schema.sql
+```
+
+Dump schema from database:
+```
+sqlite3 file.db .schema > file-schema.sql
+```
+
+<!---
 Start PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
@@ -35,6 +51,7 @@ Stop PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
 ```
+-->
 
 ### Start-up
 

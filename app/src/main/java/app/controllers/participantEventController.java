@@ -1,46 +1,27 @@
 package app.controllers;
 
 import java.util.*;
-import java.net.*;
-import java.io.*;
 import spark.*;
-import app.Validator;
-import app.DbConnection;
+import app.App;
 import app.util.*;
 import app.objects.*;
 
-import java.sql.SQLException;
-
 
 public class participantEventController {
-    private static DbConnection db;
-
-    private static Validator validator;
 
     /** Serve the participant-event page (GET request) */
     public static Route servePage = (Request request, Response response) -> {
 
-        validator = new Validator();
         Event event = null;
 
-        if (validator.eventCodeIsValid(request.queryParams("participantCode"))) {
+        if (App.getInstance().getValidator().eventCodeIsValid(request.queryParams("participantCode"))) {
             String[] name = request.queryParams("participantName").split(" ");
-            
-            try {
-                // instantiate DB connection
-                db = new DbConnection();
-                
-    
-                Participant participant = db.createParticipant(request.ip(),name[0],name[1]);
-                event = db.getEventByCode(request.queryParams("participantCode"));
-                db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
-            } catch (SQLException e){
-                System.out.println(e.getMessage());
-                //throw e;
-            }
+            Participant participant = App.getInstance().getDbConnection().createParticipant(request.ip(),name[0],name[1]);
+            event = App.getInstance().getDbConnection().getEventByCode(request.queryParams("participantCode"));
+            App.getInstance().getDbConnection().addParticipantToEvent(participant.getParticipantID(), event.getEventID());
         }
 
-        if (validator.isEventValid(event)) {
+        if (App.getInstance().getValidator().isEventValid(event)) {
             Map<String, Object> model = new HashMap<>();
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());

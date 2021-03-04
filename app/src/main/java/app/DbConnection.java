@@ -38,11 +38,16 @@ public class DbConnection{
      * Constructor; initializes db connection
      * @throws SQLException
      */
-    public DbConnection() throws SQLException {
+    public DbConnection(String databaseFile) throws SQLException {
         try{
+            // PSQL variant: 
             // see: jdbc.postgresql.org/documentation/head/connect.html
-            String url = "jdbc:postgresql:database";
-            this.conn = DriverManager.getConnection(url);
+            //String dbURL = "jdbc:postgresql:database";
+
+            // SQLite3 variant:
+            String dbURL = "jdbc:sqlite:" + databaseFile;
+
+            this.conn = DriverManager.getConnection(dbURL);
         } catch (SQLException e){
             SQLException updatedException = new SQLException("Error: DB failed to connect; ensure server is running", e);
             throw updatedException;
@@ -115,7 +120,7 @@ public class DbConnection{
                 host_id = rs.getInt("host_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -154,7 +159,7 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -190,7 +195,7 @@ public class DbConnection{
                 participant_id = rs.getInt("participant_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -236,7 +241,7 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -281,7 +286,7 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -324,7 +329,7 @@ public class DbConnection{
                 feedback_id = rs.getInt("feedback_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -351,7 +356,7 @@ public class DbConnection{
             stmt.setInt(2, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -387,7 +392,7 @@ public class DbConnection{
                 state = rs.getBoolean(1);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -420,7 +425,7 @@ public class DbConnection{
                 muted = rs.getBoolean("muted");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -451,7 +456,7 @@ public class DbConnection{
             stmt.setInt(2, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -482,7 +487,7 @@ public class DbConnection{
                 host_id = rs.getInt("host_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -515,7 +520,7 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -548,7 +553,7 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -590,7 +595,7 @@ public class DbConnection{
                 host = new Host(host_id, host_code, ip_address, e_address, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -625,7 +630,7 @@ public class DbConnection{
                 template = new Template(template_id, host_id, template_code, data);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -661,7 +666,7 @@ public class DbConnection{
                 participant = new Participant(participant_id, ip_address, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -702,7 +707,7 @@ public class DbConnection{
                 event = new Event(event_id, host_id, template_id, title, description, type, start_time, end_time, event_code);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -742,7 +747,7 @@ public class DbConnection{
                 archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -780,7 +785,7 @@ public class DbConnection{
                 feedback = new Feedback(feedback_id, participant_id, event_id, data, sentiment, anonymous, time_stamp);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -798,7 +803,7 @@ public class DbConnection{
         event_code = validator.sanitizeEventCode(event_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Boolean codeExists = null;
+        Integer codeExists = null;
         try{
             String queryEventCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM event WHERE event_code=?);";
@@ -806,15 +811,16 @@ public class DbConnection{
             stmt.setString(1, event_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getBoolean(1);
+                codeExists = rs.getInt(1);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        return codeExists;
+        if (codeExists == null) return null;
+        return (codeExists == 1);
     }
 
     /**
@@ -822,11 +828,11 @@ public class DbConnection{
      * @param template_code template code
      * @return existence state of template_code
      */
-    private boolean templateCodeExists(String template_code){
+    private Boolean templateCodeExists(String template_code){
         template_code = validator.sanitizeTemplateCode(template_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Boolean codeExists = null;
+        Integer codeExists = null;
         try{
             String queryTemplateCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM template WHERE template_code=?);";
@@ -834,15 +840,16 @@ public class DbConnection{
             stmt.setString(1, template_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getBoolean(1);
+                codeExists = rs.getInt(1);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        return codeExists;
+        if (codeExists == null) return null;
+        return (codeExists == 1);
     }
 
     /**
@@ -850,11 +857,11 @@ public class DbConnection{
      * @param host_code code
      * @return existence state of host_code
      */
-    private boolean hostCodeExists(String host_code){
+    private Boolean hostCodeExists(String host_code){
         host_code = validator.sanitizeHostCode(host_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Boolean codeExists = null;
+        Integer codeExists = null;
         try{
             String queryHostCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM host WHERE host_code=?);";
@@ -862,15 +869,16 @@ public class DbConnection{
             stmt.setString(1, host_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getBoolean(1);
+                codeExists = rs.getInt(1);
             }
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        return codeExists;
+        if (codeExists == null) return null;
+        return (codeExists == 1);
     }
 
 
@@ -926,7 +934,7 @@ public class DbConnection{
      */
     protected Boolean banHost(int host_id){
         PreparedStatement stmt = null;
-        int bannedHost = 0;
+        Integer bannedHost = null;
         try{
             String banHost = ""
                 + "UPDATE host "
@@ -937,16 +945,12 @@ public class DbConnection{
             stmt.setInt(2, host_id);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (bannedHost == 1) {
-            return true;
-        }
-
-        return false;
+        if (bannedHost == null) return null;
+        return (bannedHost != 0);
     }
 
     /**
@@ -956,7 +960,7 @@ public class DbConnection{
      */
     protected Boolean banHost(String eAddress){
         PreparedStatement stmt = null;
-        int bannedHost = 0;
+        Integer bannedHost = null;
         try{
             String banHost = ""
                 + "UPDATE host "
@@ -967,16 +971,12 @@ public class DbConnection{
             stmt.setString(2, eAddress);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (bannedHost == 1) {
-            return true;
-        }
-
-        return false;
+        if (bannedHost == null) return null;
+        return (bannedHost != 0);
     }
 
     /**
@@ -986,7 +986,7 @@ public class DbConnection{
      */
     protected Boolean banParticipant(int participant_id){
         PreparedStatement stmt = null;
-        int bannedParticipant = 0;
+        Integer bannedParticipant = null;
         try{
             String banParticipant = ""
                 + "UPDATE participant "
@@ -997,16 +997,12 @@ public class DbConnection{
             stmt.setInt(2, participant_id);
             bannedParticipant = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (bannedParticipant == 1) {
-            return true;
-        }
-
-        return false;
+        if (bannedParticipant == null) return null;
+        return (bannedParticipant != 0);
     }
 
     /**
@@ -1017,7 +1013,7 @@ public class DbConnection{
      */
     protected Boolean addDataToTemplate(int template_id, String data){
         PreparedStatement stmt = null;
-        int templateFound = 0;
+        Integer templateFound = null;
         try{
             String updateTemplate = ""
                 + "UPDATE template "
@@ -1028,16 +1024,12 @@ public class DbConnection{
             stmt.setInt(2, template_id);
             templateFound = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (templateFound == 1) {
-            return true;
-        }
-
-        return false;
+        if (templateFound == null) return null;
+        return (templateFound != 0);
     }
 
     /**
@@ -1047,7 +1039,7 @@ public class DbConnection{
      */
     protected Boolean deleteHost(int host_id){
         PreparedStatement stmt = null;
-        int hostDeleted = 0;
+        Integer hostDeleted = null;
         try{
             String deleteHost = ""
                 + "DELETE FROM host "
@@ -1056,16 +1048,12 @@ public class DbConnection{
             stmt.setInt(1, host_id);
             hostDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (hostDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (hostDeleted == null) return null;
+        return (hostDeleted != 0);
     }
 
     /**
@@ -1075,7 +1063,7 @@ public class DbConnection{
      */
     protected Boolean deleteTemplate(int template_id){
         PreparedStatement stmt = null;
-        int templateDeleted = 0;
+        Integer templateDeleted = null;
         try{
             String deleteTemplate = ""
                 + "DELETE FROM template "
@@ -1084,16 +1072,12 @@ public class DbConnection{
             stmt.setInt(1, template_id);
             templateDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (templateDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (templateDeleted == null) return null;
+        return (templateDeleted != 0);
     }
 
     /**
@@ -1103,7 +1087,7 @@ public class DbConnection{
      */
     protected Boolean deleteParticipant(int participant_id){
         PreparedStatement stmt = null;
-        int participantDeleted = 0;
+        Integer participantDeleted = null;
         try{
             String deleteParticipant = ""
                 + "DELETE FROM participant "
@@ -1112,16 +1096,12 @@ public class DbConnection{
             stmt.setInt(1, participant_id);
             participantDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (participantDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (participantDeleted == null) return null;
+        return (participantDeleted != 0);
     }
 
     /**
@@ -1131,7 +1111,7 @@ public class DbConnection{
      */
     protected Boolean deleteEvent(int event_id){
         PreparedStatement stmt = null;
-        int eventDeleted = 0;
+        Integer eventDeleted = null;
         try{
             String deleteEvent = ""
                 + "DELETE FROM event "
@@ -1140,16 +1120,12 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (eventDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (eventDeleted == null) return null;
+        return (eventDeleted != 0);
     }
 
     /**
@@ -1159,7 +1135,7 @@ public class DbConnection{
      */
     protected Boolean deleteArchivedEvent(int event_id){
         PreparedStatement stmt = null;
-        int eventDeleted = 0;
+        Integer eventDeleted = null;
         try{
             String deleteEvent = ""
                 + "DELETE FROM archived_event "
@@ -1168,16 +1144,12 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (eventDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (eventDeleted == null) return null;
+        return (eventDeleted != 0);
     }
 
     /**
@@ -1187,7 +1159,7 @@ public class DbConnection{
      */
     protected Boolean deleteFeedback(int feedback_id){
         PreparedStatement stmt = null;
-        int feedbackDeleted = 0;
+        Integer feedbackDeleted = null;
         try{
             String deleteFeedback = ""
                 + "DELETE FROM feedback "
@@ -1196,16 +1168,12 @@ public class DbConnection{
             stmt.setInt(1, feedback_id);
             feedbackDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (feedbackDeleted != 0) {
-            return true;
-        }
-
-        return false;
+        if (feedbackDeleted == null) return null;
+        return (feedbackDeleted != 0);
     }
 
     /**
@@ -1216,7 +1184,7 @@ public class DbConnection{
      */
     protected Boolean removeParticipantFromEvent(int participant_id, int event_id){
         PreparedStatement stmt = null;
-        int deletedLink = 0;
+        Integer deletedLink = null;
         try{
             String participantInEventDeleted = ""
                 + "DELETE FROM participant_in_event "
@@ -1226,16 +1194,12 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             deletedLink = stmt.executeUpdate();
         } catch (SQLException e){
-            //throw e;
+            System.out.println(e.getMessage().toUpperCase());;
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
-        
-        if (deletedLink != 0) {
-            return true;
-        }
-
-        return false;
+        if (deletedLink == null) return null;
+        return (deletedLink != 0);
     }
 
     /**

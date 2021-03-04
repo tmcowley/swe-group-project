@@ -19,7 +19,7 @@ public class DBConnTest {
 
     public DBConnTest() throws SQLException{
         try{
-            db = new DbConnection();
+            db = new DbConnection("db-testing.db");
         } catch (SQLException e){
             System.out.println(e.getMessage());
             throw e;

@@ -47,7 +47,7 @@ public class App{
     * @param args The command-line arguments supplied by the OS.
     */
     public static void main (String[] args) throws SQLException {
-        // initialise and run the program
+        // initialize and run the program
         app = new App();
         app.run();
     }
@@ -62,7 +62,7 @@ public class App{
 
         try{
             // instantiate DB connection
-            db = new DbConnection();
+            db = new DbConnection("db-dev.db");
         } catch (SQLException e){
             System.out.println(e.getMessage());
             //throw e;

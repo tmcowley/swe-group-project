@@ -58,22 +58,28 @@
     </dependency>
 
     <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.7.21</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.21</version>
     </dependency>
 
     <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.2.19</version>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.19</version>
     </dependency>
   
-  <dependency>
-  <groupId>com.github.apanimesh061</groupId>
-  <artifactId>vader-sentiment-analyzer</artifactId>
-  <version>1.0</version>
-</dependency>
+    <dependency>
+      <groupId>com.github.apanimesh061</groupId>
+      <artifactId>vader-sentiment-analyzer</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.34.0</version>
+    </dependency> 
  
   </dependencies>
 

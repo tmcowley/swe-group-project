@@ -7,7 +7,7 @@ public class Sentiment {
      * @param feedback feedback to be analysed for sentiment
      * @return sentiment containing compound score (add key results?)
      */
-public String[] main(String[][] feedback) {
+public void main() {
 
     //Currently this takes feedback in the form of an array structure i basically made up on the spot
     //When we decide how feedback is actually handled I can easily (hopefully) change this to use the new format
@@ -18,6 +18,8 @@ public String[] main(String[][] feedback) {
     //TODO - convert arraylist to array and create (or call?) array of weights from feedback
     //TODO - Get weighted mean of compound using weightedMean and the 2 arrays
     //TODO - package the weighted mean with key results into sentiment object
+
+
 }
 
 /**
@@ -26,9 +28,9 @@ public String[] main(String[][] feedback) {
      * @param scores real array of scores
      * @return weighted mean of compound scores
      */
-private Real weightedMean(Real[] weights, Real[] scores) {
-Real mean = 0; 
-for (int i = 0; i < len(weights); i++) {
+private float weightedMean(float weights[], float scores[]) {
+float mean = 0; 
+for (int i = 0; i < weights.length; i++) {
     mean += weights[i]*scores[i];
 }
 return mean;
@@ -42,10 +44,10 @@ return mean;
      * @param plaintext string to be analysed for sentiment
      * @return real compound score derived from plaintext
      */
-private Real getCompound(String plaintext) {
+private float getCompound(String plaintext) {
 
-    Real compound = 0; //Holds compound score derived from plaintext
-    Int count = 0; //Used to mean compound scores
+    float compound = 0; //Holds compound score derived from plaintext
+    int count = 0; //Used to mean compound scores
 
     BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Look into changing to a UK version, if such exists
     iterator.setText(plaintext);
@@ -57,8 +59,8 @@ private Real getCompound(String plaintext) {
         start = end, end = iterator.next()) {
         
         //Analyses scentence for compound score
-        String scentence= plaintext.substring(start,end));
-        SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer(sentence);
+        String scentence = plaintext.substring(start,end);
+        SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer(scentence);
         sentimentAnalyzer.analyse();
         compound += sentimentAnalyzer.getPolarity(); //Adds compound score to sum of all compound scores
         count++;

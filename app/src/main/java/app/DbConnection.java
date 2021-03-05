@@ -42,10 +42,10 @@ public class DbConnection{
         try{
             // PSQL variant: 
             // see: jdbc.postgresql.org/documentation/head/connect.html
-            //String dbURL = "jdbc:postgresql:database";
+            String dbURL = "jdbc:postgresql:database";
 
-            // SQLite3 variant:
-            String dbURL = "jdbc:sqlite:" + databaseFile;
+            // // SQLite3 variant:
+            // String dbURL = "jdbc:sqlite:" + databaseFile;
 
             this.conn = DriverManager.getConnection(dbURL);
         } catch (SQLException e){

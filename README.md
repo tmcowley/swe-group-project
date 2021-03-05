@@ -20,6 +20,7 @@ Database (old): [PostgreSQL v13.2](https://www.postgresql.org/)
 ## Set-up and Initialization
 
 ### Database
+<!---
 Query database:
 ```
 sqlite3 file.db
@@ -34,8 +35,8 @@ Dump schema from database:
 ```
 sqlite3 file.db .schema > file-schema.sql
 ```
+-->
 
-<!---
 Start PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
@@ -51,7 +52,6 @@ Stop PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
 ```
--->
 
 ### Start-up
 

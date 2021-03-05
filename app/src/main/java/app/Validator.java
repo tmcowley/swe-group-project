@@ -178,7 +178,7 @@ public class Validator {
 
     // // TODO; LATER IN DEV
     public boolean templateDataIsValid(String data){
-        return false;
+        return true;
     }
 
     /**
@@ -226,11 +226,11 @@ public class Validator {
      * @return type validity state
      */
     public boolean eventTypeIsValid(String data){
-        if (data.equals("lecture")||
+        if (data != null && (data.equals("lecture")||
             data.equals("seminar")||
             data.equals("conference")||
             data.equals("workshop")||
-            data.equals("other")
+            data.equals("other"))
             ) {
             return true;
         }

@@ -104,7 +104,8 @@ public class DbConnection{
             String createHost = ""
                 + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
                 + "VALUES(?, ?, ?, ?, ?) "
-                + "RETURNING host_id";
+                + "RETURNING host_id;";
+            System.out.println(createHost);
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);

@@ -27,6 +27,11 @@ public class DBConnTest {
         validator = new Validator();
     }
 
+    // !!!!!!!!!
+    // UNDER MAINTENANCE, PLS DON'T FIX
+    // Tom considering: PSQL with Docker or SQLite3 (embedded, but not nice, doesn't scale)
+    // !!!!!!!!!
+
     @Test
     public void testCodeGeneration(){
         // Test ten uniquely generated event codes
@@ -51,7 +56,7 @@ public class DBConnTest {
     }
 
     //@Test
-    public void testCreationDeletion(){
+    public void testCreationAndDeletion(){
         // test host creation
         Host testHost = db.createHost("testFName", "testLName", "127.0.0.1", "test@test.com");
         int testHostID = testHost.getHostID();

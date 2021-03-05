@@ -251,7 +251,9 @@ public class Validator {
     public boolean isArchivedEventValid(ArchivedEvent archivedEvent){
         if (eventTitleIsValid(archivedEvent.getTitle())&&
             eventDescriptionIsValid(archivedEvent.getDescription())&&
-            eventDescriptionIsValid(archivedEvent.getType())
+            eventDescriptionIsValid(archivedEvent.getType())&&
+            idIsValid(archivedEvent.getEventID())&&
+            idIsValid(archivedEvent.getHostID())
             ) {
             return true;
         }
@@ -268,7 +270,9 @@ public class Validator {
         if (eventTitleIsValid(event.getTitle())&&
             eventDescriptionIsValid(event.getDescription())&&
             eventTypeIsValid(event.getType())&&
-            eventCodeIsValid(event.getEventCode())
+            eventCodeIsValid(event.getEventCode())&&
+            idIsValid(event.getEventID())&&
+            idIsValid(event.getHostID())
             ) {
             return true;
         }
@@ -283,7 +287,10 @@ public class Validator {
      */
     public boolean isFeedbackValid(Feedback feedback){
         if (eventDescriptionIsValid(feedback.getSentiment())&&
-            sentimentIsValid(feedback.getSentiment())
+            sentimentIsValid(feedback.getSentiment())&&
+            idIsValid(feedback.getFeedbackID())&&
+            idIsValid(feedback.getEventID())&&
+            idIsValid(feedback.getHostID())
             ) {
             return true;
         }
@@ -301,7 +308,8 @@ public class Validator {
             ipAddressIsValid(host.getIPAddress())&&
             eAddressIsValid(host.getEAddress())&&
             nameIsValid(host.getFName())&&
-            nameIsValid(host.getLName())
+            nameIsValid(host.getLName())&&
+            idIsValid(host.getHostID())
             ) {
             return true;
         }
@@ -317,14 +325,15 @@ public class Validator {
     public boolean isParticipantValid(Participant participant){
         if (ipAddressIsValid(participant.getIPAddress())&&
             nameIsValid(participant.getFName())&&
-            nameIsValid(participant.getLName())
+            nameIsValid(participant.getLName())&&
+            idIsValid(participant.getParticipantID())
             ) {
             return true;
         }
         return false;
     }
 
-    /** TODO: validate more data inside
+    /**
      * Check if Template is valid:
      * check every data inside
      * @param template Template instance to be checked
@@ -332,7 +341,9 @@ public class Validator {
      */
     public boolean isTemplateValid(Template template){
         if (templateCodeIsValid(template.getTemplateCode())&&
-            templateDataIsValid(template.getData())
+            templateDataIsValid(template.getData())&&
+            idIsValid(template.getTemplateID())&&
+            idIsValid(template.getHostID())
             ) {
             return true;
         }

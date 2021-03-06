@@ -279,22 +279,24 @@ public class Validator {
         return false;
     }
 
-    /** TODO: validate more data inside
+    /** TODO: validate more data
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked
      * @return Feedback validity state
      */
     public boolean isFeedbackValid(Feedback feedback){
-        if (eventDescriptionIsValid(feedback.getSentiment())&&
-            sentimentIsValid(feedback.getSentiment())&&
-            idIsValid(feedback.getFeedbackID())&&
-            idIsValid(feedback.getEventID())&&
-            idIsValid(feedback.getHostID())
-            ) {
-            return true;
-        }
-        return false;
+        // validate IDs:
+        if (!idIsValid(feedback.getFeedbackID()))       return false;
+        if (!idIsValid(feedback.getEventID()))          return false;
+        if (!idIsValid(feedback.getParticipantID()))    return false;
+
+        // validate Sentiment fields
+
+        // validate timestamp
+        if (feedback.getTimestamp() == null) return false;
+
+        return true;
     }
 
     /** TODO: validate more data inside

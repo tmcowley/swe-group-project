@@ -99,7 +99,7 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 
 ## Database 
 
-The chosen relational database language is PostgreSQL, a client-server database model. Unlike embedded counterparts, a PSQL server instance has to be launched before the back-end is built. 
+The chosen relational database language is PostgreSQL, a client-server database model. Unlike embedded counterparts, a PostgreSQL server instance has to be launched before the back-end is built. 
 
 ### MacOS Guide:
 Start PostgreSQL server:

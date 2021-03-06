@@ -18,7 +18,7 @@ public class DBConnTest {
 
     public DBConnTest() throws SQLException{
         try{
-            db = new DbConnection("db-testing.db");
+            db = new DbConnection();
         } catch (SQLException e){
             System.out.println(e.getMessage());
             throw e;
@@ -26,35 +26,30 @@ public class DBConnTest {
         validator = new Validator();
     }
 
-    // !!!!!!!!!
-    // UNDER MAINTENANCE, PLS DON'T FIX
-    // Tom considering: PSQL with Docker or SQLite3 (embedded, but not nice, doesn't scale)
-    // !!!!!!!!!
+    //@Test
+    public void testCodeGeneration(){
+        // Test ten uniquely generated event codes
+        for (int i = 0; i < 10; i++){
+            String event_code = db.generateUniqueEventCode();
+            assertTrue(validator.eventCodeIsValid(event_code));
+        }
+
+        // Test ten unique host codes
+        for (int i = 0; i < 10; i++){
+            String host_code = db.generateUniqueHostCode();
+            // java.lang.IllegalArgumentException: bound must be positive
+            // at app.DBConnTest.testCodeGeneration(DBConnTest.java:40)
+            assertTrue(validator.hostCodeIsValid(host_code));
+        }
+
+        // Test ten unique template codes
+        for (int i = 0; i < 10; i++){
+            String template_code = db.generateUniqueTemplateCode();
+            assertTrue(validator.templateCodeIsValid(template_code));
+        }
+    }
 
     //@Test
-    // public void testCodeGeneration(){
-    //     // Test ten uniquely generated event codes
-    //     for (int i = 0; i < 10; i++){
-    //         String event_code = db.generateUniqueEventCode();
-    //         assertTrue(validator.eventCodeIsValid(event_code));
-    //     }
-
-    //     // Test ten unique host codes
-    //     for (int i = 0; i < 10; i++){
-    //         String host_code = db.generateUniqueHostCode();
-    //         // java.lang.IllegalArgumentException: bound must be positive
-    //         // at app.DBConnTest.testCodeGeneration(DBConnTest.java:40)
-    //         assertTrue(validator.hostCodeIsValid(host_code));
-    //     }
-
-    //     // Test ten unique template codes
-    //     for (int i = 0; i < 10; i++){
-    //         String template_code = db.generateUniqueTemplateCode();
-    //         assertTrue(validator.templateCodeIsValid(template_code));
-    //     }
-    // }
-
-    @Test
     public void testCreationAndDeletion(){
         // test host creation
         Host testHost = db.createHost("testFName", "testLName", "127.0.0.1", "test@test.com");

@@ -38,15 +38,12 @@ public class DbConnection{
      * Constructor; initializes db connection
      * @throws SQLException
      */
-    public DbConnection(String databaseFile) throws SQLException {
+    public DbConnection() throws SQLException {
         try{
-            // PSQL variant: 
+            // PostgreSQL variant: 
             // see: jdbc.postgresql.org/documentation/head/connect.html
             // String dbURL = "jdbc:postgresql:database";
             String dbURL = "jdbc:postgresql://127.0.0.1:5432/cs261";
-
-            // // SQLite3 variant:
-            // String dbURL = "jdbc:sqlite:" + databaseFile;
 
             // this.conn = DriverManager.getConnection(dbURL);
             this.conn = DriverManager.getConnection(dbURL, "postgres", "fas200");
@@ -779,12 +776,14 @@ public class DbConnection{
                 feedback_id = rs.getInt("feedback_id");
                 int participant_id = rs.getInt("participant_id");
                 int event_id = rs.getInt("event_id");
-                String data = rs.getString("data");
-                String sentiment = rs.getString("sentiment");
+                //String data = rs.getString("data");
+                //String sentiment = rs.getString("sentiment");
                 boolean anonymous = rs.getBoolean("anonymous");
                 Timestamp time_stamp = rs.getTimestamp("time_stamp");
 
-                feedback = new Feedback(feedback_id, participant_id, event_id, data, sentiment, anonymous, time_stamp);
+                // TODO: 
+                // Feedback constructor: (int feedback_id, int participant_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp)
+                feedback = new Feedback(feedback_id, participant_id, event_id, null, null, null, null, 0, null, anonymous, time_stamp);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
@@ -794,6 +793,8 @@ public class DbConnection{
         }
         return feedback;
     }
+
+    // (int feedback_id, int host_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp)
 
     /**
      * Check if the given event code exists, 

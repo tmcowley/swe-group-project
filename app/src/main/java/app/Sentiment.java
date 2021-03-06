@@ -1,3 +1,6 @@
+//TODO - Create a consitency test for this
+//TODO - create a does it return something in the write format test
+
 package app;
 
 import java.util.*;
@@ -26,7 +29,7 @@ public void main() {
     //TODO - Get weighted mean of compound using weightedMean and the 2 arrays
     //TODO - package the weighted mean with key results into sentiment object
 
-    
+
 
 }
 
@@ -70,7 +73,7 @@ private float getCompound(String plaintext) throws IOException{
     //Iterate through each  sentence and get compound score
     for (String sentence : sentences) {
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer(sentence);
-        //sentimentAnalyzer.analyse();
+        sentimentAnalyzer.analyze();
         compound = compound + sentimentAnalyzer.getPolarity().get(sentence);
     }
 

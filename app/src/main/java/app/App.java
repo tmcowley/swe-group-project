@@ -62,7 +62,7 @@ public class App{
 
         try{
             // instantiate DB connection
-            db = new DbConnection("db-dev.db");
+            db = new DbConnection();
         } catch (SQLException e){
             System.out.println(e.getMessage());
             //throw e;

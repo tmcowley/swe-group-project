@@ -72,7 +72,7 @@ public class DBConnTest {
         int testArchivedEventID = testArchivedEvent.getEventID();
 
         // test feedback creation
-        Feedback testFeedback = db.createFeedback(testPartID, testEventID, "data", "sentiment", false, new Timestamp(System.currentTimeMillis()));
+        Feedback testFeedback = db.createFeedback(testPartID, testEventID, false, new Timestamp(System.currentTimeMillis()), null);
         int testFeedbackID = testFeedback.getFeedbackID();
 
         // test participant_in_event creation

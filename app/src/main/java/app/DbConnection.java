@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Array;
 
 import java.util.ArrayList;
 
@@ -296,32 +297,69 @@ public class DbConnection{
 
     /**
      * Create an instance of feedback against an event
+     * TODO: ensure params are correct for non-processed feedback
      * @param participant_id Participant id of the participant who created this feedback
      * @param event_id Event id of the event which this feedback is written for
-     * @param data Feedback content
-     * @param sentiment Sentiment
      * @param anonymous Whether this feedback is anonymous
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
-    public Feedback createFeedback(int participant_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp time_stamp){
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results){
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer feedback_id = null;
         try{
-            String createArchivedEvent = ""
-                + "INSERT INTO feedback(participant_id, event_id, data, sentiment, anonymous, time_stamp) "
-                + "VALUES(?, ?, ?, ?, ?, ?) "
-                + "RETURNING feedback_id";
-            stmt = this.conn.prepareStatement(createArchivedEvent);
+            String createNonProcessedFeedback = ""
+                + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results) "
+                + "VALUES(?, ?, ?, ?, ?) "
+                + "RETURNING feedback_id;";
+            stmt = this.conn.prepareStatement(createNonProcessedFeedback);
 
             stmt.setInt(1, participant_id);
             stmt.setInt(2, event_id);
-            stmt.setString(3, data);
-            stmt.setString(4, sentiment);
-            stmt.setBoolean(5, anonymous);
-            stmt.setTimestamp(6, time_stamp);
+            stmt.setBoolean(3, anonymous);
+            stmt.setTimestamp(4, time_stamp);
+            stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                feedback_id = rs.getInt("feedback_id");
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        return getFeedback(feedback_id);
+    }
+
+    // TODO COMMENT
+    // CREATE FULL FEEDBACK OBJECT (post-processing)
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results){
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer feedback_id = null;
+        try{
+            String createProcessedFeedback = ""
+                + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results, weights, type, key, compound, key_results) "
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                + "RETURNING feedback_id;";
+            stmt = this.conn.prepareStatement(createProcessedFeedback);
+
+            stmt.setInt(1, participant_id);
+            stmt.setInt(2, event_id);
+            stmt.setBoolean(3, anonymous);
+            stmt.setTimestamp(4, time_stamp);
+            stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
+            stmt.setArray(6, this.conn.createArrayOf("REAL", weights));
+            stmt.setArray(7, this.conn.createArrayOf("INT", type));
+            stmt.setArray(8, this.conn.createArrayOf("INT", key));
+            stmt.setFloat(9, compound);
+            stmt.setArray(10, this.conn.createArrayOf("TEXT", key_results));
 
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -773,23 +811,23 @@ public class DbConnection{
 
             rs = stmt.executeQuery();
             if (rs.next()) {
+                // non-sentiment related fields
                 feedback_id = rs.getInt("feedback_id");
                 int participant_id = rs.getInt("participant_id");
                 int event_id = rs.getInt("event_id");
                 boolean anonymous = rs.getBoolean("anonymous");
                 Timestamp time_stamp = rs.getTimestamp("time_stamp");
-                //String data = rs.getString("data");
-                //String sentiment = rs.getString("sentiment");
 
                 // collect sentiment related fields
                 String[] results    = (String[])rs.getArray("results").getArray();
-                float[] weights     = (float[])rs.getArray("weights").getArray();
-                int[] type          = (int[])rs.getArray("type").getArray();
-                int[] key           = (int[])rs.getArray("key").getArray();
+                Float[] weights     = (Float[])rs.getArray("weights").getArray();
+                Integer[] type      = (Integer[])rs.getArray("type").getArray();
+                Integer[] key       = (Integer[])rs.getArray("key").getArray();
                 float compound      = rs.getFloat("compound"); 
                 String[] key_results = (String[])rs.getArray("key_results").getArray();
 
-                feedback = new Feedback(feedback_id, participant_id, event_id, results, weights, type, key, compound, key_results, anonymous, time_stamp);
+                feedback = new Feedback(feedback_id, participant_id, event_id, anonymous, time_stamp, 
+                                        results, weights, type, key, compound, key_results);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;

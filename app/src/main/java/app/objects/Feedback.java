@@ -8,26 +8,27 @@ public class Feedback{
     private int participant_id;
     private int event_id;
     private String[] results;   //Holds results to specific feedback queries
-    private float[] weights;    //Holds the weights (for weighted mean) associated with each result
-    private int[] type;         //Holds the type fo query that produced each result
-    private int[] key;          //Holds wether a result is a key result or not
+    private Float[] weights;    //Holds the weights (for weighted mean) associated with each result
+    private Integer[] type;     //Holds the type fo query that produced each result
+    private Integer[] key;      //Holds wether a result is a key result or not
     private float compound;     //Holds the compound score (part of sentiment)
     private String[] key_results; //Holds an array of all key results
     private boolean anonymous;
     private Timestamp timestamp;
 
-    public Feedback(int feedback_id, int participant_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp){
+    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp, 
+                    String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results){
         this.feedback_id    = feedback_id; 
         this.participant_id = participant_id;
         this.event_id       = event_id;
+        this.anonymous      = anonymous;
+        this.timestamp      = timestamp;
         this.results        = results;
         this.weights        = weights;
         this.type           = type;
         this.key            = key;
         this.compound       = compound;
         this.key_results    = key_results;
-        this.anonymous      = anonymous;
-        this.timestamp      = timestamp;
     }
 
     public int getFeedbackID(){
@@ -46,15 +47,15 @@ public class Feedback{
         return this.results;
     }
 
-    public float[] getWeights(){
+    public Float[] getWeights(){
         return this.weights;
     }
 
-    public int[] getType(){
+    public Integer[] getType(){
         return this.type;
     }
 
-    public int[] getKey(){
+    public Integer[] getKey(){
         return this.key;
     }
 

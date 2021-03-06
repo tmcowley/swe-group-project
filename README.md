@@ -21,6 +21,7 @@ Database (old): [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ### Database
 <!---
+SQLite3 Variant (not to be used)
 Query database:
 ```
 sqlite3 file.db

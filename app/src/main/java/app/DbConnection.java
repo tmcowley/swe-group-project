@@ -15,6 +15,8 @@ import app.objects.*;
 // IO for word-list import
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.io.FileReader;
 
@@ -43,11 +45,14 @@ public class DbConnection{
             // PSQL variant: 
             // see: jdbc.postgresql.org/documentation/head/connect.html
             String dbURL = "jdbc:postgresql:database";
+            //String dbURL = "jdbc:postgresql://127.0.0.1:5432/cs261";
 
             // // SQLite3 variant:
             // String dbURL = "jdbc:sqlite:" + databaseFile;
 
             this.conn = DriverManager.getConnection(dbURL);
+            //this.conn = DriverManager.getConnection(dbURL, "postgres", "fas200");
+            
         } catch (SQLException e){
             SQLException updatedException = new SQLException("Error: DB failed to connect; ensure server is running", e);
             throw updatedException;
@@ -100,6 +105,12 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer host_id = null;
+        InetAddress address = null;
+        try{
+            address = InetAddress.getByName(ip_address);
+        }catch (UnknownHostException e){
+            e.printStackTrace();
+        }
         try{
             String createHost = ""
                 + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
@@ -109,7 +120,7 @@ public class DbConnection{
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);
-            stmt.setString(3, ip_address);
+            stmt.setObject(3, address);
             stmt.setString(4, e_address);
             stmt.setString(5, host_code);
 
@@ -859,7 +870,7 @@ public class DbConnection{
         host_code = validator.sanitizeHostCode(host_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Integer codeExists = null;
+        Boolean codeExists = false;
         try{
             String queryHostCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM host WHERE host_code=?);";
@@ -867,7 +878,7 @@ public class DbConnection{
             stmt.setString(1, host_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getInt(1);
+                codeExists = rs.getBoolean(1);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -875,8 +886,7 @@ public class DbConnection{
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        if (codeExists == null) return null;
-        return (codeExists == 1);
+        return codeExists;
     }
 
 

@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import java.lang.reflect.Array;
 import java.sql.Timestamp;
-import app.Validator;
-//import jdk.jfr.Timestamp;
 
 // Unit tests against Validator.java
 public class ValidatorTest {

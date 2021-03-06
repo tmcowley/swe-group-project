@@ -67,7 +67,11 @@ CREATE TABLE event(
     template_id     INT,
     title           VARCHAR(32),
     description     VARCHAR(128),
-    type            event_type,
+    type            VARCHAR(10)     CHECK (type = 'lecture' or
+                                           type = 'seminar' or
+                                           type = 'conference' or
+                                           type = 'workshop' or
+                                           type = 'other'),
     start_time      TIMESTAMP,
     end_time        TIMESTAMP,
     event_code      VARCHAR(4) 
@@ -89,7 +93,11 @@ CREATE TABLE archived_event(
     total_mood      VARCHAR(40)     NOT NULL,
     title           VARCHAR(32)     NOT NULL,
     description     VARCHAR(128)    NOT NULL,
-    type            event_type       NOT NULL,
+    type            VARCHAR(10)     CHECK (type = 'lecture' or
+                                           type = 'seminar' or
+                                           type = 'conference' or
+                                           type = 'workshop' or
+                                           type = 'other'),
     start_time      TIMESTAMP       NOT NULL,
     end_time        TIMESTAMP       NOT NULL,
     FOREIGN KEY (host_id) 

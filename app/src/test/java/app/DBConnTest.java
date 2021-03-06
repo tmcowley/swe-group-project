@@ -82,7 +82,11 @@ public class DBConnTest {
 
         // test participant_in_event creation
         Boolean partInEvent = db.addParticipantToEvent(testPartID, testEventID);
-        
+
+        assertTrue(testHost.getFName().equals("testFName") && testHost.getLName().equals("testLName") && testHost.getIPAddress().equals("127.0.0.1") && testHost.getEAddress().equals("test@test.com"));
+        assertTrue(testTemplate.getHostID() == testHostID && testTemplate.getData().equals("data"));
+        assertTrue(testPart.getFName().equals("testFName") && testPart.getLName().equals("testLName") && testPart.getIPAddress().equals("127.0.0.1"));
+
         // clear all testing objects from DB
         db.deleteHost(testHostID);
         db.deleteTemplate(testTemplateID);

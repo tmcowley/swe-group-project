@@ -15,8 +15,6 @@ import app.objects.*;
 // IO for word-list import
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.io.FileReader;
 
@@ -44,14 +42,14 @@ public class DbConnection{
         try{
             // PSQL variant: 
             // see: jdbc.postgresql.org/documentation/head/connect.html
-            String dbURL = "jdbc:postgresql:database";
-            //String dbURL = "jdbc:postgresql://127.0.0.1:5432/cs261";
+            // String dbURL = "jdbc:postgresql:database";
+            String dbURL = "jdbc:postgresql://127.0.0.1:5432/cs261";
 
             // // SQLite3 variant:
             // String dbURL = "jdbc:sqlite:" + databaseFile;
 
-            this.conn = DriverManager.getConnection(dbURL);
-            //this.conn = DriverManager.getConnection(dbURL, "postgres", "fas200");
+            // this.conn = DriverManager.getConnection(dbURL);
+            this.conn = DriverManager.getConnection(dbURL, "postgres", "fas200");
             
         } catch (SQLException e){
             SQLException updatedException = new SQLException("Error: DB failed to connect; ensure server is running", e);
@@ -105,22 +103,17 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer host_id = null;
-        InetAddress address = null;
-        try{
-            address = InetAddress.getByName(ip_address);
-        }catch (UnknownHostException e){
-            e.printStackTrace();
-        }
+    
         try{
             String createHost = ""
                 + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
-                + "VALUES(?, ?, ?, ?, ?) "
+                + "VALUES(?, ?, ?::INET, ?, ?) "
                 + "RETURNING host_id;";
             System.out.println(createHost);
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);
-            stmt.setObject(3, address);
+            stmt.setObject(3, ip_address);
             stmt.setString(4, e_address);
             stmt.setString(5, host_code);
 
@@ -192,7 +185,7 @@ public class DbConnection{
         try{
             String createParticipant = ""
                 + "INSERT INTO participant(ip_address, f_name, l_name) "
-                + "VALUES(?, ?, ?) "
+                + "VALUES(?::INET, ?, ?) "
                 + "RETURNING participant_id";
             stmt = this.conn.prepareStatement(createParticipant);
             stmt.setString(1, ip_address);
@@ -233,7 +226,7 @@ public class DbConnection{
         try{
             String createEvent = ""
                 + "INSERT INTO event(host_id, template_id, title, description, type, start_time, end_time, event_code) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?) "
+                + "VALUES(?, ?, ?, ?, ?::event_type, ?, ?, ?) "
                 + "RETURNING event_id";
             stmt = this.conn.prepareStatement(createEvent);
             stmt.setInt(1, host_id);
@@ -595,7 +588,7 @@ public class DbConnection{
             if (rs.next()) {
                 host_id = rs.getInt("host_id");
                 String host_code = rs.getString("host_code");
-                String ip_address = rs.getString("ip_address");
+                String ip_address = rs.getObject("ip_address").toString();
                 String e_address = rs.getString("e_address");
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
@@ -667,7 +660,7 @@ public class DbConnection{
             rs = stmt.executeQuery();
             if (rs.next()) {
                 participant_id = rs.getInt("participant_id");
-                String ip_address = rs.getString("ip_address");
+                String ip_address = rs.getObject("ip_address").toString();
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
                 boolean sys_ban = rs.getBoolean("sys_ban");
@@ -812,7 +805,7 @@ public class DbConnection{
         event_code = validator.sanitizeEventCode(event_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Integer codeExists = null;
+        Boolean codeExists = null;
         try{
             String queryEventCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM event WHERE event_code=?);";
@@ -820,7 +813,7 @@ public class DbConnection{
             stmt.setString(1, event_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getInt(1);
+                codeExists = rs.getBoolean(1);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -828,8 +821,7 @@ public class DbConnection{
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        if (codeExists == null) return null;
-        return (codeExists == 1);
+        return codeExists;
     }
 
     /**
@@ -841,7 +833,7 @@ public class DbConnection{
         template_code = validator.sanitizeTemplateCode(template_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Integer codeExists = null;
+        Boolean codeExists = null;
         try{
             String queryTemplateCodeExists = ""
                 + "SELECT EXISTS(SELECT 1 FROM template WHERE template_code=?);";
@@ -849,7 +841,7 @@ public class DbConnection{
             stmt.setString(1, template_code);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                codeExists = rs.getInt(1);
+                codeExists = rs.getBoolean(1);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -857,8 +849,7 @@ public class DbConnection{
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-        if (codeExists == null) return null;
-        return (codeExists == 1);
+        return codeExists;
     }
 
     /**

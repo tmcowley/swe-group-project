@@ -7,17 +7,25 @@ public class Feedback{
     private int feedback_id;
     private int host_id;
     private int event_id;
-    private String data;
-    private String sentiment;
+    private String[] results; //Holds results to specific feedback queries
+    private float[] weights; //Holds the weights (for weighted mean) associated with each result
+    private int[] type; //Holds the type fo query that produced each result
+    private int[] key; //Holds wether a result is a key result or not
+    private float compound; //Holds the compound score (part of sentiment)
+    private String[] key_results; //Holds an array of all key results
     private boolean anonymous;
     private Timestamp timestamp;
 
-    public Feedback(int feedback_id, int host_id, int event_id, String data, String sentiment, boolean anonymous, Timestamp timestamp){
+    public Feedback(int feedback_id, int host_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp){
         this.feedback_id    = feedback_id; 
         this.host_id        = host_id;
         this.event_id       = event_id;
-        this.data           = data;
-        this.sentiment      = sentiment;
+        this.results        = results;
+        this.weights        = weights;
+        this.type          = type;
+        this.key            = key;
+        this.compound       = compound;
+        this.key_results    = key_results;
         this.anonymous      = anonymous;
         this.timestamp      = timestamp;
     }
@@ -34,12 +42,28 @@ public class Feedback{
         return this.host_id;
     }
 
-    public String getData(){
-        return this.data;
+    public String[] getResults(){
+        return this.results;
     }
 
-    public String getSentiment(){
-        return this.sentiment;
+    public float[] getWeights(){
+        return this.weights;
+    }
+
+    public int[] getType(){
+        return this.type;
+    }
+
+    public int[] getKey(){
+        return this.key;
+    }
+
+    public float getCompound(){
+        return this.compound;
+    }
+
+    public String[] getKey_Results(){
+        return this.key_results;
     }
 
     public boolean getAnonymous(){
@@ -49,13 +73,25 @@ public class Feedback{
     public Timestamp getTimestamp(){
         return this.timestamp;
     }
+
+    public void setCompound(float new_compound){
+        this.compound = new_compound;
+    }
+
+    public void setKey_Results(float new_key_results){
+        this.key_results = new_key_results;
+    }
     
     public boolean equals(Feedback that){
         if(this.event_id != that.getEventID()) return false;
         if(this.host_id != that.getHostID()) return false;
         if(this.feedback_id != that.getFeedbackID()) return false;
-        if(this.data != that.getData()) return false;
-        if(this.sentiment != that.getSentiment()) return false;
+        if(this.results != that.getResults()) return false;
+        if(this.weights != that.getWeights()) return false;
+        if(this.type != that.getType()) return false;
+        if(this.key != that.getKey()) return false;
+        if(this.compound != that.getCompound()) return false;
+        if(this.key_results != that.getKey_Results()) return false;
         if(this.anonymous != that.getAnonymous()) return false;
         if(this.timestamp != that.getTimestamp()) return false;
         return true;

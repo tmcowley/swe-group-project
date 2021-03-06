@@ -12,6 +12,8 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 ```mvn test``` - Compile the project, run tests from ```/app/src/test```<br>
 ```mvn exec:java``` - Execute the project<br>
 
+<br>
+
 ### Project directory overview and description:
 ```
 .
@@ -59,6 +61,8 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 >
 >```./documentation``` - documentation on dev and project sprint cycles<br>
 >
+
+<br>
 
 ### Adding the Dependencies to Maven (via pom.xml)
 

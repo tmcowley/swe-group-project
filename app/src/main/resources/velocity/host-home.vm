@@ -1,0 +1,16 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<header>
+    <div id="headerLeft">
+        Resmodus
+    </div>
+    <div id="headerRight">
+        login stuff goes here
+    </div>
+</header>
+<div id="hostHomeContainer">
+    <h1>Host Homepage</h1>
+    <a id="hostHomeNewEvent" href="/host/create-event">Create a New Event</a>
+    <a id="hostHomeMyTemplates" href="/host/templates">My Templates</a>
+</div>
+#end

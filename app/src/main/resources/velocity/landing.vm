@@ -9,7 +9,7 @@
                 <input type="text" id="participantCode" name="participantCode" placeholder="Code">
                 <input type="submit" value="Join Event" id="landingJoinButton">
             </form>
-            <a href="#" id="landingHostButton">Host Event</a>
+            <a href="/host/login" id="landingHostButton">Host Event</a>
         </div>
     </div>
 </div>

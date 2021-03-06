@@ -1,3 +1,6 @@
+//TODO - Create a consitency test for this
+//TODO - create a does it return something in the write format test
+
 package app;
 
 import java.util.*;

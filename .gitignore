@@ -41,3 +41,7 @@ hs_err_pid*
 # ignore compiled resources
 /app/target/
 /app/target/*
+
+# ignore eclipse settings
+/app/.settings/
+/app/.settings/*

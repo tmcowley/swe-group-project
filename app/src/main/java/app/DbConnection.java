@@ -776,14 +776,20 @@ public class DbConnection{
                 feedback_id = rs.getInt("feedback_id");
                 int participant_id = rs.getInt("participant_id");
                 int event_id = rs.getInt("event_id");
-                //String data = rs.getString("data");
-                //String sentiment = rs.getString("sentiment");
                 boolean anonymous = rs.getBoolean("anonymous");
                 Timestamp time_stamp = rs.getTimestamp("time_stamp");
+                //String data = rs.getString("data");
+                //String sentiment = rs.getString("sentiment");
 
-                // TODO: 
-                // Feedback constructor: (int feedback_id, int participant_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp)
-                feedback = new Feedback(feedback_id, participant_id, event_id, null, null, null, null, 0, null, anonymous, time_stamp);
+                // collect sentiment related fields
+                String[] results    = (String[])rs.getArray("results").getArray();
+                float[] weights     = (float[])rs.getArray("weights").getArray();
+                int[] type          = (int[])rs.getArray("type").getArray();
+                int[] key           = (int[])rs.getArray("key").getArray();
+                float compound      = rs.getFloat("compound"); 
+                String[] key_results = (String[])rs.getArray("key_results").getArray();
+
+                feedback = new Feedback(feedback_id, participant_id, event_id, results, weights, type, key, compound, key_results, anonymous, time_stamp);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;

@@ -26,7 +26,7 @@ public class DBConnTest {
         validator = new Validator();
     }
 
-    //@Test
+    @Test
     public void testCodeGeneration(){
         // Test ten uniquely generated event codes
         for (int i = 0; i < 10; i++){

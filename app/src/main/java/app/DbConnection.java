@@ -45,8 +45,9 @@ public class DbConnection{
             // String dbURL = "jdbc:postgresql:database";
             String dbURL = "jdbc:postgresql://127.0.0.1:5432/cs261";
 
-            // this.conn = DriverManager.getConnection(dbURL);
+            //this.conn = DriverManager.getConnection(dbURL);
             this.conn = DriverManager.getConnection(dbURL, "postgres", "fas200");
+            
             
         } catch (SQLException e){
             SQLException updatedException = new SQLException("Error: DB failed to connect; ensure server is running", e);

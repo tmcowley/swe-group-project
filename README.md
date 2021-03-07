@@ -1,4 +1,4 @@
-# ResModus: A *Live Event Feedback* System
+# ResModus: A *Live Event-Feedback* System
 An application allowing for real-time event feedback
 
 ## Context
@@ -12,32 +12,33 @@ An application allowing for real-time event feedback
 Web-based client, native Android application, native iOS application
 
 ### Technologies
-Web Front-end (old): [React](https://reactjs.org/)<br>
-Mobile Front-end (old): [React Native](https://reactnative.dev/)<br>
+<!-- Web Front-end (old): [React](https://reactjs.org/)<br> -->
+<!-- Mobile Front-end (old): [React Native](https://reactnative.dev/)<br> -->
+Web Front-end: [HTML5 with Velocity]()<br>
 Back-end: [Spark Java](https://sparkjava.com/)<br>
-Database (old): [PostgreSQL v13.2](https://www.postgresql.org/)
+Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ## Set-up and Initialization
 
+<br>
+
 ### Database
-<!---
-SQLite3 Variant (not to be used)
-Query database:
-```
-sqlite3 file.db
-```
 
-Apply schema to database:
+#### Start Postgres server with Docker (localhost port 5433):
 ```
-sqlite3 file.db < schema.sql
+cd app;
+docker-compose -f docker-compose.yml up --remove-orphans
 ```
+[to close, `crtl+c` the initial window] <br>
 
-Dump schema from database:
-```
-sqlite3 file.db .schema > file-schema.sql
-```
--->
 
+#### Interact with the database:
+```
+psql -h localhost -p 5432 --username postgres
+```
+[password is `fas200`]
+
+<!--
 Start PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
@@ -53,6 +54,9 @@ Stop PostgreSQL server (Mac):
 ```
 pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
 ```
+-->
+
+<br>
 
 ### Start-up
 
@@ -62,8 +66,8 @@ cd app; mvn compile
 mvn exec:java 
 ```
 
-Run tests: ```mvn test```
+Run tests: `mvn test`
 
-Render Website: Visit ```http://localhost:4567/```
+Render website: visit [`http://localhost:4567/`](http://localhost:4567/)
 
 ## Demonstration

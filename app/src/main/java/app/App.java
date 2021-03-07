@@ -91,6 +91,7 @@ public class App {
 
         // API endpoints
         post("/host/get-code", APIController.createHost);
+        post("/", APIController.joinEvent);
 
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

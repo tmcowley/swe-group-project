@@ -5,7 +5,9 @@
         <h1>Resmodus</h1>
         <div id="landingJoinContainer">
             <form name="joinInfo" action="/event/join/code" method="get">
-                <input type="text" id="participantName" name="participantName" placeholder="Your Name">
+                <!-- TODO: CREATE SMALLER IDs for first/last name boxes -->
+                <input type="text" id="" name="participantFName" placeholder="First Name">
+                <input type="text" id="" name="participantLName" placeholder="Last Name">
                 <input type="text" id="participantCode" name="participantCode" placeholder="Code">
                 <input type="submit" value="Join Event" id="landingJoinButton">
             </form>

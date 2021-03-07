@@ -3,10 +3,10 @@ package app.util;
 import java.util.*;  
 import javax.mail.*;  
 import javax.mail.internet.*;  
-import javax.activation.*;  
+import javax.activation.*;
 
   
-public class SendEmail  
+public class emailController
 {  
  public static void sendEmail(String to, String subject, String body){  
       String from = "resmodus.help@gmail.com"; 
@@ -15,8 +15,8 @@ public class SendEmail
      //Get the session object  
       Properties properties = System.getProperties();  
       properties.setProperty("mail.smtp.host", host);  
-      Session session = Session.getDefaultInstance(properties);  
-  
+      Session session = Session.getDefaultInstance(properties); 
+
      //compose the message  
       try{  
          MimeMessage message = new MimeMessage(session);  

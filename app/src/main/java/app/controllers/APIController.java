@@ -25,17 +25,29 @@ public class APIController {
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("createHost API endpoint recognised request \n");
         Route basePage = HostLoginController.servePage;
-
         DbConnection db = App.getInstance().getDbConnection();
+        if (db == null) {
+            System.out.println("PANIK - db null");
+            return basePage;
+        }
+
+        // collect form attributes, validate attributes
         String FName = request.queryParams("hostFName");
         String LName = request.queryParams("hostLName");
         String Email = request.queryParams("hostEmail");
-        System.out.println(Email);
-        if(v.nameIsValid(FName) && v.nameIsValid(LName) && v.eAddressIsValid(Email)){
-            Host host = db.createHost(FName,LName,"192.168.1.1",Email);
-            String HostCode = host.getHostCode();
-            e.sendEmail(Email, "Your host codes!!!", HostCode);
+        if (!v.nameIsValid(FName)) return basePage;
+        if (!v.nameIsValid(LName)) return basePage;
+        if (!v.eAddressIsValid(Email)) return basePage;
+
+        System.out.println("Notice: createHost fields collected and validated");
+        Host host = db.createHost(FName,LName,"192.168.1.1",Email);
+        if (host == null) {
+            System.out.println("PANIK");
+            return basePage;
         }
+        String HostCode = host.getHostCode();
+        System.out.println("Notice: createHost Route Host created successfully");
+
         //TODO: get IP
         // 2. create Host, get Host, get Host code
         // 3. send host-code back somehow

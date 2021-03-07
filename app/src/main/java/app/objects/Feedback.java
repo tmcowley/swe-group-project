@@ -2,99 +2,110 @@ package app.objects;
 
 import java.sql.Timestamp;
 
-public class Feedback{
+public class Feedback {
 
     private int feedback_id;
     private int participant_id;
     private int event_id;
-    private String[] results;   //Holds results to specific feedback queries
-    private Float[] weights;    //Holds the weights (for weighted mean) associated with each result
-    private Integer[] type;     //Holds the type fo query that produced each result
-    private Integer[] key;      //Holds whether a result is a key result or not
-    private float compound;     //Holds the compound score (part of sentiment)
-    private String[] key_results; //Holds an array of all key results
+    private String[] results; // Holds results to specific feedback queries
+    private Float[] weights; // Holds the weights (for weighted mean) associated with each result
+    private Integer[] type; // Holds the type fo query that produced each result
+    private Integer[] key; // Holds whether a result is a key result or not
+    private float compound; // Holds the compound score (part of sentiment)
+    private String[] key_results; // Holds an array of all key results
     private boolean anonymous;
     private Timestamp timestamp;
 
-    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp, 
-                    String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results){
-        this.feedback_id    = feedback_id; 
+    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
+            String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results) {
+        this.feedback_id = feedback_id;
         this.participant_id = participant_id;
-        this.event_id       = event_id;
-        this.anonymous      = anonymous;
-        this.timestamp      = timestamp;
-        this.results        = results;
-        this.weights        = weights;
-        this.type           = type;
-        this.key            = key;
-        this.compound       = compound;
-        this.key_results    = key_results;
+        this.event_id = event_id;
+        this.anonymous = anonymous;
+        this.timestamp = timestamp;
+        this.results = results;
+        this.weights = weights;
+        this.type = type;
+        this.key = key;
+        this.compound = compound;
+        this.key_results = key_results;
     }
 
-    public int getFeedbackID(){
+    public int getFeedbackID() {
         return this.feedback_id;
     }
 
-    public int getEventID(){
+    public int getEventID() {
         return this.event_id;
     }
 
-    public int getParticipantID(){
+    public int getParticipantID() {
         return this.participant_id;
     }
 
-    public String[] getResults(){
+    public String[] getResults() {
         return this.results;
     }
 
-    public Float[] getWeights(){
+    public Float[] getWeights() {
         return this.weights;
     }
 
-    public Integer[] getType(){
+    public Integer[] getType() {
         return this.type;
     }
 
-    public Integer[] getKey(){
+    public Integer[] getKey() {
         return this.key;
     }
 
-    public float getCompound(){
+    public float getCompound() {
         return this.compound;
     }
 
-    public String[] getKey_Results(){
+    public String[] getKey_Results() {
         return this.key_results;
     }
 
-    public boolean getAnonymous(){
+    public boolean getAnonymous() {
         return this.anonymous;
     }
 
-    public Timestamp getTimestamp(){
+    public Timestamp getTimestamp() {
         return this.timestamp;
     }
 
-    public void setCompound(float new_compound){
+    public void setCompound(float new_compound) {
         this.compound = new_compound;
     }
 
-    public void setKey_Results(String[] new_key_results){
+    public void setKey_Results(String[] new_key_results) {
         this.key_results = new_key_results;
     }
-    
-    public boolean equals(Feedback that){
-        if(this.event_id != that.getEventID())          return false;
-        if(this.participant_id != that.getParticipantID())     return false;
-        if(this.feedback_id != that.getFeedbackID())    return false;
-        if(this.results != that.getResults())           return false;
-        if(this.weights != that.getWeights())           return false;
-        if(this.type != that.getType())                 return false;
-        if(this.key != that.getKey())                   return false;
-        if(this.compound != that.getCompound())         return false;
-        if(this.key_results != that.getKey_Results())   return false;
-        if(this.anonymous != that.getAnonymous())       return false;
-        if(this.timestamp != that.getTimestamp())       return false;
+
+    public boolean equals(Feedback that) {
+        if (this.event_id != that.getEventID())
+            return false;
+        if (this.participant_id != that.getParticipantID())
+            return false;
+        if (this.feedback_id != that.getFeedbackID())
+            return false;
+        if (this.results != that.getResults())
+            return false;
+        if (this.weights != that.getWeights())
+            return false;
+        if (this.type != that.getType())
+            return false;
+        if (this.key != that.getKey())
+            return false;
+        if (this.compound != that.getCompound())
+            return false;
+        if (this.key_results != that.getKey_Results())
+            return false;
+        if (this.anonymous != that.getAnonymous())
+            return false;
+        if (this.timestamp != that.getTimestamp())
+            return false;
         return true;
     }
 }

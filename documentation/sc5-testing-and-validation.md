@@ -5,7 +5,7 @@
 Component development made use of unit testing at the point of development, as planned in our `Design and Planning Document`.
 Unit testing against the Java back-end, the PostgreSQL database, and the sentiment analyser have been developed in the form of JUnit tests, stored in `/app/src/test/`. These testing classes contain unit tests against each public and protected methods from the main source code.
 
-Below is an example of a JUnit test run against the `Validator.java` method `eventCodeIsValid`. 
+Below is an example of a JUnit test run against the `Validator.java` method `eventCodeIsValid`, from the class `ValidatorTest.java`. 
 (As defined in Design and Planning, an event code is a non-null, 4 digit, alphanumeric code uniquely identifying an event.) 
 ```
 @Test

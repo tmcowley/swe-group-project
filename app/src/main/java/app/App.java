@@ -10,7 +10,7 @@ import app.controllers.*;
 //SQLException package
 import java.sql.SQLException;
 
-public class App{
+public class App {
 
     // Stores the singleton instance of this class.
     private static App app;
@@ -36,36 +36,38 @@ public class App{
         return this.validator;
     }
 
-    /** Explicitly mark constructor as private so no instances of this
-    * class can be created elsewhere. */
+    /**
+     * Explicitly mark constructor as private so no instances of this class can be
+     * created elsewhere.
+     */
     private App() {
 
     }
 
     /**
-    * The main entry point for the application.
-    * @param args The command-line arguments supplied by the OS.
-    */
-    public static void main (String[] args) throws SQLException {
+     * The main entry point for the application.
+     * 
+     * @param args The command-line arguments supplied by the OS.
+     */
+    public static void main(String[] args) throws SQLException {
         // initialize and run the program
         app = new App();
         app.run();
     }
 
-
-    //Runs the program.
+    // Runs the program.
     private void run() throws SQLException {
 
         // tell the Spark framework where to find static files
         staticFiles.location("/static");
         Spark.port(4567);
 
-        try{
+        try {
             // instantiate DB connection
             db = new DbConnection();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-            //throw e;
+            // throw e;
         }
 
         // instantiate validator
@@ -73,8 +75,8 @@ public class App{
 
         // for each currently running event, generate /event/join/<code>
 
-        //paths
-        //get("/", participantEventController.servePage);
+        // paths
+        // get("/", participantEventController.servePage);
         get("/", IndexController.servePage);
         get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
@@ -85,8 +87,8 @@ public class App{
         get("/host/templates", null);
         get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", null);
-        //get("/", null);
-        
+        // get("/", null);
+
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());
     }

@@ -29,6 +29,7 @@ Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 cd app;
 docker-compose -f docker-compose.yml up --remove-orphans
 ```
+[Note: can be done with terminal, and powershell]<br>
 [to close: `crtl+c` the initial window] <br>
 
 

@@ -36,8 +36,10 @@ docker-compose -f docker-compose.yml up --remove-orphans
 #### Interact with the database:
 ```
 psql -h localhost -p 5432 --username postgres
+[password is fas200]
+
+\c cs261
 ```
-[password is `fas200`]
 
 <!--
 Start PostgreSQL server (Mac):

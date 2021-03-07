@@ -10,7 +10,7 @@ public class Feedback{
     private String[] results;   //Holds results to specific feedback queries
     private Float[] weights;    //Holds the weights (for weighted mean) associated with each result
     private Integer[] type;     //Holds the type fo query that produced each result
-    private Integer[] key;      //Holds wether a result is a key result or not
+    private Integer[] key;      //Holds whether a result is a key result or not
     private float compound;     //Holds the compound score (part of sentiment)
     private String[] key_results; //Holds an array of all key results
     private boolean anonymous;

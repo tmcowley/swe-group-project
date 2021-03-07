@@ -2,8 +2,8 @@
 #@mainLayout()
 <div id="hostCodeContainer">
     <h2>Here is your code:</h2>
-    <h1>Test Test Test Test</h1>
+    <h1>$hostCode</h1>
     <p>(Please make a note of it!</p>
-    <a id="hostCodeContinue" href="/host/home">Continue</a>
+    <a id="hostCodeContinue" href="/host/home/?hostCode="$hostCode>Continue</a>
 </div>
 #end

@@ -16,9 +16,9 @@ DROP TYPE IF EXISTS event_type;
 
 -- ENUMS, EXTENSIONS
 CREATE EXTENSION citext;
-CREATE TYPE event_type 
-    AS ENUM 
-    ('lecture', 'seminar', 'conference', 'workshop', 'other');
+-- CREATE TYPE event_type 
+--     AS ENUM 
+--     ('lecture', 'seminar', 'conference', 'workshop', 'other');
 
 ------------------
  --   SCHEMA   --

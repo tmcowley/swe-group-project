@@ -81,6 +81,10 @@ public class DBConnTest {
         assertTrue(testHost.getFName().equals("testFName") && testHost.getLName().equals("testLName") && testHost.getIPAddress().equals("127.0.0.1") && testHost.getEAddress().equals("test@test.com"));
         assertTrue(testTemplate.getHostID() == testHostID && testTemplate.getData().equals("data"));
         assertTrue(testPart.getFName().equals("testFName") && testPart.getLName().equals("testLName") && testPart.getIPAddress().equals("127.0.0.1"));
+        assertTrue(testEvent.getHostID() == testHostID && testEvent.getTemplateID() == testTemplateID && testEvent.getTitle().equals("event title") && testEvent.getDescription().equals("event desc") && testEvent.getType().equals("seminar"));
+        assertTrue(testArchivedEvent.getHostID() == testHostID && testArchivedEvent.getMood().equals("") && testArchivedEvent.getTitle().equals("event title") && testArchivedEvent.getDescription().equals("event desc") && testArchivedEvent.getType().equals("seminar"));
+        assertTrue(testFeedback.getParticipantID() == testPartID && testFeedback.getEventID() == testEventID && testFeedback.getAnonymous() == false);
+
 
         // clear all testing objects from DB
         db.deleteHost(testHostID);

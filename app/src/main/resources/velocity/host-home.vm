@@ -10,6 +10,7 @@
 </header>
 <div id="hostHomeContainer">
     <h1>Host Homepage</h1>
+    <h2>Hello! $fName $lName</h2>
     <a id="hostHomeNewEvent" href="/host/create-event">Create a New Event</a>
     <a id="hostHomeMyTemplates" href="/host/templates">My Templates</a>
 </div>

@@ -2,10 +2,10 @@
 #@mainLayout()
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <h1>Event Title</h1>
+    <h1>$eventTitle</h1>
     <div id="hostGrid">
         <div>
-            <h1>Event Code: 12345</h1>
+            <h1>Event Code: $eventCode</h1>
         </div>
         <div class="hostGridPlaceholder">
             graph goes here
@@ -95,10 +95,10 @@
         </div>
     </div>
     <div id="infoSection">
-        <h1>Event Title</h1>
+        <h1>$eventTitle</h1>
         <div id="hostGrid">
             <div>
-                <h1>Event Code: 12345</h1>
+                <h1>Event Code: $eventCode</h1>
             </div>
             <div class="hostGridPlaceholder">
                 graph goes here

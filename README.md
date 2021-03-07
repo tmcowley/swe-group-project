@@ -24,12 +24,12 @@ Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ### Database
 
-#### Start Postgres server with Docker (localhost port 5433):
+#### Start Postgres server with Docker (localhost port 5432):
 ```
 cd app;
 docker-compose -f docker-compose.yml up --remove-orphans
 ```
-[to close, `crtl+c` the initial window] <br>
+[to close: `crtl+c` the initial window] <br>
 
 
 #### Interact with the database:

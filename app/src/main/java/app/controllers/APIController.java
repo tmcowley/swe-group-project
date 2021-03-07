@@ -1,7 +1,7 @@
 package app.controllers;
 
 import java.util.*;
-
+import app.util.emailController;
 import app.DbConnection;
 import app.Validator;
 import app.objects.*;
@@ -16,6 +16,7 @@ import java.io.*;
 public class APIController {
 
     Validator v = new Validator();
+    emailController e = new emailController();
 
     // form sent from front-end to back-end to create host
     public static Route createHost = (Request request, Response response) -> {
@@ -28,6 +29,7 @@ public class APIController {
         if(v.nameIsValid(FName) && v.nameIsValid(LName) && v.eAddressIsValid(Email)){
             Host host = db.createHost(FName,LName,"192.168.1.1",Email);
             String HostCode = host.getHostCode;
+            e.sendEmail(Email, "Your host codes!", HostCode);
         }
         //TODO: get IP
         // 2. create Host, get Host, get Host code

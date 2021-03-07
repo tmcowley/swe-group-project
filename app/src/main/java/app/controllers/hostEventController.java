@@ -22,7 +22,7 @@ public class hostEventController {
         }
         //initialise event and input 
         Event event = null;
-        Host host = request.session().attribute("host").getHostID();
+        Host host = request.session().attribute("host");//.getHostID();
         String title = request.queryParams("eventName");
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
@@ -51,7 +51,7 @@ public class hostEventController {
             model.put("eventCode", event.getEventCode());
             return ViewUtil.render(request, model, "/velocity/host-event.vm");
         }
-        //return notfound if event is not created or input is not valid
+        //return not found if event is not created or input is not valid
         return ViewUtil.notFound;
     };
 

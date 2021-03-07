@@ -14,6 +14,7 @@ public class APIController {
 
     // form sent from front-end to back-end to create host
     public static Route createHost = (Request request, Response response) -> {
+        System.out.println("This worked??? \n\n");
         // 1. ensure validity of form (for each input field)
         // 2. create Host, get Host, get Host code
         // 3. send host-code back somehow

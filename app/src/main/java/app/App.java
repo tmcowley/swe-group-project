@@ -89,6 +89,9 @@ public class App {
         get("/host/templates/edit/code", null);
         // get("/", null);
 
+        // API endpoints
+        post("/host/get-code", APIController.createHost);
+
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());
     }

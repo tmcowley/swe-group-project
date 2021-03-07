@@ -1,13 +1,14 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<form>
+<form name="creatEvent" action="/event/host/code" method="get">
     <input type="text" id="eventName" name="eventName" placeholder="Event name">
     <textarea id="eventDescription" name="eventDescription" placeholder="Event Description"></textarea>
     <select id="eventType" name="eventType">
-        <option value="1">Type 1</option>
-        <option value="2">Type 2</option>
-        <option value="3">Type 3</option>
-        <option value="4">Type 4</option>
+        <option value="lecture">Lecture</option>
+        <option value="seminar">Seminar</option>
+        <option value="conference">Conference</option>
+        <option value="workshop">Workshop</option>
+        <option value="other">Other</option>
     </select>
     <select id="eventTemplate" name="eventTemplate">
         <option value="1">Template 1</option>

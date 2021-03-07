@@ -2,6 +2,9 @@ package app.controllers;
 
 import java.util.*;
 
+import app.DbConnection;
+import app.Validator;
+import app.objects.*;
 import app.util.ViewUtil;
 
 import java.sql.SQLException;
@@ -12,10 +15,21 @@ import java.io.*;
 
 public class APIController {
 
+    Validator v = new Validator();
+
     // form sent from front-end to back-end to create host
     public static Route createHost = (Request request, Response response) -> {
+        DbConnection db = new DbConnection();
         System.out.println("This worked??? \n\n");
-        // 1. ensure validity of form (for each input field)
+        System.out.println(request.queryParams("hostFName"));
+        String FName = request.queryParams("hostFName");
+        String LName = request.queryParams("hostLName");
+        String Email = request.queryParams("hostEmail");
+        if(v.nameIsValid(FName) && v.nameIsValid(LName) && v.eAddressIsValid(Email)){
+            Host host = db.createHost(FName,LName,"192.168.1.1",Email);
+            String HostCode = host.getHostCode;
+        }
+        //TODO: get IP
         // 2. create Host, get Host, get Host code
         // 3. send host-code back somehow
         return null;

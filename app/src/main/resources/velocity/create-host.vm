@@ -5,8 +5,12 @@
     <input type="submit" value="Submit">
 </form>
 
-<form name="hostRegister" action="/host/get-code" method="get">
-    <input type="text" id="hostName" name="hostName" placeholder="Your Name">
+<br>
+<br>
+
+<form name="hostRegister" action="/host/get-code" method="post">
+    <input type="text" id="hostFName" name="hostFName" placeholder="First Name">
+    <input type="text" id="hostLName" name="hostLName" placeholder="Second Name">
     <input type="text" id="hostEmail" name="hostEmail" placeholder="Email">
     <input type="submit" value="Submit">
 </form>

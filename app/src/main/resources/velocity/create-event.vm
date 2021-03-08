@@ -1,6 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<form name="creatEvent" action="/event/host/code" method="get">
+<form name="creatEvent" action="/event/host/code" method="post">
     <input type="text" id="eventTitle" name="eventTitle" placeholder="Event Title">
     <textarea id="eventDescription" name="eventDescription" placeholder="Event Description"></textarea>
     <select id="eventType" name="eventType">
@@ -16,8 +16,8 @@
         <option value="3">Template 3</option>
         <option value="4">Template 4</option>
     </select>
-    <input type="time" id="startTime" name="startTime">
-    <input type="time" id="endTime" name="endTime">
+    <input type="datetime-local" id="startTime" name="startTime">
+    <input type="datetime-local" id="endTime" name="endTime">
     <input type="submit" value="Submit">
 </form>
 #end

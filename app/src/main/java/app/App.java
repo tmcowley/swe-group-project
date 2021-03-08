@@ -78,18 +78,20 @@ public class App {
         // paths
         // get("/", participantEventController.servePage);
         get("/", IndexController.servePage);
-        get("/event/join/code", participantEventController.servePage);
+        // get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
-        get("/host/get-code", GetCodeController.servePage);
+        // get("/host/get-code", GetCodeController.servePage);
         get("/host/home", APIController.hostLogin);
         get("/host/create-event", EventCreateController.servePage);
-        get("/event/host/code", hostEventController.servePage);
+        // get("/event/host/code", hostEventController.servePage);
         get("/host/templates", null);
         get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", null);
         // get("/", null);
 
         // API endpoints
+        post("/event/join/code", APIController.joinEvent);
+        post("/event/host/code", APIController.createEvent);
         post("/host/get-code", APIController.createHost);
         post("/host/home", APIController.hostLogin);
         post("/", APIController.joinEvent);

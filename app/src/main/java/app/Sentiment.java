@@ -44,7 +44,7 @@ public class Sentiment {
      * @param scores  real array of scores
      * @return weighted mean of compound scores
      */
-    private float weightedMean(float weights[], float scores[]) {
+    private static float weightedMean(float weights[], float scores[]) {
         float mean = 0;
         for (int i = 0; i < weights.length; i++) {
             mean += weights[i] * scores[i];
@@ -59,32 +59,32 @@ public class Sentiment {
      * @param plaintext string to be analysed for sentiment
      * @return real compound score derived from plaintext
      */
-    private float getCompound(String plaintext) throws IOException {
+    private static float getCompound(String plaintext) throws IOException{
 
-        float compound = 0; // Holds compound score derived from plaintext
-        int count = 0; // Used to mean compound scores
-        ArrayList<String> sentences = new ArrayList<String>(); // Holds plaintext broken into sentences
-
-        // Iterates through plaintext and selects each sentence within plaintext, adds
-        // each sentence to array list
-        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); // Might have to change to US - we'll see
+        float compound = 0; //Holds compound score derived from plaintext
+        int count = 0; //Used to mean compound scores
+        List<String> sentences = new LinkedList<>(); //Holds plaintext broken into sentences
+    
+        //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Might have to change to US - we'll see
         iterator.setText(plaintext);
         int start = iterator.first();
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-            sentences.add(plaintext.substring(start, end));
+            sentences.add(plaintext.substring(start,end));
             count++;
         }
-
-        // Iterate through each sentence and get compound score
+    
+        SentimentAnalysis sa = new SentimentAnalysis(new TokenizerEnglish(), new English());
+        
+        //Iterate through each  sentence and get compound score
         for (String sentence : sentences) {
-            SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer(sentence);
-            sentimentAnalyzer.analyze();
-            compound = compound + sentimentAnalyzer.getPolarity().get(sentence);
+            sa.getSentimentAnalysis(sentence);
+            compound = compound;
         }
-
-        compound = compound / count; // Gets mean of all compound scores
+    
+        compound = compound/count; //Gets mean of all compound scores
         return compound;
-
+    
     }
 
 }

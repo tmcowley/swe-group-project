@@ -42,11 +42,16 @@
     #landingContainer h1 {
         font-size: 3em;
     }
-    #participantName {
-        width: 60%;
+    #participantFName {
+        width: 100%;
+        margin-bottom: 10px;
     }
-    #participantCode {
-        width: 38%;
+    #participantLName {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    #eventCode {
+        width: 100%;
     }
 }
 
@@ -88,13 +93,6 @@
     }
     #landingJoinContainer {
         border-radius: 20px;
-    }
-    #participantName {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    #participantCode {
-        width: 100%;
     }
     #landingContainer h1 {
         font-size: 2em;

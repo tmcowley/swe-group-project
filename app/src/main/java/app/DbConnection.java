@@ -107,7 +107,6 @@ public class DbConnection{
                 + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
                 + "VALUES(?, ?, ?::INET, ?, ?) "
                 + "RETURNING host_id;";
-            System.out.println(createHost);
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);
@@ -969,6 +968,32 @@ public class DbConnection{
             host_code= String.join("-", hostCodeWords);
         }
         return host_code;
+    }
+
+    // TODO not working, and comment
+    public Boolean emailExists(String e_address){
+        // ensure email is valid
+        if (!validator.eAddressIsValid(e_address)) return false;
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean emailExists = false;
+        try{
+            String queryHostEmailExists = ""
+                + "SELECT EXISTS(SELECT 1 FROM host WHERE e_address=?::citext);";
+            stmt = this.conn.prepareStatement(queryHostEmailExists);
+            stmt.setString(1, e_address);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                emailExists = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return emailExists;
     }
 
     /**

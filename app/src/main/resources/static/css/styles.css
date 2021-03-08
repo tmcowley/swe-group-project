@@ -275,10 +275,10 @@ textarea {
 }
 
 #landingMain {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    max-width: 900px;
+    padding: 40px 0;
+    margin: 0 auto;
+    overflow: auto;
 }
 
 #landingContainer {
@@ -301,7 +301,7 @@ textarea {
     margin-bottom: 20px;
 }
 
-#landingJoinContainer form {
+#landingSubContainer {
     padding: 40px 40px 0 40px;
     background-color: #704d7b;
     border-radius: 40px;
@@ -340,4 +340,15 @@ textarea {
 
 #landingHostButton {
     width: 70%;
+}
+
+#hostCode {
+    padding: 10px;
+    width: 100%;
+}
+
+#hostFName, #hostLName, #hostEmail {
+    padding: 10px;
+    width: 90%;
+    margin-top: 15px;
 }

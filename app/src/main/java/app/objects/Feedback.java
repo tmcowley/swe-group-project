@@ -1,6 +1,7 @@
 package app.objects;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class Feedback {
 
@@ -9,15 +10,17 @@ public class Feedback {
     private int event_id;
     private String[] results; // Holds results to specific feedback queries
     private Float[] weights; // Holds the weights (for weighted mean) associated with each result
-    private Integer[] type; // Holds the type fo query that produced each result
-    private Integer[] key; // Holds whether a result is a key result or not
-    private float compound; // Holds the compound score (part of sentiment)
-    private String[] key_results; // Holds an array of all key results
+    private Integer[] types; // Holds the type of query that produced each result
+    // 0 = plaintext
+
+    private Boolean[] keys; // Holds whether a result is a key result or not (true = key result)
+    private Float compound; // Holds the compound score (part of sentiment)
+    private ArrayList<String> key_results; // Holds an array of all key results
     private boolean anonymous;
     private Timestamp timestamp;
 
     public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
-            String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results) {
+            String[] results, Float[] weights, Integer[] types, Boolean[] keys, float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;
@@ -25,10 +28,10 @@ public class Feedback {
         this.timestamp = timestamp;
         this.results = results;
         this.weights = weights;
-        this.type = type;
-        this.key = key;
-        this.compound = compound;
-        this.key_results = key_results;
+        this.types = types;
+        this.keys = keys;
+        this.compound = null;
+        this.key_results = new ArrayList<String>();
     }
 
     public int getFeedbackID() {
@@ -51,19 +54,19 @@ public class Feedback {
         return this.weights;
     }
 
-    public Integer[] getType() {
-        return this.type;
+    public Integer[] getTypes() {
+        return this.types;
     }
 
-    public Integer[] getKey() {
-        return this.key;
+    public Boolean[] getKeys() {
+        return this.keys;
     }
 
-    public float getCompound() {
+    public Float getCompound() {
         return this.compound;
     }
 
-    public String[] getKey_Results() {
+    public ArrayList<String> getKey_Results() {
         return this.key_results;
     }
 
@@ -79,8 +82,8 @@ public class Feedback {
         this.compound = new_compound;
     }
 
-    public void setKey_Results(String[] new_key_results) {
-        this.key_results = new_key_results;
+    public void addKey_Results(String new_key_result) {
+        this.key_results.add(new_key_result);
     }
 
     public boolean equals(Feedback that) {
@@ -94,9 +97,9 @@ public class Feedback {
             return false;
         if (this.weights != that.getWeights())
             return false;
-        if (this.type != that.getType())
+        if (this.types != that.getTypes())
             return false;
-        if (this.key != that.getKey())
+        if (this.keys != that.getKeys())
             return false;
         if (this.compound != that.getCompound())
             return false;

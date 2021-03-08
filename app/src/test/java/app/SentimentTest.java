@@ -14,7 +14,7 @@ public class SentimentTest {
     //Create feedback object as input for testing
     int i = 0;
     boolean f = false;
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis();
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     //A large variety of results drawn from our research and testing, including; potential user testing, existing product user feedback. These results are in the context of the product and other feedback contexts - to test the system thoroughly.
     String[] results = {
         "The rooms were dirty, very uncomfortable, and the staff was terrible. They went over and beyond to ignore us. I do not recommend this hotel for anyone visiting downtown. They were extremely unaccommodating and did not allow us to check in early. We got to hotel super early and I didn’t wanna wait. So this was a big minus. The service was very poor as well. Would definitely not send a friend there. The staff at this property are all shit! They all go above and beyond to make your stay uncomfortable. Please give your staff beatings! The worst hotel I’ve ever been privileged enough to stay at. Ugly building, and it only gets more breathtaking when you walk in. Low quality rooms (there was not even a tv by the shower), and low quality service. Also, they are one of few hotels that do not allow people under 21 to book a reservation.",

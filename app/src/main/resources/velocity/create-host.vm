@@ -1,6 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<form name="hostCodeLogin" action="/host/home" method="get">
+<form name="hostCodeLogin" action="/host/home" method="post">
     <input type="text" id="hostCode" name="hostCode" placeholder="Enter your code">
     <input type="submit" value="Submit">
 </form>

@@ -55,7 +55,7 @@ public class ValidatorTest {
 
     @Test
     public void test_hostCodeIsValid() {
-        String[] validCodes = { "fish-bird-brother-map", "fish-bird-brother-MAP" };
+        String[] validCodes = { "fish-bird-brother-map", "fish-bird-brother-MAP", "plant-space-path-country" };
         String[] invalidCodes = { "xxxx-bird-brother-map", "fish-bird-brother-ma p", "fish-bird-brother map", " ", "",
                 null };
         for (String validCode : validCodes) {

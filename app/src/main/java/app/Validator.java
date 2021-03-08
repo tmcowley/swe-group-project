@@ -249,7 +249,8 @@ public class Validator {
      * @return ArchivedEvent validity state
      */
     public boolean isArchivedEventValid(ArchivedEvent archivedEvent){
-        if (eventTitleIsValid(archivedEvent.getTitle())&&
+        if (archivedEvent != null&&
+            eventTitleIsValid(archivedEvent.getTitle())&&
             eventDescriptionIsValid(archivedEvent.getDescription())&&
             eventDescriptionIsValid(archivedEvent.getType())&&
             idIsValid(archivedEvent.getEventID())&&
@@ -267,7 +268,8 @@ public class Validator {
      * @return Event validity state
      */
     public boolean isEventValid(Event event){
-        if (eventTitleIsValid(event.getTitle())&&
+        if (event != null&&
+            eventTitleIsValid(event.getTitle())&&
             eventDescriptionIsValid(event.getDescription())&&
             eventTypeIsValid(event.getType())&&
             eventCodeIsValid(event.getEventCode())&&
@@ -286,6 +288,8 @@ public class Validator {
      * @return Feedback validity state
      */
     public boolean isFeedbackValid(Feedback feedback){
+        if (feedback == null)                           return false;
+        
         // validate IDs:
         if (!idIsValid(feedback.getFeedbackID()))       return false;
         if (!idIsValid(feedback.getEventID()))          return false;
@@ -306,7 +310,8 @@ public class Validator {
      * @return Host validity state
      */
     public boolean isHostValid(Host host){
-        if (hostCodeIsValid(host.getHostCode())&&
+        if (host != null&&
+            hostCodeIsValid(host.getHostCode())&&
             ipAddressIsValid(host.getIPAddress())&&
             eAddressIsValid(host.getEAddress())&&
             nameIsValid(host.getFName())&&
@@ -325,7 +330,8 @@ public class Validator {
      * @return Participant validity state
      */
     public boolean isParticipantValid(Participant participant){
-        if (ipAddressIsValid(participant.getIPAddress())&&
+        if (participant != null&&
+            ipAddressIsValid(participant.getIPAddress())&&
             nameIsValid(participant.getFName())&&
             nameIsValid(participant.getLName())&&
             idIsValid(participant.getParticipantID())
@@ -342,7 +348,8 @@ public class Validator {
      * @return Template validity state
      */
     public boolean isTemplateValid(Template template){
-        if (templateCodeIsValid(template.getTemplateCode())&&
+        if (template != null&&
+            templateCodeIsValid(template.getTemplateCode())&&
             templateDataIsValid(template.getData())&&
             idIsValid(template.getTemplateID())&&
             idIsValid(template.getHostID())

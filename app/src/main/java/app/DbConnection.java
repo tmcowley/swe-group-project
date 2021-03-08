@@ -507,8 +507,8 @@ public class DbConnection{
      */
     public Host getHostByCode(String host_code){
         host_code = validator.sanitizeHostCode(host_code);
-        if (!validator.templateCodeIsValid(host_code)) return null;
-        if (!templateCodeExists(host_code)) return null;
+        if (!validator.hostCodeIsValid(host_code)) return null;
+        if (!hostCodeExists(host_code)) return null;
 
         // host code valid and exists --> query db
         PreparedStatement stmt = null;

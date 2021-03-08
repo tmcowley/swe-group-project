@@ -1,5 +1,5 @@
 //TODO - Create a consitency test for this
-//TODO - create a does it return something in the write format test
+//TODO - create a does it return something in the correct format test
 
 package app.sentimentanalysis;
 

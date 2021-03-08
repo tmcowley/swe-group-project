@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import app.objects.*;
 
@@ -20,6 +21,7 @@ import java.io.FileReader;
 
 // event code generation
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.concurrent.Computable;
 
 public class DbConnection{
 
@@ -827,51 +829,56 @@ public class DbConnection{
         return archivedEvent;
     }
 
-    /**
-     * Get a feedback object from an feedback ID
-     * @param feedback_id feedback ID
-     * @return Feedback object with ID of feedback_id
-     */
     public Feedback getFeedback(int feedback_id){
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Feedback feedback = null;
-        try{
-            String selectFeedbackByID = ""
-                + "SELECT * FROM feedback "
-                + "WHERE feedback.feedback_id = ? "
-                + "LIMIT 1;";
-            stmt = this.conn.prepareStatement(selectFeedbackByID);
-            stmt.setInt(1, feedback_id);
-
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                // non-sentiment related fields
-                feedback_id = rs.getInt("feedback_id");
-                int participant_id = rs.getInt("participant_id");
-                int event_id = rs.getInt("event_id");
-                boolean anonymous = rs.getBoolean("anonymous");
-                Timestamp time_stamp = rs.getTimestamp("time_stamp");
-
-                // collect sentiment related fields
-                String[] results    = (String[])rs.getArray("results").getArray();
-                Float[] weights     = (Float[])rs.getArray("weights").getArray();
-                Integer[] type      = (Integer[])rs.getArray("type").getArray();
-                Integer[] key       = (Integer[])rs.getArray("key").getArray();
-                float compound      = rs.getFloat("compound"); 
-                String[] key_results = (String[])rs.getArray("key_results").getArray();
-
-                feedback = new Feedback(feedback_id, participant_id, event_id, anonymous, time_stamp, 
-                                        results, weights, type, key, compound, key_results);
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-        }
-        return feedback;
+        return null;
     }
+
+    // /**
+    //  * Get a feedback object from an feedback ID
+    //  * @param feedback_id feedback ID
+    //  * @return Feedback object with ID of feedback_id
+    //  */
+    // public Feedback getFeedback(int feedback_id){
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     Feedback feedback = null;
+    //     try{
+    //         String selectFeedbackByID = ""
+    //             + "SELECT * FROM feedback "
+    //             + "WHERE feedback.feedback_id = ? "
+    //             + "LIMIT 1;";
+    //         stmt = this.conn.prepareStatement(selectFeedbackByID);
+    //         stmt.setInt(1, feedback_id);
+
+    //         rs = stmt.executeQuery();
+    //         if (rs.next()) {
+    //             // non-sentiment related fields
+    //             feedback_id = rs.getInt("feedback_id");
+    //             int participant_id = rs.getInt("participant_id");
+    //             int event_id = rs.getInt("event_id");
+    //             boolean anonymous = rs.getBoolean("anonymous");
+    //             Timestamp time_stamp = rs.getTimestamp("time_stamp");
+
+    //             // collect sentiment related fields
+    //             String[] results    = (String[])rs.getArray("results").getArray();
+    //             Float[] weights     = (Float[])rs.getArray("weights").getArray();
+    //             Integer[] type      = (Integer[])rs.getArray("type").getArray();
+    //             Boolean[] keys      = (Boolean[])rs.getArray("keys").getArray();
+    //             Float compound      = rs.getFloat("compound"); 
+    //             ArrayList<String> key_results = new ArrayList (Arrays.asList(String[])rs.getArray("key_results").getArray());
+
+    //             feedback = new Feedback(feedback_id, participant_id, event_id, anonymous, time_stamp, results, weights, type, keys, compound, key_results);
+
+    //             // (int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp, String[] results, Float[] weights, Integer[] types, Boolean[] keys)
+    //         }
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());;
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+    //     return feedback;
+    // }
 
     // (int feedback_id, int host_id, int event_id, String[] results, float[] weights, int[] type, int[] key, float compound, String[] key_results, boolean anonymous, Timestamp timestamp)
 

@@ -1,7 +1,7 @@
 //TODO - Create a consitency test for this
 //TODO - create a does it return something in the write format test
 
-package app;
+package app.sentimentanalysis;
 
 import java.util.*;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.Locale;
 import app.objects.*;
 import java.util.ArrayList;
 
-public class Sentiment {
+public class SentimentAnalyser {
 
 /**
      * Take feedback and return sentiment

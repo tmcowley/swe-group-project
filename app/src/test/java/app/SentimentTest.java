@@ -3,6 +3,8 @@ package app;
 import app.objects.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 import org.junit.Test;
 
@@ -13,9 +15,14 @@ public class ValidatorTest {
 
     @Test
     public void test_main() {
-        Feedback test = new Feedback(
-            
-        );
+        int i = 0;
+        boolean f = false;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis()
+        String[] results = [
+            "",
+            ""
+        ];
+        Feedback test = new Feedback( i, i, i, f, timestamp, );
         test_main_consistency();
         test_main_correctness();
         test_main_return();

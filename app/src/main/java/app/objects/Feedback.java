@@ -20,7 +20,7 @@ public class Feedback {
     private Timestamp timestamp;
 
     public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
-            String[] results, Float[] weights, Integer[] types, Boolean[] keys, float compound, ArrayList<String> key_results) {
+            String[] results, Float[] weights, Integer[] types, Boolean[] keys) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;

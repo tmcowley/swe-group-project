@@ -84,7 +84,7 @@ private static float getCompoundFromText(String plaintext) throws IOException{
 
     //Iterate through each sentence and get compound score
      for (String sentence : sentences) {
-        compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
+        // compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
         count++;
      }
 

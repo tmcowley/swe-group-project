@@ -5,10 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import java.sql.Timestamp;
 import java.time.Instant;
-
 import org.junit.Test;
-
-import java.sql.Timestamp;
 
 // Unit tests against Validator.java
 public class ValidatorTest {
@@ -18,11 +15,14 @@ public class ValidatorTest {
         int i = 0;
         boolean f = false;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis()
-        String[] results = [
+        String[] results = {
             "",
             ""
-        ];
-        Feedback test = new Feedback( i, i, i, f, timestamp, );
+        };
+        Float[] weights = {};
+        Integer[] types = {};
+        Boolean[] keys = {};
+        Feedback test = new Feedback( i, i, i, f, timestamp, results, weights, keys);
         test_main_consistency();
         test_main_correctness();
         test_main_return();

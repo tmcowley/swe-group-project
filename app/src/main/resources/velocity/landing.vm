@@ -4,7 +4,7 @@
     <div id="landingContainer">
         <h1>Resmodus</h1>
         <div id="landingJoinContainer">
-            <form name="joinInfo" action="/event/join/code" method="post">
+            <form id="landingSubContainer" name="joinInfo" action="/event/join/code" method="post">
                 <!-- TODO: CREATE SMALLER IDs for first/last name boxes -->
                 <input type="text" id="participantFName" name="participantFName" placeholder="First Name">
                 <input type="text" id="participantLName" name="participantLName" placeholder="Last Name">

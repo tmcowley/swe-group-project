@@ -34,6 +34,21 @@ public class Feedback {
         this.key_results = new ArrayList<String>();
     }
 
+    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
+            String[] results, Float[] weights, Integer[] types, Boolean[] keys, Float compound, ArrayList<String> key_results) {
+        this.feedback_id = feedback_id;
+        this.participant_id = participant_id;
+        this.event_id = event_id;
+        this.anonymous = anonymous;
+        this.timestamp = timestamp;
+        this.results = results;
+        this.weights = weights;
+        this.types = types;
+        this.keys = keys;
+        this.compound = compound;
+        this.key_results = key_results;
+    }
+
     public int getFeedbackID() {
         return this.feedback_id;
     }

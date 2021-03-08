@@ -1,5 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
+
 <form name="creatEvent" action="/event/host/code" method="post">
     <input type="text" id="eventTitle" name="eventTitle" placeholder="Event Title">
     <textarea id="eventDescription" name="eventDescription" placeholder="Event Description"></textarea>
@@ -11,13 +12,16 @@
         <option value="other">Other</option>
     </select>
     <select id="eventTemplate" name="eventTemplate">
-        <option value="1">Template 1</option>
-        <option value="2">Template 2</option>
-        <option value="3">Template 3</option>
-        <option value="4">Template 4</option>
+#if ($templateCount>0)
+    #foreach ($i in $templateCodes)
+        <option value=$i>$i</option>
+    #end
+#end
+        <option value="0">Do not use a template</option>
     </select>
-    <input type="datetime-local" id="startTime" name="startTime">
-    <input type="datetime-local" id="endTime" name="endTime">
+    <!-- format yyyy-[m]m-[d]d hh:mm:ss[.f...] -->
+    <input type="datetime" id="startTime" name="startTime" placeholder="startTime:yyyy-[m]m-[d]d hh:mm:ss">
+    <input type="datetime" id="endTime" name="endTime" placeholder="endTime:yyyy-[m]m-[d]d hh:mm:ss">
     <input type="submit" value="Submit">
 </form>
 #end

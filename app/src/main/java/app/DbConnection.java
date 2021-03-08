@@ -567,6 +567,42 @@ public class DbConnection{
     }
 
     /**
+     * Get a Template object by its code.
+     * @param template_code template code
+     * @return Template object corresponding to its code
+     */
+    public Template[] getTemplatesByHostID(int host_id){
+        // template code valid and exists --> query db
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Template[] foundTemplates = new Template[0];
+        try{
+            String queryTemplateByCode = "SELECT * FROM template WHERE host_id=?;";
+            stmt = this.conn.prepareStatement(queryTemplateByCode, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmt.setInt(1, host_id);
+            rs = stmt.executeQuery();
+            rs.last();
+            int rsSize= rs.getRow();
+            foundTemplates = new Template[rsSize];
+            Template foundTemplate = null;
+            int templateCount = 0;
+            rs.beforeFirst();
+            if (rs.next()) {
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"));
+                foundTemplates[templateCount] = foundTemplate;
+                templateCount++;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        return foundTemplates;
+    }
+
+    /**
      * Get an Event object by its code.
      * @param event_code 4-digit alphanumeric event code
      * @return Event object corresponding to eventCode

@@ -14,13 +14,14 @@ public class Feedback {
     // 0 = plaintext
 
     private Boolean[] keys; // Holds whether a result is a key result or not (true = key result)
-    private Float compound; // Holds the compound score (part of sentiment)
-    private ArrayList<String> key_results; // Holds an array of all key results
     private boolean anonymous;
     private Timestamp timestamp;
+    private Float compound; // Holds the compound score (part of sentiment)
+    private ArrayList<String> key_results; // Holds an array of all key results
 
-    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
-            String[] results, Float[] weights, Integer[] types, Boolean[] keys) {
+
+    public Feedback(int feedback_id, int participant_id, int event_id,
+            String[] results, Float[] weights, Integer[] types, Boolean[] keys, boolean anonymous, Timestamp timestamp) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;
@@ -34,8 +35,8 @@ public class Feedback {
         this.key_results = new ArrayList<String>();
     }
 
-    public Feedback(int feedback_id, int participant_id, int event_id, boolean anonymous, Timestamp timestamp,
-            String[] results, Float[] weights, Integer[] types, Boolean[] keys, Float compound, ArrayList<String> key_results) {
+    public Feedback(int feedback_id, int participant_id, int event_id,
+            String[] results, Float[] weights, Integer[] types, Boolean[] keys, boolean anonymous, Timestamp timestamp, Float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;

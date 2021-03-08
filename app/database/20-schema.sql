@@ -20,6 +20,10 @@ CREATE EXTENSION citext;
 --     AS ENUM 
 --     ('lecture', 'seminar', 'conference', 'workshop', 'other');
 
+-- CREATE TYPE tc_type 
+--     AS ENUM 
+--     ('text', 'radio', 'checkbox');
+
 ------------------
  --   SCHEMA   --
 ------------------
@@ -59,6 +63,21 @@ CREATE TABLE participant(
     sys_ban         BOOLEAN         NOT NULL
                     DEFAULT FALSE,
     PRIMARY KEY (participant_id)
+);
+
+
+CREATE TABLE template_component(
+    tc_id           SERIAL          NOT NULL,
+    tc_name         VARCHAR(35)     NOT NULL,
+    tc_type         VARCHAR(35)     
+        CHECK (type = 'text' or type = 'radio' or type = 'checkbox'),
+    tc_prompt       VARCHAR(128)    NOT NULL,
+    tc_default      BOOLEAN         NOT NULL
+                    DEFAULT FALSE--,
+    -- tc_text_response    
+    
+
+    PRIMARY KEY (tc_id)
 );
 
 CREATE TABLE event(

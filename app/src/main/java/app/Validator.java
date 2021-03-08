@@ -282,6 +282,7 @@ public class Validator {
     }
 
     /** TODO: validate more data
+     * TODO: add a test that checks all the floats in the weights array sum to 1 
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked

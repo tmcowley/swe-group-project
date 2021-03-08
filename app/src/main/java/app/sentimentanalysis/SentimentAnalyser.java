@@ -1,5 +1,6 @@
 //TODO - Create a consitency test for this
 //TODO - create a does it return something in the correct format test
+//TODO - add set queries to the feedback testing
 
 package app.sentimentanalysis;
 

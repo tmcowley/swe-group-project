@@ -66,17 +66,15 @@ CREATE TABLE participant(
 );
 
 
+-- tc_text_response
 CREATE TABLE template_component(
     tc_id           SERIAL          NOT NULL,
     tc_name         VARCHAR(35)     NOT NULL,
-    tc_type         VARCHAR(35)     
-        CHECK (type = 'text' or type = 'radio' or type = 'checkbox'),
+    tc_type         VARCHAR(35)     NOT NULL,
+        CHECK (tc_type = 'text' or tc_type = 'radio' or tc_type = 'checkbox'),
     tc_prompt       VARCHAR(128)    NOT NULL,
     tc_default      BOOLEAN         NOT NULL
-                    DEFAULT FALSE--,
-    -- tc_text_response    
-    
-
+                    DEFAULT FALSE,
     PRIMARY KEY (tc_id)
 );
 

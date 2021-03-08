@@ -19,7 +19,7 @@
     <exec.mainClass>app.App</exec.mainClass>
   </properties>
 
-  <dependencies>
+    <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -92,11 +92,52 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.34.0</version>
     </dependency>  
+
+    <!-- <dependency>
+      <groupId>com.vader.sentiment</groupId>
+      <artifactId>vader</artifactId>
+      <version>1.0.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/java/app/sentimentanalysis/vader-sentiment-analyzer-1.0.2.jar</systemPath>
+    </dependency>  -->
+
+    <dependency>
+      <groupId>com.vader.sentiment</groupId>
+      <artifactId>vader</artifactId>
+      <version>1.0.2</version>
+    </dependency> 
+
   </dependencies>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <!-- see https://stackoverflow.com/questions/10935135/maven-and-adding-jars-to-system-scope -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+          <executions>
+            <execution>
+              <id>install-external</id>
+              <phase>process-resources</phase>
+              <configuration>
+                  <file>${basedir}/lib/vader-1.0.15.jar</file>
+                  <repositoryLayout>default</repositoryLayout>
+                  <groupId>com.vader.sentiment</groupId>
+                  <artifactId>vader</artifactId>
+                  <version>1.0.2</version>
+                  <packaging>jar</packaging>
+                  <generatePom>true</generatePom>
+              </configuration>
+              <goals>
+                  <goal>install-file</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -119,10 +160,7 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
         </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
+
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
@@ -143,4 +181,5 @@
       </plugins>
     </pluginManagement>
   </build>
+
 </project>

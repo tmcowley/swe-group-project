@@ -11,6 +11,8 @@ import java.util.Locale;
 import app.objects.*;
 import java.util.ArrayList;
 
+//import com.vader.sentiment.SentimentAnalyzer;
+
 public class SentimentAnalyser {
 
 /**
@@ -58,6 +60,13 @@ for (int i = 0; i < weights.length; i++) {
 return mean;
 }
 
+private static float getCompoundFromFullText(String plaintext) throws IOException{
+    //return SentimentAnalyzer.getScoresFor(plaintext).getCompoundPolarity();
+
+    return 0;
+}
+
+
 
 /**
      * Break plaintext into sentences
@@ -82,10 +91,9 @@ private static float getCompoundFromText(String plaintext) throws IOException{
         sentences.add(plaintext.substring(start,end));
     }
 
-    //Iterate through each sentence and get compound score
-     for (String sentence : sentences) {
-        // compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
-        count++;
+    //Iterate through each  sentence and get compound score
+    for (String sentence : sentences) {
+        //compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
      }
 
      return compound/count;

@@ -194,9 +194,12 @@ public class ValidatorTest {
         assertTrue(v.isParticipantValid(testParticipant));
     }
 
+//int id, String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse
     @Test
+    //int template_id, int host_id, String template_code, String data, ArrayList<TemplateComponent> components
     public void test_isTemplateValid() {
-        Template testTemplate = new Template(0001, 0001, "a23fsg", "TestTemplateData");
+        TemplateComponent question = new TemplateComponent(1, "get-name", "What's your name?", null, null, "Tom");
+        Template testTemplate = new Template(1, 1, "a23fsg", new ArrayList<String>(Arrays.asList(question)););
 
         assertTrue(v.isTemplateValid(testTemplate));
     }

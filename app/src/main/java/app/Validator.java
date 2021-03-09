@@ -175,12 +175,7 @@ public class Validator {
         }
         return false;
     }
-
-    // // TODO; LATER IN DEV
-    public boolean templateDataIsValid(String data){
-        return true;
-    }
-
+    
     /**
      * Check if event title is valid:
      * contains alpha-numeric (and blank) characters only
@@ -353,7 +348,6 @@ public class Validator {
     public boolean isTemplateValid(Template template){
         if (template != null&&
             templateCodeIsValid(template.getTemplateCode())&&
-            templateDataIsValid(template.getData())&&
             idIsValid(template.getTemplateID())&&
             idIsValid(template.getHostID())
             ) {

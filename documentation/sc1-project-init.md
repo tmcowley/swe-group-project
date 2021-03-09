@@ -86,31 +86,16 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 
 #### The Sentiment Analyser (Vader) dependency
 Our proposed sentiment analysis tool was the Java variant of [Vader](https://github.com/cjhutto/vaderSentiment). See the research paper from which Vader was created [Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.](https://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8109/8122).
-It was discovered during sentiment analysis development that the Maven packaged version `1.0` of the analysis tool was out of date and contained bugs, making it unusable. We therefore generated a `Jar` file from the most up to date source code, placed this in `/lib/`, and then imported the local file to Maven's `pom.xml`.
+It was discovered during sentiment analysis development that the Maven packaged version `1.0` of the analysis tool was out of date and contained bugs, making it unusable. We therefore generated a `Jar` file from the most up to date source code, placed this in `/lib/`, and then imported the local file to Maven's `pom.xml`. This method was chosen over an `mvn install:install-file` command due to its simplicity: no additional commands other than `mvn compile` and `mvn exec:java` are needed to launch the back-end.
 ```
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-install-plugin</artifactId>
-    <version>2.5.2</version>
-    <executions>
-    <execution>
-        <id>install-external</id>
-        <phase>process-resources</phase>
-        <configuration>
-            <file>${basedir}/lib/vader-1.0.15.jar</file>
-            <repositoryLayout>default</repositoryLayout>
-            <groupId>com.vader.sentiment</groupId>
-            <artifactId>vader</artifactId>
-            <version>1.0.2</version>
-            <packaging>jar</packaging>
-            <generatePom>true</generatePom>
-        </configuration>
-        <goals>
-            <goal>install-file</goal>
-        </goals>
-    </execution>
-    </executions>
-</plugin>
+<dependencies>
+    <dependency>
+        <groupId>com.vader.sentiment</groupId>
+        <artifactId>vader-sentiment-analyzer</artifactId>
+        <version>1.0</version>
+        <scope>system</scope>
+        <systemPath>${basedir}/lib/vader-sentiment-analyzer-1.0.jar</systemPath>
+    </dependency>
 ...
 </dependencies>
 ```
@@ -131,7 +116,7 @@ docker-compose -f docker-compose.yml up --remove-orphans
 [to close: `crtl+c` the initial window] <br>
 
 
-#### Interact with the database:
+#### Database interaction:
 ```
 psql -h localhost -p 5432 --username postgres
 [password is fas200]

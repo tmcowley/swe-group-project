@@ -15,11 +15,11 @@ public class Feedback {
     // 1 = single answer multiple choice
     // 2 = many answer multiple choice
     private Boolean[] keys; // Holds whether a result is a key result or not (true = key result)
+    private Byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
     private boolean anonymous;
     private Timestamp timestamp;
     private Float compound; // Holds the compound score (part of sentiment)
     private ArrayList<String> key_results; // Holds an array of all key results
-    private Byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
 
 
     public Feedback(int feedback_id, int participant_id, int event_id,

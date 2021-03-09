@@ -55,14 +55,24 @@
                     <!-- Radio buttons are just 5 text boxes -->
                     <div class="formInputBulletIcon">&bull;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating1">Rating (1-7):</label>
+                    <input type="number" id="bulletrating1" name="bulletrating1" min="1" max="7"><br>
                     <div class="formInputBulletIcon">&bull;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating2">Rating (1-7):</label>
+                    <input type="number" id="bulletrating2" name="bulletrating2" min="1" max="7"><br>
                     <div class="formInputBulletIcon">&bull;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating3">Rating (1-7):</label>
+                    <input type="number" id="bulletrating3" name="bulletrating3" min="1" max="7"><br>
                     <div class="formInputBulletIcon">&bull;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating4">Rating (1-7):</label>
+                    <input type="number" id="bulletrating4" name="bulletrating4" min="1" max="7"><br>
                     <div class="formInputBulletIcon">&bull;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating5">Rating (1-7):</label>
+                    <input type="number" id="bulletrating5" name="bulletrating5" min="1" max="7"><br>
                 </div>
                 <button class="feedbackDelButton">del</button>
                 <div class="feedbackElementFooter">
@@ -80,14 +90,24 @@
                     <!-- Radio buttons are just 5 text boxes -->
                     <div class="formInputCheckIcon">&#x2611;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating6">Rating (1-7):</label>
+                    <input type="number" id="bulletrating6" name="bulletrating6" min="1" max="7"><br>
                     <div class="formInputCheckIcon">&#x2611;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating7">Rating (1-7):</label>
+                    <input type="number" id="bulletrating7" name="bulletrating7" min="1" max="7"><br>
                     <div class="formInputCheckIcon">&#x2611;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating8">Rating (1-7):</label>
+                    <input type="number" id="bulletrating8" name="bulletrating8" min="1" max="7"><br>
                     <div class="formInputCheckIcon">&#x2611;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating9">Rating (1-7):</label>
+                    <input type="number" id="bulletrating9" name="bulletrating9" min="1" max="7"><br>
                     <div class="formInputCheckIcon">&#x2611;</div>
                     <input class="formInputBullet" type="text" placeholder="Enter Text">
+                    <label for="bulletrating0">Rating (1-7):</label>
+                    <input type="number" id="bulletrating0" name="bulletrating0" min="1" max="7"><br>
                 </div>
                 <button class="feedbackDelButton">del</button>
                 <div class="feedbackElementFooter">

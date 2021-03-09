@@ -33,7 +33,7 @@ public class SentimentTest {
         
         SentimentAnalyser sa = new SentimentAnalyser();
         try {
-            float response = sa.getCompoundFromFullText("i hate everything");
+            float response = sa.getCompoundFromFullText("I hate everything");
             System.out.println(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());

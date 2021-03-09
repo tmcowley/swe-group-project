@@ -108,8 +108,33 @@ private static float getCompoundFromText(String plaintext) throws IOException{
 
 }
 
+/**
+ * Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
+ * @param data Index of the weight of the result chosen
+ * @param index Row of matrix to be selected
+ * @param feedback Feedback object, needed to use a getter
+ * @return Compound score for a specific query
+ */
 private static float getCompoundFromSingle(String data, int index, Feedback feedback) {
     return ((feedback.getSub_WeightsRow(index)[Integer.parseInt(data)])-4f)/3f; //Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
+}
+/**
+ * Finds mean weight of all chosen results, normalises to between 1 and -1
+ * @param data Index of the weight of the result chosen
+ * @param index Row of matrix to be selected
+ * @param feedback Feedback object, needed to use a getter
+ * @return Compound score for a specific query
+ */
+private static float getCompoundFromMultiple(String data, int index, Feedback feedback) {
+    Byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
+    float compound = 0; //Holds compound score
+    int count = 0; //Used to mean compound scores
+    for (int i = 0; i < 5; i++ ) {
+      If ( data.contains(Integer.toString(i)) == true ) {
+          compound += results[i];
+          count++;
+      }
+    }
 }
 
 }

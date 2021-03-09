@@ -730,32 +730,60 @@ public class DbConnection{
      * @return Template object with ID of template_id
      */
     private Template getTemplate(int template_id){
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        PreparedStatement stmt1 = null;
+        PreparedStatement stmt2 = null;
+        ResultSet rs1 = null;
+        ResultSet rs2 = null;
         Template template = null;
+        TemplateComponent templateComponent = null;
+        ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
+        int host_id = 0;
+        String template_code = "";
+        String data = "";
         try{
             String selectTemplateByID = ""
                 + "SELECT * FROM template "
                 + "WHERE template.template_id = ? "
                 + "LIMIT 1;";
-            stmt = this.conn.prepareStatement(selectTemplateByID);
-            stmt.setInt(1, template_id);
 
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                template_id = rs.getInt("template_id");
-                int host_id = rs.getInt("host_id");
-                String template_code = rs.getString("template_code");
-                String data = rs.getString("data");
+                String selectComponentsByID = ""
+                + "SELECT * FROM template_component t INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
+                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(component_id)"
+                + "WHERE template.template_id = ? ";
 
-                // TODO: get arraylist of components against template
-                template = new Template(template_id, host_id, template_code, data, null);
+            stmt1 = this.conn.prepareStatement(selectTemplateByID);
+            stmt1.setInt(1, template_id);
+
+            rs1 = stmt1.executeQuery();
+            if (rs1.next()) {
+                template_id = rs1.getInt("template_id");
+                host_id = rs1.getInt("host_id");
+                template_code = rs1.getString("template_code");
+                data = rs1.getString("data");          
             }
+            stmt2 = this.conn.prepareStatement(selectComponentsByID);
+            stmt2.setInt(1, template_id);
+
+            rs2 = stmt2.executeQuery();
+            if (rs2.next()) {
+                int component_id = rs2.getInt("t.tc_id");
+                String name = rs2.getString("t.tc_name");
+                String type = rs2.getString("t.tc_type");
+                String prompt = rs2.getString("t.tc_prompt"); 
+                String[] options = (String[]) rs2.getObject("t.tc_options");
+                Boolean[] optionsAns = (Boolean[]) rs2.getObject("t.tc_options_ans");
+                String textResponse = rs2.getString("t.tc_text_response");
+                templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
+                components.add(templateComponent);
+            }
+            template = new Template(template_id, host_id, template_code, data, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
         } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+            try { if (stmt1 != null) stmt1.close(); } catch (Exception e) {};
+            try { if (stmt2 != null) stmt2.close(); } catch (Exception e) {};
+            try { if (rs1 != null)   rs1.close(); }   catch (Exception e) {};
+            try { if (rs2 != null)   rs2.close(); }   catch (Exception e) {};
         }
         return template;
     }

@@ -175,7 +175,7 @@ public class Validator {
         }
         return false;
     }
-    
+
     /**
      * Check if event title is valid:
      * contains alpha-numeric (and blank) characters only
@@ -274,12 +274,13 @@ public class Validator {
             ) {
             return true;
         }
-        
         return false;
     }
 
     /** TODO: validate more data
-     * TODO: add a test that checks all the floats in the weights array sum to 1 
+     * TODO: add a test that checks weights is valid (either all values ints between 0 and 7 or all values sum to 1)
+     * TODO: add a test checking that the arrays that should be of the same length are of the same length
+     * TODO: add a test checking the rows of sub_weights are each of length 5
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked

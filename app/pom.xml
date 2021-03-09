@@ -101,11 +101,11 @@
       <systemPath>${project.basedir}/src/main/java/app/sentimentanalysis/vader-sentiment-analyzer-1.0.2.jar</systemPath>
     </dependency>  -->
 
-    <dependency>
+    <!-- <dependency>
       <groupId>com.vader.sentiment</groupId>
       <artifactId>vader</artifactId>
       <version>1.0.2</version>
-    </dependency> 
+    </dependency> -->
 
   </dependencies>
 

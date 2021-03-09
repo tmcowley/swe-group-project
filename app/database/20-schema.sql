@@ -1,10 +1,12 @@
 -- RESET, DROPS (order important)
 DROP TABLE IF EXISTS participant_in_event;
+DROP TABLE IF EXISTS template_component;
 DROP TABLE IF EXISTS feedback;
 DROP TABLE IF EXISTS archived_event;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS participant;
 DROP TABLE IF EXISTS template;
+DROP TABLE IF EXISTS component_in_template;
 DROP TABLE IF EXISTS host;
 
 DROP EXTENSION IF EXISTS citext;
@@ -49,10 +51,31 @@ CREATE TABLE template(
                     -- simulate lower-case alphanumeric
                     CHECK (template_code ~* '^[a-z0-9]+$'),
     data            VARCHAR(200)    NOT NULL,
+    component_count INTEGER         NOT NULL
+                    DEFAULT 0,
     FOREIGN KEY (host_id) 
         REFERENCES host(host_id) 
         ON DELETE CASCADE,
     PRIMARY KEY (template_id)
+);
+
+CREATE TABLE component_in_template(
+    component_id    INTEGER         NOT NULL,
+    template_id     INTEGER         NOT NULL,
+    PRIMARY KEY(component_id, template_id)
+);
+
+CREATE TABLE template_component(
+    tc_id           SERIAL          NOT NULL,
+    tc_name         VARCHAR(35)     NOT NULL,
+    tc_type         VARCHAR(35)     NOT NULL,
+        CHECK (tc_type = 'text' or tc_type = 'radio' or tc_type = 'checkbox'),
+    tc_prompt       VARCHAR(128)    NOT NULL
+                    DEFAULT FALSE,
+    tc_options      TEXT[],
+    tc_options_ans  BOOLEAN[],
+    tc_text_response TEXT,
+    PRIMARY KEY (tc_id)
 );
 
 CREATE TABLE participant(
@@ -63,19 +86,6 @@ CREATE TABLE participant(
     sys_ban         BOOLEAN         NOT NULL
                     DEFAULT FALSE,
     PRIMARY KEY (participant_id)
-);
-
-
--- tc_text_response
-CREATE TABLE template_component(
-    tc_id           SERIAL          NOT NULL,
-    tc_name         VARCHAR(35)     NOT NULL,
-    tc_type         VARCHAR(35)     NOT NULL,
-        CHECK (tc_type = 'text' or tc_type = 'radio' or tc_type = 'checkbox'),
-    tc_prompt       VARCHAR(128)    NOT NULL,
-    tc_default      BOOLEAN         NOT NULL
-                    DEFAULT FALSE,
-    PRIMARY KEY (tc_id)
 );
 
 CREATE TABLE event(
@@ -129,12 +139,12 @@ CREATE TABLE feedback(
     event_id        INT             NOT NULL,
     -- data            VARCHAR(200)    NOT NULL,
     -- sentiment       VARCHAR(40)     NOT NULL,
-    results         TEXT [],
-    weights         REAL [],
-    type            INT [],
-    key             INT [],
+    results         TEXT[],
+    weights         REAL[],
+    type            INT[],
+    key             INT[],
     compound        REAL,
-    key_results     TEXT [],
+    key_results     TEXT[],
     anonymous       BOOLEAN         NOT NULL
                     DEFAULT FALSE,
     time_stamp      TIMESTAMP       NOT NULL,

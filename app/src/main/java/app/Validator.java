@@ -190,7 +190,7 @@ public class Validator {
     public boolean eventTitleIsValid(String data){
         if (data != null && !data.isEmpty()) {
 			// title regular expression
-			String regex = "^\\w+( \\w+)*";
+			String regex = "^(\\w+)( \\w+)*";
 
             // return true if title matches with the regular expression
             if (data.matches(regex)) {
@@ -274,10 +274,12 @@ public class Validator {
             eventTypeIsValid(event.getType())&&
             eventCodeIsValid(event.getEventCode())&&
             idIsValid(event.getEventID())&&
+            (event.getTemplateID() == -1 || idIsValid(event.getTemplateID()))&&
             idIsValid(event.getHostID())
             ) {
             return true;
         }
+        
         return false;
     }
 

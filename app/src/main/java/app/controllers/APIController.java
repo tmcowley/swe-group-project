@@ -78,7 +78,7 @@ public class APIController {
         //initialise event and input 
         Event event = null;
         Host host = request.session().attribute("host");
-        String title = request.queryParams("eventName");
+        String title = request.queryParams("eventTitle");
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
@@ -91,13 +91,20 @@ public class APIController {
         if (v.eventTitleIsValid(title) &&
             v.eventDescriptionIsValid(description) &&
             v.eventTypeIsValid(type) &&
-            v.templateCodeIsValid(templateCode) &&
             startTime.compareTo(endTime) < 0 &&
-            endTime.compareTo(current) < 0
+            endTime.compareTo(current) > 0
             ) {
-            Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
+            if (templateCode.equals("noTemplate")) {
+                System.out.println("do not use a template");
+                //create an event without a template
+                event = db.createEvent(host.getHostID(), title, description, type, startTime, endTime);
+            } else if (v.templateCodeIsValid(templateCode)) {
+                //create an event with a template
+                Template template = db.getTemplateByCode(templateCode);
+                event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
+            }    
         }
+
         //return host event page if event is created
         if (v.isEventValid(event)) {
             request.session().attribute("event", event);
@@ -132,7 +139,7 @@ public class APIController {
         }
         // create Participant object in DB -> link to event
         Participant participant = db.createParticipant(request.ip(),FName,LName);
-        Event event = db.getEventByCode(request.queryParams("participantCode"));
+        Event event = db.getEventByCode(eventCode);
         db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
         request.session(true);
         request.session().attribute("participant", participant);
@@ -157,8 +164,32 @@ public class APIController {
      */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("createFeedback API endpoint recognized request \n");
+        DbConnection db = App.getInstance().getDbConnection();
+        //start session
+        request.session(true);
+        //return not found if session is new
+        if (request.session().isNew()) {
+            return ViewUtil.notFound;
+        }
+        //initialise event and input
+        Event event = request.session().attribute("event");
+        Participant participant = request.session().attribute("participant");
+        String feedbackData = request.queryParams("feedbackData");
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        Boolean anonymous = false;
+        String[] results = new String[0];
+        if (request.queryParams("anon").equals("Submit Anonymously")) {
+            anonymous = true;
+        }
+        //TODO feedback creation
+        Feedback feedback = db.createFeedback(participant.getParticipantID(), event.getEventID(), anonymous, current, results);
 
-        return null;
+        //return to evnet page if feedback is created
+        if (v.isFeedbackValid(feedback)) {
+            return "/event/join/code";
+        }
+        //return not found if feedback is not created
+        return ViewUtil.notFound;
     };
 
     /**

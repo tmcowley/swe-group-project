@@ -17,7 +17,7 @@
         <option value=$i>$i</option>
     #end
 #end
-        <option value="0">Do not use a template</option>
+        <option value="noTemplate">Do not use a template</option>
     </select>
     <!-- format yyyy-[m]m-[d]d hh:mm:ss[.f...] -->
     <input type="datetime" id="startTime" name="startTime" placeholder="startTime:yyyy-[m]m-[d]d hh:mm:ss">

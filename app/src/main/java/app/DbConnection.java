@@ -205,7 +205,7 @@ public class DbConnection{
     }
     
     /**
-     * Create a event in the database
+     * Create a event with template in the database
      * @param host_id Host id of its host
      * @param template_id Template id it used
      * @param title Event title
@@ -236,6 +236,53 @@ public class DbConnection{
             stmt.setTimestamp(6, start_time);
             stmt.setTimestamp(7, end_time);
             stmt.setString(8, event_code);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                event_id = rs.getInt("event_id");
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Event by ID
+        return getEvent(event_id);
+    }
+
+    /**
+     * Create a event without template in the database
+     * @param host_id Host id of its host
+     * @param template_id Template id it used
+     * @param title Event title
+     * @param desc Event description
+     * @param type Event type
+     * @param start_time Start time of the event
+     * @param end_time End time of the event
+     * @return Event instance representing stored data
+     */
+    public Event createEvent(int host_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
+        // generate unique event code
+        String event_code = generateUniqueEventCode();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer event_id = null;
+        try{
+            String createEvent = ""
+                + "INSERT INTO event(host_id, title, description, type, start_time, end_time, event_code) "
+                + "VALUES(?, ?, ?, ?::event_type, ?, ?, ?) "
+                + "RETURNING event_id";
+            stmt = this.conn.prepareStatement(createEvent);
+            stmt.setInt(1, host_id);
+            stmt.setString(2, title);
+            stmt.setString(3, desc);
+            stmt.setString(4, type);
+            stmt.setTimestamp(5, start_time);
+            stmt.setTimestamp(6, end_time);
+            stmt.setString(7, event_code);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -590,7 +637,7 @@ public class DbConnection{
             int templateCount = 0;
             rs.beforeFirst();
             if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"));
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"), null);
                 foundTemplates[templateCount] = foundTemplate;
                 templateCount++;
             }
@@ -701,7 +748,8 @@ public class DbConnection{
                 String template_code = rs.getString("template_code");
                 String data = rs.getString("data");
 
-                template = new Template(template_id, host_id, template_code, data);
+                // TODO: get arraylist of components against template
+                template = new Template(template_id, host_id, template_code, data, null);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;

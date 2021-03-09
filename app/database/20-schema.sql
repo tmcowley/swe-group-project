@@ -50,7 +50,6 @@ CREATE TABLE template(
                     UNIQUE          NOT NULL
                     -- simulate lower-case alphanumeric
                     CHECK (template_code ~* '^[a-z0-9]+$'),
-    data            VARCHAR(200)    NOT NULL,
     component_count INTEGER         NOT NULL
                     DEFAULT 0,
     FOREIGN KEY (host_id) 

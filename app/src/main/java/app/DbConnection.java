@@ -590,7 +590,7 @@ public class DbConnection{
             int templateCount = 0;
             rs.beforeFirst();
             if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"));
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"), null);
                 foundTemplates[templateCount] = foundTemplate;
                 templateCount++;
             }
@@ -701,7 +701,8 @@ public class DbConnection{
                 String template_code = rs.getString("template_code");
                 String data = rs.getString("data");
 
-                template = new Template(template_id, host_id, template_code, data);
+                // TODO: get arraylist of components against template
+                template = new Template(template_id, host_id, template_code, data, null);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;

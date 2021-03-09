@@ -25,7 +25,8 @@ public class SentimentTest {
     Float[] weights = {4f, 4f, 4f, 4f};
     Byte[] types = {0, 0, 0, 0};
     Boolean[] keys = {false, false, false, false};
-    Feedback test = new Feedback( i, i, i, results, weights, types, keys, f, timestamp);
+    Byte[][] sub_weights;
+    Feedback test = new Feedback(i, i, i, results, weights, types, keys, sub_weights, f, timestamp);
 
     //TODO - expand feedback object with many more diverse plaintext and nopn-plaintext
     @Test

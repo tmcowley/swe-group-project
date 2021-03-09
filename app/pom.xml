@@ -103,6 +103,18 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.34.0</version>
+    </dependency>  
+
+    <dependency>
       <groupId>com.vader.sentiment</groupId>
       <artifactId>vader-sentiment-analyzer</artifactId>
       <version>1.0</version>

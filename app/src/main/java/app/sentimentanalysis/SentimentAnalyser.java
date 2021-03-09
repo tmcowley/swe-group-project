@@ -1,6 +1,8 @@
 //TODO - Create a consitency test for this
 //TODO - create a does it return something in the correct format test
 //TODO - add set queries to the feedback testing
+//TODO change for loops to iterate through arrays
+//TODO check if one sd is enough/good
 
 package app.sentimentanalysis;
 
@@ -10,6 +12,7 @@ import java.util.Locale;
 import app.objects.*;
 import java.util.ArrayList;
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 public class SentimentAnalyser {
 
 /**
@@ -84,7 +87,8 @@ public class SentimentAnalyser {
         //TODO - fix padding
 
         float compound = 0; //Holds compound score derived from plaintext
-        int count = 0; //Used to mean compound scores
+        int count1 = 0; //Counts how many sentences are in plaintext
+        int count2 = 0; //used to mean compound scores
         ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
 
         //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
@@ -93,15 +97,26 @@ public class SentimentAnalyser {
         int start = iterator.first();
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
             sentences.add(plaintext.substring(start,end));
+            count1++;
         }
 
-        //Iterate through each sentence and get compound score
-        for (String sentence : sentences) {
-            compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
-            count++;
+        //Store compound score of each sentence in an array
+        double[] values = new double[count1];
+        for (int i = 0; i < sentences.size(); i++) {
+            values[i] = SentimentAnalyzer.getScoresFor(sentences.get(i)).getCompoundPolarity();
         }
-
-        return compound/count;
+        
+        //Remove compound scores that [fall below one standard deviation] - may change
+        StandardDeviation sd = new StandardDeviation();
+        double standev = sd.evaluate(values);
+        for (double i : values) {
+            if (i > standev) {
+                compound += i;
+                count2++;
+            }
+        }
+        
+        return compound/count2;
 
     }
 

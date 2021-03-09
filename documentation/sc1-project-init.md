@@ -85,23 +85,82 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 ```
 
 #### The Sentiment Analyser (Vader) dependency
+Our proposed sentiment analysis tool was the Java variant of [Vader](https://github.com/cjhutto/vaderSentiment). See the research paper from which Vader was created [Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.](https://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8109/8122).
+It was discovered during sentiment analysis development that the Maven packaged version `1.0` of the analysis tool was out of date and contained bugs, making it unusable. We therefore generated a `Jar` file from the most up to date source code, placed this in `/lib/`, and then imported the local file to Maven's `pom.xml`.
 ```
-<dependencies>
-    <dependency>
-      <groupId>com.github.apanimesh061</groupId>
-      <artifactId>vader-sentiment-analyzer</artifactId>
-      <version>1.0</version>
-    </dependency>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-install-plugin</artifactId>
+    <version>2.5.2</version>
+    <executions>
+    <execution>
+        <id>install-external</id>
+        <phase>process-resources</phase>
+        <configuration>
+            <file>${basedir}/lib/vader-1.0.15.jar</file>
+            <repositoryLayout>default</repositoryLayout>
+            <groupId>com.vader.sentiment</groupId>
+            <artifactId>vader</artifactId>
+            <version>1.0.2</version>
+            <packaging>jar</packaging>
+            <generatePom>true</generatePom>
+        </configuration>
+        <goals>
+            <goal>install-file</goal>
+        </goals>
+    </execution>
+    </executions>
+</plugin>
 ...
 </dependencies>
 ```
 <br>
 
-## Database 
+## The PostgreSQL Database 
 
-The chosen relational database language is PostgreSQL, a client-server database model. Unlike embedded counterparts, a PostgreSQL server instance has to be launched before the back-end is built. 
+The chosen relational database language is PostgreSQL, a client-server database model. Unlike embedded counterparts, a Postgres server instance has to be launched before the back-end is built and executed. 
 
-### MacOS Guide:
+For a common, cross-platform, method to launch a Postgres server instance, we made use of `Docker`, and its `docker-compose` command.
+
+#### Start Postgres server with Docker (localhost port 5432):
+```
+cd app;
+docker-compose -f docker-compose.yml up --remove-orphans
+```
+[Note: can be done with terminal, and powershell]<br>
+[to close: `crtl+c` the initial window] <br>
+
+
+#### Interact with the database:
+```
+psql -h localhost -p 5432 --username postgres
+[password is fas200]
+
+\c cs261
+```
+
+We created the file `docker-compose.yml` to launch the server and specify environment settings:
+```
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:13.2
+    restart: always
+    environment:
+      POSTGRES_DB: cs261
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fas200
+    volumes:
+        - ./database/:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+```
+
+This creates a Postgres `v13.2` instance containing a database of name `cs261`, and a user username, password pair of `postgres` and `fas200`, respectively. The container's internal port `5432` is mapped to the external `localhost` port `5432`. The compose file also maps the `./database/` folder (and therefore its contents) to the internal docker entrypoint `/docker-entrypoint-initdb.d/`. This means that on restart, the database inserts each of the following, in order: `10-init.sql` (moves to the cs261 database), `20-schema.sql` (creates DB schema (tables, functions, etc.)), `30-test-data.sql` (runs testing data against the DB).
+
+<!-- ### MacOS Guide:
 Start PostgreSQL server:
 ```
 pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
@@ -116,12 +175,4 @@ psql postgres
 Stop PostgreSQL server:
 ```
 pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
-```
-
-### Linux Guide:
-```
-```
-
-### Windows Guide:
-```
-```
+``` -->

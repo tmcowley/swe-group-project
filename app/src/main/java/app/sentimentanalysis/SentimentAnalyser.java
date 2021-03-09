@@ -4,7 +4,6 @@
 
 package app.sentimentanalysis;
 
-import java.util.*;
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.Locale;
@@ -18,123 +17,123 @@ public class SentimentAnalyser {
      * @param feedback feedback to be analysed for sentiment
      * @return sentiment containing compound score (add key results?)
      */
-public static void main(Feedback feedback) throws IOException{
+    public static void main(Feedback feedback) throws IOException{
     
-    
-    Byte[] types = feedback.getTypes(); //Holds type of feedback for each result
-    String[] results = feedback.getResults(); //Holds type of feedback for each result
-    Boolean[] keys = feedback.getKeys(); //Holds type of feedback for each result
-    Float[] weights = feedback.getWeights(); //Holds weights (unprocessed then processed) for weighted mean
-    int amount = feedback.getResults().length; //Holds amount of results to be (possibly) interpreted for sentiment
-    int sum = 0; //Sum of all weights, used in weights processing
-    float[] compounds = new float[amount]; //Holds compound score for each feedback result
+        Byte[] types = feedback.getTypes(); //Holds type of feedback for each result
+        String[] results = feedback.getResults(); //Holds type of feedback for each result
+        Boolean[] keys = feedback.getKeys(); //Holds type of feedback for each result
+        Float[] weights = feedback.getWeights(); //Holds weights (unprocessed then processed) for weighted mean
+        int amount = feedback.getResults().length; //Holds amount of results to be (possibly) interpreted for sentiment
+        int sum = 0; //Sum of all weights, used in weights processing
+        float[] compounds = new float[amount]; //Holds compound score for each feedback result
 
-    //Process host inputted weights into floats that sum to 1.0
-    for (int i = 0; i < amount; i++ ) {
-        sum += weights[i];
+        //Process host inputted weights into floats that sum to 1.0
+        for (int i = 0; i < amount; i++ ) {
+            sum += weights[i];
+        }
+        for (int i = 0; i < amount; i++ ) {
+            if (weights[i] != 0) {
+            feedback.setWeightItem(weights[i]/sum, i);
+            }
+        }
+        
+        //Get compound score for each result, applying the interpretation method based on result type
+        for (int i = 0; i < amount; i++ ) {
+            if (types[i] == 0) {
+                compounds[i] = getCompoundFromText(results[i]);
+            }
+            if (types[i] == 1) {
+                compounds[i] = getCompoundFromSingle(results[i], i, feedback);
+            }
+            if (types[i] == 2) {
+                compounds[i] = getCompoundFromMultiple(results[i], i, feedback);
+            }
+            //Checks if result is a key result, if it is adds to the array list of key results
+            if (keys[i] == true) {
+                feedback.addKey_Results(results[i]);
+            }
+        }
+
+        feedback.setCompound(weightedMean(feedback.getWeights(), compounds)); //Set final compound score as weighted mean of result specific compound scores
+
     }
-    for (int i = 0; i < amount; i++ ) {
-        if (weights[i] != 0) {
-        feedback.setWeightItem(weights[i]/sum, i);
+
+    /**
+         * Get weighted mean of compound scores
+         * @param weights real array of weights for each score
+         * @param scores real array of scores
+         * @return weighted mean of compound scores
+         */
+    private static float weightedMean(Float[] weights, float[] scores) {
+        float mean = 0; 
+        for (int i = 0; i < weights.length; i++) {
+                mean += weights[i]*scores[i];
         }
-    }
-    
-    //Get compound score for each result, applying the interpretation method based on result type
-    for (int i = 0; i < amount; i++ ) {
-        if (types[i] == 0) {
-            compounds[i] = getCompoundFromText(results[i]);
-        }
-        if (types[i] == 1) {
-            compounds[i] = getCompoundFromSingle(results[i], i, feedback);
-        }
-        if (types[i] == 2) {
-            compounds[i] = getCompoundFromMultiple(results[i]);
-        }
-        //Checks if result is a key result, if it is adds to the array list of key results
-        if (keys[i] == true) {
-            feedback.addKey_Results(results[i]);
-        }
+        return mean;
     }
 
-    feedback.setCompound(weightedMean(feedback.getWeights(), compounds)); //Set final compound score as weighted mean of result specific compound scores
+    /**
+    * Break plaintext into sentences
+    * Analyse each sentence for compound score
+    * Get mean of compound scores
+    * @param plaintext string to be analysed for sentiment
+    * @return real compound score derived from plaintext
+    */
+    private static float getCompoundFromText(String plaintext) throws IOException{
 
-}
+        //TODO - fix padding
 
-/**
-     * Get weighted mean of compound scores
-     * @param weights real array of weights for each score
-     * @param scores real array of scores
-     * @return weighted mean of compound scores
+        float compound = 0; //Holds compound score derived from plaintext
+        int count = 0; //Used to mean compound scores
+        ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
+
+        //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Might have to change to US - we'll see
+        iterator.setText(plaintext);
+        int start = iterator.first();
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+            sentences.add(plaintext.substring(start,end));
+        }
+
+        //Iterate through each sentence and get compound score
+        for (String sentence : sentences) {
+            compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
+            count++;
+        }
+
+        return compound/count;
+
+    }
+
+    /**
+     * Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
+     * @param data Index of the weight of the result chosen
+     * @param index Row of matrix to be selected
+     * @param feedback Feedback object, needed to use a getter
+     * @return Compound score for a specific query
      */
-private static float weightedMean(Float[] weights, float[] scores) {
-float mean = 0; 
-for (int i = 0; i < weights.length; i++) {
-    mean += weights[i]*scores[i];
-}
-return mean;
-}
+    private static float getCompoundFromSingle(String data, int index, Feedback feedback) {
+        return ((feedback.getSub_WeightsRow(index)[Integer.parseInt(data)])-4f)/3f; //Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
+    }
 
-
-/**
-     * Break plaintext into sentences
-     * Analyse each sentence for compound score
-     * Get mean of compound scores
-     * @param plaintext string to be analysed for sentiment
-     * @return real compound score derived from plaintext
+    /**
+     * Finds mean weight of all chosen results, normalises to between 1 and -1
+     * @param data Index of the weight of the result chosen
+     * @param index Row of matrix to be selected
+     * @param feedback Feedback object, needed to use a getter
+     * @return Compound score for a specific query
      */
-private static float getCompoundFromText(String plaintext) throws IOException{
-
-    //TODO - fix padding
-
-    float compound = 0; //Holds compound score derived from plaintext
-    int count = 0; //Used to mean compound scores
-    ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
-
-    //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
-    BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Might have to change to US - we'll see
-    iterator.setText(plaintext);
-    int start = iterator.first();
-    for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-        sentences.add(plaintext.substring(start,end));
+    private static float getCompoundFromMultiple(String data, int index, Feedback feedback) {
+        Byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
+        float compound = 0; //Holds compound score
+        int count = 0; //Used to mean compound scores
+        for (int i = 0; i < 5; i++ ) {
+            if ( data.contains(Integer.toString(i)) == true ) {
+                compound += results[i];
+                count++;
+            }
+        }
+        return ((compound/count)-4f)/3f;
     }
-
-    //Iterate through each sentence and get compound score
-     for (String sentence : sentences) {
-        compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
-        count++;
-     }
-
-     return compound/count;
-
-}
-
-/**
- * Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
- * @param data Index of the weight of the result chosen
- * @param index Row of matrix to be selected
- * @param feedback Feedback object, needed to use a getter
- * @return Compound score for a specific query
- */
-private static float getCompoundFromSingle(String data, int index, Feedback feedback) {
-    return ((feedback.getSub_WeightsRow(index)[Integer.parseInt(data)])-4f)/3f; //Gets row of matrix which holds weights of each possible result, selects correct result, normalises to between 1 and -1
-}
-/**
- * Finds mean weight of all chosen results, normalises to between 1 and -1
- * @param data Index of the weight of the result chosen
- * @param index Row of matrix to be selected
- * @param feedback Feedback object, needed to use a getter
- * @return Compound score for a specific query
- */
-private static float getCompoundFromMultiple(String data, int index, Feedback feedback) {
-    Byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
-    float compound = 0; //Holds compound score
-    int count = 0; //Used to mean compound scores
-    for (int i = 0; i < 5; i++ ) {
-      If ( data.contains(Integer.toString(i)) == true ) {
-          compound += results[i];
-          count++;
-      }
-    }
-}
 
 }

@@ -37,7 +37,21 @@ public class Feedback {
         this.key_results = new ArrayList<String>();
         this.sub_weights = sub_weights;
     }
-
+    /**
+     * Feedback constructer
+     * @param feedback_id
+     * @param participant_id
+     * @param event_id
+     * @param results
+     * @param weights
+     * @param types
+     * @param keys
+     * @param sub_weights
+     * @param anonymous
+     * @param timestamp
+     * @param compound
+     * @param key_results
+     */
     public Feedback(int feedback_id, int participant_id, int event_id,
             String[] results, Float[] weights, Byte[] types, Boolean[] keys, Byte[][] sub_weights, boolean anonymous, Timestamp timestamp, Float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
@@ -53,39 +67,63 @@ public class Feedback {
         this.key_results = key_results;
         this.sub_weights = sub_weights;
     }
-
+    /**
+     * gets feedback id
+     * @return feedback id
+     */
     public int getFeedbackID() {
         return this.feedback_id;
     }
-
+    /**
+     * gets event id
+     * @return event id
+     */
     public int getEventID() {
         return this.event_id;
     }
-
+    /**
+     * gets participant id
+     * @return participant id
+     */
     public int getParticipantID() {
         return this.participant_id;
     }
-
+    /**
+     * gets result for specific feedback query
+     * @return feedback results
+     */
     public String[] getResults() {
         return this.results;
     }
-
+    /**
+     * gets the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
+     * @return feedback weights
+     */
     public Float[] getWeights() {
         return this.weights;
     }
-
+    /**
+     * gets feedback type
+     * @return feedback type
+     */
     public Byte[] getTypes() {
         return this.types;
     }
-
+    /**
+     * gets feedback key
+     * @return feedback key
+     */
     public Boolean[] getKeys() {
         return this.keys;
     }
-
+    /**
+     * gets compound score
+     * @return compound score
+     */
     public Float getCompound() {
         return this.compound;
     }
-
+    
     public ArrayList<String> getKey_Results() {
         return this.key_results;
     }

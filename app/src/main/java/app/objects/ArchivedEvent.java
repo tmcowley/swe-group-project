@@ -33,54 +33,56 @@ public class ArchivedEvent {
         this.end_time = end_time;
     }
     /**
+     * gets event id
      * @return event id
      */
     public int getEventID() {
         return this.event_id;
     }
     /**
+     * gets host id
      * @return host id
      */
     public int getHostID() {
         return this.host_id;
     }
     /**
-     * 
+     * gets tootal mood of event
      * @return total mood of event
      */
     public String getMood() {
         return this.total_mood;
     }
     /**
-     * 
+     * gets event title
      * @return event title
      */
     public String getTitle() {
         return this.title;
     }
     /**
-     * 
+     * gets event description
      * @return event description
      */
     public String getDescription() {
         return this.description;
     }
     /**
-     * 
+     * gets event type
      * @return event type
      */
     public String getType() {
         return this.type;
     }
     /**
-     * 
+     * gets event start time
      * @return event start time
      */
     public Timestamp getStartTime() {
         return this.start_time;
     }
     /**
-     * 
+     * gets event end time
      * @return event end time
      */
     public Timestamp getEndTime() {

@@ -93,6 +93,13 @@
       <version>3.34.0</version>
     </dependency>  
 
+    <!-- For comparing two ArrayLists -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.4</version>
+    </dependency>
+
     <!-- <dependency>
       <groupId>com.vader.sentiment</groupId>
       <artifactId>vader</artifactId>

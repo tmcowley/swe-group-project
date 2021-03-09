@@ -637,7 +637,7 @@ public class DbConnection{
             int templateCount = 0;
             rs.beforeFirst();
             if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), rs.getString("data"), null);
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), null);
                 foundTemplates[templateCount] = foundTemplate;
                 templateCount++;
             }
@@ -776,7 +776,7 @@ public class DbConnection{
                 templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
                 components.add(templateComponent);
             }
-            template = new Template(template_id, host_id, template_code, data, components);
+            template = new Template(template_id, host_id, template_code, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
         } finally {

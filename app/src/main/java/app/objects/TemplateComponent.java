@@ -2,13 +2,16 @@ package app.objects;
 
 public class TemplateComponent {
 
-  private int id;
-  private String name;
-  private String type;
-  private String prompt;
-  private String[] options;
-  private Boolean[] optionsAns;
-  private String textResponse;
+  private int id; // component ID
+  private String name; // component name (simplified prompt)
+  private String type; // question, or radio, or checkbox
+  private String prompt; // question/ prompt
+  private String[] options; // array of radio or checkbox options
+  private Boolean[] optionsAns; // array of boolean responses to options array
+                                // e.g. t, f, t for checkbox type
+                                // empty if type is question
+  private String textResponse; // text response field following prompt
+                               // null if type radio or checkbox
 
   public TemplateComponent() {
 

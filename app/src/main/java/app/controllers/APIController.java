@@ -66,7 +66,7 @@ public class APIController {
         //initialise event and input 
         Event event = null;
         Host host = request.session().attribute("host");
-        String title = request.queryParams("eventName");
+        String title = request.queryParams("eventTitle");
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
@@ -79,13 +79,20 @@ public class APIController {
         if (v.eventTitleIsValid(title) &&
             v.eventDescriptionIsValid(description) &&
             v.eventTypeIsValid(type) &&
-            v.templateCodeIsValid(templateCode) &&
             startTime.compareTo(endTime) < 0 &&
-            endTime.compareTo(current) < 0
+            endTime.compareTo(current) > 0
             ) {
-            Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
+            if (templateCode.equals("noTemplate")) {
+                System.out.println("do not use a template");
+                //create an event without a template
+                event = db.createEvent(host.getHostID(), title, description, type, startTime, endTime);
+            } else if (v.templateCodeIsValid(templateCode)) {
+                //create an event with a template
+                Template template = db.getTemplateByCode(templateCode);
+                event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
+            }    
         }
+
         //return host event page if event is created
         if (v.isEventValid(event)) {
             request.session().attribute("event", event);
@@ -115,7 +122,7 @@ public class APIController {
         }
         // create Participant object in DB -> link to event
         Participant participant = db.createParticipant(request.ip(),FName,LName);
-        Event event = db.getEventByCode(request.queryParams("participantCode"));
+        Event event = db.getEventByCode(eventCode);
         db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
         request.session(true);
         request.session().attribute("participant", participant);

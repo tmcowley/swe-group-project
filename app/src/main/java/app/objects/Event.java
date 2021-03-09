@@ -35,6 +35,19 @@ public class Event {
         this.eventCode = eventCode;
     }
 
+    public Event(int event_id, int host_id, String title, String description, String type,
+            Timestamp start_time, Timestamp end_time, String eventCode) {
+        this.event_id = event_id;
+        this.host_id = host_id;
+        this.template_id = -1;
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.eventCode = eventCode;
+    }
+
     public int getEventID() {
         return this.event_id;
     }

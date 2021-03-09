@@ -48,14 +48,12 @@ public class Event {
         return this.host_id;
     }
     /**
-     * 
-     * @return total mood of event
+     * @return template id
      */
-    public String getMood() {
-        return this.total_mood;
+    public int getTemplateID() {
+        return this.template_id;
     }
-    /**
-     * 
+    /** 
      * @return event title
      */
     public String getTitle() {

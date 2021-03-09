@@ -21,7 +21,18 @@ public class Event {
     private Timestamp start_time;
     private Timestamp end_time;
     private String eventCode;
-
+    /**
+     * Event constructer
+     * @param event_id
+     * @param host_id
+     * @param template_id
+     * @param title
+     * @param description
+     * @param type
+     * @param start_time
+     * @param end_time
+     * @param eventCode
+     */
     public Event(int event_id, int host_id, int template_id, String title, String description, String type,
             Timestamp start_time, Timestamp end_time, String eventCode) {
         this.event_id = event_id;
@@ -36,59 +47,63 @@ public class Event {
     }
 
     /**
+     * gets event id
      * @return event id
      */
     public int getEventID() {
         return this.event_id;
     }
     /**
+     * gets host id
      * @return host id
      */
     public int getHostID() {
         return this.host_id;
     }
     /**
+     * gets template id
      * @return template id
      */
     public int getTemplateID() {
         return this.template_id;
     }
     /** 
+     * gets event title
      * @return event title
      */
     public String getTitle() {
         return this.title;
     }
     /**
-     * 
+     * gets event description
      * @return event description
      */
     public String getDescription() {
         return this.description;
     }
     /**
-     * 
+     * gets event type
      * @return event type
      */
     public String getType() {
         return this.type;
     }
     /**
-     * 
+     * gets event start time
      * @return event start time
      */
     public Timestamp getStartTime() {
         return this.start_time;
     }
     /**
-     * 
+     * gets event end time
      * @return event end time
      */
     public Timestamp getEndTime() {
         return this.end_time;
     }
     /**
-     * 
+     * gets event code
      * @return event code
      */
     public String getEventCode() {

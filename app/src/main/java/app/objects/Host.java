@@ -9,7 +9,16 @@ public class Host {
     private String f_name;
     private String l_name;
     private boolean sys_ban;
-
+    /**
+     * Host constructer
+     * @param host_id
+     * @param host_code
+     * @param ip_address
+     * @param e_address
+     * @param f_name
+     * @param l_name
+     * @param sys_ban
+     */
     public Host(int host_id, String host_code, String ip_address, String e_address, String f_name, String l_name,
             boolean sys_ban) {
         this.host_id = host_id;
@@ -20,35 +29,60 @@ public class Host {
         this.l_name = l_name;
         this.sys_ban = sys_ban;
     }
-
+    /**
+     * gets host id
+     * @return host id
+     */
     public int getHostID() {
         return this.host_id;
     }
-
+    /**
+     * gets host code
+     * @return host code
+     */
     public String getHostCode() {
         return this.host_code;
     }
-
+    /**
+     * gets IP address
+     * @return IP address
+     */
     public String getIPAddress() {
         return this.ip_address;
     }
-
+    /**
+     * gets email address
+     * @return email address
+     */
     public String getEAddress() {
         return this.e_address;
     }
-
+    /**
+     * gets host's first name
+     * @return first name
+     */
     public String getFName() {
         return this.f_name;
     }
-
+    /**
+     * gets host's last name
+     * @return last name
+     */
     public String getLName() {
         return this.l_name;
     }
-
+    /**
+     * shows if host is banned
+     * @return ban status
+     */
     public boolean getSysBan() {
         return this.sys_ban;
     }
-
+    /**
+     * compares 2 host objects
+     * @param that
+     * @return True or False
+     */
     public boolean equals(Host that) {
         if (this.host_id != that.getHostID())
             return false;

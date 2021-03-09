@@ -6,7 +6,7 @@ import javax.mail.internet.*;
 
 public class emailController {
    /**
-    * 
+    * this method allows an email to be sent to a user
     * @param to the email address that is going to recieve the email
     * @param subject the subject of the email
     * @param body the contents of the email

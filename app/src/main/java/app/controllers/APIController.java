@@ -20,7 +20,13 @@ public class APIController {
     static Validator v = App.getInstance().getValidator();
     static emailController e = new emailController();
 
-    // form sent from front-end to back-end to create host
+    // form sent from front-end to back-end to create host\
+    /**
+     * This method creates a new host when a new user signs up as a host
+     * @param request 
+     * @param response
+     * @return host object
+     */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("createHost API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
@@ -54,6 +60,12 @@ public class APIController {
     };
 
     // form sent by host to create an event
+    /**
+     * This method creates and event when a host user requests a new event to be made
+     * @param request
+     * @param response
+     * @return event object
+     */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("createEvent API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
@@ -100,6 +112,11 @@ public class APIController {
     };
 
     // form sent by participant to join an event
+    /**
+     * This method allows a participant to join an ongoing event
+     * @param request
+     * @param response
+     */
     public static Route joinEvent = (Request request, Response response) -> {
         System.out.println("joinEvent API endpoint recognized request \n"); 
         DbConnection db = App.getInstance().getDbConnection();
@@ -132,13 +149,24 @@ public class APIController {
     };
 
     // form sent by participant (in event) to create an instance of feedback
+    /**
+     * this method allows a participant in an event to create an instance of feedback
+     * @param request
+     * @param response
+     * @return feedback object
+     */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("createFeedback API endpoint recognized request \n");
 
         return null;
     };
 
-    /** Login host to host homepage */
+    /**
+     * this method Logs in host to host homepage
+     * @param request
+     * @param response 
+     */
+
     public static Route hostLogin = (Request request, Response response) -> {
         System.out.println("hostLogin API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();

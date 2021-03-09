@@ -35,42 +35,72 @@ public class Event {
         this.eventCode = eventCode;
     }
 
+    /**
+     * @return event id
+     */
     public int getEventID() {
         return this.event_id;
     }
-
+    /**
+     * @return host id
+     */
     public int getHostID() {
         return this.host_id;
     }
-
-    public int getTemplateID() {
-        return this.template_id;
+    /**
+     * 
+     * @return total mood of event
+     */
+    public String getMood() {
+        return this.total_mood;
     }
-
+    /**
+     * 
+     * @return event title
+     */
     public String getTitle() {
         return this.title;
     }
-
+    /**
+     * 
+     * @return event description
+     */
     public String getDescription() {
         return this.description;
     }
-
+    /**
+     * 
+     * @return event type
+     */
     public String getType() {
         return this.type;
     }
-
+    /**
+     * 
+     * @return event start time
+     */
     public Timestamp getStartTime() {
         return this.start_time;
     }
-
+    /**
+     * 
+     * @return event end time
+     */
     public Timestamp getEndTime() {
         return this.end_time;
     }
-
+    /**
+     * 
+     * @return event code
+     */
     public String getEventCode() {
         return this.eventCode;
     }
-
+    /**
+     * compares all fields of 2 event objects
+     * @param that
+     * @return True or False
+     */
     public boolean equals(Event that) {
         if (this.event_id != that.getEventID())
             return false;

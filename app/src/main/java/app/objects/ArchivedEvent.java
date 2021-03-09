@@ -32,39 +32,65 @@ public class ArchivedEvent {
         this.start_time = start_time;
         this.end_time = end_time;
     }
-
+    /**
+     * @return event id
+     */
     public int getEventID() {
         return this.event_id;
     }
-
+    /**
+     * @return host id
+     */
     public int getHostID() {
         return this.host_id;
     }
-
+    /**
+     * 
+     * @return total mood of event
+     */
     public String getMood() {
         return this.total_mood;
     }
-
+    /**
+     * 
+     * @return event title
+     */
     public String getTitle() {
         return this.title;
     }
-
+    /**
+     * 
+     * @return event description
+     */
     public String getDescription() {
         return this.description;
     }
-
+    /**
+     * 
+     * @return event type
+     */
     public String getType() {
         return this.type;
     }
-
+    /**
+     * 
+     * @return event start time
+     */
     public Timestamp getStartTime() {
         return this.start_time;
     }
-
+    /**
+     * 
+     * @return event end time
+     */
     public Timestamp getEndTime() {
         return this.end_time;
     }
-
+    /**
+     * compares all fields of 2 event objects
+     * @param that
+     * @return True or False
+     */
     public boolean equals(ArchivedEvent that) {
         if (this.event_id != that.getEventID())
             return false;

@@ -200,14 +200,10 @@ public class ValidatorTest {
 
     @Test
     public void test_isTemplateValid() {
-<<<<<<< HEAD
-        // Template testTemplate = new Template(0001, 0001, "a23fsg", "TestTemplateData");
-=======
         TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null, "Tom");
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>(1);
         components.add(question);
         Template testTemplate = new Template(1, 1, "a23fsg", components);
->>>>>>> 6dc08401d824ede28bd747cfd2ea82ab2106bf64
 
         // assertTrue(v.isTemplateValid(testTemplate));
     }

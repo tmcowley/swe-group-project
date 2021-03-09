@@ -30,6 +30,15 @@ public class SentimentTest {
     //TODO - expand feedback object with many more diverse plaintext and nopn-plaintext
     @Test
     public void test_main() {
+        
+        SentimentAnalyser sa = new SentimentAnalyser();
+        try {
+            float response = sa.getCompoundFromFullText("i hate everything");
+            System.out.println(response);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         //Perform tests
         test_main_consistency();
         test_main_correctness();

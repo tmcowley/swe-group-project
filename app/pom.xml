@@ -57,6 +57,8 @@
       <version>2.7.1</version>
     </dependency>
 
+    <!-- org.apache.commons.lang3.StringUtils; -->
+
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -101,18 +103,19 @@
     </dependency>
 
     <!-- <dependency>
-      <groupId>com.vader.sentiment</groupId>
-      <artifactId>vader</artifactId>
-      <version>1.0.2</version>
+      <groupId>com.vader</groupId>
+      <artifactId>vader-sentiment-analyzer</artifactId>
+      <version>1.0.15</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/src/main/java/app/sentimentanalysis/vader-sentiment-analyzer-1.0.2.jar</systemPath>
+      <systemPath>${project.basedir}/lib/vader-1.0.15.jar</systemPath>
     </dependency>  -->
 
-    <!-- <dependency>
+    <dependency>
       <groupId>com.vader.sentiment</groupId>
-      <artifactId>vader</artifactId>
-      <version>1.0.2</version>
-    </dependency> -->
+      <artifactId>vader-sentiment-analyzer</artifactId>
+      <!-- <scope>system</scope> -->
+      <version>1.0</version>
+    </dependency>
 
   </dependencies>
 
@@ -131,9 +134,9 @@
               <configuration>
                   <file>${basedir}/lib/vader-1.0.15.jar</file>
                   <repositoryLayout>default</repositoryLayout>
-                  <groupId>com.vader.sentiment</groupId>
-                  <artifactId>vader</artifactId>
-                  <version>1.0.2</version>
+                  <groupId>com.github.apanimesh061</groupId>
+                  <artifactId>vader-sentiment-analyzer</artifactId>
+                  <version>1.0.15</version>
                   <packaging>jar</packaging>
                   <generatePom>true</generatePom>
               </configuration>

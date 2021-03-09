@@ -746,7 +746,7 @@ public class DbConnection{
                 + "WHERE template.template_id = ? "
                 + "LIMIT 1;";
 
-                String selectComponentsByID = ""
+            String selectComponentsByID = ""
                 + "SELECT * FROM template_component t INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
                 + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(component_id)"
                 + "WHERE template.template_id = ? ";
@@ -778,7 +778,7 @@ public class DbConnection{
             }
             template = new Template(template_id, host_id, template_code, components);
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
         } finally {
             try { if (stmt1 != null) stmt1.close(); } catch (Exception e) {};
             try { if (stmt2 != null) stmt2.close(); } catch (Exception e) {};

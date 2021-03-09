@@ -11,16 +11,16 @@ import java.util.Locale;
 import app.objects.*;
 import java.util.ArrayList;
 
-//import com.vader.sentiment.SentimentAnalyzer;
+import com.vader.sentiment.analyzer.SentimentAnalyzer;
 
 public class SentimentAnalyser {
 
-/**
+    /**
      * Take feedback and return sentiment
      * @param feedback feedback to be analysed for sentiment
      * @return sentiment containing compound score (add key results?)
      */
-public static void main(Feedback feedback) throws IOException{
+    public static void main(Feedback feedback) throws IOException{
     
     
     Integer[] types = feedback.getTypes(); //Holds type of feedback for each result
@@ -44,60 +44,58 @@ public static void main(Feedback feedback) throws IOException{
 
     feedback.setCompound(weightedMean(feedback.getWeights(), compounds)); //Set final compound score as weighted mean of result specific compound scores
 
-}
+    }
 
-/**
+    /**
      * Get weighted mean of compound scores
      * @param weights real array of weights for each score
      * @param scores real array of scores
      * @return weighted mean of compound scores
      */
-private static float weightedMean(Float[] weights, float[] scores) {
-float mean = 0; 
-for (int i = 0; i < weights.length; i++) {
-    mean += weights[i]*scores[i];
-}
-return mean;
-}
+    private static float weightedMean(Float[] weights, float[] scores) {
+    float mean = 0; 
+    for (int i = 0; i < weights.length; i++) {
+        mean += weights[i]*scores[i];
+    }
+    return mean;
+    }
 
-private static float getCompoundFromFullText(String plaintext) throws IOException{
-    //return SentimentAnalyzer.getScoresFor(plaintext).getCompoundPolarity();
-
-    return 0;
-}
+    public static float getCompoundFromFullText(String plaintext) throws IOException{
+        return SentimentAnalyzer.getScoresFor(plaintext).getCompoundPolarity();
+    }
 
 
 
-/**
+    /**
      * Break plaintext into sentences
      * Analyse each sentence for compound score
      * Get mean of compound scores
      * @param plaintext string to be analysed for sentiment
      * @return real compound score derived from plaintext
      */
-private static float getCompoundFromText(String plaintext) throws IOException{
+    private static float getCompoundFromText(String plaintext) throws IOException{
 
-    //TODO - fix padding
+        //TODO - fix padding
 
-    float compound = 0; //Holds compound score derived from plaintext
-    int count = 0; //Used to mean compound scores
-    ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
+        float compound = 0; //Holds compound score derived from plaintext
+        int count = 0; //Used to mean compound scores
+        ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
 
-    //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
-    BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Might have to change to US - we'll see
-    iterator.setText(plaintext);
-    int start = iterator.first();
-    for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-        sentences.add(plaintext.substring(start,end));
+        //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.UK); //Might have to change to US - we'll see
+        iterator.setText(plaintext);
+        int start = iterator.first();
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+            sentences.add(plaintext.substring(start,end));
+        }
+
+        //Iterate through each  sentence and get compound score
+        for (String sentence : sentences) {
+            compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
+        }
+
+        return compound/count;
+
     }
-
-    //Iterate through each  sentence and get compound score
-    for (String sentence : sentences) {
-        //compound += SentimentAnalyzer.getScoresFor(sentence).getCompoundPolarity();
-     }
-
-     return compound/count;
-
-}
 
 }

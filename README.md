@@ -33,7 +33,7 @@ docker-compose -f docker-compose.yml up --remove-orphans
 [to close: `crtl+c` the initial window] <br>
 
 
-#### Interact with the database:
+#### Database interaction:
 ```
 psql -h localhost -p 5432 --username postgres
 [password is fas200]

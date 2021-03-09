@@ -158,14 +158,14 @@ public class APIController {
         if (request.queryParams("anon").equals("Submit Anonymously")) {
             anonymous = true;
         }
-        
+        //TODO feedback creation
         Feedback feedback = db.createFeedback(participant.getParticipantID(), event.getEventID(), anonymous, current, results);
 
-        //return host event page if event is created
+        //return to evnet page if feedback is created
         if (v.isFeedbackValid(feedback)) {
             return "/event/join/code";
         }
-        //return not found if event is not created or input is not valid
+        //return not found if feedback is not created
         return ViewUtil.notFound;
     };
 

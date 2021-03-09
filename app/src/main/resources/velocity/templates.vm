@@ -1,0 +1,24 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+
+<header>
+    <div id="headerLeft">
+        Resmodus
+    </div>
+    <div id="headerRight">
+        login stuff goes here
+    </div>
+</header>
+<div id="mainFormSection">
+    <div id="mainForm">
+        <h1>My Templates</h1>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a><br>
+        <a href="/host/templates/edit/code">My Template 1</a>
+    </div>
+</div>
+#end

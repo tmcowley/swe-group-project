@@ -352,3 +352,60 @@ textarea {
     width: 90%;
     margin-top: 15px;
 }
+
+.feedbackElement {
+    padding: 20px;
+    border: 1px solid black;
+    margin: 10px 0 0;
+    grid-column: 1;
+}
+
+.formInput, .formInputBullet {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-family: Helvetica, sans-serif;
+}
+
+.formInputBullet {
+    width: calc(100% - 30px);
+}
+
+.formInputBulletIcon {
+    font-size: 30px;
+    float: left;
+    margin-right: 15px;
+}
+
+.formInputCheckIcon {
+    font-size: 15px;
+    float: left;
+    margin-right: 15px;
+    padding-top: 10px;
+}
+
+#submitButtonTemplate {
+    background-color: #552d62;
+    color: white;
+    border: 1px solid #451c52;
+    border-radius: 40px;
+    padding: 10px 40px;
+    cursor: pointer;
+}
+
+.feedbackElementFooter {
+    border: 1px solid black;
+    border-top: none;
+    margin-bottom: 10px;
+    padding: 20px;
+}
+
+.feedbackDelButton {
+    height: 30px;
+    align-self: center;
+}
+
+#feedbackFormMain {
+    display: grid;
+    grid-template-columns: auto 30px;
+}

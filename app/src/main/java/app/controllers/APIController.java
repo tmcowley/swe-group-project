@@ -141,8 +141,32 @@ public class APIController {
     // form sent by participant (in event) to create an instance of feedback
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("createFeedback API endpoint recognized request \n");
+        DbConnection db = App.getInstance().getDbConnection();
+        //start session
+        request.session(true);
+        //return not found if session is new
+        if (request.session().isNew()) {
+            return ViewUtil.notFound;
+        }
+        //initialise event and input
+        Event event = request.session().attribute("event");
+        Participant participant = request.session().attribute("participant");
+        String feedbackData = request.queryParams("feedbackData");
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        Boolean anonymous = false;
+        String[] results = new String[0];
+        if (request.queryParams("anon").equals("Submit Anonymously")) {
+            anonymous = true;
+        }
+        
+        Feedback feedback = db.createFeedback(participant.getParticipantID(), event.getEventID(), anonymous, current, results);
 
-        return null;
+        //return host event page if event is created
+        if (v.isFeedbackValid(feedback)) {
+            return "/event/join/code";
+        }
+        //return not found if event is not created or input is not valid
+        return ViewUtil.notFound;
     };
 
     /** Login host to host homepage */

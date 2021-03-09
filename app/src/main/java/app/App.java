@@ -92,6 +92,7 @@ public class App {
         // API endpoints
         post("/event/join/code", APIController.joinEvent);
         post("/event/host/code", APIController.createEvent);
+        post("/event/participant/feedback", APIController.createFeedback);
         post("/host/get-code", APIController.createHost);
         post("/host/home", APIController.hostLogin);
         post("/", APIController.joinEvent);

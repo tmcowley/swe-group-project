@@ -105,11 +105,11 @@ public class SentimentAnalyser {
             values[i] = SentimentAnalyzer.getScoresFor(sentences.get(i)).getCompoundPolarity();
         }
         
-        //Remove compound scores that [fall below one standard deviation] - may change
+        //Remove compound scores that [fall within one standard deviation from 0] - may change
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);
         for (double i : values) {
-            if (i > standev) {
+            if ( (i > standev) && (i < -1*standev)) {
                 compound += i;
                 count2++;
             }
@@ -149,7 +149,7 @@ public class SentimentAnalyser {
         }
         return ((compound/count)-4f)/3f;
     }
-    
+
  // test method
  public static Float getFromFull(String a){
     return SentimentAnalyzer.getScoresFor(a).getCompoundPolarity();

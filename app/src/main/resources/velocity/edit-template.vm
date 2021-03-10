@@ -125,6 +125,7 @@
                     <a href="#">Add Radio Buttons</a>
                     <a href="#">Add Tickboxes</a>
                 </div>
+                <label id="formErrorMessage">Error Message</label>
                 <input type="submit" id="submitButtonTemplate" value="Save">
                 <a href="#">Delete</a>
                 <a href="#">Back</a>

@@ -2,7 +2,10 @@
 #@mainLayout()
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <h1>Meeting Name</h1>
+    <h1>$eventTitle</h1>
+    <p>
+        $eventDescription
+    </p>
 </div>
 <header>
     <div id="headerLeft">
@@ -36,6 +39,7 @@
                         <div class="feelingRadioImg sad"></div>
                     </div>
                 </div>
+                <label id="formErrorMessage">Error Message</label>
                 <div id="sumbitButtonContainer">
                     <input type="submit" id="submitButton" value="Submit">
                     <div id="submitAnonymous">

@@ -12,6 +12,7 @@
     <div id="hostHomeContainer">
         <form>
             <input type="text" id="templateName" name="templateName" placeholder="Template Name">
+            <label id="formErrorMessage">Error Message</label>
             <input id="hostCodeContinue" type="submit" value="Submit">
         </form>
     </div>

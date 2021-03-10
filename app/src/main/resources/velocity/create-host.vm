@@ -6,12 +6,14 @@
         <div id="landingJoinContainer">
             <form id="landingSubContainer" name="hostCodeLogin" action="/host/home" method="post">
                 <input type="text" id="hostCode" name="hostCode" placeholder="Enter your code">
+                <label id="formErrorMessage">Error Message</label>
                 <input id="landingJoinButton" type="submit" value="Submit">
             </form>
             <form name="hostRegister" action="/host/get-code" method="post">
                 <input type="text" id="hostFName" name="hostFName" placeholder="First Name">
                 <input type="text" id="hostLName" name="hostLName" placeholder="Second Name">
                 <input type="text" id="hostEmail" name="hostEmail" placeholder="Email">
+                <label id="formErrorMessage">Error Message</label>
                 <input id="landingHostButton" type="submit" value="Submit">
             </form>
         </div>

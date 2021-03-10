@@ -158,19 +158,33 @@ public class Feedback {
     public byte[][] getSub_Weights() {
         return this.sub_weights;
     }
-
+    /**
+     * gets sub weights
+     * @param i
+     * @return weights row
+     */
     public byte[] getSub_WeightsRow(int i) {
         return this.sub_weights[i];
     }
-
+    /**
+     * sets item weight
+     * @param new_weight
+     * @param index
+     */
     public void setWeightItem(float new_weight, int index) {
         this.weights[index] = new_weight;
     }
-
+    /**
+     * sets new compound
+     * @param new_compound
+     */
     public void setCompound(Float new_compound) {
         this.compound = new_compound;
     }
-
+    /**
+     * adds key results
+     * @param new_key_result
+     */
     public void addKey_Results(String new_key_result) {
         this.key_results.add(new_key_result);
     }

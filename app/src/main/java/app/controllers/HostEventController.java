@@ -18,6 +18,9 @@ import app.util.*;
 public class HostEventController {
 
     // TODO description
+    /**
+     * serve host event page (GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("Notice: HostEventController servePage called");

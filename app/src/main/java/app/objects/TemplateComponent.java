@@ -178,7 +178,11 @@ public class TemplateComponent {
   public String getTextResponse() {
     return this.textResponse;
   }
-
+  /**
+   * compares 2 template component objects
+   * @param that
+   * @return  true or false
+   */
   public boolean equals(TemplateComponent that) {
     if (this.id != that.getId())
       return false;
@@ -186,11 +190,14 @@ public class TemplateComponent {
       return false;
     if (!Arrays.equals(this.options, that.getOptions()))
       return false;
-    if (this.optionsAns != that.getOptionsAns())
+    if (!Arrays.equals(this.optionsAns, that.getOptionsAns()))
       return false;
     if (this.prompt != that.getPrompt())
       return false;
-
+    if (this.textResponse != that.getTextResponse())
+      return false;
+    if (this.type != that.getType())
+      return false;
     return true;
   }
 }

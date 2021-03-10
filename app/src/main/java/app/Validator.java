@@ -7,6 +7,7 @@ import java.io.FileReader;
 
 import java.util.HashSet; // import the HashSet class
 import org.apache.commons.lang3.StringUtils; // for event code sanitization
+import org.apache.commons.lang3.ArrayUtils;
 
 import app.objects.*;
 
@@ -241,7 +242,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: validate more data inside
+    /**
      * Check if ArchivedEvent is valid:
      * check every data inside
      * @param archivedEvent ArchivedEvent instance to be checked
@@ -260,7 +261,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: validate more data inside
+    /**
      * Check if Event is valid:
      * check every data inside
      * @param event Event instance to be checked
@@ -287,8 +288,6 @@ public class Validator {
      * TODO: check sub_weights holds as many arrays as results (and the other arrays) hold items - (sub weights has x rows)
      * TODO: check each array held in sub_weights is of size 5 - (sub weights has 5 columns)
      * TODO: add a test that checks either all values in weights are int between 0 and 7 or all values sum to 1.0
-     * TODO: add a test that checks all values in types are between 0 and 2
-     * TODO: check there are no empty strings in results
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked
@@ -301,8 +300,36 @@ public class Validator {
         if (!idIsValid(feedback.getFeedbackID()))       return false;
         if (!idIsValid(feedback.getEventID()))          return false;
         if (!idIsValid(feedback.getParticipantID()))    return false;
+        
 
         // validate Sentiment fields
+
+        //validates results array
+        String[] results = feedback.getResults();
+        if (ArrayUtils.isEmpty(results)) return false;
+        
+        for (int i = 0; i < results.length; i++){
+            if(StringUtils.isBlank(results[i]))
+                return false;
+        }
+
+        //checks type array
+        byte[] types = feedback.getTypes();
+        for (int i = 0; i < types.length; i++){
+            if(types[i] > 2 || types[i] < 0)
+                return false;
+        }
+
+        // //checks weights array
+        // Float[] weights = feedback.getWeights();
+        // float total = 0;
+        // for (int i = 0; i < weights.length; i++){
+        //     if (weights[i] > 7.0 || weights[i] < 0.0)
+        //         return false;
+        //     total += weights[i];
+        // }
+
+
 
         // validate timestamp
         if (feedback.getTimestamp() == null) return false;
@@ -310,7 +337,7 @@ public class Validator {
         return true;
     }
 
-    /** TODO: validate more data inside
+    /**
      * Check if Host is valid:
      * check every data inside
      * @param host Host instance to be checked
@@ -330,7 +357,7 @@ public class Validator {
         return false;
     }
 
-    /** TODO: validate more data inside
+    /**
      * Check if Participant is valid:
      * check every data inside
      * @param participant Participant instance to be checked
@@ -338,7 +365,7 @@ public class Validator {
      */
     public boolean isParticipantValid(Participant participant){
         if (participant != null&&
-            ipAddressIsValid(participant.getIPAddress())&&
+            //ipAddressIsValid(participant.getIPAddress())&&
             nameIsValid(participant.getFName())&&
             nameIsValid(participant.getLName())&&
             idIsValid(participant.getParticipantID())

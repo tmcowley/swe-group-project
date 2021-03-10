@@ -3,7 +3,7 @@
 
 <header>
     <div id="headerLeft">
-        Resmodus
+        <a href="/">Resmodus</a>
     </div>
     <div id="headerRight">
         login stuff goes here

@@ -43,9 +43,11 @@ public class APIController {
                 || db.emailExists(e_address)) {
             // return ViewUtil.notFound; -> TODO
             System.out.println("Error: field invalid or email exists");
-            
-            // TODO return "Error: field invalid or email exists";
-            return ViewUtil.render(request, new HashMap<>(), "/velocity/host-event.vm");
+
+            Map<String, Object> model = new HashMap<>();
+            // model.put("errorMessage", "Error: field invalid or email exists");
+
+            return ViewUtil.render(request, model, "/velocity/host-event.vm");
         }
         // System.out.println("Notice: createHost fields collected and validated");
 
@@ -68,8 +70,8 @@ public class APIController {
     };
 
     /**
-     * This method creates and event when a host user requests a new event to be made
-     * form sent by host to create an event
+     * This method creates and event when a host user requests a new event to be
+     * made form sent by host to create an event
      * 
      * @param request
      * @param response
@@ -186,8 +188,9 @@ public class APIController {
     };
 
     /**
-     * this method allows a participant in an event to create an instance of feedback
-     * form sent by participant (in event) to create an instance of feedback
+     * this method allows a participant in an event to create an instance of
+     * feedback form sent by participant (in event) to create an instance of
+     * feedback
      * 
      * @param request
      * @param response
@@ -233,7 +236,9 @@ public class APIController {
             System.out.println("Notice: feedback considered valid");
             String[] arrs = new String[feedback.getKey_Results().size()];
             String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
-            db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
+            db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(),
+                    feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
+                    feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
 
             // TODO: DISPLAY THAT FEEDBACK WAS RECORDED
             request.session().attribute("event", event);
@@ -244,7 +249,7 @@ public class APIController {
         }
 
         // return not found if feedback is not created
-        //return ViewUtil.notFound;
+        // return ViewUtil.notFound;
         return "Error: feedback considered invalid";
     };
 
@@ -283,7 +288,7 @@ public class APIController {
         }
 
         System.out.println("Error: Host is invalid");
-        //return ViewUtil.notFound;
+        // return ViewUtil.notFound;
         return "Error: Host is invalid";
     };
 }

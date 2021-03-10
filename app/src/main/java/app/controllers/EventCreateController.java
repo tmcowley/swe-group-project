@@ -15,13 +15,13 @@ import app.util.*;
 public class EventCreateController {
     /** Serve the index page (GET request) */
     public static Route servePage = (Request request, Response response) -> {
-        //initialiss model to hold data
+        // initialiss model to hold data
         Map<String, Object> model = new HashMap<>();
-        //start session
+        // start session
         request.session(true);
-        //get host from session
+        // get host from session
         Host host = request.session().attribute("host");
-        //return not found if session is new
+        // return not found if session is new
         if (request.session().isNew() || !App.getInstance().getValidator().isHostValid(host)) {
             return ViewUtil.notFound;
         }

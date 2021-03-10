@@ -96,7 +96,6 @@ public class APIController {
             endTime.compareTo(current) > 0
             ) {
             if (templateCode.equals("noTemplate")) {
-                System.out.println("do not use a template");
                 //create an event without a template
                 event = db.createEvent(host.getHostID(), title, description, type, startTime, endTime);
             } else if (v.templateCodeIsValid(templateCode)) {
@@ -176,13 +175,13 @@ public class APIController {
         Event event = request.session().attribute("event");
         Participant participant = request.session().attribute("participant");
         String[] results = {request.queryParams("feedbackData")};
-        Float[] weights = {4f};
+        float[] weights = {4f};
         byte[] types = {0};
         Boolean[] keys = {false};
         byte[][] sub_weights = new byte[0][0];
         Timestamp current = new Timestamp(System.currentTimeMillis());
         Boolean anonymous = false;
-        if (request.queryParams("anon").equals("Submit Anonymously")) {
+        if (request.queryParams("anon") != null && request.queryParams("anon").equals("Submit Anonymously")) {
             anonymous = true;
         }
 

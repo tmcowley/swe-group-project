@@ -1,5 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
+<meta http-equiv="refresh" content="5">
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <h1>$eventTitle</h1>
@@ -37,62 +38,23 @@
         <h1 id="formSectionTitle">Feedback</h1>
         <span id="exitButtonMobile"><img src="/images/exit-icon.png"></span>
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/analytics-icon.png"></span>
+#if($feedbackCount)
+    #if($feedbackCount>0)
+        #set($index = $feedbackCount-1)
+        #foreach($i in [0..$index])
+            <div class="feedbackBox">
+                        <h1>$participantFName.get($i) $participantLName.get($i)</h1>
+                        <p>
+                            <strong>How are you finding the meeting?:
+                            </strong>$feedbackData.get($i)
+                        </p>
+                        <h2>Sentiment: $feedbackData.get($i)</h2>
+                        <span>Submitted at $time.get($i)</span>
+                    </div>
+        #end
+    #end
+#end        
 
-        <div class="feedbackBox">
-            <h1>User 123</h1>
-            <p>
-                <strong>How are you finding the meeting?:
-                </strong>it's ok lol
-            </p>
-            <p>
-                <strong>Please rate how you're feeling:</strong>
-                😀
-            </p>
-            <h2>Sentiment: 😀</h2>
-            <span>Submitted at 10:10 AM</span>
-        </div>
-
-        <div class="feedbackBox">
-            <h1>User 123</h1>
-            <p>
-                <strong>How are you finding the meeting?:
-                </strong>it's ok lol
-            </p>
-            <p>
-                <strong>Please rate how you're feeling:</strong>
-                😀
-            </p>
-            <h2>Sentiment: 😀</h2>
-            <span>Submitted at 10:10 AM</span>
-        </div>
-
-        <div class="feedbackBox">
-            <h1>User 123</h1>
-            <p>
-                <strong>How are you finding the meeting?:
-                </strong>it's ok lol
-            </p>
-            <p>
-                <strong>Please rate how you're feeling:</strong>
-                😀
-            </p>
-            <h2>Sentiment: 😀</h2>
-            <span>Submitted at 10:10 AM</span>
-        </div>
-
-        <div class="feedbackBox">
-            <h1>User 123</h1>
-            <p>
-                <strong>How are you finding the meeting?:
-                </strong>it's ok lol
-            </p>
-            <p>
-                <strong>Please rate how you're feeling:</strong>
-                😀
-            </p>
-            <h2>Sentiment: 😀</h2>
-            <span>Submitted at 10:10 AM</span>
-        </div>
     </div>
     <div id="infoSection">
         <h1>$eventTitle</h1>

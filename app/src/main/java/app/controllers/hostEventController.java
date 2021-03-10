@@ -1,13 +1,19 @@
 package app.controllers;
 
 import java.util.*;
+
+import org.sqlite.core.DB;
+
 import java.net.*;
 import java.io.*;
 import java.sql.Timestamp;
 import spark.*;
 import app.App;
+import app.DbConnection;
 import app.objects.Event;
+import app.objects.Feedback;
 import app.objects.Host;
+import app.objects.Participant;
 import app.objects.Template;
 import app.util.*;
 
@@ -20,32 +26,50 @@ public class hostEventController {
         if (request.session().isNew()) {
             return ViewUtil.notFound;
         }
-        //initialise event and input 
-        Event event = null;
-        Host host = request.session().attribute("host");//.getHostID();
-        String title = request.queryParams("eventName");
-        String description = request.queryParams("eventDescription");
-        String type = request.queryParams("eventType");
-        String templateCode = request.queryParams("eventTemplate");
-        // timestamp in format yyyy-[m]m-[d]d hh:mm:ss[.f...]
-        Timestamp startTime = Timestamp.valueOf(request.queryParams("startTime"));
-        Timestamp endTime = Timestamp.valueOf(request.queryParams("endTime"));
-
-
-        //validate input before interact with database
-        if (App.getInstance().getValidator().eventTitleIsValid(title)&&
-            App.getInstance().getValidator().eventDescriptionIsValid(description)&&
-            App.getInstance().getValidator().eventTypeIsValid(type)&&
-            App.getInstance().getValidator().templateCodeIsValid(templateCode)&&
-            startTime.compareTo(endTime) < 0
-            ) {
-            Template template = App.getInstance().getDbConnection().getTemplateByCode(templateCode);
-            event = App.getInstance().getDbConnection().createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
-        }
+        //initialise event
+        Event event = request.session().attribute("event");
+        Host host = request.session().attribute("host");
+    
         //return host event page if event is created
         if (App.getInstance().getValidator().isEventValid(event)) {
             request.session().attribute("event", event);
             Map<String, Object> model = new HashMap<>();
+            Feedback[] feedbacks = App.getInstance().getDbConnection().getFeedbacksByEventID(event.getEventID());
+            int feedbackCount = 0;
+            if (feedbacks.length != 0) {
+
+                List<String> participantFName = new ArrayList<String>();
+                List<String> participantLName = new ArrayList<String>();
+                List<String> feedbackData = new ArrayList<String>();
+                List<String> sentiment = new ArrayList<String>();
+                List<String> time = new ArrayList<String>();
+                for (Feedback feedback : feedbacks) {
+                    if (!feedback.getAnonymous()) {
+                        Participant participant = App.getInstance().getDbConnection().getParticipant(feedback.getParticipantID());
+                        participantFName.add(participant.getFName());
+                        participantLName.add(participant.getLName());
+                    } else {
+                        participantFName.add("Anonymous");
+                        participantLName.add("");
+                    }
+                    feedbackData.add(feedback.getResults()[0]);
+                    if (feedback.getCompound()>0.05) {
+                        sentiment.add("positive");
+                    } else if (feedback.getCompound()<-0.05){
+                        sentiment.add("negative");
+                    } else {
+                        sentiment.add("neutral");
+                    }
+                    time.add(feedback.getTimestamp().toString());
+                    feedbackCount++;
+                }
+                model.put("participantFName", participantFName);
+                model.put("participantLName", participantLName);
+                model.put("feedbackData", feedbackData);
+                model.put("sentiment", sentiment);
+                model.put("time", time);
+            }
+            model.put("feedbackCount", feedbackCount);
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());
             model.put("eventCode", event.getEventCode());

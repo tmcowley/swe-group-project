@@ -9,7 +9,7 @@ public class Feedback {
     private int participant_id;
     private int event_id;
     private String[] results; // Holds results to specific feedback queries
-    private Float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
+    private float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
     private byte[] types; // Holds the type of query that produced each result
     // 0 = plaintext
     // 1 = single answer multiple choice
@@ -18,12 +18,12 @@ public class Feedback {
     private byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
     private boolean anonymous;
     private Timestamp timestamp;
-    private Float compound; // Holds the compound score (part of sentiment)
+    private float compound; // Holds the compound score (part of sentiment)
     private ArrayList<String> key_results; // Holds an array of all key results
 
 
     public Feedback(int participant_id, int event_id,
-            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp) {
+            String[] results, float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp) {
         this.participant_id = participant_id;
         this.event_id = event_id;
         this.anonymous = anonymous;
@@ -32,7 +32,7 @@ public class Feedback {
         this.weights = weights;
         this.types = types;
         this.keys = keys;
-        this.compound = null;
+        this.compound = 0f;
         this.key_results = new ArrayList<String>();
         this.sub_weights = sub_weights;
     }
@@ -52,7 +52,7 @@ public class Feedback {
      * @param key_results
      */
     public Feedback(int feedback_id, int participant_id, int event_id,
-            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, Float compound, ArrayList<String> key_results) {
+            String[] results, float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;
@@ -98,7 +98,7 @@ public class Feedback {
      * gets the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
      * @return feedback weights
      */
-    public Float[] getWeights() {
+    public float[] getWeights() {
         return this.weights;
     }
     /**
@@ -119,7 +119,7 @@ public class Feedback {
      * gets compound score
      * @return compound score
      */
-    public Float getCompound() {
+    public float getCompound() {
         return this.compound;
     }
     
@@ -143,7 +143,7 @@ public class Feedback {
         return this.sub_weights[i];
     }
 
-    public void setWeightItem(Float new_weight, int index) {
+    public void setWeightItem(float new_weight, int index) {
         this.weights[index] = new_weight;
     }
 

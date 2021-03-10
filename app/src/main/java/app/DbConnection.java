@@ -393,7 +393,7 @@ public class DbConnection{
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
-    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] type, Boolean[] key, Float compound, String[] key_results){
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, float[] weights, byte[] type, Boolean[] key, float compound, String[] key_results){
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -914,6 +914,37 @@ public class DbConnection{
 
     public Feedback getFeedback(int feedback_id){
         return null;
+    }
+
+    public Feedback[] getFeedbacksByEventID(int event_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Feedback[] foundFeedbacks = new Feedback[0];
+        try{
+            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=?;";
+            stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmt.setInt(1, event_id);
+            rs = stmt.executeQuery();
+            rs.last();
+            int rsSize= rs.getRow();
+            foundFeedbacks = new Feedback[rsSize];
+            Feedback foundFeedback = null;
+            int feedbackCount = 0;
+            rs.beforeFirst();
+            if (rs.next()) {
+                foundFeedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
+                (String[]) rs.getArray("results").getArray(), (float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), new ArrayList<String>());
+                foundFeedbacks[feedbackCount] = foundFeedback;
+                feedbackCount++;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        return foundFeedbacks;
     }
 
     // /**

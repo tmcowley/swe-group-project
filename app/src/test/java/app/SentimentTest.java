@@ -44,15 +44,14 @@ public class SentimentTest {
     Feedback test = new Feedback( i, i, results, weights, types, keys, sub_weights, f, timestamp);
 
     //TODO - expand feedback object with many more diverse plaintext and non-plaintext
-    //TODO - add multiple choice results
     //TODO - comment properly
     @Test
-    public void test_main() {
+    public void test_main() throws IOException{
 
         //Perform tests
         test_main_consistency();
         test_main_correctness();
-        test_main_return();
+        //test_main_return();
     }
 
     private void test_main_consistency() throws IOException{
@@ -74,19 +73,7 @@ public class SentimentTest {
         System.out.println(test.getCompound());
     }
 
-    private void test_main_return() {
+    private void test_main_return() throws IOException{
         //Check feedback has been set correctly
     }
-
- // @Test
-    // public void test_eventCodeIsValid() {
-    //     String[] validCodes = { "CCCC", "4RF5", "ac4r", "abcd", "aBc7" };
-    //     String[] invalidCodes = { "AAAAAA", "abcd-", "CC-C", " ", "", null };
-    //     for (String validCode : validCodes) {
-    //         assertTrue(v.eventCodeIsValid(validCode));
-    //     }
-    //     for (String invalidCode : invalidCodes) {
-    //         assertFalse(v.eventCodeIsValid(invalidCode));
-    //     }
-    // }
 }

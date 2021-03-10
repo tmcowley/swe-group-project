@@ -24,10 +24,6 @@ public class APIController {
     // form sent from front-end to back-end to create host\
     /**
      * This method creates a new host when a new user signs up as a host
-     * 
-     * @param request
-     * @param response
-     * @return host object
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request \n");
@@ -70,12 +66,8 @@ public class APIController {
     };
 
     /**
-     * This method creates and event when a host user requests a new event to be
-     * made form sent by host to create an event
-     * 
-     * @param request
-     * @param response
-     * @return event object
+     * This method creates and event when a host user requests a new event to be made
+     * form sent by host to create an event
      */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
@@ -147,9 +139,6 @@ public class APIController {
     // form sent by participant to join an event
     /**
      * This method allows a participant to join an ongoing event
-     * 
-     * @param request
-     * @param response
      */
     public static Route joinEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: joinEvent API endpoint recognized request \n");
@@ -188,13 +177,8 @@ public class APIController {
     };
 
     /**
-     * this method allows a participant in an event to create an instance of
-     * feedback form sent by participant (in event) to create an instance of
-     * feedback
-     * 
-     * @param request
-     * @param response
-     * @return feedback object
+     * this method allows a participant in an event to create an instance of feedback
+     * form sent by participant (in event) to create an instance of feedback
      */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("\nNotice: createFeedback API endpoint recognized request \n");
@@ -255,9 +239,6 @@ public class APIController {
 
     /**
      * this method Logs in host to host homepage
-     * 
-     * @param request
-     * @param response
      */
 
     public static Route hostLogin = (Request request, Response response) -> {

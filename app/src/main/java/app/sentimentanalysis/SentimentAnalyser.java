@@ -51,7 +51,7 @@ public class SentimentAnalyser {
             System.out.println("Error: array:results is null or empty");
             return;
         }
-        if (!ArrayUtils.isNotEmpty(keys))
+        if (!ArrayUtils.isNotEmpty(keys)){
             System.out.println("Error: array:keys is null or empty");
             return;
         }

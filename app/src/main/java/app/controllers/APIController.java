@@ -24,7 +24,8 @@ public class APIController {
     // form sent from front-end to back-end to create host\
     /**
      * This method creates a new host when a new user signs up as a host
-     * @param request 
+     * 
+     * @param request
      * @param response
      * @return host object
      */
@@ -32,15 +33,14 @@ public class APIController {
         System.out.println("createHost API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // collect form attributes, validate attributes and ensure email address is unique
+        // collect form attributes, validate attributes and ensure email address is
+        // unique
         String f_name = request.queryParams("hostFName");
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
-        String ip_address = null; //request.ip();
-        if (!v.nameIsValid(f_name) ||
-            !v.nameIsValid(l_name) ||
-            !v.eAddressIsValid(e_address) ||
-            db.emailExists(e_address)) {
+        String ip_address = null; // request.ip();
+        if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eAddressIsValid(e_address)
+                || db.emailExists(e_address)) {
             // return ViewUtil.notFound; -> TODO
             System.out.println("Error: field invalid or email exists");
             return "Error: field invalid or email exists";
@@ -60,13 +60,15 @@ public class APIController {
             // return ViewUtil.notFound; -> TODO
         }
         // (broken) send email containing host-code to new host
-        //e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);    
+        // e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);
 
     };
 
     // form sent by host to create an event
     /**
-     * This method creates and event when a host user requests a new event to be made
+     * This method creates and event when a host user requests a new event to be
+     * made
+     * 
      * @param request
      * @param response
      * @return event object
@@ -74,15 +76,15 @@ public class APIController {
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("Notice: createEvent API endpoint recognized request\n");
         DbConnection db = App.getInstance().getDbConnection();
-        //start session
+        // start session
         request.session(true);
-        //return not found if session is new
+        // return not found if session is new
         if (request.session().isNew()) {
-            //return ViewUtil.notFound;
+            // return ViewUtil.notFound;
             return "Error: Session not found";
         }
 
-        // initialize event and input 
+        // initialise event and input
         Event event = null;
         Host host = request.session().attribute("host");
         String title = request.queryParams("eventTitle");
@@ -92,12 +94,12 @@ public class APIController {
         // timestamp in format yyyy-[m]m-[d]d hh:mm:ss[.f...]
         Timestamp current = new Timestamp(System.currentTimeMillis());
         Timestamp startTime, endTime;
-        
+
         // Temporary fix for broken timestamp input
-        try{
+        try {
             startTime = Timestamp.valueOf(request.queryParams("startTime"));
             endTime = Timestamp.valueOf(request.queryParams("endTime"));
-        } catch (java.lang.IllegalArgumentException iae){
+        } catch (java.lang.IllegalArgumentException iae) {
             startTime = current;
             endTime = current;
         }
@@ -110,20 +112,21 @@ public class APIController {
         if (!v.eventTypeIsValid(type))
             return "Error: Event type is invalid";
         // if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
-        //     return "Error: start and end time not in order";
+        // return "Error: start and end time not in order";
 
         if (templateCode.equals("noTemplate")) {
-            //create an event without a template
+            // create an event without a template
             System.out.println("Notice: no template has been provided");
             event = db.createEvent(host.getHostID(), title, description, type, startTime, endTime);
         } else if (v.templateCodeIsValid(templateCode)) {
-            //create an event with a template
+            // create an event with a template
             System.out.println("Notice: a template has been provided");
             Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
-        } 
+            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime,
+                    endTime);
+        }
 
-        //return host event page if event is created
+        // return host event page if event is created
         System.out.println("Event created. Event is valid: " + v.isEventValid(event));
         if (v.isEventValid(event)) {
             request.session().attribute("event", event);
@@ -133,36 +136,34 @@ public class APIController {
             model.put("eventCode", event.getEventCode());
             return ViewUtil.render(request, model, "/velocity/host-event.vm");
         }
-        //return not found if event is not created or input is not valid
+        // return not found if event is not created or input is not valid
         return "Event not considered valid - check inputs";
     };
 
     // form sent by participant to join an event
     /**
      * This method allows a participant to join an ongoing event
+     * 
      * @param request
      * @param response
      */
     public static Route joinEvent = (Request request, Response response) -> {
-        System.out.println("joinEvent API endpoint recognized request \n"); 
+        System.out.println("joinEvent API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
         // Get form attributes, ensure attributes are valid
         String FName = request.queryParams("participantFName");
         String LName = request.queryParams("participantLName");
         String eventCode = request.queryParams("eventCode");
-        if (!v.nameIsValid(FName) ||
-            !v.nameIsValid(LName) ||
-            !v.eventCodeIsValid(eventCode)
-            ) {
-                return ViewUtil.notFound;
+        if (!v.nameIsValid(FName) || !v.nameIsValid(LName) || !v.eventCodeIsValid(eventCode)) {
+            return ViewUtil.notFound;
         }
 
-        if (!db.eventCodeExists(eventCode)){
+        if (!db.eventCodeExists(eventCode)) {
             return "Event code does not exist";
         }
 
         // create Participant object in DB -> link to event
-        Participant participant = db.createParticipant(request.ip(),FName,LName);
+        Participant participant = db.createParticipant(request.ip(), FName, LName);
         Event event = db.getEventByCode(eventCode);
         db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
         request.session(true);
@@ -175,13 +176,15 @@ public class APIController {
             model.put("eventDescription", event.getDescription());
             return ViewUtil.render(request, model, "/velocity/participant-event.vm");
         }
-        //return notfound if event is not found
+        // return notfound if event is not found
         return ViewUtil.notFound;
     };
 
     // form sent by participant (in event) to create an instance of feedback
     /**
-     * this method allows a participant in an event to create an instance of feedback
+     * this method allows a participant in an event to create an instance of
+     * feedback
+     * 
      * @param request
      * @param response
      * @return feedback object
@@ -193,16 +196,16 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            //return ViewUtil.notFound;
+            // return ViewUtil.notFound;
             return "Error: Session not found";
         }
-        // initialize event and input
+        // initialise event and input
         Event event = request.session().attribute("event");
         Participant participant = request.session().attribute("participant");
-        String[] results = {request.queryParams("feedbackData")};
-        Float[] weights = {4f};
-        byte[] types = {0};
-        Boolean[] keys = {false};
+        String[] results = { request.queryParams("feedbackData") };
+        Float[] weights = { 4f };
+        byte[] types = { 0 };
+        Boolean[] keys = { false };
         byte[][] sub_weights = new byte[0][0];
         Timestamp current = new Timestamp(System.currentTimeMillis());
         Boolean anonymous = false;
@@ -211,41 +214,45 @@ public class APIController {
         }
 
         System.out.println("Notice: generating feedback instance");
-        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
+        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types,
+                keys, sub_weights, anonymous, current);
         SentimentAnalyser.main(feedback);
-        if (feedback.getCompound() != null){
+        if (feedback.getCompound() != null) {
             System.out.println("Notice: SA on feedback successful");
         }
 
-        //return to event page if feedback is created
+        // return to event page if feedback is created
         if (v.isFeedbackValid(feedback)) {
             System.out.println("Notice: feedback considered valid");
             String[] arrs = new String[feedback.getKey_Results().size()];
             String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
-            db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getCompound(), keyResults);
+            db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(),
+                    feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
+                    feedback.getKeys(), feedback.getCompound(), keyResults);
             return "/event/join/code";
-            
+
         }
-        //return not found if feedback is not created
+        // return not found if feedback is not created
         return ViewUtil.notFound;
     };
 
     /**
      * this method Logs in host to host homepage
+     * 
      * @param request
-     * @param response 
+     * @param response
      */
 
     public static Route hostLogin = (Request request, Response response) -> {
         System.out.println("hostLogin API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
-        //initialise host
+        // initialise host
         Host host = null;
-        //start session
+        // start session
         request.session(true);
         if (request.session().isNew()) {
             String hostCode = request.queryParams("hostCode");
-            //validate input before interact with database
+            // validate input before interact with database
             if (v.hostCodeIsValid(hostCode)) {
                 host = db.getHostByCode(hostCode);
             }
@@ -253,14 +260,14 @@ public class APIController {
         } else {
             host = request.session().attribute("host");
         }
-        //return host homepage if host is found
+        // return host homepage if host is found
         if (v.isHostValid(host)) {
             Map<String, Object> model = new HashMap<>();
             model.put("fName", host.getFName());
             model.put("lName", host.getLName());
             return ViewUtil.render(request, model, "/velocity/host-home.vm");
         }
-        //return notfound if host is not found or hostcode is not valid
+        // return notfound if host is not found or hostcode is not valid
         System.out.println("Host not found!");
         return ViewUtil.notFound;
     };

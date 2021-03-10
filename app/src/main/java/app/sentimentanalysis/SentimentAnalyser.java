@@ -87,8 +87,7 @@ public class SentimentAnalyser {
         //TODO make private, delete the direct ests from sentiment test
 
         float compound = 0; //Holds compound score derived from plaintext
-        int count1 = 0; //Counts how many sentences are in plaintext
-        int count2 = 0; //used to mean compound scores
+        int count = 0; //used to mean compound scores
         ArrayList<String> sentences = new ArrayList<String>(); //Holds plaintext broken into sentences
 
         //Iterates through plaintext and selects each sentence within plaintext, adds each sentence to array list 
@@ -97,11 +96,10 @@ public class SentimentAnalyser {
         int start = iterator.first();
         for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
             sentences.add(plaintext.substring(start,end));
-            count1++;
         }
 
         //Store compound score of each sentence in an array
-        double[] values = new double[count1];
+        double[] values = new double[count];
         for (int i = 0; i < sentences.size(); i++) {
             values[i] = SentimentAnalyzer.getScoresFor(sentences.get(i)).getCompoundPolarity();
         }
@@ -110,16 +108,16 @@ public class SentimentAnalyser {
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);
         for (double i : values) {
-            if ( (i > standev) && (i < -1*standev)) {
+            if ( (i > 1*standev) != (i < -1*standev) ) {
                 compound += i;
-                count2++;
+                count++;
             }
         }
         
-        if (count2 == 0) {
+        if (count == 0) {
             return compound;
         } else {
-            return compound/count2;
+            return compound/count;
         }
     }
 

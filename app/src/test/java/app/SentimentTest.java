@@ -56,6 +56,8 @@ public class SentimentTest {
     @Test
     public void test_main() throws IOException{
 
+        SentimentAnalyser.main(test);
+        SentimentAnalyser.main(test2);
         //Perform tests
         test_main_consistency();
         test_main_correctness();
@@ -69,15 +71,12 @@ public class SentimentTest {
 
     @Test
     private void test_main_consistency() throws IOException{
-        SentimentAnalyser.main(test);
-        SentimentAnalyser.main(test2);
         assertTrue(test.getWeights().equals(test2.getWeights()));
         assertTrue(test.getCompound().equals(test2.getCompound()));
         assertTrue(test.getKey_Results().equals(test2.getKey_Results()));
     }
 
     private void test_main_correctness() throws IOException{
-        SentimentAnalyser.main(test);
         ArrayList<String> krs = new ArrayList<String>();
         krs.add("Terrible, just terrible.");
         krs.add("3");

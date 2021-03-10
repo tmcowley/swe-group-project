@@ -413,37 +413,45 @@ public class DbConnection{
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
-    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] type, Boolean[] key, Float compound, String[] key_results){
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, Float compound, String[] key_results){
+
+        // results         TEXT[],
+        // weights         REAL[],
+        // types           bytea,
+        // keys            BOOLEAN[],
+        // sub_weights     bytea[],
+        // compound        REAL,
+        // key_results     TEXT[],
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer feedback_id = null;
         try{
             String createProcessedFeedback = ""
-                + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results, weights, type, key, compound, key_results) "
+                + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results, weights, types, keys, compound, key_results) "
                 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
                 + "RETURNING feedback_id;";
             stmt = this.conn.prepareStatement(createProcessedFeedback);
 
-            System.out.println(participant_id);
-            System.out.println(event_id);
-            System.out.println(anonymous);
-            System.out.println(time_stamp);
-            System.out.println(results);
-            System.out.println(weights);
-            System.out.println(type);
-            System.out.println(key);
-            System.out.println(compound);
-            System.out.println(key_results);
+            // System.out.println(participant_id);
+            // System.out.println(event_id);
+            // System.out.println(anonymous);
+            // System.out.println(time_stamp);
+            // System.out.println(results);
+            // System.out.println(weights);
+            // System.out.println(types);
+            // System.out.println(key);
+            // System.out.println(compound);
+            // System.out.println(key_results);
 
             stmt.setInt(1, participant_id);
             stmt.setInt(2, event_id);
             stmt.setBoolean(3, anonymous);
             stmt.setTimestamp(4, time_stamp);
             stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
-            stmt.setArray(6, this.conn.createArrayOf("REAL", weights));
-            stmt.setBytes(7, type);
-            stmt.setArray(8, this.conn.createArrayOf("BOOLEAN", key));
+            stmt.setArray(6, this.conn.createArrayOf("float4", weights));
+            stmt.setBytes(7, types);
+            stmt.setArray(8, this.conn.createArrayOf("BOOLEAN", keys));
             stmt.setFloat(9, compound);
             stmt.setArray(10, this.conn.createArrayOf("TEXT", key_results));
 

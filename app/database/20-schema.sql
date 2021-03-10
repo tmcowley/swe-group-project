@@ -132,16 +132,25 @@ CREATE TABLE archived_event(
     PRIMARY KEY (event_id)
 );
 
+-- private String[] results; // Holds results to specific feedback queries
+-- private Float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
+-- private byte[] types; // Holds the type of query that produced each result
+-- private Boolean[] keys; // Holds whether a result is a key result or not (true = key result)
+-- private byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
+-- private boolean anonymous;
+-- private Timestamp timestamp;
+-- private Float compound; // Holds the compound score (part of sentiment)
+-- private ArrayList<String> key_results; // Holds an array of all key results
+
 CREATE TABLE feedback(
     feedback_id     SERIAL          NOT NULL,
     participant_id  INT             NOT NULL,
     event_id        INT             NOT NULL,
-    -- data            VARCHAR(200)    NOT NULL,
-    -- sentiment       VARCHAR(40)     NOT NULL,
     results         TEXT[],
     weights         REAL[],
-    type            INT[],
-    key             INT[],
+    types           bytea,
+    keys            BOOLEAN[],
+    sub_weights     bytea[],
     compound        REAL,
     key_results     TEXT[],
     anonymous       BOOLEAN         NOT NULL

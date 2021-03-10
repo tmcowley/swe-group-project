@@ -51,7 +51,8 @@ public class SentimentTest {
         try{
             SentimentAnalyser.main(test);
             SentimentAnalyser.main(test2);
-        } catch (IOException ioe){
+        } catch (Exception e){
+            e.printStackTrace();
             assertTrue(false);
         }
     }

@@ -278,9 +278,13 @@ public class Validator {
     }
 
     /** TODO: validate more data
-     * TODO: add a test that checks weights is valid (either all values ints between 0 and 7 or all values sum to 1)
-     * TODO: add a test checking that the arrays that should be of the same length are of the same length
-     * TODO: add a test checking the rows of sub_weights are each of length 5
+     * TODO: Check all values in sub_weights are between 0 and 7
+     * TODO: Check results, weights, types, keys are of the same length and that length is at least 1
+     * TODO: check sub_weights holds as many arrays as results (and the other arrays) hold items - (sub weights has x rows)
+     * TODO: check each array held in sub_weights is of size 5 - (sub weights has 5 columns)
+     * TODO: add a test that checks either all values in weights are int between 0 and 7 or all values sum to 1.0
+     * TODO: add a test that checks all values in types are between 0 and 2
+     * TODO: check there are no empty strings in results
      * Check if Feedback is valid:
      * check every data inside
      * @param feedback Feedback instance to be checked

@@ -262,18 +262,18 @@ public class APIController {
         } else {
             host = request.session().attribute("host");
         }
-        
+
         // return host homepage if host is found
         if (v.isHostValid(host)) {
+            System.out.println("Notice: host is valid");
             Map<String, Object> model = new HashMap<>();
             model.put("fName", host.getFName());
             model.put("lName", host.getLName());
             return ViewUtil.render(request, model, "/velocity/host-home.vm");
         }
 
-        // return notfound if host is not found or hostcode is not valid
-        System.out.println("Error: Host not found or host-code invalid");
+        System.out.println("Error: Host is invalid");
         //return ViewUtil.notFound;
-        return "Error: Host not found or host-code invalid";
+        return "Error: Host is invalid";
     };
 }

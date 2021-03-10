@@ -6,7 +6,6 @@ import app.App;
 import app.util.*;
 import app.objects.*;
 
-
 public class participantEventController {
 
     /** Serve the participant-event page (GET request) */

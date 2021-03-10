@@ -9,17 +9,30 @@ package app.sentimentanalysis;
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.Locale;
+
+import app.Validator;
 import app.objects.*;
 import java.util.ArrayList;
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+
+// for event code sanitization
+import org.apache.commons.lang3.ArrayUtils; 
+
 public class SentimentAnalyser {
 
-/**
+    Validator v = new Validator();
+
+    /**
      * Take a feedback object and updated it to include sentiment
      * @param feedback feedback to be analysed for sentiment
      */
     public static void main(Feedback feedback) throws IOException{
+
+        if (!v.feedbackIsValid(feedback)){
+            System.out.println("Error: feedback instance is invalid");
+            return;
+        }
     
         byte[] types = feedback.getTypes(); //Holds type of feedback for each result
         String[] results = feedback.getResults(); //Holds type of feedback for each result
@@ -29,6 +42,29 @@ public class SentimentAnalyser {
         int sum = 0; //Sum of all weights, used in weights processing
         float[] compounds = new float[amount]; //Holds compound score for each feedback result
 
+        // ensure non-empty arrays
+        if (!ArrayUtils.isNotEmpty(types)){
+            System.out.println("Error: array:types is null or empty");
+            return;
+        }
+        if (!ArrayUtils.isNotEmpty(results)){
+            System.out.println("Error: array:results is null or empty");
+            return;
+        }
+        if (!ArrayUtils.isNotEmpty(keys))
+            System.out.println("Error: array:keys is null or empty");
+            return;
+        }
+        if (!ArrayUtils.isNotEmpty(weights)){
+            System.out.println("Error: array:weights is null or empty");
+            return;
+        }
+        if (!ArrayUtils.isNotEmpty(compounds)){
+            System.out.println("Error: array:compounds is null or empty");
+            return;
+        }
+
+        
         //Process host inputted weights into floats that sum to 1.0
         for (int i = 0; i < amount; i++ ) {
             sum += weights[i];

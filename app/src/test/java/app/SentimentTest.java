@@ -32,6 +32,8 @@ public class SentimentTest {
     @Test
     public void test_main() {
 
+        System.out.println(SentimentAnalyser.getFromFull("I hate hate hate hate pomegranets. No pomegranets"));
+
         //Perform tests
         test_main_consistency();
         test_main_correctness();

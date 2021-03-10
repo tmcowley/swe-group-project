@@ -58,7 +58,6 @@
     </dependency>
 
     <!-- org.apache.commons.lang3.StringUtils; -->
-
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -95,7 +94,7 @@
       <version>3.34.0</version>
     </dependency>  
 
-    <!-- For comparing two ArrayLists -->
+    <!-- For ArrayList comparison -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>

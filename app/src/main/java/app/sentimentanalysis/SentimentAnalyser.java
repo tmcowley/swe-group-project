@@ -151,4 +151,9 @@ public class SentimentAnalyser {
         return ((compound/count)-4f)/3f;
     }
 
+    // test method
+    public static Float getFromFull(String a){
+        return SentimentAnalyzer.getScoresFor(a).getCompoundPolarity();
+    }
+
 }

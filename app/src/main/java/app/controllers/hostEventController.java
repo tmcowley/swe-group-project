@@ -26,6 +26,7 @@ public class hostEventController {
         System.out.println("Notice: hostEventcontroller servePage called");
 
         Validator v = App.getInstance().getValidator();
+        DbConnection db = App.getInstance().getDbConnection();
 
         // start session
         request.session(true);
@@ -44,7 +45,7 @@ public class hostEventController {
         // return host event page if event is created
         request.session().attribute("event", event);
         Map<String, Object> model = new HashMap<>();
-        Feedback[] feedbacks = App.getInstance().getDbConnection().getFeedbacksByEventID(event.getEventID());
+        Feedback[] feedbacks = db.getFeedbacksByEventID(event.getEventID());
         int feedbackCount = 0;
         if (feedbacks.length != 0) {
 
@@ -55,8 +56,7 @@ public class hostEventController {
             List<String> time = new ArrayList<String>();
             for (Feedback feedback : feedbacks) {
                 if (!feedback.getAnonymous()) {
-                    Participant participant = App.getInstance().getDbConnection()
-                            .getParticipant(feedback.getParticipantID());
+                    Participant participant = db.getParticipant(feedback.getParticipantID());
                     participantFName.add(participant.getFName());
                     participantLName.add(participant.getLName());
                 } else {
@@ -79,6 +79,7 @@ public class hostEventController {
             model.put("feedbackData", feedbackData);
             model.put("sentiment", sentiment);
             model.put("time", time);
+
         }
         model.put("feedbackCount", feedbackCount);
         model.put("eventTitle", event.getTitle());

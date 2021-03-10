@@ -273,7 +273,7 @@ public class DbConnection{
         try{
             String createEvent = ""
                 + "INSERT INTO event(host_id, title, description, type, start_time, end_time, event_code) "
-                + "VALUES(?, ?, ?, ?::event_type, ?, ?, ?) "
+                + "VALUES(?, ?, ?, ?::type, ?, ?, ?) "
                 + "RETURNING event_id";
             stmt = this.conn.prepareStatement(createEvent);
             stmt.setInt(1, host_id);

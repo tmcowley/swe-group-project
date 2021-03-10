@@ -43,7 +43,9 @@ public class APIController {
                 || db.emailExists(e_address)) {
             // return ViewUtil.notFound; -> TODO
             System.out.println("Error: field invalid or email exists");
-            return "Error: field invalid or email exists";
+            
+            // TODO return "Error: field invalid or email exists";
+            return ViewUtil.render(request, new HashMap<>(), "/velocity/host-event.vm");
         }
         // System.out.println("Notice: createHost fields collected and validated");
 

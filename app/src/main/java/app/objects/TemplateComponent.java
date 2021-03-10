@@ -147,4 +147,19 @@ public class TemplateComponent {
   public String getTextResponse(){
     return this.textResponse;
   }
+
+  public boolean equals(TemplateComponent that){
+    if(this.id != that.getId())
+      return false;
+    if(this.name != that.getName())
+      return false;
+    if(!ArrayUtils.equals(this.options, that.getOptions()))
+      return false;
+    if(this.optionsAns != that.getOptionsAns())
+      return false;
+    if(this.prompt != that.getPrompt())
+      return false;
+    
+    return true;
+  }
 }

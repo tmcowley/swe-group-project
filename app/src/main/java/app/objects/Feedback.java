@@ -137,15 +137,24 @@ public class Feedback {
     public ArrayList<String> getKey_Results() {
         return this.key_results;
     }
-
+    /**
+     * gets whether or not a feedback submission is anonymous or not
+     * @return True or False
+     */
     public boolean getAnonymous() {
         return this.anonymous;
     }
-
+    /**
+     * gets timestamp of a feedback submission
+     * @return timestamp
+     */
     public Timestamp getTimestamp() {
         return this.timestamp;
     }
-
+    /**
+     * gets weights (unprocessed then processed) associated with each set result in multiple choice queries
+     * @return weights
+     */
     public byte[][] getSub_Weights() {
         return this.sub_weights;
     }
@@ -165,7 +174,11 @@ public class Feedback {
     public void addKey_Results(String new_key_result) {
         this.key_results.add(new_key_result);
     }
-
+    /**
+     * compares 2 feedback objects
+     * @param that
+     * @return True or False
+     */
     public boolean equals(Feedback that) {
         if (this.event_id != that.getEventID())
             return false;

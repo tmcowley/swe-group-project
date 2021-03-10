@@ -8,126 +8,128 @@
         login stuff goes here
     </div>
 </header>
-<div id="mainFormSection">
-    <div id="mainForm">
-        <form action="" method="post">
-            <div id="feedbackFormMain">
-                <div class="feedbackElement">
-                    <input class="formInput" type="text" placeholder="Enter Text">
-                    <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
-                </div>
-                <button class="feedbackDelButton">del</button>
-                <div class="feedbackElementFooter">
-                    <input type="checkbox" id="consider1" name="consider1" value="Consider">
-                    <label for="consider1">
-                        Consider in sentiment</label><br>
-                    <label for="rating1">Rating (1-5):</label>
-                    <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
-                </div>
-                <div class="feedbackElement">
-                    <input class="formInput" type="text" placeholder="Enter Text">
-                    <!-- the images are radio buttons -->
-                    <div class="feelingRadioContainer">
-                        <div class="feelingRadio">
-                            <input type="radio" id="happy" name="feeling" value="happy">
-                            <div class="feelingRadioImg happy"></div>
-                        </div>
-                        <div class="feelingRadio">
-                            <input type="radio" id="ok" name="feeling" value="ok">
-                            <div class="feelingRadioImg ok"></div>
-                        </div>
-                        <div class="feelingRadio">
-                            <input type="radio" id="sad" name="feeling" value="sad">
-                            <div class="feelingRadioImg sad"></div>
+<div id="mainBodyContainerOneCol">
+    <div id="mainFormSection">
+        <div id="mainForm">
+            <form action="" method="post">
+                <div id="feedbackFormMain">
+                    <div class="feedbackElement">
+                        <input class="formInput" type="text" placeholder="Enter Text">
+                        <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
+                    </div>
+                    <button class="feedbackDelButton">del</button>
+                    <div class="feedbackElementFooter">
+                        <input type="checkbox" id="consider1" name="consider1" value="Consider">
+                        <label for="consider1">
+                            Consider in sentiment</label><br>
+                        <label for="rating1">Rating (1-5):</label>
+                        <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
+                    </div>
+                    <div class="feedbackElement">
+                        <input class="formInput" type="text" placeholder="Enter Text">
+                        <!-- the images are radio buttons -->
+                        <div class="feelingRadioContainer">
+                            <div class="feelingRadio">
+                                <input type="radio" id="happy" name="feeling" value="happy">
+                                <div class="feelingRadioImg happy"></div>
+                            </div>
+                            <div class="feelingRadio">
+                                <input type="radio" id="ok" name="feeling" value="ok">
+                                <div class="feelingRadioImg ok"></div>
+                            </div>
+                            <div class="feelingRadio">
+                                <input type="radio" id="sad" name="feeling" value="sad">
+                                <div class="feelingRadioImg sad"></div>
+                            </div>
                         </div>
                     </div>
+                    <button class="feedbackDelButton">del</button>
+                    <div class="feedbackElementFooter">
+                        <input type="checkbox" id="consider2" name="consider2" value="Consider">
+                        <label for="consider2">
+                            Consider in sentiment</label><br>
+                        <label for="rating2">Rating (1-5):</label>
+                        <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
+                    </div>
+                    <div class="feedbackElement">
+                        <input class="formInput" type="text" placeholder="Enter Text">
+                        <!-- Radio buttons are just 5 text boxes -->
+                        <div class="formInputBulletIcon">&bull;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating1">Rating (1-7):</label>
+                        <input type="number" id="bulletrating1" name="bulletrating1" min="1" max="7"><br>
+                        <div class="formInputBulletIcon">&bull;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating2">Rating (1-7):</label>
+                        <input type="number" id="bulletrating2" name="bulletrating2" min="1" max="7"><br>
+                        <div class="formInputBulletIcon">&bull;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating3">Rating (1-7):</label>
+                        <input type="number" id="bulletrating3" name="bulletrating3" min="1" max="7"><br>
+                        <div class="formInputBulletIcon">&bull;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating4">Rating (1-7):</label>
+                        <input type="number" id="bulletrating4" name="bulletrating4" min="1" max="7"><br>
+                        <div class="formInputBulletIcon">&bull;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating5">Rating (1-7):</label>
+                        <input type="number" id="bulletrating5" name="bulletrating5" min="1" max="7"><br>
+                    </div>
+                    <button class="feedbackDelButton">del</button>
+                    <div class="feedbackElementFooter">
+                        <input type="checkbox" id="consider3" name="consider3" value="Consider">
+                        <label for="consider3">
+                            Consider in sentiment</label><br>
+                        <label for="rating3">Rating (1-5):</label>
+                        <input type="number" id="rating3" name="rating3" min="1" max="5"><br>
+                        <input type="checkbox" id="highlight3" name="highlight3" value="Consider">
+                        <label for="highlight3">
+                            Highlight?</label>
+                    </div>
+                    <div class="feedbackElement">
+                        <input class="formInput" type="text" placeholder="Enter Text">
+                        <!-- Radio buttons are just 5 text boxes -->
+                        <div class="formInputCheckIcon">&#x2611;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating6">Rating (1-7):</label>
+                        <input type="number" id="bulletrating6" name="bulletrating6" min="1" max="7"><br>
+                        <div class="formInputCheckIcon">&#x2611;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating7">Rating (1-7):</label>
+                        <input type="number" id="bulletrating7" name="bulletrating7" min="1" max="7"><br>
+                        <div class="formInputCheckIcon">&#x2611;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating8">Rating (1-7):</label>
+                        <input type="number" id="bulletrating8" name="bulletrating8" min="1" max="7"><br>
+                        <div class="formInputCheckIcon">&#x2611;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating9">Rating (1-7):</label>
+                        <input type="number" id="bulletrating9" name="bulletrating9" min="1" max="7"><br>
+                        <div class="formInputCheckIcon">&#x2611;</div>
+                        <input class="formInputBullet" type="text" placeholder="Enter Text">
+                        <label for="bulletrating0">Rating (1-7):</label>
+                        <input type="number" id="bulletrating0" name="bulletrating0" min="1" max="7"><br>
+                    </div>
+                    <button class="feedbackDelButton">del</button>
+                    <div class="feedbackElementFooter">
+                        <input type="checkbox" id="consider4" name="consider4" value="Consider">
+                        <label for="consider4">
+                            Consider in sentiment</label><br>
+                        <label for="rating4">Rating (1-5):</label>
+                        <input type="number" id="rating4" name="rating4" min="1" max="5"><br>
+                    </div>
                 </div>
-                <button class="feedbackDelButton">del</button>
-                <div class="feedbackElementFooter">
-                    <input type="checkbox" id="consider2" name="consider2" value="Consider">
-                    <label for="consider2">
-                        Consider in sentiment</label><br>
-                    <label for="rating2">Rating (1-5):</label>
-                    <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
+                <div id="templateAddNewControls">
+                    <a href="#">Add Textarea</a>
+                    <a href="#">Add Emojis</a>
+                    <a href="#">Add Radio Buttons</a>
+                    <a href="#">Add Tickboxes</a>
                 </div>
-                <div class="feedbackElement">
-                    <input class="formInput" type="text" placeholder="Enter Text">
-                    <!-- Radio buttons are just 5 text boxes -->
-                    <div class="formInputBulletIcon">&bull;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating1">Rating (1-7):</label>
-                    <input type="number" id="bulletrating1" name="bulletrating1" min="1" max="7"><br>
-                    <div class="formInputBulletIcon">&bull;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating2">Rating (1-7):</label>
-                    <input type="number" id="bulletrating2" name="bulletrating2" min="1" max="7"><br>
-                    <div class="formInputBulletIcon">&bull;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating3">Rating (1-7):</label>
-                    <input type="number" id="bulletrating3" name="bulletrating3" min="1" max="7"><br>
-                    <div class="formInputBulletIcon">&bull;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating4">Rating (1-7):</label>
-                    <input type="number" id="bulletrating4" name="bulletrating4" min="1" max="7"><br>
-                    <div class="formInputBulletIcon">&bull;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating5">Rating (1-7):</label>
-                    <input type="number" id="bulletrating5" name="bulletrating5" min="1" max="7"><br>
-                </div>
-                <button class="feedbackDelButton">del</button>
-                <div class="feedbackElementFooter">
-                    <input type="checkbox" id="consider3" name="consider3" value="Consider">
-                    <label for="consider3">
-                        Consider in sentiment</label><br>
-                    <label for="rating3">Rating (1-5):</label>
-                    <input type="number" id="rating3" name="rating3" min="1" max="5"><br>
-                    <input type="checkbox" id="highlight3" name="highlight3" value="Consider">
-                    <label for="highlight3">
-                        Highlight?</label>
-                </div>
-                <div class="feedbackElement">
-                    <input class="formInput" type="text" placeholder="Enter Text">
-                    <!-- Radio buttons are just 5 text boxes -->
-                    <div class="formInputCheckIcon">&#x2611;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating6">Rating (1-7):</label>
-                    <input type="number" id="bulletrating6" name="bulletrating6" min="1" max="7"><br>
-                    <div class="formInputCheckIcon">&#x2611;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating7">Rating (1-7):</label>
-                    <input type="number" id="bulletrating7" name="bulletrating7" min="1" max="7"><br>
-                    <div class="formInputCheckIcon">&#x2611;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating8">Rating (1-7):</label>
-                    <input type="number" id="bulletrating8" name="bulletrating8" min="1" max="7"><br>
-                    <div class="formInputCheckIcon">&#x2611;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating9">Rating (1-7):</label>
-                    <input type="number" id="bulletrating9" name="bulletrating9" min="1" max="7"><br>
-                    <div class="formInputCheckIcon">&#x2611;</div>
-                    <input class="formInputBullet" type="text" placeholder="Enter Text">
-                    <label for="bulletrating0">Rating (1-7):</label>
-                    <input type="number" id="bulletrating0" name="bulletrating0" min="1" max="7"><br>
-                </div>
-                <button class="feedbackDelButton">del</button>
-                <div class="feedbackElementFooter">
-                    <input type="checkbox" id="consider4" name="consider4" value="Consider">
-                    <label for="consider4">
-                        Consider in sentiment</label><br>
-                    <label for="rating4">Rating (1-5):</label>
-                    <input type="number" id="rating4" name="rating4" min="1" max="5"><br>
-                </div>
-            </div>
-            <div id="templateAddNewControls">
-                <a href="#">Add Textarea</a>
-                <a href="#">Add Emojis</a>
-                <a href="#">Add Radio Buttons</a>
-                <a href="#">Add Tickboxes</a>
-            </div>
-            <input type="submit" id="submitButtonTemplate" value="Save">
-            <a href="#">Delete</a>
-            <a href="#">Back</a>
-        </form>
+                <input type="submit" id="submitButtonTemplate" value="Save">
+                <a href="#">Delete</a>
+                <a href="#">Back</a>
+            </form>
+        </div>
     </div>
 </div>
 #end

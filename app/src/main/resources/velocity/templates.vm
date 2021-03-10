@@ -9,16 +9,21 @@
         login stuff goes here
     </div>
 </header>
-<div id="mainFormSection">
-    <div id="mainForm">
-        <h1>My Templates</h1>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a><br>
-        <a href="/host/templates/edit/code">My Template 1</a>
+<div id="mainBodyContainerOneCol">
+    <div id="mainFormSection">
+        <div id="hostHomeContainer">
+            <h1>My Templates</h1>
+            <div id="landingJoinContainer">
+                <a href="/host/templates/new" id="landingHostButton">Create New Template</a>
+            </div>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+        </div>
     </div>
 </div>
 #end

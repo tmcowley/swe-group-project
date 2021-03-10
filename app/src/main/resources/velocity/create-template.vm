@@ -1,7 +1,19 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<form>
-    <input type="text" id="templateName" name="templateName" placeholder="Template Name">
-    <input type="submit" value="Submit">
-</form>
+<header>
+    <div id="headerLeft">
+        Resmodus
+    </div>
+    <div id="headerRight">
+        login stuff goes here
+    </div>
+</header>
+<div id="mainBodyContainerOneCol">
+    <div id="hostHomeContainer">
+        <form>
+            <input type="text" id="templateName" name="templateName" placeholder="Template Name">
+            <input id="hostCodeContinue" type="submit" value="Submit">
+        </form>
+    </div>
+</div>
 #end

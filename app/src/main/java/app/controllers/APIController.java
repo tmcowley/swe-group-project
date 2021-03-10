@@ -30,7 +30,7 @@ public class APIController {
      * @return host object
      */
     public static Route createHost = (Request request, Response response) -> {
-        System.out.println("createHost API endpoint recognized request \n");
+        System.out.println("Notice: createHost API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect form attributes, validate attributes and ensure email address is
@@ -136,7 +136,7 @@ public class APIController {
             return ViewUtil.render(request, model, "/velocity/host-event.vm");
         }
         // return not found if event is not created or input is not valid
-        return "Event not considered valid - check inputs";
+        return "Error: event considered invalid - check inputs";
     };
 
     // form sent by participant to join an event
@@ -147,11 +147,11 @@ public class APIController {
      * @param response
      */
     public static Route joinEvent = (Request request, Response response) -> {
-        System.out.println("joinEvent API endpoint recognized request \n");
+        System.out.println("Notice: joinEvent API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
 
         // Get form attributes, ensure attributes are valid
-        String f_name = request.queryParams("participantFNname");
+        String f_name = request.queryParams("participantFName");
         String l_name = request.queryParams("participantLName");
         String eventCode = request.queryParams("eventCode");
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eventCodeIsValid(eventCode)) {
@@ -182,10 +182,9 @@ public class APIController {
         return "Error: the event was invalid";
     };
 
-    // form sent by participant (in event) to create an instance of feedback
     /**
-     * this method allows a participant in an event to create an instance of
-     * feedback
+     * this method allows a participant in an event to create an instance of feedback
+     * form sent by participant (in event) to create an instance of feedback
      * 
      * @param request
      * @param response
@@ -194,6 +193,8 @@ public class APIController {
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("Notice: createFeedback API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
+        Session session = request.session();
+
         // start session
         request.session(true);
         // return not found if session is new
@@ -201,9 +202,10 @@ public class APIController {
             // return ViewUtil.notFound;
             return "Error: Session not found";
         }
+
         // initialise event and input
-        Event event = request.session().attribute("event");
-        Participant participant = request.session().attribute("participant");
+        Event event = session.attribute("event");
+        Participant participant = session.attribute("participant");
         String[] results = { request.queryParams("feedbackData") };
         Float[] weights = { 4f };
         byte[] types = { 0 };
@@ -232,10 +234,11 @@ public class APIController {
                     feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
                     feedback.getKeys(), feedback.getCompound(), keyResults);
             return "/event/join/code";
-
         }
+
         // return not found if feedback is not created
-        return ViewUtil.notFound;
+        //return ViewUtil.notFound;
+        return "Error: feedback considered invalid";
     };
 
     /**
@@ -246,7 +249,7 @@ public class APIController {
      */
 
     public static Route hostLogin = (Request request, Response response) -> {
-        System.out.println("hostLogin API endpoint recognized request \n");
+        System.out.println("Notice: hostLogin API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
         // initialise host
         Host host = null;

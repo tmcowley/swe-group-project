@@ -16,9 +16,8 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 public class SentimentAnalyser {
 
 /**
-     * Take feedback and return sentiment
+     * Take a feedback object and updated it to include sentiment
      * @param feedback feedback to be analysed for sentiment
-     * @return sentiment containing compound score (add key results?)
      */
     public static void main(Feedback feedback) throws IOException{
     
@@ -150,10 +149,10 @@ public class SentimentAnalyser {
         }
         return ((compound/count)-4f)/3f;
     }
-
-    // test method
-    public static Float getFromFull(String a){
-        return SentimentAnalyzer.getScoresFor(a).getCompoundPolarity();
-    }
+    
+ // test method
+ public static Float getFromFull(String a){
+    return SentimentAnalyzer.getScoresFor(a).getCompoundPolarity();
+}
 
 }

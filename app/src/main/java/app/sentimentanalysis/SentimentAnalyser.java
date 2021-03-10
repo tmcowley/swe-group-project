@@ -162,7 +162,7 @@ public class SentimentAnalyser {
             values[i] = SentimentAnalyzer.getScoresFor(sentences.get(i)).getCompoundPolarity();
         }
 
-        // Remove compound scores that [fall within one standard deviation from 0] - may
+        // Remove compound scores that [fall within one standard deviation from 0]
         // change
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);

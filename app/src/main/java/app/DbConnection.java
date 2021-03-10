@@ -405,6 +405,17 @@ public class DbConnection{
                 + "RETURNING feedback_id;";
             stmt = this.conn.prepareStatement(createProcessedFeedback);
 
+            System.out.println(participant_id);
+            System.out.println(event_id);
+            System.out.println(anonymous);
+            System.out.println(time_stamp);
+            System.out.println(results);
+            System.out.println(weights);
+            System.out.println(type);
+            System.out.println(key);
+            System.out.println(compound);
+            System.out.println(key_results);
+
             stmt.setInt(1, participant_id);
             stmt.setInt(2, event_id);
             stmt.setBoolean(3, anonymous);
@@ -426,7 +437,7 @@ public class DbConnection{
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
-
+        System.out.println(feedback_id);
         return getFeedback(feedback_id);
     }
 
@@ -913,7 +924,32 @@ public class DbConnection{
     }
 
     public Feedback getFeedback(int feedback_id){
-        return null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Feedback feedback = null;
+        try{
+            String queryFeedback = "SELECT * FROM feedback WHERE feedback_id=?;";
+            stmt = this.conn.prepareStatement(queryFeedback);
+            stmt.setInt(1, feedback_id);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                ArrayList<String> keyResults = new ArrayList<String>();
+                String[] keyresults = (String[]) rs.getArray("key_results").getArray();
+                for (String result : keyresults) {
+                    keyResults.add(result);
+                }
+                feedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
+                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), keyResults);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        return feedback;
     }
 
     public Feedback[] getFeedbacksByEventID(int event_id){
@@ -932,8 +968,13 @@ public class DbConnection{
             int feedbackCount = 0;
             rs.beforeFirst();
             if (rs.next()) {
+                ArrayList<String> keyResults = new ArrayList<String>();
+                String[] keyresults = (String[]) rs.getArray("key_results").getArray();
+                for (String result : keyresults) {
+                    keyResults.add(result);
+                }
                 foundFeedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
-                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), new ArrayList<String>());
+                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), keyResults);
                 foundFeedbacks[feedbackCount] = foundFeedback;
                 feedbackCount++;
             }

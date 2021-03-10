@@ -189,7 +189,8 @@ public class APIController {
         SentimentAnalyser.main(feedback);
         //return to event page if feedback is created
         if (v.isFeedbackValid(feedback)) {
-            String[] keyResults = (String[]) feedback.getKey_Results().toArray();
+            String[] arrs = new String[feedback.getKey_Results().size()];
+            String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
             db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getCompound(), keyResults);
             return "/event/join/code";
         }

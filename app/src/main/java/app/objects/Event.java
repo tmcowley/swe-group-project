@@ -22,7 +22,7 @@ public class Event {
     private Timestamp end_time;
     private String eventCode;
     /**
-     * Event constructer
+     * Event constructor
      * @param event_id
      * @param host_id
      * @param template_id

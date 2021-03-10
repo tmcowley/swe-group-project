@@ -68,8 +68,8 @@ public class SentimentAnalyser {
         }
 
         // Process host inputted weights into floats that sum to 1.0
-        for (int i = 0; i < amount; i++) {
-            sum += weights[i];
+        for (Float i : weights) {
+            sum += i;
         }
         for (int i = 0; i < amount; i++) {
             if (weights[i] != 0) {

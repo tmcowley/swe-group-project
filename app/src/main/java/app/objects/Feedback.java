@@ -18,11 +18,11 @@ public class Feedback {
     private byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
     private boolean anonymous;
     private Timestamp timestamp;
-    private float compound; // Holds the compound score (part of sentiment)
+    private Float compound; // Holds the compound score (part of sentiment)
     private ArrayList<String> key_results; // Holds an array of all key results
 
     /**
-     * Feedback constructer when sentiment is unknown
+     * Feedback constructor when sentiment is unknown
      * @param participant_id
      * @param event_id
      * @param results
@@ -43,12 +43,12 @@ public class Feedback {
         this.weights = weights;
         this.types = types;
         this.keys = keys;
-        this.compound = 0f;
+        this.compound = null;
         this.key_results = new ArrayList<String>();
         this.sub_weights = sub_weights;
     }
     /**
-     * Feedback constructer when sentiment is known
+     * Feedback constructor when sentiment is known
      * @param feedback_id
      * @param participant_id
      * @param event_id
@@ -63,7 +63,7 @@ public class Feedback {
      * @param key_results
      */
     public Feedback(int feedback_id, int participant_id, int event_id,
-            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, float compound, ArrayList<String> key_results) {
+            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, Float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;
@@ -130,7 +130,7 @@ public class Feedback {
      * gets compound score
      * @return compound score
      */
-    public float getCompound() {
+    public Float getCompound() {
         return this.compound;
     }
     
@@ -158,7 +158,7 @@ public class Feedback {
         this.weights[index] = new_weight;
     }
 
-    public void setCompound(float new_compound) {
+    public void setCompound(Float new_compound) {
         this.compound = new_compound;
     }
 

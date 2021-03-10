@@ -185,14 +185,20 @@ public class APIController {
             anonymous = true;
         }
 
+        System.out.println("Notice: generating feedback instance.");
         Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
         SentimentAnalyser.main(feedback);
+        if (feedback.getCompound() != null){
+            System.out.println("Notice: SA successful");
+        }
+
         //return to event page if feedback is created
         if (v.isFeedbackValid(feedback)) {
             String[] arrs = new String[feedback.getKey_Results().size()];
             String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
             db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getCompound(), keyResults);
             return "/event/join/code";
+            
         }
         //return not found if feedback is not created
         return ViewUtil.notFound;

@@ -63,10 +63,12 @@ pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
 
 ### Start-up
 
-Compile, execute:
+Launch the web-app (after DB launch):
 ```
-cd app; mvn compile 
-mvn exec:java 
+cd app; 
+mvn clean;
+mvn compile;
+mvn exec:java; 
 ```
 
 Run tests: `mvn test`

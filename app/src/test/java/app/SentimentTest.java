@@ -51,16 +51,16 @@ public class SentimentTest {
         //Perform tests
         test_main_consistency();
         test_main_correctness();
-        //test_main_return();
+        //est_main_return();
     }
 
     private void test_main_consistency() throws IOException{
         Feedback test2 = new Feedback( i, i, results, weights, types, keys, sub_weights, f, timestamp);
         SentimentAnalyser.main(test);
         SentimentAnalyser.main(test2);
-        assertTrue(test.getWeights() == test2.getWeights());
-        assertTrue(test.getCompound() == test2.getCompound());
-        assertTrue(test.getKey_Results() == test2.getKey_Results());
+        assertTrue(test.getWeights().equals(test2.getWeights()));
+        assertTrue(test.getCompound().equals(test2.getCompound()));
+        assertTrue(test.getKey_Results().equals(test2.getKey_Results()));
     }
 
     private void test_main_correctness() throws IOException{
@@ -69,7 +69,7 @@ public class SentimentTest {
         krs.add("Terrible, just terrible.");
         krs.add("3");
         krs.add("1245");
-        assertTrue(test.getKey_Results() == krs);
+        assertTrue(test.getKey_Results().equals(krs));
         System.out.println(test.getCompound());
     }
 

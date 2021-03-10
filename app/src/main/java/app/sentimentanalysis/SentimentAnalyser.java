@@ -156,7 +156,7 @@ public class SentimentAnalyser {
         }
 
         // Store compound score of each sentence in an array
-        double[] values = new double[count];
+        double[] values = new double[sentences.size()];
         for (int i = 0; i < sentences.size(); i++) {
             values[i] = SentimentAnalyzer.getScoresFor(sentences.get(i)).getCompoundPolarity();
         }

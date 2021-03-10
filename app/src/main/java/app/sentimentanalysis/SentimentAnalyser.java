@@ -82,6 +82,10 @@ public class SentimentAnalyser {
         // Get compound score for each result, applying the interpretation method based
         // on result type
         for (int i = 0; i < amount; i++) {
+
+            if (StringUtils.isBlank(results[i]))
+                continue;
+            
             if (types[i] == 0) {
                 compounds[i] = getCompoundFromText(results[i]);
             }

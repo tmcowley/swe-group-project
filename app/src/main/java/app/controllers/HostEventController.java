@@ -1,12 +1,7 @@
 package app.controllers;
 
-import java.util.*;
+import java.util.ArrayList;
 
-import org.sqlite.core.DB;
-
-import java.net.*;
-import java.io.*;
-import java.sql.Timestamp;
 import spark.*;
 import app.App;
 import app.DbConnection;
@@ -15,15 +10,14 @@ import app.objects.Event;
 import app.objects.Feedback;
 import app.objects.Host;
 import app.objects.Participant;
-import app.objects.Template;
 import app.util.*;
 
-public class hostEventController {
+public class HostEventController {
 
     // TODO description
     public static Route servePage = (Request request, Response response) -> {
 
-        System.out.println("Notice: hostEventcontroller servePage called");
+        System.out.println("Notice: HostEventController servePage called");
 
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();

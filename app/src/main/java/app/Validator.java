@@ -164,16 +164,20 @@ public class Validator {
      * @return name validity state
      */
     public boolean nameIsValid(String name){
-        if (name != null && !name.isEmpty()) {
-			// first name regular expression
-			String regex = "^[A-Z][a-z]+$";
+        // if (name != null && !name.isEmpty()) {
+		// 	// first name regular expression
+		// 	String regex = "^[A-Z][a-z]+$";
 
-            // return true if name matches with the regular expression
-            if (name.matches(regex)) {
-                return true;
-            }
-        }
-        return false;
+        //     // return true if name matches with the regular expression
+        //     if (name.matches(regex)) {
+        //         return true;
+        //     }
+        // }
+
+        if (StringUtils.isBlank(name))
+            // name is not null, empty, or blank
+            return false;
+        return true;
     }
 
     /**

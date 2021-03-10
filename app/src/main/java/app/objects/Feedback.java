@@ -21,7 +21,18 @@ public class Feedback {
     private float compound; // Holds the compound score (part of sentiment)
     private ArrayList<String> key_results; // Holds an array of all key results
 
-
+    /**
+     * Feedback constructer when sentiment is unknown
+     * @param participant_id
+     * @param event_id
+     * @param results
+     * @param weights
+     * @param types
+     * @param keys
+     * @param sub_weights
+     * @param anonymous
+     * @param timestamp
+     */
     public Feedback(int participant_id, int event_id,
             String[] results, float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp) {
         this.participant_id = participant_id;
@@ -37,7 +48,7 @@ public class Feedback {
         this.sub_weights = sub_weights;
     }
     /**
-     * Feedback constructer
+     * Feedback constructer when sentiment is known
      * @param feedback_id
      * @param participant_id
      * @param event_id

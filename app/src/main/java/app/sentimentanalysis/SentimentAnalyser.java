@@ -22,10 +22,10 @@ public class SentimentAnalyser {
      */
     public static void main(Feedback feedback) throws IOException{
     
-        byte[] types = feedback.getTypes(); //Holds type of feedback for each result
+        Byte[] types = feedback.getTypes(); //Holds type of feedback for each result
         String[] results = feedback.getResults(); //Holds type of feedback for each result
         Boolean[] keys = feedback.getKeys(); //Holds type of feedback for each result
-        float[] weights = feedback.getWeights(); //Holds weights (unprocessed then processed) for weighted mean
+        Float[] weights = feedback.getWeights(); //Holds weights (unprocessed then processed) for weighted mean
         int amount = feedback.getResults().length; //Holds amount of results to be (possibly) interpreted for sentiment
         int sum = 0; //Sum of all weights, used in weights processing
         float[] compounds = new float[amount]; //Holds compound score for each feedback result
@@ -67,7 +67,7 @@ public class SentimentAnalyser {
          * @param scores real array of scores
          * @return weighted mean of compound scores
          */
-    private static float weightedMean(float[] weights, float[] scores) {
+    private static float weightedMean(Float[] weights, float[] scores) {
         float mean = 0; 
         for (int i = 0; i < weights.length; i++) {
                 mean += weights[i]*scores[i];
@@ -84,7 +84,7 @@ public class SentimentAnalyser {
     */
     private static float getCompoundFromText(String plaintext) throws IOException{
 
-        //TODO - fix padding
+        //TODO - fix padding (maybe make 2 sds above or below mean)
 
         float compound = 0; //Holds compound score derived from plaintext
         int count1 = 0; //Counts how many sentences are in plaintext
@@ -139,7 +139,7 @@ public class SentimentAnalyser {
      * @return Compound score for a specific query
      */
     private static float getCompoundFromMultiple(String data, int index, Feedback feedback) {
-        byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
+        Byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
         float compound = 0; //Holds compound score
         int count = 0; //Used to mean compound scores
         for (int i = 0; i < 5; i++ ) {

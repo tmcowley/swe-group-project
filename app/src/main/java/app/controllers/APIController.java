@@ -41,14 +41,8 @@ public class APIController {
 
             request.session().attribute("errorMessageLogin", "");
             request.session().attribute("errorMessageCreate", "Error: field invalid or email exists");
-            // return request.session().attribute("errorMessageCreate");
-
-            Map<String, Object> model = new HashMap<>();
-            model.put("errorMessageLogin", "");
-            model.put("errorMessageCreate", "Error: field invalid or email exists");
-
             response.redirect("/host/login");
-            return ViewUtil.render(request, model, "/velocity/create-host.vm");
+            return null;
         }
         // System.out.println("Notice: createHost fields collected and validated");
 
@@ -66,8 +60,8 @@ public class APIController {
 
             request.session().attribute("errorMessageLogin", "");
             request.session().attribute("errorMessageCreate", "Created host considered invalid. Please re-try");
-            return request.session().attribute("errorMessageCreate");
-            //response.redirect("/host/login");
+            response.redirect("/host/login");
+            return null;
         }
         // (broken) send email containing host-code to new host
         // e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);
@@ -259,15 +253,30 @@ public class APIController {
         // start session
         request.session(true);
         if (request.session().isNew()) {
-            String hostCode = request.queryParams("hostCode");
-            // validate input before interact with database
-            if (v.hostCodeIsValid(hostCode)) {
-                host = db.getHostByCode(hostCode);
-            }
-            request.session().attribute("host", host);
-        } else {
-            host = request.session().attribute("host");
+            // return ViewUtil.notFound;
+            return "Error: Session not found";
         }
+
+        String hostCode = request.queryParams("hostCode");
+
+        // validate input before database interaction
+        if (!v.hostCodeIsValid(hostCode)){
+            request.session().attribute("errorMessageLogin", "Error: host-code is invalid");
+            request.session().attribute("errorMessageCreate", "");
+            response.redirect("/host/login");
+            return null;
+        }
+
+        if (!db.hostCodeExists(hostCode)){
+            request.session().attribute("errorMessageLogin", "Error: host-code does not yet exist");
+            request.session().attribute("errorMessageCreate", "");
+            response.redirect("/host/login");
+            return null;
+        }
+
+        // get the host by valid, existing host-code
+        host = db.getHostByCode(hostCode);
+        request.session().attribute("host", host);
 
         // return host homepage if host is found
         if (v.isHostValid(host)) {
@@ -278,8 +287,10 @@ public class APIController {
             return ViewUtil.render(request, model, "/velocity/host-home.vm");
         }
 
-        System.out.println("Error: Host is invalid");
-        // return ViewUtil.notFound;
-        return "Error: Host is invalid";
+        System.out.println("Error: Host matched to host-code is invalid");
+        request.session().attribute("errorMessageLogin", "Error: Host matched to host-code is invalid");
+        request.session().attribute("errorMessageCreate", "");
+        response.redirect("/host/login");
+        return null;
     };
 }

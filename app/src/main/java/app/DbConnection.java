@@ -1137,7 +1137,7 @@ public class DbConnection{
      * @param host_code code
      * @return existence state of host_code
      */
-    private Boolean hostCodeExists(String host_code){
+    public Boolean hostCodeExists(String host_code){
         host_code = validator.sanitizeHostCode(host_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;

@@ -978,7 +978,7 @@ public class DbConnection{
                     keyResults.add(result);
                 }
                 feedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
-                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), keyResults);
+                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("types").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), keyResults);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;

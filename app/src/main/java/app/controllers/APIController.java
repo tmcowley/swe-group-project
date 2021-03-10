@@ -232,7 +232,13 @@ public class APIController {
             String[] arrs = new String[feedback.getKey_Results().size()];
             String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
             db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
-            return "/event/join/code";
+
+            // TODO: DISPLAY THAT FEEDBACK WAS RECORDED
+            request.session().attribute("event", event);
+            Map<String, Object> model = new HashMap<>();
+            model.put("eventTitle", event.getTitle());
+            model.put("eventDescription", event.getDescription());
+            return ViewUtil.render(request, model, "/velocity/participant-event.vm");
         }
 
         // return not found if feedback is not created

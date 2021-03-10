@@ -116,8 +116,11 @@ public class SentimentAnalyser {
             }
         }
         
-        return compound/count2;
-
+        if (count2 == 0) {
+            return compound;
+        } else {
+            return compound/count2;
+        }
     }
 
     /**

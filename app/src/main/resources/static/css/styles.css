@@ -59,6 +59,13 @@ header {
     overflow: auto;
 }
 
+#mainBodyContainerOneCol {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 100%;
+    overflow: auto;
+}
+
 #mainFormSection {
     background-color: #886C91;
     overflow-y: scroll;
@@ -297,7 +304,7 @@ textarea {
 }
 
 #landingContainer h1 {
-    font-size: 4em;
+    font-size: 3.5em;
     margin-bottom: 20px;
 }
 
@@ -408,4 +415,40 @@ textarea {
 #feedbackFormMain {
     display: grid;
     grid-template-columns: auto 30px;
+}
+
+#hostCodeContinue {
+    margin: 20px auto;
+    display: block;
+    background-color: #704d7b;
+    color: white;
+    border-radius: 40px;
+    padding: 10px 35px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid #451c52;
+}
+
+#hostHomeContainer {
+    background-color: #552d62;
+    max-width: 1000px;
+    margin: 60px auto;
+    width: 100%;
+    padding: 40px;
+    text-align: center;
+    color: white;
+    border-radius: 40px;
+    box-shadow: 5px 5px 5px #3e3e3e;
+    height: max-content;
+}
+
+#hostHomeContainer h2 {
+    font-size: 1.3em;
+    margin-bottom: 30px
+}
+
+#hostHomeContainer input, #hostHomeContainer select {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
 }

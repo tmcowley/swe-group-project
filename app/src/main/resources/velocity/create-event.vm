@@ -1,27 +1,38 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-
-<form name="creatEvent" action="/event/host/code" method="post">
-    <input type="text" id="eventTitle" name="eventTitle" placeholder="Event Title">
-    <textarea id="eventDescription" name="eventDescription" placeholder="Event Description"></textarea>
-    <select id="eventType" name="eventType">
-        <option value="lecture">Lecture</option>
-        <option value="seminar">Seminar</option>
-        <option value="conference">Conference</option>
-        <option value="workshop">Workshop</option>
-        <option value="other">Other</option>
-    </select>
-    <select id="eventTemplate" name="eventTemplate">
-#if ($templateCount>0)
-    #foreach ($i in $templateCodes)
-        <option value=$i>$i</option>
-    #end
-#end
-        <option value="noTemplate">Do not use a template</option>
-    </select>
-    <!-- format yyyy-[m]m-[d]d hh:mm:ss[.f...] -->
-    <input type="datetime" id="startTime" name="startTime" placeholder="startTime:yyyy-[m]m-[d]d hh:mm:ss">
-    <input type="datetime" id="endTime" name="endTime" placeholder="endTime:yyyy-[m]m-[d]d hh:mm:ss">
-    <input type="submit" value="Submit">
-</form>
+<header>
+    <div id="headerLeft">
+        Resmodus
+    </div>
+    <div id="headerRight">
+        login stuff goes here
+    </div>
+</header>
+<div id="mainBodyContainerOneCol">
+    <div id="hostHomeContainer">
+        <form name="creatEvent" action="/event/host/code" method="post">
+            <input type="text" id="eventTitle" name="eventTitle" placeholder="Event Title">
+            <textarea id="eventDescription" name="eventDescription" placeholder="Event Description"></textarea>
+            <select id="eventType" name="eventType">
+                <option value="lecture">Lecture</option>
+                <option value="seminar">Seminar</option>
+                <option value="conference">Conference</option>
+                <option value="workshop">Workshop</option>
+                <option value="other">Other</option>
+            </select>
+            <select id="eventTemplate" name="eventTemplate">
+        #if ($templateCount>0)
+            #foreach ($i in $templateCodes)
+                <option value=$i>$i</option>
+            #end
+        #end
+                <option value="noTemplate">Do not use a template</option>
+            </select>
+            <!-- format yyyy-[m]m-[d]d hh:mm:ss[.f...] -->
+            <input type="datetime" id="startTime" name="startTime" placeholder="startTime:yyyy-[m]m-[d]d hh:mm:ss">
+            <input type="datetime" id="endTime" name="endTime" placeholder="endTime:yyyy-[m]m-[d]d hh:mm:ss">
+            <input id="hostCodeContinue" type="submit" value="Submit">
+        </form>
+    </div>
+</div>
 #end

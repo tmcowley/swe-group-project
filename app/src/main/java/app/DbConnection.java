@@ -181,15 +181,35 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer participant_id = null;
+        String createParticipant;
+
         try{
-            String createParticipant = ""
-                + "INSERT INTO participant(ip_address, f_name, l_name) "
-                + "VALUES(?::INET, ?, ?) "
+            // if (ip_address == null){
+            //     createParticipant = ""
+            //         + "INSERT INTO participant(f_name, l_name) "
+            //         + "VALUES(?, ?) "
+            //         + "RETURNING participant_id";
+            //     stmt = this.conn.prepareStatement(createParticipant);
+            //     stmt.setString(1, f_name);
+            //     stmt.setString(2, l_name);
+            // } else {
+            //     createParticipant = ""
+            //         + "INSERT INTO participant(ip_address, f_name, l_name) "
+            //         + "VALUES(?::INET, ?, ?) "
+            //         + "RETURNING participant_id";
+            //     stmt = this.conn.prepareStatement(createParticipant);
+            //     stmt.setString(1, ip_address);
+            //     stmt.setString(2, f_name);
+            //     stmt.setString(3, l_name);
+            // }
+
+            createParticipant = ""
+                + "INSERT INTO participant(f_name, l_name) "
+                + "VALUES(?, ?) "
                 + "RETURNING participant_id";
             stmt = this.conn.prepareStatement(createParticipant);
-            stmt.setString(1, ip_address);
-            stmt.setString(2, f_name);
-            stmt.setString(3, l_name);
+            stmt.setString(1, f_name);
+            stmt.setString(2, l_name);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -831,7 +851,12 @@ public class DbConnection{
             rs = stmt.executeQuery();
             if (rs.next()) {
                 participant_id = rs.getInt("participant_id");
-                String ip_address = rs.getObject("ip_address").toString();
+                String ip_address;
+                try{
+                    ip_address = rs.getObject("ip_address").toString();
+                } catch (NullPointerException npe){
+                    ip_address = null;
+                }
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
                 boolean sys_ban = rs.getBoolean("sys_ban");

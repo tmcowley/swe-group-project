@@ -30,11 +30,11 @@ public class APIController {
      * @return host object
      */
     public static Route createHost = (Request request, Response response) -> {
-        System.out.println("Notice: createHost API endpoint recognized request \n");
+        System.out.println("\nNotice: createHost API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // collect form attributes, validate attributes and ensure email address is
-        // unique
+        // collect form attributes, validate attributes
+        // ensure email address is unique
         String f_name = request.queryParams("hostFName");
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
@@ -45,18 +45,19 @@ public class APIController {
             System.out.println("Error: field invalid or email exists");
             return "Error: field invalid or email exists";
         }
-        System.out.println("Notice: createHost fields collected and validated");
+        // System.out.println("Notice: createHost fields collected and validated");
+
         Host host = db.createHost(f_name, l_name, ip_address, e_address);
-        System.out.println("created Host is valid: " + v.isHostValid(host));
         if (v.isHostValid(host)) {
+            // host is valid
             request.session(true);
             request.session().attribute("host", host);
             Map<String, Object> model = new HashMap<>();
             model.put("hostCode", host.getHostCode());
             return ViewUtil.render(request, model, "/velocity/get-code.vm");
         } else {
-            System.out.println("Error: Host creation failed");
-            return "Error: Host creation failed";
+            System.out.println("Error: Created host considered invalid");
+            return "Error: Created host considered invalid";
             // return ViewUtil.notFound; -> TODO
         }
         // (broken) send email containing host-code to new host
@@ -73,7 +74,7 @@ public class APIController {
      * @return event object
      */
     public static Route createEvent = (Request request, Response response) -> {
-        System.out.println("Notice: createEvent API endpoint recognized request\n");
+        System.out.println("\nNotice: createEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
         // start session
         request.session(true);
@@ -125,9 +126,9 @@ public class APIController {
                     endTime);
         }
 
-        // return host event page if event is created
-        System.out.println("Event created. Event is valid: " + v.isEventValid(event));
+        // return host event page if event is created and valid
         if (v.isEventValid(event)) {
+            // event is valid
             request.session().attribute("event", event);
             Map<String, Object> model = new HashMap<>();
             model.put("eventTitle", event.getTitle());
@@ -136,7 +137,7 @@ public class APIController {
             return ViewUtil.render(request, model, "/velocity/host-event.vm");
         }
         // return not found if event is not created or input is not valid
-        return "Error: event considered invalid - check inputs";
+        return "Error: event not created or considered invalid - check inputs";
     };
 
     // form sent by participant to join an event
@@ -147,7 +148,7 @@ public class APIController {
      * @param response
      */
     public static Route joinEvent = (Request request, Response response) -> {
-        System.out.println("Notice: joinEvent API endpoint recognized request \n");
+        System.out.println("\nNotice: joinEvent API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
 
         // Get form attributes, ensure attributes are valid
@@ -170,8 +171,8 @@ public class APIController {
         request.session().attribute("participant", participant);
 
         // redirect participant to event
-        System.out.println("Notice: event is valid: " + v.isEventValid(event));
         if (v.isEventValid(event)) {
+            // event is valid
             request.session().attribute("event", event);
             Map<String, Object> model = new HashMap<>();
             model.put("eventTitle", event.getTitle());
@@ -191,7 +192,7 @@ public class APIController {
      * @return feedback object
      */
     public static Route createFeedback = (Request request, Response response) -> {
-        System.out.println("Notice: createFeedback API endpoint recognized request \n");
+        System.out.println("\nNotice: createFeedback API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
         Session session = request.session();
 
@@ -249,7 +250,7 @@ public class APIController {
      */
 
     public static Route hostLogin = (Request request, Response response) -> {
-        System.out.println("Notice: hostLogin API endpoint recognized request \n");
+        System.out.println("\nNotice: hostLogin API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
         // initialise host
         Host host = null;
@@ -268,7 +269,7 @@ public class APIController {
 
         // return host homepage if host is found
         if (v.isHostValid(host)) {
-            System.out.println("Notice: host is valid");
+            // host is valid
             Map<String, Object> model = new HashMap<>();
             model.put("fName", host.getFName());
             model.put("lName", host.getLName());

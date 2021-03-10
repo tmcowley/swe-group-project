@@ -343,50 +343,57 @@ public class DbConnection{
         return getArchivedEvent(event_id);
     }
 
+    // /**
+    //  * Create an instance of feedback against an event
+    //  * TODO: ensure params are correct for non-processed feedback
+    //  * @param participant_id Participant id of the participant who created this feedback
+    //  * @param event_id Event id of the event which this feedback is written for
+    //  * @param anonymous Whether this feedback is anonymous
+    //  * @param time_stamp Time when the feedback was created
+    //  * @return Feedback instance representing stored data
+    //  */
+    // public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results){
+
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     Integer feedback_id = null;
+    //     try{
+    //         String createNonProcessedFeedback = ""
+    //             + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results) "
+    //             + "VALUES(?, ?, ?, ?, ?) "
+    //             + "RETURNING feedback_id;";
+    //         stmt = this.conn.prepareStatement(createNonProcessedFeedback);
+
+    //         stmt.setInt(1, participant_id);
+    //         stmt.setInt(2, event_id);
+    //         stmt.setBoolean(3, anonymous);
+    //         stmt.setTimestamp(4, time_stamp);
+    //         stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
+
+    //         rs = stmt.executeQuery();
+    //         if (rs.next()) {
+    //             feedback_id = rs.getInt("feedback_id");
+    //         }
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());;
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+
+    //     return getFeedback(feedback_id);
+    // }
+
     /**
      * Create an instance of feedback against an event
-     * TODO: ensure params are correct for non-processed feedback
+     * TODO: ADD param comments
      * @param participant_id Participant id of the participant who created this feedback
      * @param event_id Event id of the event which this feedback is written for
      * @param anonymous Whether this feedback is anonymous
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
-    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results){
-
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Integer feedback_id = null;
-        try{
-            String createNonProcessedFeedback = ""
-                + "INSERT INTO feedback(participant_id, event_id, anonymous, time_stamp, results) "
-                + "VALUES(?, ?, ?, ?, ?) "
-                + "RETURNING feedback_id;";
-            stmt = this.conn.prepareStatement(createNonProcessedFeedback);
-
-            stmt.setInt(1, participant_id);
-            stmt.setInt(2, event_id);
-            stmt.setBoolean(3, anonymous);
-            stmt.setTimestamp(4, time_stamp);
-            stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
-
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                feedback_id = rs.getInt("feedback_id");
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-        }
-
-        return getFeedback(feedback_id);
-    }
-
-    // TODO COMMENT
-    // CREATE FULL FEEDBACK OBJECT (post-processing)
-    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, Integer[] type, Integer[] key, float compound, String[] key_results){
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] type, Boolean[] key, Float compound, String[] key_results){
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -404,8 +411,8 @@ public class DbConnection{
             stmt.setTimestamp(4, time_stamp);
             stmt.setArray(5, this.conn.createArrayOf("TEXT", results));
             stmt.setArray(6, this.conn.createArrayOf("REAL", weights));
-            stmt.setArray(7, this.conn.createArrayOf("INT", type));
-            stmt.setArray(8, this.conn.createArrayOf("INT", key));
+            stmt.setBytes(7, type);
+            stmt.setArray(8, this.conn.createArrayOf("BOOLEAN", key));
             stmt.setFloat(9, compound);
             stmt.setArray(10, this.conn.createArrayOf("TEXT", key_results));
 

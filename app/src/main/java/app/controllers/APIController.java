@@ -8,6 +8,7 @@ import app.App;
 import app.DbConnection;
 import app.Validator;
 import app.objects.*;
+import app.sentimentanalysis.SentimentAnalyser;
 import app.util.ViewUtil;
 import app.util.emailController;
 import spark.*;
@@ -174,18 +175,23 @@ public class APIController {
         //initialise event and input
         Event event = request.session().attribute("event");
         Participant participant = request.session().attribute("participant");
-        String feedbackData = request.queryParams("feedbackData");
+        String[] results = {request.queryParams("feedbackData")};
+        Float[] weights = {4f};
+        byte[] types = {0};
+        Boolean[] keys = {false};
+        byte[][] sub_weights = new byte[0][0];
         Timestamp current = new Timestamp(System.currentTimeMillis());
         Boolean anonymous = false;
-        String[] results = new String[0];
         if (request.queryParams("anon").equals("Submit Anonymously")) {
             anonymous = true;
         }
-        //TODO feedback creation
-        Feedback feedback = db.createFeedback(participant.getParticipantID(), event.getEventID(), anonymous, current, results);
 
-        //return to evnet page if feedback is created
+        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
+        SentimentAnalyser.main(feedback);
+        //return to event page if feedback is created
         if (v.isFeedbackValid(feedback)) {
+            String[] keyResults = (String[]) feedback.getKey_Results().toArray();
+            db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getCompound(), keyResults);
             return "/event/join/code";
         }
         //return not found if feedback is not created

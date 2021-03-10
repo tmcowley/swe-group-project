@@ -22,7 +22,7 @@ public class SentimentAnalyser {
      */
     public static void main(Feedback feedback) throws IOException{
     
-        Byte[] types = feedback.getTypes(); //Holds type of feedback for each result
+        byte[] types = feedback.getTypes(); //Holds type of feedback for each result
         String[] results = feedback.getResults(); //Holds type of feedback for each result
         Boolean[] keys = feedback.getKeys(); //Holds type of feedback for each result
         Float[] weights = feedback.getWeights(); //Holds weights (unprocessed then processed) for weighted mean
@@ -139,7 +139,7 @@ public class SentimentAnalyser {
      * @return Compound score for a specific query
      */
     private static float getCompoundFromMultiple(String data, int index, Feedback feedback) {
-        Byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
+        byte[] results = feedback.getSub_WeightsRow(index); //Holds weights of results
         float compound = 0; //Holds compound score
         int count = 0; //Used to mean compound scores
         for (int i = 0; i < 5; i++ ) {

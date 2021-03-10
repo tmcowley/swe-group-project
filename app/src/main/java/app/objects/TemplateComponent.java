@@ -1,5 +1,7 @@
 package app.objects;
 
+import org.apache.commons.lang3.ArrayUtils; // for event code sanitization
+
 public class TemplateComponent {
 
   private int id; // component ID

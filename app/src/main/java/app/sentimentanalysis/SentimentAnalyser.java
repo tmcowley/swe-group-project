@@ -81,9 +81,10 @@ public class SentimentAnalyser {
     * @param plaintext string to be analysed for sentiment
     * @return real compound score derived from plaintext
     */
-    private static float getCompoundFromText(String plaintext) throws IOException{
+    public static float getCompoundFromText(String plaintext) throws IOException{
 
         //TODO - fix padding (maybe make 2 sds above or below mean)
+        //TODO make private, delete the direct ests from sentiment test
 
         float compound = 0; //Holds compound score derived from plaintext
         int count1 = 0; //Counts how many sentences are in plaintext

@@ -933,7 +933,7 @@ public class DbConnection{
             rs.beforeFirst();
             if (rs.next()) {
                 foundFeedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
-                (String[]) rs.getArray("results").getArray(), (float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), new ArrayList<String>());
+                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), (byte[]) rs.getArray("type").getArray(), (Boolean[]) rs.getArray("key").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), rs.getFloat("compound"), new ArrayList<String>());
                 foundFeedbacks[feedbackCount] = foundFeedback;
                 feedbackCount++;
             }

@@ -248,13 +248,7 @@ public class SentimentTest {
     @Test
     public void test_main_consistency() throws IOException {
         assertTrue(test.getWeights().equals(test2.getWeights()));
-
-        System.out.println(test.getCompound().equals(test2.getCompound()));
-        System.out.println("test1 compound: " + test.getCompound());
-        System.out.println("test2 compound: " + test2.getCompound());
-        // WHY IS THIS FALSE
-        // assertTrue(test.getCompound().equals(test2.getCompound()))
-
+        assertTrue(test.getCompound().equals(test2.getCompound()));
         assertTrue(test.getKey_Results().equals(test2.getKey_Results()));
     }
 

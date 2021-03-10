@@ -42,7 +42,7 @@ public class SentimentAnalyser {
         Boolean[] keys = feedback.getKeys(); // Holds type of feedback for each result
         Float[] weights = feedback.getWeights(); // Holds weights (unprocessed then processed) for weighted mean
         int amount = feedback.getResults().length; // Holds amount of results to be (possibly) interpreted for sentiment
-        int sum = 0; // Sum of all weights, used in weights processing
+        float sum = 0f; // Sum of all weights, used in weights processing
         float[] compounds = new float[amount]; // Holds compound score for each feedback result
 
         // ensure non-empty arrays
@@ -69,8 +69,10 @@ public class SentimentAnalyser {
 
         // Process host inputted weights into floats that sum to 1.0
         for (Float i : weights) {
+            // sum cannot be 0 since weights sum to 1
             sum += i;
         }
+
         for (int i = 0; i < amount; i++) {
             if (weights[i] != 0) {
                 feedback.setWeightItem(weights[i] / sum, i);
@@ -118,7 +120,7 @@ public class SentimentAnalyser {
             return null;
         }
 
-        float mean = 0;
+        float mean = 0f;
         for (int i = 0; i < weights.length; i++) {
             mean += weights[i] * scores[i];
         }

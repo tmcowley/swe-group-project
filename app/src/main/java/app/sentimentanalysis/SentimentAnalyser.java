@@ -21,7 +21,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class SentimentAnalyser {
 
-    Validator v = new Validator();
+    static Validator v = new Validator();
 
     /**
      * Take a feedback object and updated it to include sentiment
@@ -29,7 +29,7 @@ public class SentimentAnalyser {
      */
     public static void main(Feedback feedback) throws IOException{
 
-        if (!v.feedbackIsValid(feedback)){
+        if (!v.isFeedbackValid(feedback)){
             System.out.println("Error: feedback instance is invalid");
             return;
         }

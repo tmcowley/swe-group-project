@@ -9,6 +9,7 @@
                 <input type="text" id="participantFName" name="participantFName" placeholder="First Name">
                 <input type="text" id="participantLName" name="participantLName" placeholder="Last Name">
                 <input type="text" id="eventCode" name="eventCode" placeholder="Code">
+                <label id="formErrorMessage">Error Message</label>
                 <input type="submit" value="Join Event" id="landingJoinButton">
             </form>
             <a href="/host/login" id="landingHostButton">Host Event</a>

@@ -29,8 +29,11 @@
                 <option value="noTemplate">Do not use a template</option>
             </select>
             <!-- format yyyy-[m]m-[d]d hh:mm:ss[.f...] -->
-            <input type="datetime" id="startTime" name="startTime" placeholder="startTime:yyyy-[m]m-[d]d hh:mm:ss">
-            <input type="datetime" id="endTime" name="endTime" placeholder="endTime:yyyy-[m]m-[d]d hh:mm:ss">
+            <label for="startTime">Start Time</label>
+            <input type="time" id="startTime" name="startTime">
+            <label for="endTime">End Time</label>
+            <input type="time" id="endTime" name="endTime">
+            <label id="formErrorMessage">Error Message</label>
             <input id="hostCodeContinue" type="submit" value="Submit">
         </form>
     </div>

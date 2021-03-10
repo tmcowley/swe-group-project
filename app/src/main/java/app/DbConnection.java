@@ -393,7 +393,7 @@ public class DbConnection{
      * @param time_stamp Time when the feedback was created
      * @return Feedback instance representing stored data
      */
-    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, float[] weights, byte[] type, Boolean[] key, float compound, String[] key_results){
+    public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] type, Boolean[] key, float compound, String[] key_results){
 
         PreparedStatement stmt = null;
         ResultSet rs = null;

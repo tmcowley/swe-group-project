@@ -9,7 +9,7 @@ public class Feedback {
     private int participant_id;
     private int event_id;
     private String[] results; // Holds results to specific feedback queries
-    private float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
+    private Float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
     private byte[] types; // Holds the type of query that produced each result
     // 0 = plaintext
     // 1 = single answer multiple choice
@@ -34,7 +34,7 @@ public class Feedback {
      * @param timestamp
      */
     public Feedback(int participant_id, int event_id,
-            String[] results, float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp) {
+            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp) {
         this.participant_id = participant_id;
         this.event_id = event_id;
         this.anonymous = anonymous;
@@ -63,7 +63,7 @@ public class Feedback {
      * @param key_results
      */
     public Feedback(int feedback_id, int participant_id, int event_id,
-            String[] results, float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, float compound, ArrayList<String> key_results) {
+            String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, boolean anonymous, Timestamp timestamp, float compound, ArrayList<String> key_results) {
         this.feedback_id = feedback_id;
         this.participant_id = participant_id;
         this.event_id = event_id;
@@ -109,7 +109,7 @@ public class Feedback {
      * gets the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
      * @return feedback weights
      */
-    public float[] getWeights() {
+    public Float[] getWeights() {
         return this.weights;
     }
     /**

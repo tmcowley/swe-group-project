@@ -175,7 +175,7 @@ public class APIController {
         Event event = request.session().attribute("event");
         Participant participant = request.session().attribute("participant");
         String[] results = {request.queryParams("feedbackData")};
-        float[] weights = {4f};
+        Float[] weights = {4f};
         byte[] types = {0};
         Boolean[] keys = {false};
         byte[][] sub_weights = new byte[0][0];

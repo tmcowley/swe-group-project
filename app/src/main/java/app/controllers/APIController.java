@@ -41,13 +41,18 @@ public class APIController {
         String ip_address = null; // request.ip();
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eAddressIsValid(e_address)
                 || db.emailExists(e_address)) {
-            // return ViewUtil.notFound; -> TODO
             System.out.println("Error: field invalid or email exists");
 
-            Map<String, Object> model = new HashMap<>();
-            // model.put("errorMessage", "Error: field invalid or email exists");
+            request.session().attribute("errorMessageLogin", "");
+            request.session().attribute("errorMessageCreate", "Error: field invalid or email exists");
+            // return request.session().attribute("errorMessageCreate");
 
-            return ViewUtil.render(request, model, "/velocity/host-event.vm");
+            Map<String, Object> model = new HashMap<>();
+            model.put("errorMessageLogin", "");
+            model.put("errorMessageCreate", "Error: field invalid or email exists");
+
+            response.redirect("/host/login");
+            return ViewUtil.render(request, model, "/velocity/create-host.vm");
         }
         // System.out.println("Notice: createHost fields collected and validated");
 
@@ -58,14 +63,19 @@ public class APIController {
             request.session().attribute("host", host);
             Map<String, Object> model = new HashMap<>();
             model.put("hostCode", host.getHostCode());
+            model.put("hostCode", host.getHostCode());
             return ViewUtil.render(request, model, "/velocity/get-code.vm");
         } else {
             System.out.println("Error: Created host considered invalid");
-            return "Error: Created host considered invalid";
-            // return ViewUtil.notFound; -> TODO
+
+            request.session().attribute("errorMessageLogin", "");
+            request.session().attribute("errorMessageCreate", "Created host considered invalid. Please re-try");
+            return request.session().attribute("errorMessageCreate");
+            //response.redirect("/host/login");
         }
         // (broken) send email containing host-code to new host
         // e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);
+
 
     };
 

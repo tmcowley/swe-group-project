@@ -36,15 +36,18 @@ public class APIController {
         String f_name = request.queryParams("hostFName");
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
-        String ip_address = request.ip();
+        String ip_address = null; //request.ip();
         if (!v.nameIsValid(f_name) ||
             !v.nameIsValid(l_name) ||
             !v.eAddressIsValid(e_address) ||
             db.emailExists(e_address)) {
-            return ViewUtil.notFound;
+            // return ViewUtil.notFound; -> TODO
+            System.out.println("Error: field invalid or email exists");
+            return "Error: field invalid or email exists";
         }
         System.out.println("Notice: createHost fields collected and validated");
         Host host = db.createHost(f_name, l_name, ip_address, e_address);
+        System.out.println("created Host is valid: " + v.isHostValid(host));
         if (v.isHostValid(host)) {
             request.session(true);
             request.session().attribute("host", host);
@@ -53,7 +56,8 @@ public class APIController {
             return ViewUtil.render(request, model, "/velocity/get-code.vm");
         } else {
             System.out.println("Error: Host creation failed");
-            return ViewUtil.notFound;
+            return "Error: Host creation failed";
+            // return ViewUtil.notFound; -> TODO
         }
         // (broken) send email containing host-code to new host
         //e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);    
@@ -137,6 +141,11 @@ public class APIController {
             ) {
                 return ViewUtil.notFound;
         }
+
+        if (!db.eventCodeExists(eventCode)){
+            return "Event code does not exist";
+        }
+
         // create Participant object in DB -> link to event
         Participant participant = db.createParticipant(request.ip(),FName,LName);
         Event event = db.getEventByCode(eventCode);
@@ -163,15 +172,15 @@ public class APIController {
      * @return feedback object
      */
     public static Route createFeedback = (Request request, Response response) -> {
-        System.out.println("createFeedback API endpoint recognized request \n");
+        System.out.println("Notice: createFeedback API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
-        //start session
+        // start session
         request.session(true);
-        //return not found if session is new
+        // return not found if session is new
         if (request.session().isNew()) {
             return ViewUtil.notFound;
         }
-        //initialise event and input
+        // initialize event and input
         Event event = request.session().attribute("event");
         Participant participant = request.session().attribute("participant");
         String[] results = {request.queryParams("feedbackData")};
@@ -185,15 +194,16 @@ public class APIController {
             anonymous = true;
         }
 
-        System.out.println("Notice: generating feedback instance.");
+        System.out.println("Notice: generating feedback instance");
         Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
         SentimentAnalyser.main(feedback);
         if (feedback.getCompound() != null){
-            System.out.println("Notice: SA successful");
+            System.out.println("Notice: SA on feedback successful");
         }
 
         //return to event page if feedback is created
         if (v.isFeedbackValid(feedback)) {
+            System.out.println("Notice: feedback considered valid");
             String[] arrs = new String[feedback.getKey_Results().size()];
             String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
             db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getCompound(), keyResults);

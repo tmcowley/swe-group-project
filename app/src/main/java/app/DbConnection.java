@@ -725,7 +725,12 @@ public class DbConnection{
             if (rs.next()) {
                 host_id = rs.getInt("host_id");
                 String host_code = rs.getString("host_code");
-                String ip_address = rs.getObject("ip_address").toString();
+                String ip_address;
+                try{
+                    ip_address = rs.getObject("ip_address").toString();
+                } catch (NullPointerException npe){
+                    ip_address = null;
+                }
                 String e_address = rs.getString("e_address");
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
@@ -1043,7 +1048,7 @@ public class DbConnection{
      * @param event_code the event code
      * @return existence state of eventCode, null if fails
      */
-    private Boolean eventCodeExists(String event_code){
+    public Boolean eventCodeExists(String event_code){
         event_code = validator.sanitizeEventCode(event_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;

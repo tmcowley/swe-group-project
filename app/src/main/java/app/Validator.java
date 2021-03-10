@@ -311,7 +311,7 @@ public class Validator {
     public boolean isHostValid(Host host){
         if (host != null&&
             hostCodeIsValid(host.getHostCode())&&
-            ipAddressIsValid(host.getIPAddress())&&
+            //ipAddressIsValid(host.getIPAddress())&&
             eAddressIsValid(host.getEAddress())&&
             nameIsValid(host.getFName())&&
             nameIsValid(host.getLName())&&

@@ -34,7 +34,7 @@ CREATE TABLE host(
     host_id         SERIAL          NOT NULL,
     host_code       VARCHAR(64)
                     UNIQUE          NOT NULL,
-    ip_address      INET            NOT NULL,
+    ip_address      INET,
     e_address       citext UNIQUE   NOT NULL,
     f_name          VARCHAR(35)     NOT NULL,
     l_name          VARCHAR(35)     NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE template_component(
 
 CREATE TABLE participant(
     participant_id  SERIAL          NOT NULL,
-    ip_address      INET            NOT NULL,
+    ip_address      INET,
     f_name          VARCHAR(35)     NOT NULL,
     l_name          VARCHAR(35)     NOT NULL,
     sys_ban         BOOLEAN         NOT NULL

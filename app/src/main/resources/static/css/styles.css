@@ -41,6 +41,11 @@ header {
     float: left;
 }
 
+#headerLeft a {
+    color: white;
+    text-decoration: none;
+}
+
 #headerRight {
     float: right;
 }

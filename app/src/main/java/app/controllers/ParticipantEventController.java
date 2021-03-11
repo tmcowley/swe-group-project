@@ -27,7 +27,7 @@ public class ParticipantEventController {
         // get current session; ensure session is live
         Session session = request.session(false);
         if (session == null) {
-            System.out.println("Error:  APIController:createEvent session not found");
+            System.out.println("Error:  ParticipantEventController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }

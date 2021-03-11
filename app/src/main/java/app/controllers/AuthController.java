@@ -15,13 +15,16 @@ public class AuthController {
 
     // authorise host (following POST request) and redirect to host home page
     public static Route authHost = (Request request, Response response) -> {
+
         System.out.println("\nNotice: AuthController:authHost API endpoint recognized request");
+
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
         // start session
         request.session(true);
 
+        // collect host-code from request
         String hostCode = request.queryParams("hostCode");
         System.out.println("Notice: hostCode:" + hostCode);
 

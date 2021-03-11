@@ -14,9 +14,10 @@ public class TemplateEditController {
 
         System.out.println("\nNotice: TemplateEditController:servePage recognized request");
 
-        request.session(true);
-        if (request.session().isNew()) {
-            System.out.println("Error:  HostEventController:servePage session not found");
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
+            System.out.println("Error:  TemplateEditController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }

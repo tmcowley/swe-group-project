@@ -17,8 +17,6 @@ import spark.*;
 
 public class APIController {
 
-    // For developers: see https://sparkjava.com/documentation#path-groups
-
     // thread safe (no DB interaction)
     static Validator v = App.getInstance().getValidator();
 
@@ -70,10 +68,13 @@ public class APIController {
             return null;
         }
 
-        // host is valid; store and return host-code
+        // host is valid; store host and host-code in session
         request.session(true);
         request.session().attribute("hostCode", host.getHostCode());
         request.session().attribute("host", host);
+
+        // return host-code
+        // links to (GetCodeController.servePage)
         response.redirect("/host/get-code");
         return null;
     };
@@ -234,18 +235,22 @@ public class APIController {
         }
 
         System.out.println("Notice: generating feedback instance");
-        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types,
-                keys, sub_weights, anonymous, current);
+        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
+        
+        // run sentiment analysis on feedback
         SentimentAnalyser.main(feedback);
         if (feedback.getCompound() != null) System.out.println("Notice: SA on feedback successful");
 
         // ensure feedback is valid
         if (!v.isFeedbackValid(feedback)){
-            System.out.println("Error:  feedback considered invalid");
+            System.out.println("Error: APIController:createFeedback: feedback considered invalid");
             return "Error: feedback considered invalid";
         }
 
-        // feedback created and is valid -> redirect to participant event page
+        // store (valid) feedback in system
+        db.createFeedback(feedback);
+
+        // redirect to participant event page
         // (links to ParticipantEventController.servePage)
         response.redirect("/event/participant/feedback");
         return null;

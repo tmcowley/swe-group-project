@@ -23,10 +23,10 @@ public class EventCreateController {
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 
-        // start session
-        request.session(true);
-        if (request.session().isNew()) {
-            System.out.println("Error: EventCreateController:servePage session not found");
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
+            System.out.println("Error:  EventCreateController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }

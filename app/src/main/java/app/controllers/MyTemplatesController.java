@@ -14,6 +14,14 @@ public class MyTemplatesController {
 
         System.out.println("\nNotice: MyTemplatesController:servePage recognized request");
 
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
+            System.out.println("Error:  MyTemplatesController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
         Map<String, Object> model = new HashMap<>();
         model.put("test1", "this is a test variable!");
         return ViewUtil.render(request, model, "/velocity/templates.vm");

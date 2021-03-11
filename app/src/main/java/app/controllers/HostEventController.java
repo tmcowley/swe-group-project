@@ -81,7 +81,11 @@ public class HostEventController {
             model.put("time", time);
 
         }
-        model.put("feedbackCount", feedbackCount);
+        List<Integer> feedbackCounts = new ArrayList<Integer>();
+        for (int i = 0; i < feedbackCount; i++) {
+            feedbackCounts.add(i);
+        }
+        model.put("feedbackCounts", feedbackCounts);
         model.put("eventTitle", event.getTitle());
         model.put("eventDescription", event.getDescription());
         model.put("eventCode", event.getEventCode());

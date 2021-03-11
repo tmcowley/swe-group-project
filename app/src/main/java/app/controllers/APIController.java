@@ -187,8 +187,6 @@ public class APIController {
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("\nNotice: createFeedback API endpoint recognized request \n");
         DbConnection db = App.getInstance().getDbConnection();
-        Session session = request.session();
-
         // start session
         request.session(true);
         // return not found if session is new
@@ -196,7 +194,7 @@ public class APIController {
             // return ViewUtil.notFound;
             return "Error: Session not found";
         }
-
+        Session session = request.session();
         // initialise event and input
         Event event = session.attribute("event");
         Participant participant = session.attribute("participant");
@@ -229,7 +227,6 @@ public class APIController {
                     feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
 
             // TODO: DISPLAY THAT FEEDBACK WAS RECORDED
-            request.session().attribute("event", event);
             Map<String, Object> model = new HashMap<>();
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());

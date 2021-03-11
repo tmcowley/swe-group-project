@@ -1,11 +1,5 @@
 package app.controllers;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import app.App;
 import app.DbConnection;
 import app.Validator;
@@ -13,19 +7,26 @@ import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
 import app.util.ViewUtil;
 import app.util.emailController;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import spark.*;
 
 public class APIController {
 
-    // SEE https://sparkjava.com/documentation#path-groups FOR HELP
+    // Developers: see https://sparkjava.com/documentation#path-groups FOR HELP
 
     // thread safe - no DB interaction
     static Validator v = App.getInstance().getValidator();
     static emailController e = new emailController();
 
-    // form sent from front-end to back-end to create host\
     /**
      * creates a new host when a new user signs-up as a host
+     * form sent from front-end to back-end to create host
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
@@ -198,7 +199,6 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            // return ViewUtil.notFound;
             return "Error: Session not found";
         }
         Session session = request.session();
@@ -280,15 +280,15 @@ public class APIController {
             for (int i = 0; i < feedbackCount; i++) {
                 feedbackCounts.add(i);
             }
-            model.put("feedbackCounts", feedbackCounts);
 
+            model.put("feedbackCounts", feedbackCounts);
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());
             return ViewUtil.render(request, model, "/velocity/participant-event.vm");
         }
 
         // return not found if feedback is not created
-        // return ViewUtil.notFound;
+        System.out.println("Error:  feedback considered invalid");
         return "Error: feedback considered invalid";
     };
 

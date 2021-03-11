@@ -84,6 +84,7 @@ public class App {
         get("/host/home", APIController.hostLogin);
         get("/host/create-event", EventCreateController.servePage);
         get("/event/host/code", HostEventController.servePage);
+        get("/event/participant/feedback", ParticipantEventController.servePage);
         get("/host/templates", MyTemplatesController.servePage);
         get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", TemplateEditController.servePage);

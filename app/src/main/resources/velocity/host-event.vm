@@ -1,6 +1,7 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
 <meta http-equiv="refresh" content="5">
+<!-- Side nav for mobile (not visible on desktop) -->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <h1>$eventTitle</h1>
@@ -36,8 +37,10 @@
 <div id="mainHostEventBodyContainer">
     <div id="mainFormSection">
         <h1 id="formSectionTitle">Feedback</h1>
+        <!-- Mobile icons -->
         <span id="exitButtonMobile"><img src="/images/exit-icon.png"></span>
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/analytics-icon.png"></span>
+        <!-- Feedback responses will appear here -->
 #if($feedbackCounts)
     #foreach($i in $feedbackCounts)
         <div class="feedbackBox">

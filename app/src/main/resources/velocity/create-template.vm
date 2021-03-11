@@ -1,5 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
+<!-- Main page header -->
 <header>
     <div id="headerLeft">
         <a href="/">Resmodus</a>
@@ -10,6 +11,7 @@
 </header>
 <div id="mainBodyContainerOneCol">
     <div id="hostHomeContainer">
+        <!-- Basic form - only template name needed + error messages and submit button -->
         <form>
             <input type="text" id="templateName" name="templateName" placeholder="Template Name">
             <label id="formErrorMessage">Error Message</label>

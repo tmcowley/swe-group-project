@@ -173,7 +173,7 @@ public class SentimentAnalyser {
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);
         for (double i : values) {
-            if ((i > 1 * standev) != (i < -1 * standev)) {
+            if ((i > 1*standev) != (i < -1*standev)) {
                 compound += i;
                 count++;
             }

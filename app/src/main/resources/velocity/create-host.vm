@@ -5,15 +5,18 @@
 <div id="mainBodyContainerOneCol">
     <div id="landingMain">
         <div id="landingContainer">
+            <!-- Section for previously created users to log in (with their code) -->
             <h1>Host Login</h1>
             <div id="landingJoinContainer">
                 <form id="landingSubContainer" name="hostCodeLogin" action="/host/home" method="post">
                     <input type="text" id="hostCode" name="hostCode" placeholder="Enter your code">
+                    <!-- Holds error messages relating to this form -->
                     <label id="formErrorMessage">$errorMessageLogin</label>
                     <input id="landingJoinButton" type="submit" value="Login">
                 </form>
             </div>
             <br><br><br>
+            <!-- Section to create a new user -->
             <h1>Host Signup</h1>
             <div id="landingJoinContainer">
                 <form name="hostRegister" action="/host/get-code" method="post">
@@ -21,6 +24,7 @@
                     <input type="text" id="hostFName" name="hostFName" placeholder="First Name">
                     <input type="text" id="hostLName" name="hostLName" placeholder="Second Name">
                     <input type="text" id="hostEmail" name="hostEmail" placeholder="Email">
+                    <!-- Holds error messages relating to this form -->
                     <label id="formErrorMessage">$errorMessageCreate</label>
                     <input id="landingHostButton" type="submit" value="Signup">
                 </form>

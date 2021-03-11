@@ -1,5 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
+<!-- Main page header -->
 <header>
     <div id="headerLeft">
         <a href="/">Resmodus</a>
@@ -12,13 +13,14 @@
     <div id="mainFormSection">
         <div id="mainForm">
             <form action="" method="post">
-                <div id="feedbackFormMain">
+                <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
                     <div class="feedbackElement">
+                        <!-- Textarea -->
                         <input class="formInput" type="text" placeholder="Enter Text">
                         <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                     </div>
                     <button class="feedbackDelButton">del</button>
-                    <div class="feedbackElementFooter">
+                    <div class="feedbackElementFooter"> <!-- feedbackElementFooter will contain extra properties to be set -->
                         <input type="checkbox" id="consider1" name="consider1" value="Consider">
                         <label for="consider1">
                             Consider in sentiment</label><br>
@@ -26,8 +28,8 @@
                         <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
                     </div>
                     <div class="feedbackElement">
+                        <!-- Emoji selector -->
                         <input class="formInput" type="text" placeholder="Enter Text">
-                        <!-- the images are radio buttons -->
                         <div class="feelingRadioContainer">
                             <div class="feelingRadio">
                                 <input type="radio" id="happy" name="feeling" value="happy">
@@ -53,6 +55,7 @@
                     </div>
                     <div class="feedbackElement">
                         <input class="formInput" type="text" placeholder="Enter Text">
+                        <!-- Radio buttons section -->
                         <!-- Radio buttons are just 5 text boxes -->
                         <div class="formInputBulletIcon">&bull;</div>
                         <input class="formInputBullet" type="text" placeholder="Enter Text">
@@ -88,7 +91,8 @@
                     </div>
                     <div class="feedbackElement">
                         <input class="formInput" type="text" placeholder="Enter Text">
-                        <!-- Radio buttons are just 5 text boxes -->
+                        <!-- Checkbox section -->
+                        <!-- Checkboxes are just 5 text boxes -->
                         <div class="formInputCheckIcon">&#x2611;</div>
                         <input class="formInputBullet" type="text" placeholder="Enter Text">
                         <label for="bulletrating6">Rating (1-7):</label>
@@ -119,13 +123,13 @@
                         <input type="number" id="rating4" name="rating4" min="1" max="5"><br>
                     </div>
                 </div>
-                <div id="templateAddNewControls">
+                <div id="templateAddNewControls"> <!-- Buttons to add new sections -->
                     <a href="#">Add Textarea</a>
                     <a href="#">Add Emojis</a>
                     <a href="#">Add Radio Buttons</a>
                     <a href="#">Add Tickboxes</a>
                 </div>
-                <label id="formErrorMessage">Error Message</label>
+                <label id="formErrorMessage">Error Message</label> <!-- Space for error messages -->
                 <input type="submit" id="submitButtonTemplate" value="Save">
                 <a href="#">Delete</a>
                 <a href="#">Back</a>

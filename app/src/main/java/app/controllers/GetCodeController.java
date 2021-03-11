@@ -1,5 +1,8 @@
 package app.controllers;
 
+import app.App;
+import app.DbConnection;
+import app.Validator;
 import app.util.*;
 
 // for ViewUtil velocity models
@@ -16,23 +19,25 @@ public class GetCodeController {
 
         System.out.println("\nNotice: GetCodeController:servePage recognized request");
 
-        request.session(true);
-        if (request.session().isNew()) {
+        DbConnection db = App.getInstance().getDbConnection();
+        Validator v = App.getInstance().getValidator();
+
+        Session session = request.session();
+        if (session.isNew()) {
             System.out.println("Error:  GetCodeController:servePage session not found");
             response.redirect("/");
             return "Error: Session not found";
         }
+
+        // collect host-code (attribute already valid)
+        String hostCode = session.attribute("hostCode");
         
         // hostCode not set -> return user to sign-up page
-        if (request.session().attribute("hostCode") == null){
-            // Error: please ensure you have access to this page
+        if (hostCode == null){
             System.out.println("Error:  GetCodeController:servePage hostCode not set");
             response.redirect("/host/login");
             return null;
         }
-
-        // session hostCode attribute already valid
-        String hostCode = request.session().attribute("hostCode");
 
         Map<String, Object> model = new HashMap<>();
         model.put("hostCode", hostCode);

@@ -25,35 +25,47 @@ public class APIController {
     /**
      * creates a new host when a new user signs-up as a host
      * form sent from front-end to back-end to create host
+     * // TODO: IP collection, validation
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // collect form attributes, validate attributes
-        // ensure email address is unique
+        // collect attributes from API call-point (request)
         String f_name = request.queryParams("hostFName");
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
         String ip_address = null; // request.ip();
 
-        // TODO: IP collection, validation
-        if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eAddressIsValid(e_address)
-                || db.emailExists(e_address)) {
-            System.out.println("Error:  field invalid or email exists");
-
-            request.session().attribute("errorMessageLogin", "");
-            request.session().attribute("errorMessageCreate", "Error: field invalid or email exists");
+        // attribute validation
+        if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name)){
+            System.out.println("Error:  the name provided is considered invalid");
+            request.session().attribute("errorMessageCreate", "Error: name is invalid");
+            response.redirect("/host/login");
+            return null;
+        }
+        if (!v.eAddressIsValid(e_address)){
+            System.out.println("Error:  the email provided is considered invalid");
+            request.session().attribute("errorMessageCreate", "Error: email is invalid");
             response.redirect("/host/login");
             return null;
         }
 
-        // create host
+        // ensure email uniqueness
+        if (db.emailExists(e_address)){
+            System.out.println("Error:  the email provided is non-unique");
+            request.session().attribute("errorMessageCreate", "Error: email is already in use");
+            response.redirect("/host/login");
+            return null;
+        }
+
+        // create host in system
         Host host = db.createHost(f_name, l_name, ip_address, e_address);
+
+        // ensure host is valid
         if (!v.isHostValid(host)){
-            System.out.println("Error:  Created host considered invalid");
-            request.session().attribute("errorMessageLogin", "");
-            request.session().attribute("errorMessageCreate", "Created host considered invalid. Please re-try");
+            System.out.println("Error:  created host considered invalid");
+            request.session().attribute("errorMessageCreate", "Error: created host invalid; please try again");
             response.redirect("/host/login");
             return null;
         }
@@ -73,10 +85,9 @@ public class APIController {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // start session
-        request.session(true);
-        // return not found if session is new
-        if (request.session().isNew()) {
+        // get the current session
+        Session session = request.session(false);
+        if (session == null) {
             System.out.println("Error:  APIController:createEvent session not found");
             response.redirect("/error/401");
             return null;
@@ -84,7 +95,7 @@ public class APIController {
 
         // initialise event and input
         Event event = null;
-        Host host = request.session().attribute("host");
+        Host host = session.attribute("host");
         String title = request.queryParams("eventTitle");
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
@@ -93,7 +104,7 @@ public class APIController {
         Timestamp current = new Timestamp(System.currentTimeMillis());
         Timestamp startTime, endTime;
 
-        // Temporary fix for broken timestamp input
+        // TODO ((Temporary fix for broken timestamp input))
         try {
             startTime = Timestamp.valueOf(request.queryParams("startTime"));
             endTime = Timestamp.valueOf(request.queryParams("endTime"));
@@ -109,8 +120,10 @@ public class APIController {
             return "Error: Event description is invalid";
         if (!v.eventTypeIsValid(type))
             return "Error: Event type is invalid";
-        // if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
-        // return "Error: start and end time not in order";
+        /*
+        if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
+        return "Error: start and end time not in order";
+        */
 
         if (templateCode.equals("noTemplate")) {
             // create an event without a template
@@ -120,22 +133,21 @@ public class APIController {
             // create an event with a template
             System.out.println("Notice: a template has been provided");
             Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime,
-                    endTime);
+            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
         }
 
-        // return host event page if event is created and valid
-        if (v.isEventValid(event)) {
-            // event is valid
-            request.session().attribute("event", event);
-            Map<String, Object> model = new HashMap<>();
-            model.put("eventTitle", event.getTitle());
-            model.put("eventDescription", event.getDescription());
-            model.put("eventCode", event.getEventCode());
-            return ViewUtil.render(request, model, "/velocity/host-event.vm");
+        if (!v.isEventValid(event)){
+            // return not found if event is not created or input is not valid
+            return "Error: event not created or considered invalid - check inputs";
         }
-        // return not found if event is not created or input is not valid
-        return "Error: event not created or considered invalid - check inputs";
+
+        // event is valid; return host event page if event is created and valid
+        request.session().attribute("event", event);
+        Map<String, Object> model = new HashMap<>();
+        model.put("eventTitle", event.getTitle());
+        model.put("eventDescription", event.getDescription());
+        model.put("eventCode", event.getEventCode());
+        return ViewUtil.render(request, model, "/velocity/host-event.vm");
     };
 
     /**

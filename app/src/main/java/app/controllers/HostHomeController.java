@@ -29,27 +29,8 @@ public class HostHomeController {
             return null;
         }
 
-        // collect inputted host-code; get host by host-code
-        String hostCode = request.session().attribute("hostCode");
-        Host host = db.getHostByCode(hostCode);
-
-        // validate input before database interaction
-        if (!v.hostCodeIsValid(hostCode)) {
-            return "Error:  HostHomeController:servePage: hostCode invalid";
-        }
-
-        if (!db.hostCodeExists(hostCode)){
-            return "Error:  HostHomeController:servePage: hostCode does not exist";
-        }
-
-        host = db.getHostByCode(hostCode);
-
-        if (!v.isHostValid(host)){
-            return "Error:  HostHomeController:servePage: host invalid";
-        }
-
-        // host valid; store host
-        request.session().attribute("host", host);
+        // collect stored (valid) host
+        Host host = request.session().attribute("host");
 
         // return host homepage
         Map<String, Object> model = new HashMap<>();

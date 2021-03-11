@@ -83,21 +83,6 @@ public class ValidatorTest {
     }
 
     @Test
-    public void test_ipAddressIsValid() {
-        String[] validIPs = { "213.107.128.255",
-                // "0.0.0.0",
-                // "1.1.1."
-        };
-        String[] invalidIPs = { "123107128255", "1.5", " ", "", null };
-        for (String validIP : validIPs) {
-            assertTrue(v.ipAddressIsValid(validIP));
-        }
-        for (String invalidIP : invalidIPs) {
-            assertFalse(v.ipAddressIsValid(invalidIP));
-        }
-    }
-
-    @Test
     public void test_eAddressIsValid() {
         String[] validEmails = { "qweiuhu@ada.com", "qweq_wrq@fas.cn", "xxx@live.warwick.ac.uk" };
         String[] invalidEmails = { "123107128255", "1.5", "@.", " ", "", null };
@@ -112,7 +97,7 @@ public class ValidatorTest {
     @Test
     public void test_nameIsValid() {
         String[] validNames = { "Edwy" };
-        String[] invalidNames = { "EDwY", "3dwy", " ", "", null };
+        String[] invalidNames = { " ", "", null };
         for (String validName : validNames) {
             assertTrue(v.nameIsValid(validName));
         }
@@ -185,7 +170,7 @@ public class ValidatorTest {
 
     @Test
     public void test_isHostValid() {
-        Host testHost = new Host(0001, "fish-bird-brother-map", "213.107.128.255", "moustafa.edwy@gmail.com",
+        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com",
                 "Moustafa", "Eledwy", false);
 
         assertTrue(v.isHostValid(testHost));
@@ -193,7 +178,7 @@ public class ValidatorTest {
 
     @Test
     public void test_isParticipantValid() {
-        Participant testParticipant = new Participant(0001, "213.107.128.255", "Moustafa", "Eledwy", false);
+        Participant testParticipant = new Participant(0001, "Moustafa", "Eledwy", false);
 
         assertTrue(v.isParticipantValid(testParticipant));
     }

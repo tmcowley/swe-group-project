@@ -23,7 +23,6 @@ public class APIController {
     /**
      * creates a new host when a new user signs-up as a host
      * form sent from front-end to back-end to create host
-     * // TODO: IP collection, validation
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
@@ -33,7 +32,6 @@ public class APIController {
         String f_name = request.queryParams("hostFName");
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
-        String ip_address = null; // request.ip();
 
         // attribute validation
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name)){
@@ -58,7 +56,7 @@ public class APIController {
         }
 
         // create host in system
-        Host host = db.createHost(f_name, l_name, ip_address, e_address);
+        Host host = db.createHost(f_name, l_name, e_address);
 
         // ensure host is valid
         if (!v.isHostValid(host)){
@@ -181,7 +179,7 @@ public class APIController {
         }
 
         // create Participant object in DB -> link to event
-        Participant participant = db.createParticipant(null, f_name, l_name);
+        Participant participant = db.createParticipant(f_name, l_name);
         Event event = db.getEventByCode(eventCode);
         db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
 

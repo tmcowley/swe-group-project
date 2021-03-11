@@ -120,27 +120,6 @@ public class Validator {
     }
 
     /**
-     * Check if IP address is valid
-     * @param ip_address IP address to be checked
-     * @return IP address validity state
-     */
-    public boolean ipAddressIsValid(String ip_address){
-
-        if (StringUtils.isBlank(ip_address))
-            return false;
-        
-        // ip-address regular expression - source? ...
-        String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
-        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
-        + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
-
-        if (!ip_address.matches(regex))
-            return false;
-        
-        return true;
-    }
-
-    /**
      * Check if email address is valid
      * @param e_address email address to be checked
      * @return email address validity state
@@ -346,7 +325,6 @@ public class Validator {
     public boolean isHostValid(Host host){
         if (host != null&&
             hostCodeIsValid(host.getHostCode())&&
-            //ipAddressIsValid(host.getIPAddress())&&
             eAddressIsValid(host.getEAddress())&&
             nameIsValid(host.getFName())&&
             nameIsValid(host.getLName())&&
@@ -365,7 +343,6 @@ public class Validator {
      */
     public boolean isParticipantValid(Participant participant){
         if (participant != null&&
-            //ipAddressIsValid(participant.getIPAddress())&&
             nameIsValid(participant.getFName())&&
             nameIsValid(participant.getLName())&&
             idIsValid(participant.getParticipantID())
@@ -430,6 +407,24 @@ public class Validator {
 }
 
 // DEPRECIATED METHODS
+
+/*
+// Check if IP address is valid
+// @param ip_address IP address to be checked
+// @return IP address validity state
+//
+public boolean ipAddressIsValid(String ip_address){
+    if (StringUtils.isBlank(ip_address))
+        return false;
+    // ip-address regular expression - source? ...
+    String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+    + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+    + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+    if (!ip_address.matches(regex))
+        return false;
+    return true;
+}
+*/
 
 // /**
 //  * Check if the given host code is valid:

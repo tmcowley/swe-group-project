@@ -52,15 +52,15 @@ public class DBConnTest {
     //@Test
     public void testCreationAndDeletion(){
         // test host creation
-        Host testHost = db.createHost("testFName", "testLName", "127.0.0.1", "test@test.com");
+        Host testHost = db.createHost("testFName", "testLName", "test@test.com");
         int testHostID = testHost.getHostID();
 
         // test template creation
-        Template testTemplate = db.createTemplate(testHostID, "data");
+        Template testTemplate = db.createTemplate(testHostID, null);
         int testTemplateID = testTemplate.getTemplateID();
 
         // test participant creation
-        Participant testPart = db.createParticipant("127.0.0.1", "testFName", "testLName");
+        Participant testPart = db.createParticipant("testFName", "testLName");
         int testPartID = testPart.getParticipantID();
 
         // test event creation
@@ -78,7 +78,7 @@ public class DBConnTest {
         // test participant_in_event creation
         Boolean partInEvent = db.addParticipantToEvent(testPartID, testEventID);
 
-        assertTrue(testHost.getFName().equals("testFName") && testHost.getLName().equals("testLName") && testHost.getIPAddress().equals("127.0.0.1") && testHost.getEAddress().equals("test@test.com"));
+        assertTrue(testHost.getFName().equals("testFName") && testHost.getLName().equals("testLName") && testHost.getEAddress().equals("test@test.com"));
         assertTrue(testTemplate.getHostID() == testHostID);
         assertTrue(testPart.getFName().equals("testFName") && testPart.getLName().equals("testLName") && testPart.getIPAddress().equals("127.0.0.1"));
         assertTrue(testEvent.getHostID() == testHostID && testEvent.getTemplateID() == testTemplateID && testEvent.getTitle().equals("event title") && testEvent.getDescription().equals("event desc") && testEvent.getType().equals("seminar"));

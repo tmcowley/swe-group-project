@@ -8,16 +8,14 @@ public class Participant {
     private String l_name;
     private boolean sys_ban;
     /**
-     * Participant constructer
-     * @param participant_id
+     * Participant constructor
      * @param ip_address
      * @param f_name
      * @param l_name
      * @param sys_ban
      */
-    public Participant(int participant_id, String ip_address, String f_name, String l_name, boolean sys_ban) {
+    public Participant(int participant_id, String f_name, String l_name, boolean sys_ban) {
         this.participant_id = participant_id;
-        this.ip_address = ip_address;
         this.f_name = f_name;
         this.l_name = l_name;
         this.sys_ban = sys_ban;

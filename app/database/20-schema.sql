@@ -35,7 +35,6 @@ CREATE TABLE host(
     host_id         SERIAL          NOT NULL,
     host_code       VARCHAR(64)
                     UNIQUE          NOT NULL,
-    ip_address      INET,
     e_address       citext UNIQUE   NOT NULL,
     f_name          VARCHAR(35)     NOT NULL,
     l_name          VARCHAR(35)     NOT NULL,

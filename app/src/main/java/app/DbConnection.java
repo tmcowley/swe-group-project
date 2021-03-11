@@ -92,11 +92,10 @@ public class DbConnection{
      * Create a host in the database
      * @param f_name First name
      * @param l_name Last name
-     * @param ip_address Ip address
      * @param e_address Email address
      * @return Host instance representing stored data
      */
-    public Host createHost(String f_name, String l_name, String ip_address, String e_address){
+    public Host createHost(String f_name, String l_name, String e_address){
         // generate unique host code
         String host_code = generateUniqueHostCode();
 
@@ -106,13 +105,12 @@ public class DbConnection{
     
         try{
             String createHost = ""
-                + "INSERT INTO host(f_name, l_name, ip_address, e_address, host_code) "
+                + "INSERT INTO host(f_name, l_name, e_address, host_code) "
                 + "VALUES(?, ?, ?::INET, ?, ?) "
                 + "RETURNING host_id;";
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);
-            stmt.setObject(3, ip_address);
             stmt.setString(4, e_address);
             stmt.setString(5, host_code);
 
@@ -131,14 +129,13 @@ public class DbConnection{
         return getHost(host_id);
     }
 
-    /**
-     * Create a template in the database
-     * @param host_id Host id that it belongs to
-     * @param template_code template code
-     * @param data content
-     * @return Template instance representing stored data
-     */
-    public Template createTemplate(int host_id, String data){
+
+    // // TODO: COMMENT, FIX
+    // public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
+    // }
+
+    // TODO: since broken
+    public Template createTemplate(int host_id, ArrayList<TemplateComponent> components){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
 
@@ -146,18 +143,24 @@ public class DbConnection{
         ResultSet rs = null;
         Integer template_id = null;
         try{
+            // create empty template object
             String createTemplate = ""
-                + "INSERT INTO template(host_id, template_code, data) "
-                + "VALUES(?, ?, ?) "
+                + "INSERT INTO template(host_id, template_code) "
+                + "VALUES(?, ?) "
                 + "RETURNING template_id";
             stmt = this.conn.prepareStatement(createTemplate);
             stmt.setInt(1, host_id);
             stmt.setString(2, template_code);
-            stmt.setString(3, data);
-
             rs = stmt.executeQuery();
             if (rs.next()) {
                 template_id = rs.getInt("template_id");
+            }
+
+            // for each component in components -> create template component in DB, add tc in t connection
+            for (TemplateComponent tc : components){
+                ;
+            // tc = createTemplateComponent(tc);
+            // addComponentToTemplate();
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
@@ -172,37 +175,17 @@ public class DbConnection{
 
     /**
      * Create a participant in the database
-     * @param ip_address Ip address
      * @param f_name First name
      * @param l_name Last name
      * @return Participant instance representing stored data
      */
-    public Participant createParticipant(String ip_address, String f_name, String l_name){
+    public Participant createParticipant(String f_name, String l_name){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer participant_id = null;
         String createParticipant;
 
         try{
-            // if (ip_address == null){
-            //     createParticipant = ""
-            //         + "INSERT INTO participant(f_name, l_name) "
-            //         + "VALUES(?, ?) "
-            //         + "RETURNING participant_id";
-            //     stmt = this.conn.prepareStatement(createParticipant);
-            //     stmt.setString(1, f_name);
-            //     stmt.setString(2, l_name);
-            // } else {
-            //     createParticipant = ""
-            //         + "INSERT INTO participant(ip_address, f_name, l_name) "
-            //         + "VALUES(?::INET, ?, ?) "
-            //         + "RETURNING participant_id";
-            //     stmt = this.conn.prepareStatement(createParticipant);
-            //     stmt.setString(1, ip_address);
-            //     stmt.setString(2, f_name);
-            //     stmt.setString(3, l_name);
-            // }
-
             createParticipant = ""
                 + "INSERT INTO participant(f_name, l_name) "
                 + "VALUES(?, ?) "
@@ -711,18 +694,12 @@ public class DbConnection{
             if (rs.next()) {
                 host_id = rs.getInt("host_id");
                 String host_code = rs.getString("host_code");
-                String ip_address;
-                try{
-                    ip_address = rs.getObject("ip_address").toString();
-                } catch (NullPointerException npe){
-                    ip_address = null;
-                }
                 String e_address = rs.getString("e_address");
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
                 boolean sys_ban = rs.getBoolean("sys_ban");
 
-                host = new Host(host_id, host_code, ip_address, e_address, f_name, l_name, sys_ban);
+                host = new Host(host_id, host_code, e_address, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
@@ -748,7 +725,6 @@ public class DbConnection{
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
         int host_id = 0;
         String template_code = "";
-        String data = "";
         try{
             String selectTemplateByID = ""
                 + "SELECT * FROM template "
@@ -768,7 +744,6 @@ public class DbConnection{
                 template_id = rs1.getInt("template_id");
                 host_id = rs1.getInt("host_id");
                 template_code = rs1.getString("template_code");
-                data = rs1.getString("data");          
             }
             stmt2 = this.conn.prepareStatement(selectComponentsByID);
             stmt2.setInt(1, template_id);
@@ -817,17 +792,11 @@ public class DbConnection{
             rs = stmt.executeQuery();
             if (rs.next()) {
                 participant_id = rs.getInt("participant_id");
-                String ip_address;
-                try{
-                    ip_address = rs.getObject("ip_address").toString();
-                } catch (NullPointerException npe){
-                    ip_address = null;
-                }
                 String f_name = rs.getString("f_name");
                 String l_name = rs.getString("l_name");
                 boolean sys_ban = rs.getBoolean("sys_ban");
 
-                participant = new Participant(participant_id, ip_address, f_name, l_name, sys_ban);
+                participant = new Participant(participant_id, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
@@ -901,7 +870,6 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
                 int host_id = rs.getInt("host_id");
                 String total_mood = rs.getString("total_mood");
-
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 String type = rs.getString("type");
@@ -919,6 +887,7 @@ public class DbConnection{
         return archivedEvent;
     }
 
+    // TODO: comment
     public Feedback getFeedback(int feedback_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -930,11 +899,16 @@ public class DbConnection{
             rs = stmt.executeQuery();
             
             if (rs.next()) {
-                ArrayList<String> keyResults = new ArrayList<String>();
+                // ArrayList<String> keyResults = new ArrayList<String>();
+                // String[] keyresults = (String[]) rs.getArray("key_results").getArray();
+                // for (String result : keyresults) {
+                //     keyResults.add(result);
+                // }
+                
+                // convert key_results from String Array to String ArrayList
                 String[] keyresults = (String[]) rs.getArray("key_results").getArray();
-                for (String result : keyresults) {
-                    keyResults.add(result);
-                }
+                ArrayList<String> keyResults = new ArrayList<String>(Arrays.asList(keyresults));
+
                 feedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
                 (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), rs.getBytes("types"), (Boolean[]) rs.getArray("keys").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), Float.valueOf(rs.getFloat("compound")), keyResults);
             }
@@ -948,6 +922,7 @@ public class DbConnection{
         return feedback;
     }
 
+    // TODO: comment
     public Feedback[] getFeedbacksByEventID(int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -964,11 +939,8 @@ public class DbConnection{
             int feedbackCount = 0;
             rs.beforeFirst();
             while (rs.next()) {
-                ArrayList<String> keyResults = new ArrayList<String>();
                 String[] keyresults = (String[]) rs.getArray("key_results").getArray();
-                for (String result : keyresults) {
-                    keyResults.add(result);
-                }
+                ArrayList<String> keyResults = new ArrayList<String>(Arrays.asList(keyresults));
                 foundFeedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
                 (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), rs.getBytes("types"), (Boolean[]) rs.getArray("keys").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), Float.valueOf(rs.getFloat("compound")), keyResults);
                 foundFeedbacks[feedbackCount] = foundFeedback;
@@ -976,6 +948,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());;
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1013,7 +986,8 @@ public class DbConnection{
                 feedbackCount++;
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1306,32 +1280,32 @@ public class DbConnection{
         return (bannedParticipant != 0);
     }
 
-    /**
-     * Update data in templates 
-     * @template_id templateID of template that needs to be changed
-     * @data updated data
-     * @return data change status
-     */
-    protected Boolean addDataToTemplate(int template_id, String data){
-        PreparedStatement stmt = null;
-        Integer templateFound = null;
-        try{
-            String updateTemplate = ""
-                + "UPDATE template "
-                + "SET data = ? "
-                + "WHERE template_id = ?;";
-            stmt = this.conn.prepareStatement(updateTemplate);
-            stmt.setString(1, data);
-            stmt.setInt(2, template_id);
-            templateFound = stmt.executeUpdate();
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-        }
-        if (templateFound == null) return null;
-        return (templateFound != 0);
-    }
+    // /**
+    //  * Update data in templates 
+    //  * @template_id templateID of template that needs to be changed
+    //  * @data updated data
+    //  * @return data change status
+    //  */
+    // protected Boolean addDataToTemplate(int template_id, String data){
+    //     PreparedStatement stmt = null;
+    //     Integer templateFound = null;
+    //     try{
+    //         String updateTemplate = ""
+    //             + "UPDATE template "
+    //             + "SET data = ? "
+    //             + "WHERE template_id = ?;";
+    //         stmt = this.conn.prepareStatement(updateTemplate);
+    //         stmt.setString(1, data);
+    //         stmt.setInt(2, template_id);
+    //         templateFound = stmt.executeUpdate();
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());;
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //     }
+    //     if (templateFound == null) return null;
+    //     return (templateFound != 0);
+    // }
 
     /**
      * Delete host by ID

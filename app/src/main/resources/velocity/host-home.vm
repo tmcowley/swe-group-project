@@ -11,7 +11,7 @@
 <div id="mainBodyContainerOneCol">
     <div id="hostHomeContainer">
         <h1>Host Homepage</h1>
-        <h2>Hello! $fName $lName</h2>
+        <h2>Hello! $fName $lName</h2> <!-- Host's first and last name -->
         <a id="hostCodeContinue" href="/host/create-event">Create a New Event</a>
         <a id="hostCodeContinue" href="/host/templates">My Templates</a>
     </div>

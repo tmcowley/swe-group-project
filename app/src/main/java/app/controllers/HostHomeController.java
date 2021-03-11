@@ -24,7 +24,9 @@ public class HostHomeController {
 
         request.session(true);
         if (request.session().isNew()) {
-            return "Error:  HostHomeController:servePage: session does not exist";
+            System.out.println("Error:  HostHomeController:servePage: session does not exist");
+            response.redirect("/error/401");
+            return null;
         }
 
         // collect inputted host-code; get host by host-code

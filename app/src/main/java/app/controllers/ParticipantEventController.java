@@ -28,8 +28,9 @@ public class ParticipantEventController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            // return ViewUtil.notFound; TODO
-            return "Error: Session not found";
+            System.out.println("Error:  participantEventController:servePage: session does not exist");
+            response.redirect("/error/401");
+            return null;
         }
 
         Event event = request.session().attribute("event");

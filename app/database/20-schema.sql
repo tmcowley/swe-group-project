@@ -60,19 +60,6 @@ CREATE TABLE template(
     PRIMARY KEY (template_id)
 );
 
--- create template component link table which stores components contained in templates
-CREATE TABLE component_in_template(
-    component_id    INTEGER         NOT NULL,
-    template_id     INTEGER         NOT NULL,
-    FOREIGN KEY (component_id)
-        REFERENCES template_component(tc_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (template_id)
-        REFERENCES template(template_id)
-        ON DELETE CASCADE,
-    PRIMARY KEY(component_id, template_id)
-);
-
 -- create component table which stores components data
 CREATE TABLE template_component(
     tc_id           SERIAL          NOT NULL,
@@ -85,6 +72,19 @@ CREATE TABLE template_component(
     tc_options_ans  BOOLEAN[],
     tc_text_response TEXT,
     PRIMARY KEY (tc_id)
+);
+
+-- create template component link table which stores components contained in templates
+CREATE TABLE component_in_template(
+    component_id    INTEGER         NOT NULL,
+    template_id     INTEGER         NOT NULL,
+    FOREIGN KEY (component_id)
+        REFERENCES template_component(tc_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (template_id)
+        REFERENCES template(template_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY(component_id, template_id)
 );
 
 -- create participant table which stores participants data

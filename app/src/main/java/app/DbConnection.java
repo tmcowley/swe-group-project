@@ -364,13 +364,14 @@ public class DbConnection{
     }
 
 
+    // TODO: comment
     public Feedback createFeedback(Feedback feedback){
 
+        // convert key_results from String ArrayList to String array
         ArrayList<String> keyResultsList = feedback.getKey_Results();
         String[] keyResultsArray = keyResultsList.toArray(new String[keyResultsList.size()]);
 
         return createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(), feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResultsArray);
-        
     }
 
     /**
@@ -952,7 +953,7 @@ public class DbConnection{
         ResultSet rs = null;
         Feedback[] foundFeedbacks = new Feedback[0];
         try{
-            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=?;";
+            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? ORDER BY feedback.time_stamp DESC;";
             stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, event_id);
             rs = stmt.executeQuery();
@@ -983,12 +984,14 @@ public class DbConnection{
         return foundFeedbacks;
     }
 
+    // TODO comment
+    // in descending order of time generated (newest first)
     public Feedback[] getFeedbacksInEventByParticipantID(int event_id, int participant_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Feedback[] foundFeedbacks = new Feedback[0];
         try{
-            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? AND participant_id=?;";
+            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? AND participant_id=? ORDER BY feedback.time_stamp DESC;";
             stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, event_id);
             rs = stmt.executeQuery();

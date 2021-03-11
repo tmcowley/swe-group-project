@@ -137,10 +137,11 @@ public class DbConnection{
 
 
     // public TemplateComponent createTemplateComponent(TemplateComponent tc){
-    //     if (tc.getId() != null){
+
+    //     // a TC with an ID -> TC already stored
+    //     if (tc.getId() != null) 
     //         return tc;
-    //     }
-    //     return createTemplateComponent()
+    //     return createTemplateComponent(tc.getName(), tc.getType(), tc.)
     // }
 
     // TODO: COMMENT
@@ -202,13 +203,13 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
 
-            // if Template contains components
-            if (components != null){
-                for (TemplateComponent tc : components){
-                    tc = createTemplateComponent(tc);
-                    // addComponentToTemplate();
-                }
-            }
+            // // if Template contains components
+            // if (components != null){
+            //     for (TemplateComponent tc : components){
+            //         tc = createTemplateComponent(tc);
+            //         // addComponentToTemplate();
+            //     }
+            // }
 
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());

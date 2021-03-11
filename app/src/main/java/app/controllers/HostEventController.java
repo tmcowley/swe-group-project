@@ -30,9 +30,11 @@ public class HostEventController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            // return ViewUtil.notFound; TODO
-            return "Error: Session not found";
+            System.out.println("Error:  HostEventController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
         }
+        
         // initialise event
         Event event = request.session().attribute("event");
         Host host = request.session().attribute("host");

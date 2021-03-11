@@ -26,7 +26,9 @@ public class EventCreateController {
         // start session
         request.session(true);
         if (request.session().isNew()) {
-            return "Error:  session not found";
+            System.out.println("Error: EventCreateController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
         }
 
         // get host from session

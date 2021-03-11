@@ -1,17 +1,21 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<div id="landingMain">
-    <div id="landingContainer">
-        <h1>Resmodus</h1>
-        <div id="landingJoinContainer">
-            <form id="landingSubContainer" name="joinInfo" action="/event/join/code" method="post">
-                <input type="text" id="participantFName" name="participantFName" placeholder="First Name">
-                <input type="text" id="participantLName" name="participantLName" placeholder="Last Name">
-                <input type="text" id="eventCode" name="eventCode" placeholder="Code">
-                <label id="formErrorMessage">$errorMessageJoinEvent</label>
-                <input type="submit" value="Join Event" id="landingJoinButton">
-            </form>
-            <a href="/host/login" id="landingHostButton">Host Event</a>
+<div id="mainBodyContainerOneCol">
+    <div id="landingMain">
+        <div id="landingContainer">
+            <h1>Resmodus</h1>
+            <div id="landingJoinContainer">
+                <!-- Form to join an event - in its own section -->
+                <form id="landingSubContainer" name="joinInfo" action="/event/join/code" method="post">
+                    <input type="text" id="participantFName" name="participantFName" placeholder="First Name">
+                    <input type="text" id="participantLName" name="participantLName" placeholder="Last Name">
+                    <input type="text" id="eventCode" name="eventCode" placeholder="Code">
+                    <label id="formErrorMessage">$errorMessageJoinEvent</label>
+                    <input type="submit" value="Join Event" id="landingJoinButton">
+                </form>
+                <!-- Alternatively, a button to host an event -->
+                <a href="/host/login" id="landingHostButton">Host Event</a>
+            </div>
         </div>
     </div>
 </div>

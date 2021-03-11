@@ -1,5 +1,6 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
+<!-- Mobile side menu - same content as desktop version further below -->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <h1>$eventTitle</h1>
@@ -17,9 +18,11 @@
 </header>
 <div id="mainBodyContainer">
     <div id="mainFormSection">
+        <!-- mobile icons -->
         <span id="exitButtonMobile"><a href="/"><img src="/images/exit-icon.png"></a></span>
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/info-icon.png"></span>
         <div id="mainForm">
+            <!-- Feedback form -->
             <form action="/event/participant/feedback" method="post">
                 <h1>How are you finding the meeting?</h1>
                 <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
@@ -61,6 +64,7 @@
     #end
 #end
     </div>
+    <!-- Desktop info section -->
     <div id="infoSection">
         <h1>$eventTitle</h1>
         <p>

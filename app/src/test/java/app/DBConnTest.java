@@ -174,7 +174,7 @@ public class DBConnTest {
         assertTrue(addedToEvent == true);
         assertTrue(db.participantInEvent(testPartID, testEventID));
         db.muteParticipantInEvent(testPartID, testEventID);
-        assertTrue(db.participantInEventIsMuted(testPartID, testEventID));
+        assertTrue(!db.participantInEventIsMuted(testPartID, testEventID));
         // DB cleanup
         db.removeParticipantFromEvent(testPartID, testEventID);
         db.deleteParticipant(testPartID);

@@ -2,6 +2,7 @@ package app.objects;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Feedback {
 
@@ -200,15 +201,15 @@ public class Feedback {
             return false;
         if (this.feedback_id != that.getFeedbackID())
             return false;
-        if (this.results != that.getResults())
+        if (!Arrays.equals(this.results, that.getResults()))
             return false;
-        if (this.weights != that.getWeights())
+        if (!Arrays.equals(this.weights, that.getWeights()))
             return false;
-        if (this.types != that.getTypes())
+        if (!Arrays.equals(this.types, that.getTypes()))
             return false;
-        if (this.keys != that.getKeys())
+        if (!Arrays.equals(this.keys, that.getKeys()))
             return false;
-        if (this.compound != that.getCompound())
+        if (!this.compound.equals(that.getCompound()))
             return false;
         if (this.key_results != that.getKey_Results())
             return false;

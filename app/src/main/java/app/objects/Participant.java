@@ -61,13 +61,15 @@ public class Participant {
      * @return True or False
      */
     public boolean equals(Participant that) {
+        if (that ==  null)
+            return false;
         if (this.participant_id != that.getParticipantID())
             return false;
-        if (this.ip_address != that.getIPAddress())
+        // if (this.ip_address.equals(that.getIPAddress()))
+        //     return false;
+        if (!this.f_name.equals(that.getFName()))
             return false;
-        if (this.f_name != that.getFName())
-            return false;
-        if (this.l_name != that.getLName())
+        if (!this.l_name.equals(that.getLName()))
             return false;
         if (this.sys_ban != that.getSysBan())
             return false;

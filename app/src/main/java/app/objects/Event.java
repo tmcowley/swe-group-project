@@ -121,17 +121,17 @@ public class Event {
             return false;
         if (this.template_id != that.getTemplateID())
             return false;
-        if (this.title != that.getTitle())
+        if (!this.title.equals(that.getTitle()))
             return false;
-        if (this.description != that.getDescription())
+        if (!this.description.equals(that.getDescription()))
             return false;
-        if (this.type != that.getType())
+        if (!this.type.equals(that.getType()))
             return false;
         if (this.start_time != that.getStartTime())
             return false;
         if (this.end_time != that.getEndTime())
             return false;
-        if (this.eventCode != that.getEventCode())
+        if (!this.eventCode.equals(that.getEventCode()))
             return false;
         return true;
     }

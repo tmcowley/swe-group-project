@@ -106,4 +106,41 @@ public class DBConnTest {
         //assertFalse(true);
 
     }
+
+
+
+    @Test
+    public void test_createParticipant(){
+        String Fname = "testFName";
+        String Lname = "testLName";
+        Participant testPart = db.createParticipant(Fname, Lname);
+        int testPartID = testPart.getParticipantID();
+        Participant testPart2 = db.getParticipant(testPartID);
+        assertTrue(testPart.equals(testPart2));
+    }
+
+    @Test
+    public void test_createHost(){
+        String Fname = "testFName";
+        String Lname = "testLName";
+        String email = "test@test.com";
+        Host testHost = db.createHost(Fname, Lname, email);
+        String testCode = testHost.getHostCode();
+        Host testHost2 = db.getHostByCode(testCode);
+        assertTrue(testHost.equals(testHost2));
+    }
+
+    @Test 
+    public void test_participantInEvent_addParticipantToEvent(){
+        String ip = "192.168.1.1";
+        String Fname = "testFName";
+        String Lname = "testLName";
+        Participant testPart = db.createParticipant(Fname, Lname);
+        String email = "test@test.com";
+        Host testHost = db.createHost(Fname, Lname, email);
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        Event testEvent = db.createEvent(testHost.getHostID(), "title", "desc", "type", ts, ts);
+        db.addParticipantToEvent(testPart.getParticipantID(), testEvent.getEventID());
+        assertTrue(db.participantInEvent(testPart.getParticipantID(), testEvent.getEventID()));
+    }
 }

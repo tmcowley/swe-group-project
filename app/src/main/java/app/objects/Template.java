@@ -63,7 +63,7 @@ public class Template {
             return false;
         if (this.host_id != that.getHostID())
             return false;
-        if (this.template_code != that.getTemplateCode())
+        if (!this.template_code.equals(that.getTemplateCode()))
             return false;
         if (!CollectionUtils.isEqualCollection(this.components, that.getComponents()))
             return false;

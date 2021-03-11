@@ -191,17 +191,17 @@ public class TemplateComponent {
       return false;
     if (this.id != that.getId())
       return false;
-    if (this.name != that.getName())
+    if (!this.name.equals(that.getName()))
       return false;
     if (!Arrays.equals(this.options, that.getOptions()))
       return false;
     if (!Arrays.equals(this.optionsAns, that.getOptionsAns()))
       return false;
-    if (this.prompt != that.getPrompt())
+    if (!this.prompt.equals(that.getPrompt()))
       return false;
-    if (this.textResponse != that.getTextResponse())
+    if (!this.textResponse.equals(that.getTextResponse()))
       return false;
-    if (this.type != that.getType())
+    if (!this.type.equals(that.getType()))
       return false;
     return true;
   }

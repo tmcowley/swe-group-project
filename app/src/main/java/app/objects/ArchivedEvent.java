@@ -98,13 +98,13 @@ public class ArchivedEvent {
             return false;
         if (this.host_id != that.getHostID())
             return false;
-        if (this.total_mood != that.getMood())
+        if (!this.total_mood.equals(that.getMood()))
             return false;
-        if (this.title != that.getTitle())
+        if (!this.title.equals(that.getTitle()))
             return false;
-        if (this.description != that.getDescription())
+        if (!this.description.equals(that.getDescription()))
             return false;
-        if (this.type != that.getType())
+        if (!this.type.equals(that.getType()))
             return false;
         if (this.start_time != that.getStartTime())
             return false;

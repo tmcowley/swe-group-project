@@ -22,14 +22,9 @@ public class AuthController {
 
         // start session
         request.session(true);
-        if (request.session().isNew()) {
-            System.out.println("Error:  APIController:hostLogin: session not found");
-            response.redirect("/");
-            return null;
-        }
-        System.out.println(request.toString());
+
+        System.out.println(request);
         String hostCode = request.queryParams("hostCode");
-        //String hostCode = request.session().attribute("hostCode");
         System.out.println("Notice: hostCode:" + hostCode);
 
         // validate input before database interaction

@@ -6,7 +6,6 @@ import app.Validator;
 import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
 import app.util.ViewUtil;
-import app.util.emailController;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class APIController {
 
     // thread safe - no DB interaction
     static Validator v = App.getInstance().getValidator();
-    static emailController e = new emailController();
 
     /**
      * creates a new host when a new user signs-up as a host

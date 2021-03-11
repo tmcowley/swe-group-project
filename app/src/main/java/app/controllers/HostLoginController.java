@@ -5,8 +5,11 @@ import spark.*;
 import app.util.*;
 
 public class HostLoginController {
-    // serve index page (GET request)
+
+    // TODO: comment
     public static Route servePage = (Request request, Response response) -> {
+        // start session
+        request.session(true);
 
         if (request.session().attribute("errorMessageLogin") == null)
             request.session().attribute("errorMessageLogin", "");

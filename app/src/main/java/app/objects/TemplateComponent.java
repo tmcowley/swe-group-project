@@ -10,15 +10,16 @@ public class TemplateComponent {
   private String type; // question, or radio, or checkbox
   private String prompt; // question/ prompt
   private String[] options; // array of radio or checkbox options
-  private Boolean[] optionsAns; // array of boolean responses to options array
-                                // e.g. t, f, t for checkbox type
-                                // empty if type is question
-  private String textResponse; // text response field following prompt
-                               // null if type radio or checkbox
 
-  public TemplateComponent() {
+  // array of boolean responses to options array
+  // e.g. t, f, t for checkbox type; empty if type is question
+  private Boolean[] optionsAns;
 
-  }
+  // text response field following prompt
+  // null if type radio or checkbox
+  private String textResponse;
+
+  public TemplateComponent() {}
 
   /**
    * Template component constructor
@@ -178,12 +179,16 @@ public class TemplateComponent {
   public String getTextResponse() {
     return this.textResponse;
   }
+
   /**
-   * compares 2 template component objects
-   * @param that
-   * @return  true or false
+   * null-safe comparison of template component objects
+   * 
+   * @param that other TemplateComponent
+   * @return true or false
    */
   public boolean equals(TemplateComponent that) {
+    if (that == null)
+      return false;
     if (this.id != that.getId())
       return false;
     if (this.name != that.getName())

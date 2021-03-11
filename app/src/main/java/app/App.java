@@ -80,7 +80,7 @@ public class App {
         get("/", IndexController.servePage);
         // get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
-        // get("/host/get-code", GetCodeController.servePage);
+        get("/host/get-code", GetCodeController.servePage);
         get("/host/home", APIController.hostLogin);
         get("/host/create-event", EventCreateController.servePage);
         get("/event/host/code", HostEventController.servePage);

@@ -1,36 +1,52 @@
 package app.controllers;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import spark.*;
 import app.App;
+import app.DbConnection;
+import app.Validator;
 import app.objects.Host;
 import app.util.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import spark.*;
+import spark.utils.StringUtils;
+
+
 public class GetCodeController {
-    /** Serve the index page (GET request) */
+    
+    // TODO comment
     public static Route servePage = (Request request, Response response) -> {
-        // initialise event and input first name and last name
-        Host host = null;
-        String[] name = request.queryParams("hostName").split(" ");
-        String e_address = request.queryParams("hostEmail");
-        // validate input before interact with database
-        if (App.getInstance().getValidator().eAddressIsValid(e_address)
-                && App.getInstance().getValidator().nameIsValid(name[0])
-                && App.getInstance().getValidator().nameIsValid(name[1])) {
-            host = App.getInstance().getDbConnection().createHost(name[0], name[1], request.ip(), e_address);
+
+        System.out.println("\nNotice: GetCodeController:servePage recognized request");
+
+        request.session(true);
+        if (request.session().isNew()) {
+            return "Error: Session not found";
         }
-        // return participant event page if event is found
-        if (App.getInstance().getValidator().isHostValid(host)) {
-            request.session(true);
-            request.session().attribute("host", host);
-            Map<String, Object> model = new HashMap<>();
-            model.put("hostCode", host.getHostCode());
-            return ViewUtil.render(request, model, "/velocity/get-code.vm");
+
+        if (request.session().attribute("errorMessageGetHostCode") == null)
+            request.session().attribute("errorMessageGetHostCode", "");
+        
+        // host not set -> return user to sign-up page
+        if (request.session().attribute("host") == null){
+            // Error: please ensure you have access to this page
+            System.out.println("Error: GetCodeController:servePage please ensure you have access to this page");
+            //request.session().attribute("errorMessageGetHostCode", "Error: please ensure you have access to this page");
+            response.redirect("/host/login");
+            return null;
         }
-        // return notfound if event is not found or input is not valid
-        return ViewUtil.notFound;
+
+        // session host attribute validity pre-established
+        Host host = request.session().attribute("host");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("hostCode", host.getHostCode());
+        model.put("errorMessageGetHostCode", request.session().attribute("errorMessageGetHostCode"));
+        return ViewUtil.render(request, model, "/velocity/get-code.vm");
+
     };
 
 }

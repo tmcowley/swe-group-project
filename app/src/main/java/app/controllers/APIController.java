@@ -23,10 +23,10 @@ public class APIController {
 
     // form sent from front-end to back-end to create host\
     /**
-     * This method creates a new host when a new user signs up as a host
+     * creates a new host when a new user signs-up as a host
      */
     public static Route createHost = (Request request, Response response) -> {
-        System.out.println("\nNotice: createHost API endpoint recognized request \n");
+        System.out.println("\nNotice: createHost API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect form attributes, validate attributes
@@ -35,6 +35,8 @@ public class APIController {
         String l_name = request.queryParams("hostLName");
         String e_address = request.queryParams("hostEmail");
         String ip_address = null; // request.ip();
+
+        // TODO: IP collection, validation
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eAddressIsValid(e_address)
                 || db.emailExists(e_address)) {
             System.out.println("Error: field invalid or email exists");
@@ -44,38 +46,32 @@ public class APIController {
             response.redirect("/host/login");
             return null;
         }
-        // System.out.println("Notice: createHost fields collected and validated");
 
+        // create host
         Host host = db.createHost(f_name, l_name, ip_address, e_address);
-        if (v.isHostValid(host)) {
-            // host is valid
-            request.session(true);
-            request.session().attribute("host", host);
-            Map<String, Object> model = new HashMap<>();
-            model.put("hostCode", host.getHostCode());
-            model.put("hostCode", host.getHostCode());
-            return ViewUtil.render(request, model, "/velocity/get-code.vm");
-        } else {
+        if (!v.isHostValid(host)){
             System.out.println("Error: Created host considered invalid");
-
             request.session().attribute("errorMessageLogin", "");
             request.session().attribute("errorMessageCreate", "Created host considered invalid. Please re-try");
             response.redirect("/host/login");
             return null;
         }
-        // (broken) send email containing host-code to new host
-        // e.sendEmail(Email, "Resmodus: Here's your host code", hostCode);
 
-
+        // host is valid
+        request.session(true);
+        request.session().attribute("host", host);
+        response.redirect("/host/get-code");
+        return null;
     };
 
     /**
-     * This method creates and event when a host user requests a new event to be made
+     * Creates and event when a host user requests a new event to be made
      * form sent by host to create an event
      */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
+
         // start session
         request.session(true);
         // return not found if session is new
@@ -140,12 +136,12 @@ public class APIController {
         return "Error: event not created or considered invalid - check inputs";
     };
 
-    // form sent by participant to join an event
     /**
-     * This method allows a participant to join an ongoing event
+     * allows a participant to join an ongoing event
+     * collects form sent by participant to join an event
      */
     public static Route joinEvent = (Request request, Response response) -> {
-        System.out.println("\nNotice: joinEvent API endpoint recognized request \n");
+        System.out.println("\nNotice: joinEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
         // Get form attributes, ensure attributes are valid
@@ -181,11 +177,11 @@ public class APIController {
     };
 
     /**
-     * this method allows a participant in an event to create an instance of feedback
-     * form sent by participant (in event) to create an instance of feedback
+     * allows a participant in an event to create an instance of feedback
+     * collects form sent by participant (in event) to create an instance of feedback
      */
     public static Route createFeedback = (Request request, Response response) -> {
-        System.out.println("\nNotice: createFeedback API endpoint recognized request \n");
+        System.out.println("\nNotice: createFeedback API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
         // start session
         request.session(true);
@@ -239,11 +235,10 @@ public class APIController {
     };
 
     /**
-     * this method Logs in host to host homepage
+     * Logs in host to host homepage
      */
-
     public static Route hostLogin = (Request request, Response response) -> {
-        System.out.println("\nNotice: hostLogin API endpoint recognized request \n");
+        System.out.println("\nNotice: hostLogin API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
         // initialise host
         Host host = null;

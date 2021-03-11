@@ -5,6 +5,8 @@
         <h2>Here is your code:</h2>
         <h1>$hostCode</h1>
         <p>(Please make a note of it!)</p>
+        <br>
+        <label id="formErrorMessage">$errorMessageGetHostCode</label>
         <a id="hostCodeContinue" href="/host/home">Continue</a>
     </div>
 </div>

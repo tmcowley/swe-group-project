@@ -64,6 +64,12 @@ CREATE TABLE template(
 CREATE TABLE component_in_template(
     component_id    INTEGER         NOT NULL,
     template_id     INTEGER         NOT NULL,
+    FOREIGN KEY (component_id)
+        REFERENCES template_component(tc_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (template_id)
+        REFERENCES template(template_id)
+        ON DELETE CASCADE,
     PRIMARY KEY(component_id, template_id)
 );
 

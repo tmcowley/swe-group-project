@@ -87,6 +87,7 @@ public class App {
         get("/host/templates", MyTemplatesController.servePage);
         get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", TemplateEditController.servePage);
+        get("/error/401", UnauthAccessController.servePage);
 
         // POST-API endpoint mappings
         post("/event/join/code", APIController.joinEvent);

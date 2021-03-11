@@ -1,6 +1,8 @@
 package app.controllers;
 
 import app.App;
+import app.DbConnection;
+import app.Validator;
 import app.objects.Host;
 import app.util.*;
 
@@ -17,15 +19,18 @@ public class HostHomeController {
 
         System.out.println("\nNotice: HostHomeController:servePage recognized request");
 
+        DbConnection db = App.getInstance().getDbConnection();
+        Validator v = App.getInstance().getValidator();
+
         // initialise host and collect inputted host-code
         Host host = null;
         String hostCode = request.queryParams("hostCode");
         // validate input before interact with database
-        if (App.getInstance().getValidator().hostCodeIsValid(hostCode)) {
-            host = App.getInstance().getDbConnection().getHostByCode(hostCode);
+        if (v.hostCodeIsValid(hostCode)) {
+            host = db.getHostByCode(hostCode);
         }
         // return host homepage if host is found
-        if (App.getInstance().getValidator().isHostValid(host)) {
+        if (v.isHostValid(host)) {
             request.session(true);
             if (request.session().isNew()) {
                 request.session().attribute("host", host);
@@ -36,7 +41,7 @@ public class HostHomeController {
             return ViewUtil.render(request, model, "/velocity/host-home.vm");
         }
         // return notfound if host is not found or hostcode is not valid
-        return ViewUtil.notFound;
+        return "Error: HostHomeController:servePage: host invalid";
     };
 
 }

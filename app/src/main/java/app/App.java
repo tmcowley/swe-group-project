@@ -73,24 +73,22 @@ public class App {
         // instantiate validator
         validator = new Validator();
 
-        // for each currently running event, generate /event/join/<code>
+        // TODO: for each currently running event, generate /event/join/<code>
 
-        // paths
-        // get("/", participantEventController.servePage);
+        // GET-API endpoint mappings
         get("/", IndexController.servePage);
-        // get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
         get("/host/get-code", GetCodeController.servePage);
         get("/host/home", HostHomeController.servePage);
         get("/host/create-event", EventCreateController.servePage);
         get("/event/host/code", HostEventController.servePage);
+        // get("/event/join/code", participantEventController.servePage);
         get("/event/participant/feedback", ParticipantEventController.servePage);
         get("/host/templates", MyTemplatesController.servePage);
         get("/host/templates/new", TemplateCreateController.servePage);
         get("/host/templates/edit/code", TemplateEditController.servePage);
-        // get("/", null);
 
-        // API endpoints
+        // POST-API endpoint mappings
         post("/event/join/code", APIController.joinEvent);
         post("/event/host/code", APIController.createEvent);
         post("/event/participant/feedback", APIController.createFeedback);

@@ -125,6 +125,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -161,7 +162,8 @@ public class DbConnection{
             }
 
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -240,7 +242,8 @@ public class DbConnection{
                 participant_id = rs.getInt("participant_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -286,7 +289,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -384,7 +388,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -449,7 +454,8 @@ public class DbConnection{
                 feedback_id = rs.getInt("feedback_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -475,7 +481,8 @@ public class DbConnection{
             stmt.setInt(2, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -511,7 +518,8 @@ public class DbConnection{
                 state = rs.getBoolean(1);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -544,7 +552,8 @@ public class DbConnection{
                 muted = rs.getBoolean("muted");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -575,7 +584,8 @@ public class DbConnection{
             stmt.setInt(2, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -606,7 +616,8 @@ public class DbConnection{
                 host_id = rs.getInt("host_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -639,7 +650,8 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -676,7 +688,8 @@ public class DbConnection{
                 templateCount++;
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -708,7 +721,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -748,7 +762,8 @@ public class DbConnection{
                 
     //         }
     //     } catch (SQLException e){
-    //         System.out.println(e.getMessage().toUpperCase());;
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
     //     } finally {
     //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
     //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -785,7 +800,8 @@ public class DbConnection{
                 host = new Host(host_id, host_code, e_address, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -883,7 +899,8 @@ public class DbConnection{
                 participant = new Participant(participant_id, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -924,7 +941,8 @@ public class DbConnection{
                 event = new Event(event_id, host_id, template_id, title, description, type, start_time, end_time, event_code);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -963,7 +981,8 @@ public class DbConnection{
                 archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -998,6 +1017,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1151,6 +1171,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1179,6 +1200,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1207,6 +1229,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1279,6 +1302,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1304,7 +1328,8 @@ public class DbConnection{
             stmt.setInt(2, host_id);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1330,7 +1355,8 @@ public class DbConnection{
             stmt.setString(2, eAddress);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1356,7 +1382,8 @@ public class DbConnection{
             stmt.setInt(2, participant_id);
             bannedParticipant = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1383,7 +1410,8 @@ public class DbConnection{
     //         stmt.setInt(2, template_id);
     //         templateFound = stmt.executeUpdate();
     //     } catch (SQLException e){
-    //         System.out.println(e.getMessage().toUpperCase());;
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
     //     } finally {
     //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
     //     }
@@ -1407,7 +1435,8 @@ public class DbConnection{
             stmt.setInt(1, host_id);
             hostDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1431,7 +1460,8 @@ public class DbConnection{
             stmt.setInt(1, template_id);
             templateDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1455,7 +1485,8 @@ public class DbConnection{
             stmt.setInt(1, participant_id);
             participantDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1479,7 +1510,8 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1503,7 +1535,8 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1550,10 +1583,11 @@ public class DbConnection{
                 + "WHERE participant_id = ? AND event_id = ?;";
             stmt = this.conn.prepareStatement(participantInEventDeleted);
             stmt.setInt(1, participant_id);
-            stmt.setInt(1, event_id);
+            stmt.setInt(2, event_id);
             deletedLink = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }

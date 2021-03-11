@@ -85,7 +85,8 @@ public class ParticipantEventController {
             model.put("feedbackCounts", feedbackCounts);
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());
-        return ViewUtil.render(request, model, "/velocity/landing.vm");
+        
+        return ViewUtil.render(request, model, "/velocity/participant-event.vm");
     };
 
 }

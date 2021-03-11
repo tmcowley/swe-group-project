@@ -21,7 +21,6 @@ import java.io.FileReader;
 
 // event code generation
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.concurrent.Computable;
 
 public class DbConnection{
 
@@ -99,6 +98,12 @@ public class DbConnection{
         // generate unique host code
         String host_code = generateUniqueHostCode();
 
+        // ensure email-address is non-unique
+        if (emailExists(e_address)){
+            System.out.println("Error: email-address non-unique");
+            return null;
+        } 
+
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer host_id = null;
@@ -106,7 +111,7 @@ public class DbConnection{
         try{
             String createHost = ""
                 + "INSERT INTO host(f_name, l_name, e_address, host_code) "
-                + "VALUES(?, ?, ?::INET, ?) "
+                + "VALUES(?, ?, ?, ?) "
                 + "RETURNING host_id;";
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
@@ -119,7 +124,7 @@ public class DbConnection{
                 host_id = rs.getInt("host_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -189,14 +194,17 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
 
-            // for each component in components -> create template component in DB, add tc in t connection
-            for (TemplateComponent tc : components){
-                ;
-            // tc = createTemplateComponent(tc);
-            // addComponentToTemplate();
+            if (components != null){
+                for (TemplateComponent tc : components){
+                    ;
+                // tc = createTemplateComponent(tc);
+                // addComponentToTemplate();
+                }
             }
+
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -261,7 +269,7 @@ public class DbConnection{
         try{
             String createEvent = ""
                 + "INSERT INTO event(host_id, template_id, title, description, type, start_time, end_time, event_code) "
-                + "VALUES(?, ?, ?, ?, ?::event_type, ?, ?, ?) "
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?) "
                 + "RETURNING event_id";
             stmt = this.conn.prepareStatement(createEvent);
             stmt.setInt(1, host_id);
@@ -299,6 +307,11 @@ public class DbConnection{
      * @param end_time End time of the event
      * @return Event instance representing stored data
      */
+
+    // String createEvent = ""
+    // + "INSERT INTO event(host_id, template_id, title, description, type, start_time, end_time, event_code) "
+    // + "VALUES(?, ?, ?, ?, ?::event_type, ?, ?, ?) "
+    // + "RETURNING event_id";
     public Event createEvent(int host_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique event code
         String event_code = generateUniqueEventCode();
@@ -310,7 +323,7 @@ public class DbConnection{
             String createEvent = ""
                 + "INSERT INTO event(host_id, title, description, type, start_time, end_time, event_code) "
                 + "VALUES(?, ?, ?, ?, ?, ?, ?) "
-                + "RETURNING event_id";
+                + "RETURNING event_id;";
             stmt = this.conn.prepareStatement(createEvent);
             stmt.setInt(1, host_id);
             stmt.setString(2, title);
@@ -325,7 +338,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -726,12 +740,12 @@ public class DbConnection{
     //             String type = rs.getString("tc_type");
     //             String prompt = rs.getString("tc_prompt");
 
-    //             String l_name = rs.getString("l_name");
-    //             boolean sys_ban = rs.getBoolean("sys_ban");
+    //             String[] options = rs.getArray("tc_options").getArray();
+    //             Boolean[] options_ans = rs.getArray("tc_options_ans").getArray();
+    //             String text_response = rs.getBoolean("tc_text_response");
 
-    //             tc = new TemplateComponent
+    //             tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
                 
-    //             (host_id, host_code, e_address, f_name, l_name, sys_ban);
     //         }
     //     } catch (SQLException e){
     //         System.out.println(e.getMessage().toUpperCase());;
@@ -801,7 +815,7 @@ public class DbConnection{
                 + "LIMIT 1;";
 
             String selectComponentsByID = ""
-                + "SELECT * FROM template_component t INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
+                + "SELECT * FROM template_component INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
                 + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(component_id)"
                 + "WHERE template.template_id = ? ";
 
@@ -832,6 +846,7 @@ public class DbConnection{
             template = new Template(template_id, host_id, template_code, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt1 != null) stmt1.close(); } catch (Exception e) {};
             try { if (stmt2 != null) stmt2.close(); } catch (Exception e) {};

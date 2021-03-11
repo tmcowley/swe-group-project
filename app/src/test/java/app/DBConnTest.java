@@ -123,24 +123,50 @@ public class DBConnTest {
     public void test_createHost(){
         String Fname = "testFName";
         String Lname = "testLName";
-        String email = "test@test.com";
+        String email = "test@test6.com";
         Host testHost = db.createHost(Fname, Lname, email);
+        assertFalse(testHost == null);
         String testCode = testHost.getHostCode();
         Host testHost2 = db.getHostByCode(testCode);
         assertTrue(testHost.equals(testHost2));
+
+        // DB cleanup
+        db.deleteHost(testHost.getHostID());
     }
 
     @Test 
     public void test_participantInEvent_addParticipantToEvent(){
-        String ip = "192.168.1.1";
         String Fname = "testFName";
         String Lname = "testLName";
-        Participant testPart = db.createParticipant(Fname, Lname);
-        String email = "test@test.com";
-        Host testHost = db.createHost(Fname, Lname, email);
+        String email = "test@test9.com";
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        Event testEvent = db.createEvent(testHost.getHostID(), "title", "desc", "type", ts, ts);
-        db.addParticipantToEvent(testPart.getParticipantID(), testEvent.getEventID());
-        assertTrue(db.participantInEvent(testPart.getParticipantID(), testEvent.getEventID()));
+
+        Participant testPart = db.createParticipant(Fname, Lname);
+        assertFalse(testPart == null);
+        int testPartID = testPart.getParticipantID();
+
+        Host testHost = db.createHost(Fname, Lname, email);
+        assertFalse(testHost == null);
+        int testHostID = testHost.getHostID();
+
+        // MAKE A TEMPLATE code here
+        // Template testTemplate = db.createTemplate(testHostID, null);
+        // assertFalse(testTemplate == null);
+        // int testTemplateID = testTemplate.getTemplateID();
+        // db.deleteTemplate(testTemplateID);
+
+        Event testEvent = db.createEvent(testHostID, "title", "desc", "lecture", ts, ts);
+        assertFalse(testEvent == null);
+        int testEventID = testEvent.getEventID();
+
+        Boolean addedToEvent = db.addParticipantToEvent(testPartID, testEventID);
+        assertTrue(addedToEvent == true);
+        assertTrue(db.participantInEvent(testPartID, testEventID));
+
+        // DB cleanup
+        db.removeParticipantFromEvent(testPartID, testEventID);
+        db.deleteParticipant(testPartID);
+        db.deleteHost(testHostID);
+        db.deleteEvent(testEventID);
     }
 }

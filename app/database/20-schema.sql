@@ -30,6 +30,7 @@ CREATE EXTENSION citext;
  --   SCHEMA   --
 ------------------
 
+-- create host table which stores hosts data
 CREATE TABLE host(
     host_id         SERIAL          NOT NULL,
     host_code       VARCHAR(64)
@@ -43,6 +44,7 @@ CREATE TABLE host(
     PRIMARY KEY (host_id)
 );
 
+-- create template table which stores templates created by hosts
 CREATE TABLE template(
     template_id     SERIAL          NOT NULL,
     host_id         INT             NOT NULL,
@@ -58,12 +60,14 @@ CREATE TABLE template(
     PRIMARY KEY (template_id)
 );
 
+-- create template component link table which stores components contained in templates
 CREATE TABLE component_in_template(
     component_id    INTEGER         NOT NULL,
     template_id     INTEGER         NOT NULL,
     PRIMARY KEY(component_id, template_id)
 );
 
+-- create component table which stores components data
 CREATE TABLE template_component(
     tc_id           SERIAL          NOT NULL,
     tc_name         VARCHAR(35)     NOT NULL,
@@ -77,6 +81,7 @@ CREATE TABLE template_component(
     PRIMARY KEY (tc_id)
 );
 
+-- create participant table which stores participants data
 CREATE TABLE participant(
     participant_id  SERIAL          NOT NULL,
     ip_address      INET,
@@ -87,6 +92,7 @@ CREATE TABLE participant(
     PRIMARY KEY (participant_id)
 );
 
+-- create event table which stores events data
 CREATE TABLE event(
     event_id        SERIAL          NOT NULL,
     host_id         INT             NOT NULL,
@@ -113,6 +119,7 @@ CREATE TABLE event(
     PRIMARY KEY (event_id)
 );
 
+-- create archived event table which stores archived events data
 CREATE TABLE archived_event(
     event_id        SERIAL          NOT NULL,
     host_id         INT             NOT NULL,
@@ -132,16 +139,7 @@ CREATE TABLE archived_event(
     PRIMARY KEY (event_id)
 );
 
--- private String[] results; // Holds results to specific feedback queries
--- private Float[] weights; // Holds the weights (for weighted mean) associated with each result (first unprocessed weights, then processed weights)
--- private byte[] types; // Holds the type of query that produced each result
--- private Boolean[] keys; // Holds whether a result is a key result or not (true = key result)
--- private byte[][] sub_weights; //Holds weights (unprocessed then processed) associated with each set result in multiple choice queries
--- private boolean anonymous;
--- private Timestamp timestamp;
--- private Float compound; // Holds the compound score (part of sentiment)
--- private ArrayList<String> key_results; // Holds an array of all key results
-
+-- create feedback table which stores feedbacks data
 CREATE TABLE feedback(
     feedback_id     SERIAL          NOT NULL,
     participant_id  INT             NOT NULL,
@@ -165,6 +163,7 @@ CREATE TABLE feedback(
     PRIMARY KEY (feedback_id)
 );
 
+-- create participant event link table which stores participants joined in events
 CREATE TABLE participant_in_event(
     participant_id  INT         NOT NULL,
     event_id        INT         NOT NULL,

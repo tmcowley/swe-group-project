@@ -1,12 +1,14 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-<div id="landingMain">
-    <div id="landingContainer">
-        <h2>Here is your code:</h2>
-        <h1>$hostCode</h1>
-        <p>(Please make a note of it!)</p>
-        <label id="formErrorMessage"></label>
-        <a id="hostCodeContinue" href="/host/home">Continue</a>
+<div id="mainBodyContainerOneCol">
+    <div id="landingMain">
+        <div id="landingContainer">
+            <h2>Here is your code:</h2>
+            <h1>$hostCode</h1>
+            <p>(Please make a note of it!)</p>
+            <label id="formErrorMessage"></label>
+            <a id="hostCodeContinue" href="/host/home">Continue</a>
+        </div>
     </div>
 </div>
 #end

@@ -100,7 +100,7 @@ public class DbConnection{
 
         // ensure email-address is non-unique
         if (emailExists(e_address)){
-            System.out.println("Error: email-address non-unique");
+            System.out.println("Error: DbConn:createHost(): email-address non-unique");
             return null;
         } 
 
@@ -136,7 +136,14 @@ public class DbConnection{
     }
 
 
-    // TODO: COMMENT, FIX
+    // public TemplateComponent createTemplateComponent(TemplateComponent tc){
+    //     if (tc.getId() != null){
+    //         return tc;
+    //     }
+    //     return createTemplateComponent()
+    // }
+
+    // TODO: COMMENT
     public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
 
         PreparedStatement stmt = null;
@@ -170,11 +177,10 @@ public class DbConnection{
         }
 
         // get Template object by ID
-        return null;
-        //return getTemplateComponent(tc_id);
+        return getTemplateComponent(tc_id);
     }
 
-    // TODO: since broken
+    // TODO: fix, comments
     public Template createTemplate(int host_id, ArrayList<TemplateComponent> components){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
@@ -196,11 +202,11 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
 
+            // if Template contains components
             if (components != null){
                 for (TemplateComponent tc : components){
-                    ;
-                // tc = createTemplateComponent(tc);
-                // addComponentToTemplate();
+                    tc = createTemplateComponent(tc);
+                    // addComponentToTemplate();
                 }
             }
 
@@ -542,8 +548,7 @@ public class DbConnection{
                 + "SELECT muted FROM participant_in_event WHERE "                
                 + "participant_in_event.participant_id=? "
                 + "AND "
-                + "participant_in_event.event_id=? " 
-                + ");";
+                + "participant_in_event.event_id=?;";
             stmt = this.conn.prepareStatement(queryMutedState);
             stmt.setInt(1, participant_id);
             stmt.setInt(2, event_id);
@@ -573,15 +578,15 @@ public class DbConnection{
         try{
             String muteParticipant = ""
                 + "UPDATE participant_in_event "
-                + "SET muted = TRUE"
+                + "SET muted = ?"
                 + "WHERE "
                 + "participant_in_event.participant_id=? "
                 + "AND "
-                + "participant_in_event.event_id=? " 
-                + ");";
+                + "participant_in_event.event_id=?;";
             stmt = this.conn.prepareStatement(muteParticipant);
-            stmt.setInt(1, participant_id);
-            stmt.setInt(2, event_id);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, participant_id);
+            stmt.setInt(3, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -734,42 +739,40 @@ public class DbConnection{
 
     // PRIVATE METHODS
 
-    // // TODO: comment
-    // private TemplateComponent getTemplateComponent(int tc_id){
-    //     PreparedStatement stmt = null;
-    //     ResultSet rs = null;
-    //     TemplateComponent tc = null;
-    //     try{
-    //         String selectComponentByID = ""
-    //             + "SELECT * FROM template_component "
-    //             + "WHERE template_component.tc_id = ? "
-    //             + "LIMIT 1;";
-    //         stmt = this.conn.prepareStatement(selectComponentByID);
-    //         stmt.setInt(1, tc_id);
+    // TODO: comment
+    private TemplateComponent getTemplateComponent(int tc_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        TemplateComponent tc = null;
+        try{
+            String selectComponentByID = ""
+                + "SELECT * FROM template_component "
+                + "WHERE template_component.tc_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectComponentByID);
+            stmt.setInt(1, tc_id);
 
-    //         rs = stmt.executeQuery();
-    //         if (rs.next()) {
-    //             int id = rs.getInt("tc_id");
-    //             String name = rs.getString("tc_name");
-    //             String type = rs.getString("tc_type");
-    //             String prompt = rs.getString("tc_prompt");
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("tc_id");
+                String name = rs.getString("tc_name");
+                String type = rs.getString("tc_type");
+                String prompt = rs.getString("tc_prompt");
+                String[] options = (String[]) rs.getArray("tc_options").getArray();
+                Boolean[] options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
+                String text_response = rs.getString("tc_text_response");
 
-    //             String[] options = rs.getArray("tc_options").getArray();
-    //             Boolean[] options_ans = rs.getArray("tc_options_ans").getArray();
-    //             String text_response = rs.getBoolean("tc_text_response");
-
-    //             tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
-                
-    //         }
-    //     } catch (SQLException e){
-    //         System.out.println(e.getMessage().toUpperCase());
-    //         e.printStackTrace();
-    //     } finally {
-    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-    //     }
-    //     return tc;
-    // }
+                tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return tc;
+    }
 
     /**
      * Get an Host object from a host ID

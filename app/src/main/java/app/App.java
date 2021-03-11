@@ -81,7 +81,7 @@ public class App {
         // get("/event/join/code", participantEventController.servePage);
         get("/host/login", HostLoginController.servePage);
         get("/host/get-code", GetCodeController.servePage);
-        get("/host/home", APIController.hostLogin);
+        get("/host/home", HostHomeController.servePage);
         get("/host/create-event", EventCreateController.servePage);
         get("/event/host/code", HostEventController.servePage);
         get("/event/participant/feedback", ParticipantEventController.servePage);
@@ -95,7 +95,7 @@ public class App {
         post("/event/host/code", APIController.createEvent);
         post("/event/participant/feedback", APIController.createFeedback);
         post("/host/get-code", APIController.createHost);
-        post("/host/home", APIController.hostLogin);
+        post("/host/home", AuthController.authHost);
         post("/", APIController.joinEvent);
 
         awaitInitialization();

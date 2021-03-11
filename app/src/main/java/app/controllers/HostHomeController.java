@@ -17,8 +17,7 @@ public class HostHomeController {
 
         System.out.println("\nNotice: HostHomeController:servePage recognized request");
 
-
-        // initialise host and inputted hostcode
+        // initialise host and collect inputted host-code
         Host host = null;
         String hostCode = request.queryParams("hostCode");
         // validate input before interact with database

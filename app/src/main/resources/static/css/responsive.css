@@ -98,6 +98,9 @@
         font-size: 2em;
         margin-bottom: 0;
     }
+    #hostFName, #hostLName {
+        width: 90%;
+    }
 }
 
 

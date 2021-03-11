@@ -1,0 +1,9 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<div id="landingMain">
+    <div id="landingContainer">
+        <h1>Error: Unauthorized Access</h1>
+        <a id="hostCodeContinue" href="/">Return to Homepage</a>
+    </div>
+</div>
+#end

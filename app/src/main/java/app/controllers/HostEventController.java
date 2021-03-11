@@ -26,22 +26,25 @@ public class HostEventController {
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 
-        request.session(true);
-        if (request.session().isNew()) {
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
             System.out.println("Error:  HostEventController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // initialise event
-        Event event = request.session().attribute("event");
-        Host host = request.session().attribute("host");
+        Event event = session.attribute("event");
+        Host host = session.attribute("host");
 
-        if (!v.isEventValid(event))
-            return "Error: event is invalid";
+        if (!v.isEventValid(event)){
+            System.out.println("Error:  HostEventController:servePage event is invalid");
+            return "Error:  event is invalid";
+        }
 
         // return host event page if event is created
-        request.session().attribute("event", event);
+        session.attribute("event", event);
         Map<String, Object> model = new HashMap<>();
         Feedback[] feedbacks = db.getFeedbacksByEventID(event.getEventID());
         int feedbackCount = 0;

@@ -22,11 +22,12 @@ public class GetCodeController {
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
-        Session session = request.session();
-        if (session.isNew()) {
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
             System.out.println("Error:  GetCodeController:servePage session not found");
-            response.redirect("/");
-            return "Error: Session not found";
+            response.redirect("/error/401");
+            return null;
         }
 
         // collect host-code (attribute already valid)
@@ -42,6 +43,8 @@ public class GetCodeController {
         Map<String, Object> model = new HashMap<>();
         model.put("hostCode", hostCode);
         return ViewUtil.render(request, model, "/velocity/get-code.vm");
+
+        //--> auth host??
     };
 
 }

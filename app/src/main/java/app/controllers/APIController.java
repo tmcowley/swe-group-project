@@ -17,9 +17,9 @@ import spark.*;
 
 public class APIController {
 
-    // Developers: see https://sparkjava.com/documentation#path-groups FOR HELP
+    // For developers: see https://sparkjava.com/documentation#path-groups
 
-    // thread safe - no DB interaction
+    // thread safe (no DB interaction)
     static Validator v = App.getInstance().getValidator();
 
     /**
@@ -86,7 +86,7 @@ public class APIController {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // get the current session
+        // get current session; ensure session is live
         Session session = request.session(false);
         if (session == null) {
             System.out.println("Error:  APIController:createEvent session not found");
@@ -142,27 +142,28 @@ public class APIController {
             return "Error: event not created or considered invalid - check inputs";
         }
 
-        // event is valid; return host event page if event is created and valid
-        request.session().attribute("event", event);
-        Map<String, Object> model = new HashMap<>();
-        model.put("eventTitle", event.getTitle());
-        model.put("eventDescription", event.getDescription());
-        model.put("eventCode", event.getEventCode());
-        return ViewUtil.render(request, model, "/velocity/host-event.vm");
+        // store event in session for host event page
+        session.attribute("event", event);
+
+        // event is valid; return host event page
+        // (linking to HostEventController.servePage)
+        response.redirect("/event/host/code");
+        return null;
     };
 
     /**
-     * allows a participant to join an ongoing event
-     * collects form sent by participant to join an event
+     * joins a participant to an ongoing event
      */
     public static Route joinEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: joinEvent API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // Get form attributes, ensure attributes are valid
+        // collect form attributes
         String f_name = request.queryParams("participantFName");
         String l_name = request.queryParams("participantLName");
         String eventCode = request.queryParams("eventCode");
+
+        // ensure attribute validity
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eventCodeIsValid(eventCode)) {
             System.out.println("Error:  a given name or event code is invalid");
             request.session().attribute("errorMessageJoinEvent", "Error: a given name or event code is invalid");
@@ -170,6 +171,7 @@ public class APIController {
             return null;
         }
 
+        // ensure event-code exists in system
         if (!db.eventCodeExists(eventCode)) {
             System.out.println("Error:  event-code does not exist");
             request.session().attribute("errorMessageJoinEvent", "Error: event-code does not exist");
@@ -181,9 +183,8 @@ public class APIController {
         Participant participant = db.createParticipant(null, f_name, l_name);
         Event event = db.getEventByCode(eventCode);
         db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
-        request.session(true);
-        request.session().attribute("participant", participant);
 
+        // ensure event is valid
         if (!v.isEventValid(event)){
             System.out.println("Error:  the event was invalid");
             request.session().attribute("errorMessageJoinEvent", "Error: the event was invalid");
@@ -191,13 +192,15 @@ public class APIController {
             return null;
         }
 
-        // event is valid; redirect participant to event
+        // startup session; add participant and event to session
+        request.session(true);
+        request.session().attribute("participant", participant);
         request.session().attribute("event", event);
-        Map<String, Object> model = new HashMap<>();
-        model.put("eventTitle", event.getTitle());
-        model.put("eventDescription", event.getDescription());
-        return ViewUtil.render(request, model, "/velocity/participant-event.vm");
 
+        // event is valid; redirect participant to event page
+        // (links to ParticipantEventController.servePage)
+        response.redirect("/event/participant/feedback");
+        return null;
     };
 
     /**
@@ -208,15 +211,13 @@ public class APIController {
         System.out.println("\nNotice: createFeedback API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
 
-        // start session
-        request.session(true);
-        // return not found if session is new
-        if (request.session().isNew()) {
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
             System.out.println("Error:  APIController:createFeedback session not found");
             response.redirect("/error/401");
             return null;
         }
-        Session session = request.session();
 
         // initialise event and input
         Event event = session.attribute("event");
@@ -238,76 +239,15 @@ public class APIController {
         SentimentAnalyser.main(feedback);
         if (feedback.getCompound() != null) System.out.println("Notice: SA on feedback successful");
 
+        // ensure feedback is valid
         if (!v.isFeedbackValid(feedback)){
             System.out.println("Error:  feedback considered invalid");
             return "Error: feedback considered invalid";
         }
 
         // feedback created and is valid -> redirect to participant event page
+        // (links to ParticipantEventController.servePage)
         response.redirect("/event/participant/feedback");
         return null;
-
-        // // return to event page if feedback is created
-        // if (v.isFeedbackValid(feedback)) {
-        //     System.out.println("Notice: feedback considered valid");
-        //     String[] arrs = new String[feedback.getKey_Results().size()];
-        //     String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
-        //     db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(),
-        //             feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
-        //             feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
-
-        //     //Display Feedback was recorded
-        //     Map<String, Object> model = new HashMap<>();
-
-        //     Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
-        //     int feedbackCount = 0;
-        //     if (feedbacks.length != 0) {
-    
-        //         List<String> participantFName = new ArrayList<String>();
-        //         List<String> participantLName = new ArrayList<String>();
-        //         List<String> feedbackData = new ArrayList<String>();
-        //         List<String> sentiment = new ArrayList<String>();
-        //         List<String> time = new ArrayList<String>();
-        //         for (Feedback feedbackOfParticipant : feedbacks) {
-        //             feedbackData.add(feedbackOfParticipant.getResults()[0]);
-        //             if (feedbackOfParticipant.getCompound() > 0.15) {
-        //                 if (feedbackOfParticipant.getCompound() < 0.45) {
-        //                     sentiment.add("slightly positive");
-        //                 } else if (feedbackOfParticipant.getCompound() < 0.75) {
-        //                     sentiment.add("positive");
-        //                 } else {
-        //                     sentiment.add("very positive");
-        //                 }
-        //             } else if (feedbackOfParticipant.getCompound() < -0.15) {
-        //                 if (feedbackOfParticipant.getCompound() > -0.45) {
-        //                     sentiment.add("slightly negative");
-        //                 } else if (feedbackOfParticipant.getCompound() > -0.75) {
-        //                     sentiment.add("negative");
-        //                 } else {
-        //                     sentiment.add("very negative");
-        //                 }
-        //             } else {
-        //                 sentiment.add("neutral");
-        //             }
-        //             time.add(feedbackOfParticipant.getTimestamp().toString());
-        //             feedbackCount++;
-        //         }
-        //         model.put("participantFName", participantFName);
-        //         model.put("participantLName", participantLName);
-        //         model.put("feedbackData", feedbackData);
-        //         model.put("sentiment", sentiment);
-        //         model.put("time", time);
-    
-        //     }
-        //     List<Integer> feedbackCounts = new ArrayList<Integer>();
-        //     for (int i = 0; i < feedbackCount; i++) {
-        //         feedbackCounts.add(i);
-        //     }
-
-        //     model.put("feedbackCounts", feedbackCounts);
-        //     model.put("eventTitle", event.getTitle());
-        //     model.put("eventDescription", event.getDescription());
-        //     return ViewUtil.render(request, model, "/velocity/participant-event.vm");
-        // }
     };
 }

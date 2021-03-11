@@ -8,6 +8,9 @@ public class HostLoginController {
 
     // TODO: comment
     public static Route servePage = (Request request, Response response) -> {
+
+        System.out.println("\nNotice: HostLoginController:servePage recognized request");
+
         // start session
         request.session(true);
 

@@ -61,7 +61,7 @@ public class APIController {
 
         // host is valid
         request.session(true);
-        request.session().attribute("host", host);
+        request.session().attribute("hostCode", host.getHostCode());
         response.redirect("/host/get-code");
         return null;
     };
@@ -151,11 +151,17 @@ public class APIController {
         String l_name = request.queryParams("participantLName");
         String eventCode = request.queryParams("eventCode");
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eventCodeIsValid(eventCode)) {
-            return "Error: a given name or event code is invalid";
+            System.out.println("Error: a given name or event code is invalid");
+            request.session().attribute("errorMessageJoinEvent", "Error: a given name or event code is invalid");
+            response.redirect("/");
+            return null;
         }
 
         if (!db.eventCodeExists(eventCode)) {
-            return "Event code does not exist";
+            System.out.println("Error: event-code does not exist");
+            request.session().attribute("errorMessageJoinEvent", "Error: event-code does not exist");
+            response.redirect("/");
+            return null;
         }
 
         // create Participant object in DB -> link to event
@@ -165,17 +171,20 @@ public class APIController {
         request.session(true);
         request.session().attribute("participant", participant);
 
-        // redirect participant to event
-        if (v.isEventValid(event)) {
-            // event is valid
-            request.session().attribute("event", event);
-            Map<String, Object> model = new HashMap<>();
-            model.put("eventTitle", event.getTitle());
-            model.put("eventDescription", event.getDescription());
-            return ViewUtil.render(request, model, "/velocity/participant-event.vm");
+        if (!v.isEventValid(event)){
+            System.out.println("Error: the event was invalid");
+            request.session().attribute("errorMessageJoinEvent", "Error: the event was invalid");
+            response.redirect("/");
+            return null;
         }
 
-        return "Error: the event was invalid";
+        // event is valid; redirect participant to event
+        request.session().attribute("event", event);
+        Map<String, Object> model = new HashMap<>();
+        model.put("eventTitle", event.getTitle());
+        model.put("eventDescription", event.getDescription());
+        return ViewUtil.render(request, model, "/velocity/participant-event.vm");
+
     };
 
     /**
@@ -277,8 +286,10 @@ public class APIController {
     public static Route hostLogin = (Request request, Response response) -> {
         System.out.println("\nNotice: hostLogin API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
+
         // initialise host
         Host host = null;
+
         // start session
         request.session(true);
         if (request.session().isNew()) {
@@ -286,7 +297,8 @@ public class APIController {
             return "Error: Session not found";
         }
 
-        String hostCode = request.queryParams("hostCode");
+        String hostCode = request.session().attribute("hostCode");
+        System.out.println("Notice: hostCode:" + hostCode);
 
         // validate input before database interaction
         if (!v.hostCodeIsValid(hostCode)){

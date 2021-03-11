@@ -84,6 +84,21 @@
         width: 100%;
         height: 80px;
     }
+    #mainForm {
+        padding: 15px;
+    }
+    .feedbackElementFooter input {
+        max-width: 80px;
+    }
+    .formInputBulletRating {
+        width: 80px;
+    }
+    .formInputBulletLabel {
+        margin-left: 0px;
+    }
+    .templateControlsSection {
+        justify-content: center;
+    }
 }
 
 @media screen and (max-width: 420px) {

@@ -70,9 +70,10 @@ public class APIController {
             return null;
         }
 
-        // host is valid
+        // host is valid; store and return host-code
         request.session(true);
         request.session().attribute("hostCode", host.getHostCode());
+        request.session().attribute("host", host);
         response.redirect("/host/get-code");
         return null;
     };

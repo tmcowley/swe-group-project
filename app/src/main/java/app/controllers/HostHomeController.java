@@ -22,15 +22,16 @@ public class HostHomeController {
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
-        request.session(true);
-        if (request.session().isNew()) {
+        // get the current session
+        Session session = request.session(false);
+        if (session == null) {
             System.out.println("Error:  HostHomeController:servePage: session does not exist");
             response.redirect("/error/401");
             return null;
         }
 
         // collect stored (valid) host
-        Host host = request.session().attribute("host");
+        Host host = session.attribute("host");
 
         // return host homepage
         Map<String, Object> model = new HashMap<>();

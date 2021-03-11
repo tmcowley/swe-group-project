@@ -111,10 +111,10 @@ public class DbConnection{
             stmt = this.conn.prepareStatement(createHost);
             stmt.setString(1, f_name);
             stmt.setString(2, l_name);
-            stmt.setString(4, e_address);
-            stmt.setString(5, host_code);
-
+            stmt.setString(3, e_address);
+            stmt.setString(4, host_code);
             rs = stmt.executeQuery();
+
             if (rs.next()) {
                 host_id = rs.getInt("host_id");
             }
@@ -130,9 +130,42 @@ public class DbConnection{
     }
 
 
-    // // TODO: COMMENT, FIX
-    // public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
-    // }
+    // TODO: COMMENT, FIX
+    public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer tc_id = null;
+        try{
+            // create empty template object
+            String createTemplateComponent = ""
+                + "INSERT INTO template_component(tc_id, tc_name, tc_type, tc_prompt, tc_options, tc_options_ans, tc_text_response) "
+                + "VALUES(?, ?, ?, ?, ?, ?, ?) "
+                + "RETURNING template_id";
+            stmt = this.conn.prepareStatement(createTemplateComponent);
+            stmt.setString(1, name);
+            stmt.setString(2, type);
+            stmt.setString(3, prompt);
+            stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
+            stmt.setArray(5, this.conn.createArrayOf("BOOLEAN", optionsAns));
+            stmt.setString(6, textResponse);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                tc_id = rs.getInt("tc_id");
+            }
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Template object by ID
+        return null;
+        //return getTemplateComponent(tc_id);
+    }
 
     // TODO: since broken
     public Template createTemplate(int host_id, ArrayList<TemplateComponent> components){
@@ -672,6 +705,42 @@ public class DbConnection{
     }
 
     // PRIVATE METHODS
+
+    // // TODO: comment
+    // private TemplateComponent getTemplateComponent(int tc_id){
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     TemplateComponent tc = null;
+    //     try{
+    //         String selectComponentByID = ""
+    //             + "SELECT * FROM template_component "
+    //             + "WHERE template_component.tc_id = ? "
+    //             + "LIMIT 1;";
+    //         stmt = this.conn.prepareStatement(selectComponentByID);
+    //         stmt.setInt(1, tc_id);
+
+    //         rs = stmt.executeQuery();
+    //         if (rs.next()) {
+    //             int id = rs.getInt("tc_id");
+    //             String name = rs.getString("tc_name");
+    //             String type = rs.getString("tc_type");
+    //             String prompt = rs.getString("tc_prompt");
+
+    //             String l_name = rs.getString("l_name");
+    //             boolean sys_ban = rs.getBoolean("sys_ban");
+
+    //             tc = new TemplateComponent
+                
+    //             (host_id, host_code, e_address, f_name, l_name, sys_ban);
+    //         }
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());;
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+    //     return tc;
+    // }
 
     /**
      * Get an Host object from a host ID

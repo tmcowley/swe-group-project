@@ -96,7 +96,7 @@ public class ValidatorTest {
 
     @Test
     public void test_nameIsValid() {
-        String[] validNames = { "Edwy" };
+        String[] validNames = { "name", "Name", "NAME", "n'ame", "na-me" };
         String[] invalidNames = { " ", "", null };
         for (String validName : validNames) {
             assertTrue(v.nameIsValid(validName));

@@ -1014,6 +1014,42 @@ public class DbConnection{
         return foundFeedbacks;
     }
 
+    public Feedback[] getFeedbacksInEventByParticipantID(int event_id, int participant_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Feedback[] foundFeedbacks = new Feedback[0];
+        try{
+            String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? AND participant_id=?;";
+            stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmt.setInt(1, event_id);
+            rs = stmt.executeQuery();
+            rs.last();
+            int rsSize= rs.getRow();
+            foundFeedbacks = new Feedback[rsSize];
+            Feedback foundFeedback = null;
+            int feedbackCount = 0;
+            rs.beforeFirst();
+            while (rs.next()) {
+                ArrayList<String> keyResults = new ArrayList<String>();
+                String[] keyresults = (String[]) rs.getArray("key_results").getArray();
+                for (String result : keyresults) {
+                    keyResults.add(result);
+                }
+                foundFeedback = new Feedback(rs.getInt("feedback_id"), rs.getInt("participant_id"), rs.getInt("event_id"),
+                (String[]) rs.getArray("results").getArray(), (Float[]) rs.getArray("weights").getArray(), rs.getBytes("types"), (Boolean[]) rs.getArray("keys").getArray(), new byte[0][0], rs.getBoolean("anonymous"), rs.getTimestamp("time_stamp"), Float.valueOf(rs.getFloat("compound")), keyResults);
+                foundFeedbacks[feedbackCount] = foundFeedback;
+                feedbackCount++;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());;
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        return foundFeedbacks;
+    }
+
     // /**
     //  * Get a feedback object from an feedback ID
     //  * @param feedback_id feedback ID

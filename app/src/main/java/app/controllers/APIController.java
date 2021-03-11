@@ -1,7 +1,9 @@
 package app.controllers;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import app.App;
@@ -222,8 +224,43 @@ public class APIController {
                     feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
                     feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
 
-            // TODO: DISPLAY THAT FEEDBACK WAS RECORDED
+            //Display Feedback was recorded
             Map<String, Object> model = new HashMap<>();
+
+            Feedback[] feedbacks = db.getFeedbacksByEventID(event.getEventID());
+            int feedbackCount = 0;
+            if (feedbacks.length != 0) {
+    
+                List<String> participantFName = new ArrayList<String>();
+                List<String> participantLName = new ArrayList<String>();
+                List<String> feedbackData = new ArrayList<String>();
+                List<String> sentiment = new ArrayList<String>();
+                List<String> time = new ArrayList<String>();
+                for (Feedback feedbackOfParticipant : feedbacks) {
+                    feedbackData.add(feedbackOfParticipant.getResults()[0]);
+                    if (feedbackOfParticipant.getCompound() > 0.05) {
+                        sentiment.add("positive");
+                    } else if (feedbackOfParticipant.getCompound() < -0.05) {
+                        sentiment.add("negative");
+                    } else {
+                        sentiment.add("neutral");
+                    }
+                    time.add(feedbackOfParticipant.getTimestamp().toString());
+                    feedbackCount++;
+                }
+                model.put("participantFName", participantFName);
+                model.put("participantLName", participantLName);
+                model.put("feedbackData", feedbackData);
+                model.put("sentiment", sentiment);
+                model.put("time", time);
+    
+            }
+            List<Integer> feedbackCounts = new ArrayList<Integer>();
+            for (int i = 0; i < feedbackCount; i++) {
+                feedbackCounts.add(i);
+            }
+            model.put("feedbackCounts", feedbackCounts);
+
             model.put("eventTitle", event.getTitle());
             model.put("eventDescription", event.getDescription());
             return ViewUtil.render(request, model, "/velocity/participant-event.vm");

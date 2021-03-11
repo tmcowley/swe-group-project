@@ -79,8 +79,9 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            // return ViewUtil.notFound;
-            return "Error: Session not found";
+            System.out.println("Error:  APIController:createEvent session not found");
+            response.redirect("/error/401");
+            return null;
         }
 
         // initialise event and input
@@ -200,7 +201,9 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            return "Error: Session not found";
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
         }
         Session session = request.session();
 

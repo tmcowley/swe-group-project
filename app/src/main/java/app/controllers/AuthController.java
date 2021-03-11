@@ -20,9 +20,6 @@ public class AuthController {
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
-        // initialise host
-        Host host = null;
-
         // start session
         request.session(true);
         if (request.session().isNew()) {
@@ -30,7 +27,9 @@ public class AuthController {
             response.redirect("/");
             return null;
         }
-        String hostCode = request.session().attribute("hostCode");
+        System.out.println(request.toString());
+        String hostCode = request.queryParams("hostCode");
+        //String hostCode = request.session().attribute("hostCode");
         System.out.println("Notice: hostCode:" + hostCode);
 
         // validate input before database interaction
@@ -49,7 +48,7 @@ public class AuthController {
         }
 
         // get the host by valid, existing host-code
-        host = db.getHostByCode(hostCode);
+        Host host = db.getHostByCode(hostCode);
         request.session().attribute("host", host);
 
         // return host homepage if host is found

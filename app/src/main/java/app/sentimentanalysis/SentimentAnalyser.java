@@ -3,6 +3,7 @@
 //TODO - add set queries to the feedback testing
 //TODO change for loops to iterate through arrays
 //TODO check if one sd is enough/good
+//TODO: 
 
 package app.sentimentanalysis;
 

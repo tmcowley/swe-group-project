@@ -59,7 +59,7 @@ public class APIController {
 
         // host is valid
         request.session(true);
-        request.session().attribute("host", host);
+        request.session().attribute("hostCode", host.getHostCode());
         response.redirect("/host/get-code");
         return null;
     };
@@ -240,8 +240,10 @@ public class APIController {
     public static Route hostLogin = (Request request, Response response) -> {
         System.out.println("\nNotice: hostLogin API endpoint recognized request");
         DbConnection db = App.getInstance().getDbConnection();
+
         // initialise host
         Host host = null;
+
         // start session
         request.session(true);
         if (request.session().isNew()) {
@@ -249,7 +251,8 @@ public class APIController {
             return "Error: Session not found";
         }
 
-        String hostCode = request.queryParams("hostCode");
+        String hostCode = request.session().attribute("hostCode");
+        System.out.println("Notice: hostCode:" + hostCode);
 
         // validate input before database interaction
         if (!v.hostCodeIsValid(hostCode)){

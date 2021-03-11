@@ -1,16 +1,23 @@
 package app.controllers;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import spark.*;
 import app.App;
 import app.objects.Host;
 import app.util.*;
 
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.*;
+
 public class HostHomeController {
-    /** Serve the index page (GET request) */
+
+    // serve the host homepage (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
+
+        System.out.println("\nNotice: HostHomeController:servePage recognized request");
+
+
         // initialise host and inputted hostcode
         Host host = null;
         String hostCode = request.queryParams("hostCode");

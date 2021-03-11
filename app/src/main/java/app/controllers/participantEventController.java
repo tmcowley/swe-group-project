@@ -1,15 +1,20 @@
 package app.controllers;
 
-import java.util.*;
-import spark.*;
-import app.App;
 import app.util.*;
-import app.objects.*;
+
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.*;
 
 public class participantEventController {
 
-    /** Serve the participant-event page (GET request) */
+    // serve the participant event page (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
+
+        System.out.println("\nNotice: participantEventController:servePage recognized request");
+
         Map<String, Object> model = new HashMap<>();
         return ViewUtil.render(request, model, "/velocity/landing.vm");
     };

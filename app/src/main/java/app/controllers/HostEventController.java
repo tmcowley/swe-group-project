@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+// for ViewUtil velocity models
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,13 +18,10 @@ import app.util.*;
 
 public class HostEventController {
 
-    // TODO description
-    /**
-     * serve host event page (GET request)
-     */
+    // serve host event page (following GET request)
     public static Route servePage = (Request request, Response response) -> {
 
-        System.out.println("Notice: HostEventController servePage called");
+        System.out.println("\nNotice: HostEventController:servePage recognized request");
 
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();

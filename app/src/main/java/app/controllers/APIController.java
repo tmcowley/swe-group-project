@@ -41,7 +41,7 @@ public class APIController {
         // TODO: IP collection, validation
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eAddressIsValid(e_address)
                 || db.emailExists(e_address)) {
-            System.out.println("Error: field invalid or email exists");
+            System.out.println("Error:  field invalid or email exists");
 
             request.session().attribute("errorMessageLogin", "");
             request.session().attribute("errorMessageCreate", "Error: field invalid or email exists");
@@ -52,7 +52,7 @@ public class APIController {
         // create host
         Host host = db.createHost(f_name, l_name, ip_address, e_address);
         if (!v.isHostValid(host)){
-            System.out.println("Error: Created host considered invalid");
+            System.out.println("Error:  Created host considered invalid");
             request.session().attribute("errorMessageLogin", "");
             request.session().attribute("errorMessageCreate", "Created host considered invalid. Please re-try");
             response.redirect("/host/login");
@@ -151,14 +151,14 @@ public class APIController {
         String l_name = request.queryParams("participantLName");
         String eventCode = request.queryParams("eventCode");
         if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name) || !v.eventCodeIsValid(eventCode)) {
-            System.out.println("Error: a given name or event code is invalid");
+            System.out.println("Error:  a given name or event code is invalid");
             request.session().attribute("errorMessageJoinEvent", "Error: a given name or event code is invalid");
             response.redirect("/");
             return null;
         }
 
         if (!db.eventCodeExists(eventCode)) {
-            System.out.println("Error: event-code does not exist");
+            System.out.println("Error:  event-code does not exist");
             request.session().attribute("errorMessageJoinEvent", "Error: event-code does not exist");
             response.redirect("/");
             return null;
@@ -172,7 +172,7 @@ public class APIController {
         request.session().attribute("participant", participant);
 
         if (!v.isEventValid(event)){
-            System.out.println("Error: the event was invalid");
+            System.out.println("Error:  the event was invalid");
             request.session().attribute("errorMessageJoinEvent", "Error: the event was invalid");
             response.redirect("/");
             return null;
@@ -293,10 +293,10 @@ public class APIController {
         // start session
         request.session(true);
         if (request.session().isNew()) {
-            // return ViewUtil.notFound;
-            return "Error: Session not found";
+            System.out.println("Error:  APIController:hostLogin: session not found");
+            response.redirect("/");
+            return null;
         }
-
         String hostCode = request.session().attribute("hostCode");
         System.out.println("Notice: hostCode:" + hostCode);
 
@@ -328,7 +328,7 @@ public class APIController {
             return ViewUtil.render(request, model, "/velocity/host-home.vm");
         }
 
-        System.out.println("Error: Host matched to host-code is invalid");
+        System.out.println("Error:  Host matched to host-code is invalid");
         request.session().attribute("errorMessageLogin", "Error: Host matched to host-code is invalid");
         request.session().attribute("errorMessageCreate", "");
         response.redirect("/host/login");

@@ -1,12 +1,15 @@
 package app.controllers;
 
-import java.util.*;
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
 import spark.*;
 import app.util.*;
 
 public class HostLoginController {
 
-    // TODO: comment
+    // serve the host login and sign-up page (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostLoginController:servePage recognized request");

@@ -1,31 +1,45 @@
 package app.controllers;
 
-import java.util.*;
-
-import org.apache.commons.collections.functors.IfClosure;
-
-import java.net.*;
-import java.io.*;
-import spark.*;
 import app.App;
+import app.DbConnection;
+import app.Validator;
 import app.objects.Host;
 import app.objects.Template;
 import app.util.*;
 
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.*;
+
 public class EventCreateController {
-    /** Serve the index page (GET request) */
+
+    // serve the event creation page for an authenticated host
     public static Route servePage = (Request request, Response response) -> {
-        // initialiss model to hold data
-        Map<String, Object> model = new HashMap<>();
+
+        System.out.println("\nNotice: EventCreateController:servePage recognized request");
+
+        Validator v = App.getInstance().getValidator();
+        DbConnection db = App.getInstance().getDbConnection();
+
         // start session
         request.session(true);
+        if (request.session().isNew()) {
+            return "Error:  session not found";
+        }
+
         // get host from session
         Host host = request.session().attribute("host");
-        // return not found if session is new
-        if (request.session().isNew() || !App.getInstance().getValidator().isHostValid(host)) {
-            return ViewUtil.notFound;
+
+        if (!v.isHostValid(host)) {
+            return "Error:  host is invalid";
         }
-        Template[] templates = App.getInstance().getDbConnection().getTemplatesByHostID(host.getHostID());
+
+        // model holds data to be sent to front-end variables (w/ Velocity)
+        Map<String, Object> model = new HashMap<>();
+        Template[] templates = db.getTemplatesByHostID(host.getHostID());
+
         int templateCount = 0;
         if (templates.length != 0) {
             String[] templateCodes = new String[templates.length];
@@ -35,8 +49,8 @@ public class EventCreateController {
             }
             model.put("templateCodes", templateCodes);
         }
+
         model.put("templateCount", templateCount);
         return ViewUtil.render(request, model, "/velocity/create-event.vm");
     };
-
 }

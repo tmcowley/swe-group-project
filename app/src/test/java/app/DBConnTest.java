@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import app.objects.*;
 
@@ -103,20 +104,30 @@ public class DBConnTest {
         assertFalse(testFeedback == null);
         assertFalse(partInEvent == null || partInEvent == false);
 
-        //assertFalse(true);
-
     }
 
 
 
     @Test
     public void test_createParticipant(){
+        // participant dummy data: first and last names
         String Fname = "testFName";
         String Lname = "testLName";
-        Participant testPart = db.createParticipant(Fname, Lname);
-        int testPartID = testPart.getParticipantID();
-        Participant testPart2 = db.getParticipant(testPartID);
-        assertTrue(testPart.equals(testPart2));
+
+        // store the participant
+        Participant storedParticipant = db.createParticipant(Fname, Lname);
+        assertFalse(storedParticipant == null);
+
+        // generate local version using local variables
+        int commonPartID = storedParticipant.getParticipantID();
+        Participant localParticipant = new Participant(commonPartID, Fname, Lname);
+        
+        // get stored variant of participant object
+        storedParticipant = db.getParticipant(commonPartID);
+        assertFalse(storedParticipant == null);
+
+        // ensure local and stored participant match
+        assertTrue(Objects.deepEquals(localParticipant, storedParticipant));
     }
 
     @Test

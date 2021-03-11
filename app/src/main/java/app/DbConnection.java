@@ -135,18 +135,17 @@ public class DbConnection{
         return getHost(host_id);
     }
 
-
-    // public TemplateComponent createTemplateComponent(TemplateComponent tc){
-
-    //     // a TC with an ID -> TC already stored
-    //     if (tc.getId() != null) 
-    //         return tc;
-    //     return createTemplateComponent(tc.getName(), tc.getType(), tc.)
-    // }
+    // TODO: COMMENT
+    public TemplateComponent createTemplateComponent(TemplateComponent tc){
+        // component with an ID already exists
+        if (tc.getId() != null) 
+            return tc;
+        // component without ID; store component
+        return createTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns(), tc.getTextResponse());
+    }
 
     // TODO: COMMENT
     public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
-
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
@@ -203,13 +202,14 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
 
-            // // if Template contains components
-            // if (components != null){
-            //     for (TemplateComponent tc : components){
-            //         tc = createTemplateComponent(tc);
-            //         // addComponentToTemplate();
-            //     }
-            // }
+            // if Template contains components
+            if (components != null){
+                for (TemplateComponent tc : components){
+                    tc = createTemplateComponent(tc);
+                    int component_id = tc.getId();
+                    addComponentToTemplate(component_id, template_id);
+                }
+            }
 
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -597,6 +597,59 @@ public class DbConnection{
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
         return participantInEventIsMuted(participant_id, event_id);
+    }
+
+    // TODO comment
+    public boolean componentInTemplate(int component_id, int template_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean state = null;
+        try{
+            String queryComponentInTemplate = ""
+                + "SELECT EXISTS "
+                + "(SELECT 1 FROM component_in_template WHERE "                
+                + "component_in_template.component_id=? "
+                + "AND "
+                + "component_in_template.template_id=? " 
+                + ");";
+            stmt = this.conn.prepareStatement(queryComponentInTemplate);
+            stmt.setInt(1, component_id);
+            stmt.setInt(2, template_id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                state = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return state;
+    }
+
+    public Boolean addComponentToTemplate(int component_id, int template_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try{
+            String addComponentToTemplate = ""
+                + "INSERT INTO component_in_template(component_id, template_id) "
+                + "VALUES(?, ?) ";
+            stmt = this.conn.prepareStatement(addComponentToTemplate);
+            stmt.setInt(1, component_id);
+            stmt.setInt(2, template_id);
+            stmt.executeUpdate();
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // return success state (select query)
+        return componentInTemplate(component_id, template_id);
     }
 
     /**

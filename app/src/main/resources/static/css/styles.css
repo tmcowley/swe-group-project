@@ -113,6 +113,7 @@ textarea {
     height: 200px;
     padding: 10px;
     font-family: Helvetica, sans-serif;
+    border-radius: 15px;
 }
 
 .feelingRadioContainer {
@@ -378,20 +379,30 @@ textarea {
 
 .feedbackElement {
     padding: 20px;
-    border: 1px solid black;
+    border: 1px solid #cacaca;
     margin: 10px 0 0;
     grid-column: 1;
+    border-radius: 15px 15px 0 0;
 }
 
 .formInput, .formInputBullet {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px;
     font-family: Helvetica, sans-serif;
 }
 
 .formInputBullet {
     width: calc(100% - 30px);
+}
+
+.formInputBulletLabel {
+    margin-left: 30px;
+}
+
+
+.formInputBulletRating {
+    margin-bottom: 20px;
 }
 
 .formInputBulletIcon {
@@ -407,6 +418,25 @@ textarea {
     padding-top: 10px;
 }
 
+.templateControlsSection {
+    display: flex;
+    justify-content: left;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+
+.templateControlsSection a {
+    background-color: #552d62;
+    color: white;
+    border: 1px solid #451c52;
+    border-radius: 40px;
+    padding: 10px 40px;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    margin: 10px;
+}
+
 #submitButtonTemplate {
     background-color: #552d62;
     color: white;
@@ -414,18 +444,23 @@ textarea {
     border-radius: 40px;
     padding: 10px 40px;
     cursor: pointer;
+    margin: 10px;
 }
 
 .feedbackElementFooter {
-    border: 1px solid black;
+    border: 1px solid #cacaca;
     border-top: none;
     margin-bottom: 10px;
     padding: 20px;
+    border-radius: 0 0 15px 15px;
 }
 
 .feedbackDelButton {
-    height: 30px;
+    height: 35px;
     align-self: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 #feedbackFormMain {

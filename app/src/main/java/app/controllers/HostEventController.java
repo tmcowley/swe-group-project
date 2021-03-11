@@ -62,18 +62,18 @@ public class HostEventController {
                     participantLName.add("");
                 }
                 feedbackData.add(feedback.getResults()[0]);
-                if (feedbackOfParticipant.getCompound() > 0.15) {
-                    if (feedbackOfParticipant.getCompound() < 0.45) {
+                if (feedback.getCompound() > 0.15) {
+                    if (feedback.getCompound() < 0.45) {
                         sentiment.add("slightly positive");
-                    } else if (feedbackOfParticipant.getCompound() < 0.75) {
+                    } else if (feedback.getCompound() < 0.75) {
                         sentiment.add("positive");
                     } else {
                         sentiment.add("very positive");
                     }
-                } else if (feedbackOfParticipant.getCompound() < -0.15) {
-                    if (feedbackOfParticipant.getCompound() > -0.45) {
+                } else if (feedback.getCompound() < -0.15) {
+                    if (feedback.getCompound() > -0.45) {
                         sentiment.add("slightly negative");
-                    } else if (feedbackOfParticipant.getCompound() > -0.75) {
+                    } else if (feedback.getCompound() > -0.75) {
                         sentiment.add("negative");
                     } else {
                         sentiment.add("very negative");

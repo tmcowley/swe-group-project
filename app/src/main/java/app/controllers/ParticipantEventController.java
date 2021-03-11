@@ -37,7 +37,7 @@ public class ParticipantEventController {
         // get all feedbacks of the participant in the current event - inject into front-end
         Map<String, Object> model = new HashMap<>();
 
-            Feedback[] feedbacks = db.getFeedbacksByEventID(event.getEventID());
+        Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
             int feedbackCount = 0;
             if (feedbacks.length != 0) {
     

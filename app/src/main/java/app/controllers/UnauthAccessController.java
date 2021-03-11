@@ -1,7 +1,5 @@
 package app.controllers;
 
-import app.App;
-import app.objects.Host;
 import app.util.*;
 
 // for ViewUtil velocity models
@@ -17,7 +15,8 @@ public class UnauthAccessController {
 
         System.out.println("\nNotice: participantEventController:servePage recognized request");
 
-        return ViewUtil.render(request, new HashMap<>(), "/velocity/error.vm");
+        Map<String, Object> model = new HashMap<>();
+        return ViewUtil.render(request, model, "/velocity/error.vm");
     };
     
 }

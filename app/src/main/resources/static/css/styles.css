@@ -455,6 +455,10 @@ textarea {
     border-radius: 0 0 15px 15px;
 }
 
+.feedbackElementFooter input {
+    margin-bottom: 10px;
+}
+
 .feedbackDelButton {
     height: 35px;
     align-self: center;

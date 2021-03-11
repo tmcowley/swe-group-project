@@ -26,15 +26,13 @@ public class HostEventController {
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 
-        // start session
         request.session(true);
-        // return not found if session is new
         if (request.session().isNew()) {
             System.out.println("Error:  HostEventController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }
-        
+
         // initialise event
         Event event = request.session().attribute("event");
         Host host = request.session().attribute("host");

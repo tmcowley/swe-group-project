@@ -29,6 +29,7 @@
                     <input id="landingHostButton" type="submit" value="Signup">
                 </form>
             </div>
+            <br>
             <a id="hostCodeContinue" href="/">Return to Homepage</a>
         </div>
     </div>

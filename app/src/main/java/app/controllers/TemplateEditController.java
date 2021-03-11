@@ -14,8 +14,14 @@ public class TemplateEditController {
 
         System.out.println("\nNotice: TemplateEditController:servePage recognized request");
 
+        request.session(true);
+        if (request.session().isNew()) {
+            System.out.println("Error:  HostEventController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
         Map<String, Object> model = new HashMap<>();
-        model.put("test1", "this is a test variable!");
         return ViewUtil.render(request, model, "/velocity/edit-template.vm");
     };
 

@@ -22,6 +22,10 @@ public class IndexController {
 
         Map<String, Object> model = new HashMap<>();
         model.put("errorMessageJoinEvent", request.session().attribute("errorMessageJoinEvent"));
+
+        // unset session error attribute
+        request.session().removeAttribute("errorMessageJoinEvent");
+
         return ViewUtil.render(request, model, "/velocity/landing.vm");
     };
 

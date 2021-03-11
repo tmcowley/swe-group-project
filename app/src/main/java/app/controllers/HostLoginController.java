@@ -27,6 +27,10 @@ public class HostLoginController {
         model.put("errorMessageLogin", request.session().attribute("errorMessageLogin"));
         model.put("errorMessageCreate", request.session().attribute("errorMessageCreate"));
 
+        // unset session error attributes
+        request.session().removeAttribute("errorMessageLogin");
+        request.session().removeAttribute("errorMessageCreate");
+
         return ViewUtil.render(request, model, "/velocity/create-host.vm");
     };
 

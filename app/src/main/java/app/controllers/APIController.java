@@ -6,7 +6,6 @@ import app.Validator;
 import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
 import app.util.ViewUtil;
-import app.util.emailController;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class APIController {
 
     // thread safe - no DB interaction
     static Validator v = App.getInstance().getValidator();
-    static emailController e = new emailController();
 
     /**
      * creates a new host when a new user signs-up as a host
@@ -79,8 +77,9 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            // return ViewUtil.notFound;
-            return "Error: Session not found";
+            System.out.println("Error:  APIController:createEvent session not found");
+            response.redirect("/error/401");
+            return null;
         }
 
         // initialise event and input
@@ -200,7 +199,9 @@ public class APIController {
         request.session(true);
         // return not found if session is new
         if (request.session().isNew()) {
-            return "Error: Session not found";
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
         }
         Session session = request.session();
 

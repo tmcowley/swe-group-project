@@ -75,27 +75,40 @@ public class App {
 
         // TODO: for each currently running event, generate /event/join/<code>
 
-        // GET-API endpoint mappings
-        get("/", IndexController.servePage);
-        get("/host/login", HostLoginController.servePage);
-        get("/host/get-code", GetCodeController.servePage);
-        get("/host/home", HostHomeController.servePage);
-        get("/host/create-event", EventCreateController.servePage);
-        get("/event/host/code", HostEventController.servePage);
-        // get("/event/join/code", participantEventController.servePage);
-        get("/event/participant/feedback", ParticipantEventController.servePage);
-        get("/host/templates", MyTemplatesController.servePage);
-        get("/host/templates/new", TemplateCreateController.servePage);
-        get("/host/templates/edit/code", TemplateEditController.servePage);
-        get("/error/401", UnauthAccessController.servePage);
+        // API endpoint mappings
+        path("/", () -> {
+            // landing page GET and POST API endpoint mappings
+            get("", IndexController.servePage);
+            post("", APIController.joinEvent);
+        });
+        path("/host", () -> {
+            // host GET-API endpoint mappings
+            get("/login", HostLoginController.servePage);
+            get("/get-code", GetCodeController.servePage);
+            get("/home", HostHomeController.servePage);
+            get("/create-event", EventCreateController.servePage);
+            get("/templates", MyTemplatesController.servePage);
+            get("/templates/new", TemplateCreateController.servePage);
+            get("/templates/edit/code", TemplateEditController.servePage);
+            
+            // host POST-API endpoint mappings
+            post("/get-code", APIController.createHost);
+            post("/home", AuthController.authHost);
+        });
+        path("/event", () -> {
+            // event GET-API endpoint mappings
+            get("/host/code", HostEventController.servePage);
+            // get("/join/code", participantEventController.servePage);
+            get("/participant/feedback", ParticipantEventController.servePage);
 
-        // POST-API endpoint mappings
-        post("/event/join/code", APIController.joinEvent);
-        post("/event/host/code", APIController.createEvent);
-        post("/event/participant/feedback", APIController.createFeedback);
-        post("/host/get-code", APIController.createHost);
-        post("/host/home", AuthController.authHost);
-        post("/", APIController.joinEvent);
+            // event POST-API endpoint mappings
+            post("/join/code", APIController.joinEvent);
+            post("/host/code", APIController.createEvent);
+            post("/participant/feedback", APIController.createFeedback);
+        });
+        path("/error", () -> {
+            get("/401", UnauthAccessController.servePage);
+        });
 
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

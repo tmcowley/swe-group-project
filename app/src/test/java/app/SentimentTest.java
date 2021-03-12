@@ -57,6 +57,13 @@ public class SentimentTest {
     @Test
     public void test_main() throws IOException {
 
+
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I hate this. I think I might not love this."));
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I love this. I think I might not hate this."));
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I hate this. I think I might not love this. Facts are facts."));
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I love this. I think I might not hate this. Facts are facts."));
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I hate this. I think I might not love this. Facts are facts. Facts are facts. Facts are facts. Facts are facts."));
+        // System.out.println(SentimentAnalyser.getCompoundFromText("I love this. I think I might not hate this. Facts are facts. Facts are facts. Facts are facts. Facts are facts."));
         // System.out.println(SentimentAnalyser.getCompoundFromText("The rooms were
         // dirty, very uncomfortable, and the staff was terrible. They went over and
         // beyond to ignore us. I do not recommend this hotel for anyone visiting

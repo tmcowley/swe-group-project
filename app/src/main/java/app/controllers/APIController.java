@@ -401,6 +401,53 @@ public class APIController {
     };
 
     public static Route createTemplateComponent = (Request request, Response response) -> {
+        System.out.println("\nNotice: createTemplateComponent API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:createTemplateComponent session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createTemplateComponent session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        String name = request.queryParams("tc_name");
+        String type = request.queryParams("tc_type");
+        String prompt = request.queryParams("tc_prompt");
+        String[] options = request.queryParamsValues("tc_options");
+        String[] optionsAnsStrings = request.queryParamsValues("tc_optionsAns");
+        Boolean[] optionsAns = new Boolean[optionsAnsStrings.length];
+        for (int i=0; i < optionsAnsStrings.length;i++) {
+            optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
+        }
+        if (type.equals("radio") || type.equals("checkbox")) {
+            String textResponse = null;
+        } else {
+            String textResponse = request.queryParams("tc_textResponse");
+        }
+
+        TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns, textResponse);
+        
+        if (!v.isComponentValid(templateComponent)){
+            System.out.println("Error: APIController:createTemplateComponent: TemplateComponent considered invalid");
+            return "Error: TemplateComponent considered invalid";
+        }
+
+        db.createTemplateComponent(templateComponent);
+        return null;
+    };
+
+    public static Route createEmptyComponent = (Request request, Response response) -> {
         return null;
     };
 

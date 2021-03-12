@@ -14,9 +14,8 @@ public class HostLoginController {
 
         System.out.println("\nNotice: HostLoginController:servePage recognized request");
 
-        // start session
-        request.session(true);
-        Session session = request.session();
+        // get session; start session if empty
+        Session session = request.session(true);
 
         Map<String, Object> model = new HashMap<>();
         model.put("errorMessageLogin", session.attribute("errorMessageLogin"));

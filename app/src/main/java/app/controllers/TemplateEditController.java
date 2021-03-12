@@ -25,10 +25,16 @@ public class TemplateEditController {
         Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (request.session().isNew()) {
             System.out.println("Error:  TemplateEditController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  TemplateEditController:servePage session found, host not in session");
             response.redirect("/error/401");
             return null;
         }

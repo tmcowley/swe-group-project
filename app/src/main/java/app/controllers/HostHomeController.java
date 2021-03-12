@@ -31,6 +31,13 @@ public class HostHomeController {
             return null;
         }
 
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  HostHomeController:servePage session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
         // collect stored (valid) host
         Host host = session.attribute("host");
 

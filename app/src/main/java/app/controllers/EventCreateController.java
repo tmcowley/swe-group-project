@@ -32,6 +32,13 @@ public class EventCreateController {
             return null;
         }
 
+        // ensure host is set
+        if (session.attribute("host") == null){
+            System.out.println("Error:  EventCreateController:servePage host not set");
+            response.redirect("/error/401");
+            return null;
+        }
+
         // get host from session
         Host host = request.session().attribute("host");
 

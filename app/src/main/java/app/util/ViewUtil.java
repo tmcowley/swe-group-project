@@ -13,14 +13,26 @@ public class ViewUtil {
         return strictVelocityEngine().render(new ModelAndView(model, templatePath));
     }
 
-    public static Route notAcceptable = (Request request, Response response) -> {
-        response.status(HttpStatus.NOT_ACCEPTABLE_406);
-        return "Not acceptable.";
+    // unauthorized page access (HTTP_401)
+    public static Route unauthAccess = (Request request, Response response) -> {
+        System.out.println("\nNotice: ViewUtil:unauthAccess (401) called");
+        response.status(HttpStatus.UNAUTHORIZED_401);
+
+        Map<String, Object> model = new HashMap<>();
+        return ViewUtil.render(request, model, "/velocity/401-unauth-access.vm");
     };
 
+
+    // page not found Route (HTTP_404)
     public static Route notFound = (Request request, Response response) -> {
         response.status(HttpStatus.NOT_FOUND_404);
         return "404!";
+    };
+
+    // input not acceptable (HTTP_406)
+    public static Route notAcceptable = (Request request, Response response) -> {
+        response.status(HttpStatus.NOT_ACCEPTABLE_406);
+        return "Not acceptable.";
     };
 
     private static VelocityTemplateEngine strictVelocityEngine() {

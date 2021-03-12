@@ -19,6 +19,7 @@ import app.util.*;
 public class HostEventController {
 
     // serve host event page (following GET request)
+    // TODO: ensure host is author of event
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostEventController:servePage recognized request");
@@ -27,10 +28,16 @@ public class HostEventController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  HostEventController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host and event exist in current session
+        if (session.attribute("event") == null || session.attribute("host") == null){
+            System.out.println("Error:  HostEventController:servePage session found, event or host not in session");
             response.redirect("/error/401");
             return null;
         }

@@ -89,10 +89,16 @@ public class APIController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  APIController:createEvent session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createEvent session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -119,30 +125,29 @@ public class APIController {
         Timestamp endTime = new Timestamp(eTime.getTime());    
         Timestamp current = new Timestamp(System.currentTimeMillis());
 
-
         // validate input before database interaction
         if (!v.eventTitleIsValid(title)) {
-            request.session().attribute("errorMessageCreateEvent", "Error: Event title is not valid");
+            session.attribute("errorMessageCreateEvent", "Error: Event title is not valid");
             response.redirect("/host/create-event");
             return null;
         }
         if (!v.eventDescriptionIsValid(description)) {
-            request.session().attribute("errorMessageCreateEvent", "Error: Event description is invalid");
+            session.attribute("errorMessageCreateEvent", "Error: Event description is invalid");
             response.redirect("/host/create-event");
             return null;
         }
         if (!v.eventTypeIsValid(type)) {
-            request.session().attribute("errorMessageCreateEvent", "Error: Event type is invalid");
+            session.attribute("errorMessageCreateEvent", "Error: Event type is invalid");
             response.redirect("/host/create-event");
             return null;
         }
         if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
-            request.session().attribute("errorMessageCreateEvent", "Error: start and end time not in order");
+            session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
             response.redirect("/host/create-event");
             return null;
         }
 
-
+        // create an event object
         if (templateCode.equals("noTemplate")) {
             // create an event without a template
             System.out.println("Notice: no template has been provided");
@@ -154,9 +159,10 @@ public class APIController {
             event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
         }
 
+        // ensure event created is valid
         if (!v.isEventValid(event)){
             // return not found if event is not created or input is not valid
-            request.session().attribute("errorMessageCreateEvent", "Error: event not created or considered invalid - check inputs");
+            session.attribute("errorMessageCreateEvent", "Error: event not created or considered invalid - check inputs");
             response.redirect("/host/create-event");
             return null;
         }
@@ -231,10 +237,16 @@ public class APIController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure participant and event exist in current session
+        if (session.attribute("event") == null || session.attribute("participant") == null){
+            System.out.println("Error:  APIController:createFeedback session found, event or participant not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -283,10 +295,16 @@ public class APIController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createEmptyTemplate session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -323,10 +341,16 @@ public class APIController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createTemplate session found, host not in session");
             response.redirect("/error/401");
             return null;
         }

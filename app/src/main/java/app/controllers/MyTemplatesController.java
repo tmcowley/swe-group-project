@@ -31,6 +31,13 @@ public class MyTemplatesController {
             return null;
         }
 
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  MyTemplatesController:servePage session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
         // get host from session
         Host host = session.attribute("host");
         int hostID = host.getHostID();

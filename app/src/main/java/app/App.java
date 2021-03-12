@@ -6,6 +6,7 @@ import spark.Spark;
 
 // Internal packages
 import app.controllers.*;
+import app.util.ViewUtil;
 
 //SQLException package
 import java.sql.SQLException;
@@ -117,7 +118,7 @@ public class App {
             post("/participant/feedback", APIController.createFeedback);
         });
         path("/error", () -> {
-            get("/401", UnauthAccessController.servePage);
+            get("/401", ViewUtil.unauthAccess);
         });
 
         awaitInitialization();

@@ -1639,7 +1639,7 @@ public class DbConnection{
      * @param template_id template ID of the template needed to be deleted
      * @return delete status
      */
-    protected Boolean deleteTemplate(int template_id){
+    public Boolean deleteTemplate(int template_id){
         PreparedStatement stmt = null;
         Integer templateDeleted = null;
         try{
@@ -1668,7 +1668,7 @@ public class DbConnection{
      * @param tc_id template component ID of the template needed to be deleted
      * @return Delete status
      */
-    protected Boolean deleteTemplateComponent(int tc_id){
+    public Boolean deleteTemplateComponent(int tc_id){
         PreparedStatement stmt = null;
         Integer templateComponentDeleted = null;
         try{

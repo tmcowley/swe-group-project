@@ -1128,6 +1128,7 @@ public class DbConnection{
             String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? AND participant_id=? ORDER BY feedback.time_stamp DESC;";
             stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, event_id);
+            stmt.setInt(2, participant_id);
             rs = stmt.executeQuery();
             rs.last();
             int rsSize= rs.getRow();

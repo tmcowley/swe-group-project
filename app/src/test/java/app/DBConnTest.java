@@ -111,52 +111,75 @@ public class DBConnTest {
     @Test
     public void test_createParticipant(){
         // participant dummy data: first and last names
-        String Fname = "testFName";
-        String Lname = "testLName";
+        String f_name = "testFName";
+        String l_name = "testLName";
 
         // store the participant
-        Participant storedParticipant = db.createParticipant(Fname, Lname);
+        Participant storedParticipant = db.createParticipant(f_name, l_name);
         assertFalse(storedParticipant == null);
 
         // generate local version using local variables
         int commonPartID = storedParticipant.getParticipantID();
-        Participant localParticipant = new Participant(commonPartID, Fname, Lname);
+        Participant localParticipant = new Participant(commonPartID, f_name, l_name);
         
         // get stored variant of participant object
         storedParticipant = db.getParticipant(commonPartID);
         assertFalse(storedParticipant == null);
 
-        // ensure local and stored participant match
-        assertTrue(Objects.deepEquals(localParticipant, storedParticipant));
+        // ensure local and stored participants match
+        assertTrue(localParticipant.equals(storedParticipant));
+
+        // DB cleanup
+        db.deleteParticipant(commonPartID);
+    }
+
+    private String generateUniqueEmail(){
+        String e_address = "test@test.com";
+        while (db.emailExists(e_address)){
+            e_address += "a";
+        }
+        return e_address;
     }
 
     @Test
     public void test_createHost(){
-        String Fname = "testFName";
-        String Lname = "testLName";
-        String email = "test@test6.com";
-        Host testHost = db.createHost(Fname, Lname, email);
-        assertFalse(testHost == null);
-        String testCode = testHost.getHostCode();
-        Host testHost2 = db.getHostByCode(testCode);
-        assertTrue(testHost.equals(testHost2));
+        // host dummy data: first, last names and email
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
+
+        // store the host
+        Host storedHost = db.createHost(f_name, l_name, e_address);
+        assertFalse(storedHost == null);
+        int commonHostID = storedHost.getHostID();
+        String commonHostCode = storedHost.getHostCode();
+
+        // get stored variant of host object
+        Host localHost = new Host(commonHostID, commonHostCode, e_address, f_name, l_name);
+        assertFalse(localHost == null);
+
+        // ensure local and stored hosts match
+        assertTrue(localHost.equals(storedHost));
 
         // DB cleanup
-        db.deleteHost(testHost.getHostID());
+        db.deleteHost(commonHostID);
     }
 
     @Test 
     public void test_participantInEvent_addParticipantToEvent(){
-        String Fname = "testFName";
-        String Lname = "testLName";
-        String email = "test@test9.com";
+        // system object dummy data
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-        Participant testPart = db.createParticipant(Fname, Lname);
+        // generate a participant
+        Participant testPart = db.createParticipant(f_name, l_name);
         assertFalse(testPart == null);
         int testPartID = testPart.getParticipantID();
 
-        Host testHost = db.createHost(Fname, Lname, email);
+        // generate a host (for event generation)
+        Host testHost = db.createHost(f_name, l_name, e_address);
         assertFalse(testHost == null);
         int testHostID = testHost.getHostID();
 
@@ -166,15 +189,23 @@ public class DBConnTest {
         // int testTemplateID = testTemplate.getTemplateID();
         // db.deleteTemplate(testTemplateID);
 
+        // generate an event
         Event testEvent = db.createEvent(testHostID, "title", "desc", "lecture", ts, ts);
         assertFalse(testEvent == null);
         int testEventID = testEvent.getEventID();
 
+        // add participant to event
         Boolean addedToEvent = db.addParticipantToEvent(testPartID, testEventID);
         assertTrue(addedToEvent == true);
-        assertTrue(db.participantInEvent(testPartID, testEventID));
-        db.muteParticipantInEvent(testPartID, testEventID);
-        assertTrue(!db.participantInEventIsMuted(testPartID, testEventID));
+        Boolean participantInEvent = db.participantInEvent(testPartID, testEventID);
+        assertTrue(participantInEvent);
+
+        // mute the test participant in their event
+        Boolean mutedInEvent = db.muteParticipantInEvent(testPartID, testEventID);
+        assertTrue(mutedInEvent == true);
+        Boolean mutedInEventCheck2 = db.participantInEventIsMuted(testPartID, testEventID);
+        assertTrue(mutedInEventCheck2);
+
         // DB cleanup
         db.removeParticipantFromEvent(testPartID, testEventID);
         db.deleteParticipant(testPartID);

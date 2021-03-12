@@ -139,7 +139,7 @@ public class SentimentAnalyser {
      * @param plaintext string to be analysed for sentiment
      * @return real compound score derived from plaintext
      */
-    private static Float getCompoundFromText(String plaintext) throws IOException {
+    public static Float getCompoundFromText(String plaintext) throws IOException {
 
         if (StringUtils.isBlank(plaintext)){
             System.out.println("Error: getCompoundFromText() plaintext is blank");
@@ -174,7 +174,7 @@ public class SentimentAnalyser {
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);
         for (double i : values) {
-            if ((i > 1*standev) != (i < -1*standev)) {
+            if ((i >= 1*standev) != (i <= -1*standev)) {
                 compound += i;
                 count++;
             }

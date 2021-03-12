@@ -20,7 +20,7 @@
 
                     #foreach($component in $template.getComponents())
 
-                        # component is of type question
+                        ## component is of type question
                         #if($component.getType() == "question")
                             <div class="feedbackElement">
                                 <h3> Question </h3>
@@ -39,7 +39,7 @@
                                 <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
                             </div>
 
-                        # component is of type checkbox
+                        ## component is of type checkbox
                         #elseif($component.getType() == "checkbox")
                             <div class="feedbackElement">
                                 <h3> Checkbox </h3>
@@ -67,7 +67,7 @@
                                     Highlight?</label>
                             </div>
 
-                        # component is of type radio
+                        ## component is of type radio
                         #elseif($component.getType() == "radio")
                             <div class="feedbackElement">
                                 <h3> Radio </h3>

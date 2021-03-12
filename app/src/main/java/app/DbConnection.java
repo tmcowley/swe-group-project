@@ -1267,7 +1267,7 @@ public class DbConnection{
      * @param template_code template code
      * @return existence state of template_code
      */
-    private Boolean templateCodeExists(String template_code){
+    public Boolean templateCodeExists(String template_code){
         template_code = validator.sanitizeTemplateCode(template_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;

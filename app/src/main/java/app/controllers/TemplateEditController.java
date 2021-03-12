@@ -41,7 +41,7 @@ public class TemplateEditController {
         }
 
         // ensure host code exists in system
-        if (!db.templateCodeExists()){
+        if (!db.templateCodeExists(templateCode)){
             System.out.println("Error:  TemplateEditController:servePage template code does not exist in the system");
             response.redirect("/host/templates");
             return null;

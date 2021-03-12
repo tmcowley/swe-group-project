@@ -404,6 +404,10 @@ public class APIController {
         return null;
     };
 
+    public static Route createEmptyComponent = (Request request, Response response) -> {
+        return null;
+    };
+
     public static Route deleteTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: deleteTemplate API endpoint recognized request");
 

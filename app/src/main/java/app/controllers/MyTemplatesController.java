@@ -24,8 +24,7 @@ public class MyTemplatesController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  MyTemplatesController:servePage session not found");
             response.redirect("/error/401");
@@ -46,20 +45,33 @@ public class MyTemplatesController {
         // get each template against the host
         Template[] hostTemplates = db.getTemplatesByHostID(hostID);
 
+        // ensure the host template array is non-null
         if (hostTemplates == null){
             System.out.println("Notice: MyTemplatesController:servePage hostTemplates array is null");
             // send to generic error page 
+            session.attribute("errorRedirect", request.contextPath());
+            session.attribute("errorMessage", "host template array is null");
+            session.attribute("errorRedirect", "/host/template");
+            response.redirect("/error/406");
             return null;
         }
 
-        //System.out.println("Notice: hostTemplates' array length: " + hostTemplates.length);
-
+        // ensure each template is not-null
         int templateIndex = 0;
         for (Template template : hostTemplates){
-            if (template == null) System.out.println("Error: templates[" +templateIndex+ "] is null");
+            if (template == null) {
+                System.out.println("Error: templates[" +templateIndex+ "] is null");
+                // send to generic error page 
+                session.attribute("errorRedirect", request.contextPath());
+                session.attribute("errorMessage", "Error: templates[" +templateIndex+ "] is null");
+                session.attribute("errorRedirect", "/host/home");
+                response.redirect("/error/406");
+                return null;
+            }
             templateIndex++;
         }
 
+        // generate template overview page
         Map<String, Object> model = new HashMap<>();
         model.put("hostTemplates", hostTemplates);
         model.put("errorMessageMyTemplates", session.attribute("errorMessageMyTemplates"));
@@ -67,6 +79,7 @@ public class MyTemplatesController {
         // unset error messages
         session.removeAttribute("errorMessageMyTemplates");
 
+        // render template overview page
         return ViewUtil.render(request, model, "/velocity/templates.vm");
     };
 

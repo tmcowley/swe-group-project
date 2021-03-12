@@ -34,15 +34,27 @@ public class ViewUtil {
         return ViewUtil.render(request, model, "/velocity/404-not-found.vm");
     };
 
-    // input not acceptable (HTTP_406)
+    // general error page: not acceptable (HTTP_406)
     public static Route notAcceptable = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:notAcceptable (406) called");
         response.status(HttpStatus.NOT_ACCEPTABLE_406);
-        return "Not acceptable.";
 
-        // // render page not found page
-        // Map<String, Object> model = new HashMap<>();
-        // return ViewUtil.render(request, model, "/velocity/406-not-acceptable.vm");
+        // get current session; launch session if needed
+        Session session = request.session(true);
+
+        // generate general error page
+        Map<String, Object> model = new HashMap<>();
+        model.put("errorFrom", session.attribute("errorFrom"));
+        model.put("errorMessage", session.attribute("errorMessage"));
+        model.put("errorRedirect", session.attribute("errorRedirect"));
+
+        // unset session error attributes
+        session.removeAttribute("errorFrom");
+        session.removeAttribute("errorMessage");
+        session.removeAttribute("errorRedirect");
+
+        // render general error page
+        return ViewUtil.render(request, model, "/velocity/406-not-acceptable.vm");
     };
 
     private static VelocityTemplateEngine strictVelocityEngine() {

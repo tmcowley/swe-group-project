@@ -119,8 +119,12 @@ public class App {
         });
         path("/error", () -> {
             get("/401", ViewUtil.unauthAccess);
-            get("/404", ViewUtil.notFound);
+            //get("/404", ViewUtil.notFound);
+            get("/406", ViewUtil.notAcceptable);
         });
+
+        // map page not found error to page
+        notFound(ViewUtil.notFound);
 
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

@@ -22,10 +22,6 @@ public class TemplateCreateController {
             response.redirect("/error/401");
             return null;
         }
-
-        // if error message is unset, then set it to empty string
-        if (session.attribute("errorMessageCreateEmptyTemplate") == null)
-            session.attribute("errorMessageCreateEmptyTemplate", "");
         
         // generate model for front-end; include error message
         Map<String, Object> model = new HashMap<>();

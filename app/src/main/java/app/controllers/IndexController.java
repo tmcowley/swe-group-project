@@ -17,9 +17,6 @@ public class IndexController {
         // start session
         request.session(true);
 
-        if (request.session().attribute("errorMessageJoinEvent") == null)
-            request.session().attribute("errorMessageJoinEvent", "");
-
         Map<String, Object> model = new HashMap<>();
         model.put("errorMessageJoinEvent", request.session().attribute("errorMessageJoinEvent"));
 

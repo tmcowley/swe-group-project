@@ -13,7 +13,7 @@
     <div id="mainFormSection">
         <div id="mainForm">
             <form action="" method="post">
-                <h1>Template Name</h1>
+                <h1>$template.getTemplateName()</h1>
                 <label id="formErrorMessage">$errorMessageCreateTemplate</label>
                 <!-- Space for error messages -->
                 <div class="templateControlsSection">

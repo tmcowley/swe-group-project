@@ -383,8 +383,8 @@ public class APIController {
 
         //TODO
 
-        // get template hostCode (stored in form) 
-        String hostCode = request.queryParams("hostCode");
+        // get template code (stored in form) 
+        String templateCode = request.queryParams("templateCode");
 
         // collect form data
         // form data -> components
@@ -396,7 +396,7 @@ public class APIController {
 
         // return to "/host/templates/edit/code"
         // (links to TemplateEditController.servePage)
-        response.redirect("/host/templates/edit/code" + "?hostCode=" + hostCode);
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;
     };
 
@@ -433,8 +433,13 @@ public class APIController {
             return null;
         }
 
-        Template template = db.getTemplateByCode(request.queryParams("templateCode"));
+        String templateCode = request.queryParams("templateCode");
+
+        // get template from templateCode; delete corresponding template
+        Template template = db.getTemplateByCode(templateCode);
         db.deleteTemplate(template.getTemplateID());
+
+        // redirect host to templates page
         response.redirect("/host/templates");
         return null;
     };
@@ -460,7 +465,7 @@ public class APIController {
             return null;
         }
 
-        // ensure host code sent in POST request
+        // ensure component ID sent in POST request
         if (request.queryParams("component_id") == null){
             System.out.println("Error:  APIController:deleteTemplateComponent TemplateComponent ID not in POST request");
             session.attribute("errorMessageDeleteTemplateComponent", "Error: TemplateComponent ID not in form attributes");
@@ -468,8 +473,21 @@ public class APIController {
             return null;
         }
 
-        db.deleteTemplateComponent(Integer.parseInt(request.queryParams("component_id")));
-        response.redirect("/host/templates");
+        // collect host from session
+        Host host = session.attribute("host");
+
+        // parse component_id from form input
+        int component_id = Integer.parseInt(request.queryParams("component_id"));
+
+        // get template code (stored in form) 
+        String templateCode = request.queryParams("templateCode");
+
+        // delete template component by ID
+        db.deleteTemplateComponent(component_id);
+
+        // return to "/host/templates/edit/code"
+        // (links to TemplateEditController.servePage)
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;
     };
 

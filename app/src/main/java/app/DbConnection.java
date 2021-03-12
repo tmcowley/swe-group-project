@@ -252,10 +252,6 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
-        if (name == null || type == null || prompt == null || textResponse == null){
-            System.out.println("CALL POINT giving NULLS");
-        }
-        System.out.println("type: " + type);
         try{
             // create empty template object
             String createTemplateComponent = ""
@@ -1094,14 +1090,14 @@ public class DbConnection{
                 + "WHERE template.template_id = ? "
                 + "LIMIT 1;";
 
-            String selectComponentsByID = ""
-                + "SELECT * FROM template_component "
-                + "INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(tc_id)"
-                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(tc_id)"
-                + "WHERE template.template_id = ? ";
+            // String alternativeSelectComponentsByID = ""
+            //     + "SELECT * FROM template_component "
+            //     + "INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(tc_id)"
+            //     + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(tc_id)"
+            //     + "WHERE template.template_id = ? ";
             
             // works but has extra fields
-            String alternativeSelectComponentsByID = ""
+            String selectComponentsByID = ""
                 + "SELECT * FROM template_component "
                 + "INNER JOIN component_in_template "
                     + "ON (template_component.tc_id = component_in_template.component_id) "
@@ -1112,6 +1108,7 @@ public class DbConnection{
             stmt1 = this.conn.prepareStatement(selectTemplateByID);
             stmt1.setInt(1, template_id);
 
+            // get template main fields
             rs1 = stmt1.executeQuery();
             if (rs1.next()) {
                 template_id = rs1.getInt("template_id");
@@ -1120,19 +1117,32 @@ public class DbConnection{
                 template_code = rs1.getString("template_code");
                 timestamp = rs1.getTimestamp("timestamp");
             }
-            stmt2 = this.conn.prepareStatement(alternativeSelectComponentsByID);
+            stmt2 = this.conn.prepareStatement(selectComponentsByID);
             stmt2.setInt(1, template_id);
 
+            // get all components
             rs2 = stmt2.executeQuery();
-            if (rs2.next()) {
-                int component_id = rs2.getInt("t.tc_id");
-                String name = rs2.getString("t.tc_name");
-                String type = rs2.getString("t.tc_type");
-                String prompt = rs2.getString("t.tc_prompt"); 
-                String[] options = (String[]) rs2.getObject("t.tc_options");
-                Boolean[] optionsAns = (Boolean[]) rs2.getObject("t.tc_options_ans");
-                String textResponse = rs2.getString("t.tc_text_response");
-                templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
+            while (rs2.next()) {
+                int component_id = rs2.getInt("tc_id");
+                String name = rs2.getString("tc_name");
+                String type = rs2.getString("tc_type");
+                String prompt = rs2.getString("tc_prompt"); 
+                String[] options = null;
+                Boolean[] options_ans = null;
+                String text_response = null;
+
+                // component is of type question
+                if (type.equals("question")){
+                    text_response = rs2.getString("tc_text_response");
+                }
+
+                // component is of type options
+                if (type.equals("radio") || type.equals("checkbox")){
+                    options = (String[]) rs2.getArray("tc_options").getArray();
+                    options_ans = (Boolean[]) rs2.getArray("tc_options_ans").getArray();
+                }
+
+                templateComponent = new TemplateComponent(component_id, name, type, prompt, options, options_ans, text_response);
                 components.add(templateComponent);
             }
             template = new Template(template_id, host_id, template_name, template_code, timestamp, components);

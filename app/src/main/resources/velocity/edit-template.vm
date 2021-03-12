@@ -43,7 +43,7 @@
                             <!-- Textarea -->
                             <input class="formInput" type="text" placeholder="Enter Prompt" value="$component.getPrompt()">
                             <input class="formInput" type="hidden" value="$component.getType()">
-                            <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
+                            <!-- <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea> -->
                         </div>
                         <button class="feedbackDelButton"><img src="/images/delete-icon.png"/></button>
                         <!-- feedbackElementFooter will contain extra properties to be set -->
@@ -51,7 +51,7 @@
                             <input type="checkbox" id="consider1" name="consider1" value="Consider">
                             <label for="consider1">
                                 Consider in sentiment analysis</label><br>
-                            <label for="rating1">Rating (1-5):</label>
+                            <label for="rating1">Sentiment Influence (1-5):</label>
                             <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
                         </div>
 
@@ -67,14 +67,14 @@
                             #foreach($option in $component.getOptions())
                                 <div class="formInputBulletIcon">&bull;</div>
                                 <input class="formInputBullet" type="text" placeholder="Enter Text" value="$option">
-                                <label class="formInputBulletLabel" for="bulletrating1">Rating (1-7):</label>
+                                <label class="formInputBulletLabel" for="bulletrating1">Positivity (-3 to 3):</label>
                                 <input
                                     class="formInputBulletRating"
                                     type="number"
                                     id="bulletrating1"
                                     name="bulletrating1"
-                                    min="1"
-                                    max="7"><br>
+                                    min="-3"
+                                    max="3"><br>
                                 <div class="formInputBulletIcon">&bull;</div>
                             #end
                         </div>
@@ -82,8 +82,8 @@
                         <div class="feedbackElementFooter">
                             <input type="checkbox" id="consider3" name="consider3" value="Consider">
                             <label for="consider3">
-                                Consider in sentiment</label><br>
-                            <label for="rating3">Rating (1-5):</label>
+                                Consider in sentiment analysis</label><br>
+                            <label for="rating3">Sentiment Influence (1-5):</label>
                             <input type="number" id="rating3" name="rating3" min="1" max="5"><br>
                             <input type="checkbox" id="highlight3" name="highlight3" value="Consider">
                             <label for="highlight3">
@@ -95,31 +95,27 @@
                             <h3>
                                 Radio
                             </h3>
-                            <!-- Emoji selector -->
                             <input class="formInput" type="text" placeholder="Enter Prompt" value="$component.getPrompt()">
                             <input class="formInput" type="hidden" value="$component.getType()">
-                            <div class="feelingRadioContainer">
-                                #foreach($option in $component.getOptions())
-                                    <div class="formInputBulletIcon">&bull;</div>
-                                    <input class="formInputBullet" type="text" placeholder="Enter Text" value="option">
-                                    <label class="formInputBulletLabel" for="bulletrating2">Rating (1-7):</label>
-                                    <input
-                                        class="formInputBulletRating"
-                                        type="number"
-                                        id="bulletrating2"
-                                        name="bulletrating2"
-                                        min="1"
-                                        max="7"><br>
-                                    <div class="formInputBulletIcon">&bull;</div>
-                                #end
-                            </div>
+                            #foreach($option in $component.getOptions())
+                                <div class="formInputBulletIcon">&bull;</div>
+                                <input class="formInputBullet" type="text" placeholder="Enter Text" value="option">
+                                <label class="formInputBulletLabel" for="bulletrating2">Positivity (-3 to 3):</label>
+                                <input
+                                    class="formInputBulletRating"
+                                    type="number"
+                                    id="bulletrating2"
+                                    name="bulletrating2"
+                                    min="-3"
+                                    max="3"><br>
+                            #end
                         </div>
                         <button class="feedbackDelButton"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
                             <input type="checkbox" id="consider2" name="consider2" value="Consider">
                             <label for="consider2">
-                                Consider in sentiment</label><br>
-                            <label for="rating2">Rating (1-5):</label>
+                                Consider in sentiment analysis</label><br>
+                            <label for="rating2">Sentiment Influence (1-5):</label>
                             <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
                         </div>
 
@@ -135,9 +131,20 @@
                     <button name="componentType" value="question">Add Question</button>
                 </form>
 
+                <form name="" method="post" action="/host/templates/edit/code/create-empty-component">
+                    <input type="hidden" name="templateCode" value=$template.getTemplateCode()>
+                    <button name="componentType" value="radio">Add Radio Buttons</button>
+                </form>
+
+                <form name="" method="post" action="/host/templates/edit/code/create-empty-component">
+                    <input type="hidden" name="templateCode" value=$template.getTemplateCode()>
+                    <button name="componentType" value="checkbox">Add Tickboxes</button>
+                </form>
+
                 <!-- <a href="#">Add Emojis</a> -->
                 <a href="#">Add Radio Buttons</a>
                 <a href="#">Add Tickboxes</a>
+                -->
             </div>           
         </div>
     </div>

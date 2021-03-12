@@ -468,8 +468,7 @@ public class APIController {
             return null;
         }
 
-        Template template = db.getTemplateByCode(request.queryParams("component_id"));
-        db.deleteTemplate(template.getTemplateID());
+        db.deleteTemplateComponent(Integer.parseInt(request.queryParams("component_id")));
         response.redirect("/host/templates");
         return null;
     };

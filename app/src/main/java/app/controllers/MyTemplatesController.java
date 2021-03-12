@@ -76,10 +76,12 @@ public class MyTemplatesController {
         model.put("hostTemplates", hostTemplates);
         model.put("errorMessageMyTemplates", session.attribute("errorMessageMyTemplates"));
         model.put("errorMessageDeleteTemplate", session.attribute("errorMessageDeleteTemplate"));
+        model.put("errorMessageDeleteTemplateComponent", session.attribute("errorMessageDeleteTemplateComponent"));
 
         // unset error messages
         session.removeAttribute("errorMessageMyTemplates");
         session.removeAttribute("errorMessageDeleteTemplate");
+        session.removeAttribute("errorMessageDeleteTemplateComponent");
 
         // render template overview page
         return ViewUtil.render(request, model, "/velocity/templates.vm");

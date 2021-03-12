@@ -25,6 +25,9 @@
             #if($errorMessageDeleteTemplate)
                 <label id="formErrorMessage">$errorMessageDeleteTemplate</label>
             #end
+            #if($errorMessageDeleteTemplateComponent)
+                <label id="formErrorMessage">$errorMessageDeleteTemplateComponent</label>
+            #end
 
             <!-- Generate link for each template owned by the host -->
             #foreach($template in $hostTemplates)

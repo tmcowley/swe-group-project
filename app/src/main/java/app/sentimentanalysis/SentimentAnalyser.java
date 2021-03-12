@@ -87,13 +87,13 @@ public class SentimentAnalyser {
             if (StringUtils.isBlank(results[i]))
                 continue;
             
-            if (types[i] == 0) {
+            if (types[i] == 0 && weights[i] != 0) {
                 compounds[i] = getCompoundFromText(results[i]);
             }
-            if (types[i] == 1) {
+            if (types[i] == 1 && weights[i] != 0) {
                 compounds[i] = getCompoundFromSingle(results[i], i, feedback);
             }
-            if (types[i] == 2) {
+            if (types[i] == 2 && weights[i] != 0) {
                 compounds[i] = getCompoundFromMultiple(results[i], i, feedback);
             }
             // Checks if result is a key result, if it is adds to the array list of key
@@ -139,7 +139,7 @@ public class SentimentAnalyser {
      * @param plaintext string to be analysed for sentiment
      * @return real compound score derived from plaintext
      */
-    public static Float getCompoundFromText(String plaintext) throws IOException {
+    private static Float getCompoundFromText(String plaintext) throws IOException {
 
         if (StringUtils.isBlank(plaintext)){
             System.out.println("Error: getCompoundFromText() plaintext is blank");

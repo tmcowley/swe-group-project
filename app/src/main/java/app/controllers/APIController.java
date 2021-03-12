@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.util.Calendar;
 
 import spark.*;
 import spark.utils.StringUtils;
@@ -102,18 +104,21 @@ public class APIController {
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
-        // timestamp in format yyyy-[m]m-[d]d hh:mm:ss[.f...]
+        String[] startTimes = request.queryParams("startTime").split(":");
+        String[] endTimes = request.queryParams("endTime").split(":");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimes[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(startTimes[1]));
+        calendar.set(Calendar.SECOND, 0);
+        Date sTime =(Date) calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimes[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(endTimes[1]));
+        calendar.set(Calendar.SECOND, 0);
+        Date eTime =(Date) calendar.getTime();       
+        Timestamp startTime = new Timestamp(sTime.getTime());
+        Timestamp endTime = new Timestamp(eTime.getTime());    
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        Timestamp startTime, endTime;
 
-        // TODO ((Temporary fix for broken timestamp input))
-        try {
-            startTime = Timestamp.valueOf(request.queryParams("startTime"));
-            endTime = Timestamp.valueOf(request.queryParams("endTime"));
-        } catch (java.lang.IllegalArgumentException iae) {
-            startTime = current;
-            endTime = current;
-        }
 
         // validate input before database interaction
         if (!v.eventTitleIsValid(title)) {
@@ -131,11 +136,12 @@ public class APIController {
             response.redirect("/host/create-event");
             return null;
         }
+        if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
+            request.session().attribute("errorMessageCreateEvent", "Error: start and end time not in order");
+            response.redirect("/host/create-event");
+            return null;
+        }
 
-        /*
-        if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
-        return "Error: start and end time not in order";
-        */
 
         if (templateCode.equals("noTemplate")) {
             // create an event without a template

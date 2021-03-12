@@ -1643,6 +1643,10 @@ public class DbConnection{
         PreparedStatement stmt = null;
         Integer templateDeleted = null;
         try{
+            Template template = getTemplate(template_id);
+            for (TemplateComponent templateComponent : template.getComponents()) {
+                deleteTemplateComponent(templateComponent.getId());
+            }
             String deleteTemplate = ""
                 + "DELETE FROM template "
                 + "WHERE template_id = ?;";

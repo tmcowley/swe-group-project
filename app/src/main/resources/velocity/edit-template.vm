@@ -126,14 +126,19 @@
                         #end
                     #end
                 </div>
-                <div class="templateAddControlsSection">
-                    <!-- Buttons to add new sections -->
-                    <a href="#">Add Textarea</a>
-                    <!-- <a href="#">Add Emojis</a> -->
-                    <a href="#">Add Radio Buttons</a>
-                    <a href="#">Add Tickboxes</a>
-                </div>                
             </form>
+            <div class="templateAddControlsSection">
+                <!-- Buttons to add new sections -->
+
+                <form name="" method="post" action="/host/templates/edit/code/create-empty-component">
+                    <input type="hidden" name="templateCode" value=$template.getTemplateCode()>
+                    <button name="componentType" value="question">Add Question</button>
+                </form>
+
+                <!-- <a href="#">Add Emojis</a> -->
+                <a href="#">Add Radio Buttons</a>
+                <a href="#">Add Tickboxes</a>
+            </div>           
         </div>
     </div>
 </div>

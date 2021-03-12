@@ -123,5 +123,47 @@ public class Host {
             return false;
         return true;
     }
+    /**
+     * sets first name
+     * @param name
+     */
+    public void setFName(String name){
+        this.f_name = name;
+    }
+    /**
+     * sets last name
+     * @param name
+     */
+    public void setLName(String name){
+        this.l_name = name;
+    }
+    /**
+     * sets email address
+     * @param email
+     */
+    public void setEAddress(String email){
+        this.e_address = email;
+    }
+    /**
+     * sets system ban
+     * @param ban
+     */
+    public void setSysBan(Boolean ban){
+        this.sys_ban = ban;
+    }
+    /**
+     * sets host code
+     * @param code
+     */
+    public void setHostCode(String code){
+        this.host_code = code;
+    }
+     /**
+     * sets host id
+     * @param id
+     */
+    public void setHostID(int id){
+        this.host_id = id;
+    }
 
 }

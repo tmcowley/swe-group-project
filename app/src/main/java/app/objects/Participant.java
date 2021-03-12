@@ -101,4 +101,32 @@ public class Participant {
             return false;
         return true;
     }
+    /**
+     * sets first name
+     * @param name
+     */
+    public void setFName(String name){
+        this.f_name = name;
+    }
+    /**
+     * sets last name
+     * @param name
+     */
+    public void setLName(String name){
+        this.l_name = name;
+    }
+    /**
+     * sets system ban
+     * @param ban
+     */
+    public void setSysBan(Boolean ban){
+        this.sys_ban = ban;
+    }
+     /**
+     * sets participant id
+     * @param id
+     */
+    public void setPartID(int id){
+        this.participant_id = id;
+    }
 }

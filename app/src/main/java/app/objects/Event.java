@@ -135,4 +135,68 @@ public class Event {
             return false;
         return true;
     }
+
+    /**
+     * sets host id
+     * @param id
+     */
+    public void setHostID(int id){
+        this.host_id = id;
+    }
+    /**
+     * sets event id
+     * @param id
+     */
+    public void setEventID(int id){
+        this.event_id = id;
+    }
+    /**
+     * sets title
+     * @param title
+     */
+    public void setTitle(String title){
+        this.title = title;
+    }
+    /**
+     * sets description
+     * @param desc
+     */
+    public void setDesciption(String desc){
+        this.description = desc;
+    }
+    /**
+     * sets type
+     * @param type
+     */
+    public void setType(String type){
+        this.type = type;
+    }
+    /**
+     * sets Start time
+     * @param ts
+     */
+    public void setStartTime(Timestamp ts){
+        this.start_time = ts;
+    }
+    /**
+     * sets end time
+     * @param ts
+     */
+    public void setEndTime(Timestamp ts){
+        this.end_time = ts;
+    }
+    /**
+     * sets event code
+     * @param event_code
+     */
+    public void setEventCode(String event_code){
+        this.eventCode = event_code;
+    }
+    /**
+     * sets template id
+     * @param id
+     */
+    public void setTemplateID(int id){
+        this.template_id = id;
+    }
 }

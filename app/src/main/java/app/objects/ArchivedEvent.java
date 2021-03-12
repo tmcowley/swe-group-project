@@ -112,4 +112,60 @@ public class ArchivedEvent {
             return false;
         return true;
     }
+    /**
+     * sets host id
+     * @param id
+     */
+    public void setHostID(int id){
+        this.host_id = id;
+    }
+    /**
+     * sets event id
+     * @param id
+     */
+    public void setEventID(int id){
+        this.event_id = id;
+    }
+    /**
+     * sets title
+     * @param title
+     */
+    public void setTitle(String title){
+        this.title = title;
+    }
+    /**
+     * sets mood
+     * @param mood
+     */
+    public void setMood(String mood){
+        this.total_mood = mood;
+    }
+    /**
+     * sets description
+     * @param desc
+     */
+    public void setDesciption(String desc){
+        this.description = desc;
+    }
+    /**
+     * sets type
+     * @param type
+     */
+    public void setType(String type){
+        this.type = type;
+    }
+    /**
+     * sets Start time
+     * @param ts
+     */
+    public void setStartTime(Timestamp ts){
+        this.start_time = ts;
+    }
+    /**
+     * sets end time
+     * @param ts
+     */
+    public void setEndTime(Timestamp ts){
+        this.end_time = ts;
+    }
 }

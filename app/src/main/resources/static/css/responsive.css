@@ -100,7 +100,7 @@
     .formInputBulletLabel {
         margin-left: 0px;
     }
-    .templateControlsSection {
+    .templateControlsSection, .templateAddControlsSection {
         justify-content: center;
     }
 }

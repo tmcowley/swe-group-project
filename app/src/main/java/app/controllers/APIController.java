@@ -430,10 +430,11 @@ public class APIController {
         for (int i=0; i < optionsAnsStrings.length;i++) {
             optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
         }
+        String textResponse;
         if (type.equals("radio") || type.equals("checkbox")) {
-            String textResponse = null;
+            textResponse = null;
         } else {
-            String textResponse = request.queryParams("tc_textResponse");
+            textResponse = request.queryParams("tc_textResponse");
         }
 
         TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns, textResponse);

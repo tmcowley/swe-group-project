@@ -1,0 +1,11 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<div id="mainBodyContainerOneCol">
+    <div id="landingMain">
+        <div id="landingContainer">
+            <h1>Page Not Found</h1>
+            <a id="hostCodeContinue" href="/">Return to Homepage</a>
+        </div>
+    </div>
+</div>
+#end

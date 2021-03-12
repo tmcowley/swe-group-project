@@ -18,6 +18,7 @@ public class ViewUtil {
         System.out.println("\nNotice: ViewUtil:unauthAccess (401) called");
         response.status(HttpStatus.UNAUTHORIZED_401);
 
+        // render unauthorised access page
         Map<String, Object> model = new HashMap<>();
         return ViewUtil.render(request, model, "/velocity/401-unauth-access.vm");
     };
@@ -25,14 +26,23 @@ public class ViewUtil {
 
     // page not found Route (HTTP_404)
     public static Route notFound = (Request request, Response response) -> {
+        System.out.println("\nNotice: ViewUtil:notFound (404) called");
         response.status(HttpStatus.NOT_FOUND_404);
-        return "404!";
+
+        // render page not found page
+        Map<String, Object> model = new HashMap<>();
+        return ViewUtil.render(request, model, "/velocity/404-not-found.vm");
     };
 
     // input not acceptable (HTTP_406)
     public static Route notAcceptable = (Request request, Response response) -> {
+        System.out.println("\nNotice: ViewUtil:notAcceptable (406) called");
         response.status(HttpStatus.NOT_ACCEPTABLE_406);
         return "Not acceptable.";
+
+        // // render page not found page
+        // Map<String, Object> model = new HashMap<>();
+        // return ViewUtil.render(request, model, "/velocity/406-not-acceptable.vm");
     };
 
     private static VelocityTemplateEngine strictVelocityEngine() {

@@ -344,7 +344,7 @@ public class APIController {
     };
 
     /**
-     * host API end-point: generate a populated template
+     * host API POST end-point: generate a populated template
      */
     public static Route createTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: createTemplate API endpoint recognized request");
@@ -364,6 +364,14 @@ public class APIController {
         if (session.attribute("host") == null){
             System.out.println("Error:  APIController:createTemplate session found, host not in session");
             response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host code sent in POST request
+        if (request.queryParams("hostCode") == null){
+            System.out.println("Error:  APIController:createTemplate host code not in POST request");
+            session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
+            response.redirect("/host/templates");
             return null;
         }
 

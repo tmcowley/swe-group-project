@@ -119,6 +119,7 @@ public class App {
         });
         path("/error", () -> {
             get("/401", ViewUtil.unauthAccess);
+            get("/404", ViewUtil.notFound);
         });
 
         awaitInitialization();

@@ -43,12 +43,12 @@ public class MyTemplatesController {
         Host host = session.attribute("host");
         int hostID = host.getHostID();
 
-
         // get each template against the host
         Template[] hostTemplates = db.getTemplatesByHostID(hostID);
 
         if (hostTemplates == null){
             System.out.println("Notice: MyTemplatesController:servePage hostTemplates array is null");
+            // send to generic error page 
             return null;
         }
 
@@ -62,6 +62,11 @@ public class MyTemplatesController {
 
         Map<String, Object> model = new HashMap<>();
         model.put("hostTemplates", hostTemplates);
+        model.put("errorMessageMyTemplates", session.attribute("errorMessageMyTemplates"));
+
+        // unset error messages
+        session.removeAttribute("errorMessageMyTemplates");
+
         return ViewUtil.render(request, model, "/velocity/templates.vm");
     };
 

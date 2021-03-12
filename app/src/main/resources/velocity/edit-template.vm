@@ -15,7 +15,11 @@
             <form action="" method="post">
                 <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
                     <input class="formInput" name="hostCode" type="hidden" value="$template.getTemplateCode()">
-
+                    #if($template.getComponents().size() == 0)
+                        <div class="feedbackElementEmpty">
+                            <h2>There are no elements in the current template - use the buttons below to add some.</h2>
+                        </div>
+                    #end
                     #foreach($component in $template.getComponents())
                         #if($component.getType() == "question") ## component is of type question 
                         <div class="feedbackElement">

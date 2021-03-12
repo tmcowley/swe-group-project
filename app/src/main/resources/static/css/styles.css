@@ -385,6 +385,15 @@ textarea {
     border-radius: 15px 15px 0 0;
 }
 
+.feedbackElementEmpty {
+    padding: 60px 20px;
+    border: 1px solid #cacaca;
+    margin: 10px 0 0;
+    grid-column: span 2;
+    border-radius: 15px;
+    text-align: center;
+}
+
 .formInput, .formInputBullet {
     width: 100%;
     margin-bottom: 10px;

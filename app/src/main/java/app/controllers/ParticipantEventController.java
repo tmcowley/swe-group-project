@@ -21,19 +21,28 @@ public class ParticipantEventController {
 
         System.out.println("\nNotice: participantEventController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        Session session = request.session(true);
+        if (session.isNew()) {
             System.out.println("Error:  ParticipantEventController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }
 
-        Event event = request.session().attribute("event");
-        Participant participant = request.session().attribute("participant");
+        // ensure host exists in current session
+        if (session.attribute("event") == null || session.attribute("participant") == null){
+            System.out.println("Error:  ParticipantEventController:servePage session found, participant or event not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // collect event and participant from session
+        Event event = session.attribute("event");
+        Participant participant = session.attribute("participant");
 
         Map<String, Object> model = new HashMap<>();
         Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());

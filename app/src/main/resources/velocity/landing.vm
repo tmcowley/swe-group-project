@@ -10,7 +10,9 @@
                     <input type="text" id="participantFName" name="participantFName" placeholder="First Name">
                     <input type="text" id="participantLName" name="participantLName" placeholder="Last Name">
                     <input type="text" id="eventCode" name="eventCode" placeholder="Code">
-                    <label id="formErrorMessage">$errorMessageJoinEvent</label>
+                    #if($errorMessageJoinEvent)
+                        <label id="formErrorMessage">$errorMessageJoinEvent</label>
+                    #end
                     <input type="submit" value="Join Event" id="landingJoinButton">
                 </form>
                 <!-- Alternatively, a button to host an event -->

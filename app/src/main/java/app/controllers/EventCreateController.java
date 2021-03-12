@@ -20,13 +20,22 @@ public class EventCreateController {
 
         System.out.println("\nNotice: EventCreateController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        request.session(true);
+        Session session = request.session();
+        if (session.isNew()) {
             System.out.println("Error:  EventCreateController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host is set
+        if (session.attribute("host") == null){
+            System.out.println("Error:  EventCreateController:servePage host not set");
             response.redirect("/error/401");
             return null;
         }
@@ -53,6 +62,8 @@ public class EventCreateController {
         }
 
         model.put("templateCount", templateCount);
+        model.put("errorMessageCreateEvent", session.attribute("errorMessageCreateEvent"));
+        session.removeAttribute("errorMessageCreateEvent");
         return ViewUtil.render(request, model, "/velocity/create-event.vm");
     };
 }

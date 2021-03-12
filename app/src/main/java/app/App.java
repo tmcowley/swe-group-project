@@ -6,6 +6,7 @@ import spark.Spark;
 
 // Internal packages
 import app.controllers.*;
+import app.util.ViewUtil;
 
 //SQLException package
 import java.sql.SQLException;
@@ -87,13 +88,23 @@ public class App {
             get("/get-code", GetCodeController.servePage);
             get("/home", HostHomeController.servePage);
             get("/create-event", EventCreateController.servePage);
-            get("/templates", MyTemplatesController.servePage);
-            get("/templates/new", TemplateCreateController.servePage);
-            get("/templates/edit/code", TemplateEditController.servePage);
-            
+
             // host POST-API endpoint mappings
             post("/get-code", APIController.createHost);
             post("/home", AuthController.authHost);
+
+            // template API endpoint mappings
+            path("/templates", () -> {
+                // template GET-API endpoint mappings
+                get("", MyTemplatesController.servePage);
+                get("/new", TemplateCreateController.servePage);
+                get("/edit/code", TemplateEditController.servePage);
+
+                // template POST-API endpoint mappings
+                post("/new", APIController.createEmptyTemplate);
+                post("/edit/code", APIController.createTemplate);
+            });
+
         });
         path("/event", () -> {
             // event GET-API endpoint mappings
@@ -107,8 +118,13 @@ public class App {
             post("/participant/feedback", APIController.createFeedback);
         });
         path("/error", () -> {
-            get("/401", UnauthAccessController.servePage);
+            get("/401", ViewUtil.unauthAccess);
+            //get("/404", ViewUtil.notFound);
+            get("/406", ViewUtil.notAcceptable);
         });
+
+        // map page not found error to page
+        notFound(ViewUtil.notFound);
 
         awaitInitialization();
         System.out.printf("\nRunning at http://localhost:%d\n", Spark.port());

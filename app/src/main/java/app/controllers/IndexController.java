@@ -14,17 +14,14 @@ public class IndexController {
 
         System.out.println("\nNotice: IndexController:servePage recognized request");
 
-        // start session
-        request.session(true);
-
-        if (request.session().attribute("errorMessageJoinEvent") == null)
-            request.session().attribute("errorMessageJoinEvent", "");
+        // get session; start session if empty
+        Session session = request.session(true);
 
         Map<String, Object> model = new HashMap<>();
-        model.put("errorMessageJoinEvent", request.session().attribute("errorMessageJoinEvent"));
+        model.put("errorMessageJoinEvent", session.attribute("errorMessageJoinEvent"));
 
         // unset session error attribute
-        request.session().removeAttribute("errorMessageJoinEvent");
+        session.removeAttribute("errorMessageJoinEvent");
 
         return ViewUtil.render(request, model, "/velocity/landing.vm");
     };

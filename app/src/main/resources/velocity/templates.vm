@@ -17,13 +17,22 @@
             <div id="landingJoinContainer">
                 <a href="/host/templates/new" id="landingHostButton">Create New Template</a>
             </div>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
-            <a id="hostCodeContinue" href="/host/templates/edit/code">My Template 1</a>
+
+            <!-- Holds error messages relating to this form -->
+            #if($errorMessageMyTemplates)
+                <label id="formErrorMessage">$errorMessageMyTemplates</label>
+            #end
+            #if($errorMessageDeleteTemplate)
+                <label id="formErrorMessage">$errorMessageDeleteTemplate</label>
+            #end
+            #if($errorMessageDeleteTemplateComponent)
+                <label id="formErrorMessage">$errorMessageDeleteTemplateComponent</label>
+            #end
+
+            <!-- Generate link for each template owned by the host -->
+            #foreach($template in $hostTemplates)
+                <a id="hostCodeContinue" href="/host/templates/edit/code?templateCode=$template.getTemplateCode()">Template: $template.getTemplateName()</a>
+            #end
         </div>
     </div>
 </div>

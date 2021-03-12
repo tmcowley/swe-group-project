@@ -19,26 +19,27 @@ public class GetCodeController {
 
         System.out.println("\nNotice: GetCodeController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        Session session = request.session(true);
+        if (session.isNew()) {
             System.out.println("Error:  GetCodeController:servePage session not found");
             response.redirect("/error/401");
             return null;
         }
 
-        // collect host-code (attribute already valid)
-        String hostCode = session.attribute("hostCode");
-        
-        // hostCode not set -> return user to sign-up page
-        if (hostCode == null){
-            System.out.println("Error:  GetCodeController:servePage hostCode not set");
-            response.redirect("/host/login");
+        // ensure host code is set; return user to sign-up page if not
+        if (session.attribute("hostCode") == null){
+            System.out.println("Error:  GetCodeController:servePage host code not set");
+            response.redirect("/host/login"); //response.redirect("/error/401");
             return null;
         }
+
+        // collect host-code (attribute already valid)
+        String hostCode = session.attribute("hostCode");
 
         Map<String, Object> model = new HashMap<>();
         model.put("hostCode", hostCode);

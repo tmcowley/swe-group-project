@@ -100,7 +100,7 @@ public class DbConnection{
 
         // ensure email-address is non-unique
         if (emailExists(e_address)){
-            System.out.println("Error: email-address non-unique");
+            System.out.println("Error: DbConn:createHost(): email-address non-unique");
             return null;
         } 
 
@@ -125,6 +125,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -134,10 +135,30 @@ public class DbConnection{
         return getHost(host_id);
     }
 
+    /**
+     * Create a template component in the database using a TemplateComponent object
+     * @param tc TemplateComponent object
+     * @return Stored template component
+     */
+    public TemplateComponent createTemplateComponent(TemplateComponent tc){
+        // component with an ID already exists
+        if (tc.getId() != null) 
+            return tc;
+        // component without ID; store component
+        return createTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns(), tc.getTextResponse());
+    }
 
-    // TODO: COMMENT, FIX
+    /**
+     * Create a template component in the database
+     * @param name Component name
+     * @param type Question, or radio, or checkbox
+     * @param prompt Question/ prompt
+     * @param options Array of radio or checkbox options
+     * @param optionsAns Array of boolean responses to options array e.g. t, f, t for checkbox type; empty if type is question
+     * @param textResponse Text response field following prompt (null if type radio or checkbox)
+     * @return Stored template component
+     */
     public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
-
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
@@ -161,19 +182,37 @@ public class DbConnection{
             }
 
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
 
         // get Template object by ID
-        return null;
-        //return getTemplateComponent(tc_id);
+        return getTemplateComponent(tc_id);
     }
 
-    // TODO: since broken
-    public Template createTemplate(int host_id, ArrayList<TemplateComponent> components){
+    /**
+     * Create an empty template in the database
+     * @param host_id Creator ID
+     * @param template_name Name of the template
+     * @param timestamp Created time
+     * @return Stored template instance
+     */
+    public Template createEmptyTemplate(int host_id, String template_name, Timestamp timestamp){
+        return createTemplate(host_id, template_name, timestamp, new ArrayList<TemplateComponent>());
+    }
+
+    /**
+     * Create an empty template in the database
+     * @param host_id Creator ID
+     * @param template_name Name of the template
+     * @param timestamp Created time
+     * @param components An arraylist of linked template components
+     * @return Stored template instance
+     */
+    public Template createTemplate(int host_id, String template_name, Timestamp timestamp, ArrayList<TemplateComponent> components){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
 
@@ -181,24 +220,27 @@ public class DbConnection{
         ResultSet rs = null;
         Integer template_id = null;
         try{
-            // create empty template object
+            // create empty template
             String createTemplate = ""
-                + "INSERT INTO template(host_id, template_code) "
-                + "VALUES(?, ?) "
+                + "INSERT INTO template(host_id, template_code, template_name, timestamp) "
+                + "VALUES(?, ?, ?, ?) "
                 + "RETURNING template_id";
             stmt = this.conn.prepareStatement(createTemplate);
             stmt.setInt(1, host_id);
             stmt.setString(2, template_code);
+            stmt.setString(3, template_name);
+            stmt.setTimestamp(4, timestamp);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 template_id = rs.getInt("template_id");
             }
 
+            // if Template contains components
             if (components != null){
                 for (TemplateComponent tc : components){
-                    ;
-                // tc = createTemplateComponent(tc);
-                // addComponentToTemplate();
+                    tc = createTemplateComponent(tc);
+                    int component_id = tc.getId();
+                    addComponentToTemplate(component_id, template_id);
                 }
             }
 
@@ -240,7 +282,8 @@ public class DbConnection{
                 participant_id = rs.getInt("participant_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -286,7 +329,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -384,7 +428,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -394,7 +439,11 @@ public class DbConnection{
     }
 
 
-    // TODO: comment
+    /**
+     * Create an instance of feedback against an event using feedback objects
+     * @param feedback Feedback object to be stored
+     * @return Feedback instance representing stored data
+     */
     public Feedback createFeedback(Feedback feedback){
 
         // convert key_results from String ArrayList to String array
@@ -406,11 +455,17 @@ public class DbConnection{
 
     /**
      * Create an instance of feedback against an event
-     * TODO: ADD param comments
      * @param participant_id Participant id of the participant who created this feedback
      * @param event_id Event id of the event which this feedback is written for
      * @param anonymous Whether this feedback is anonymous
      * @param time_stamp Time when the feedback was created
+     * @param results Results array to specific feedback queries
+     * @param weights Weights array (for weighted mean) associated with each result
+     * @param types Type array of query that produced each result
+     * @param keys Keys array that holds whether a result is a key result or not
+     * @param sub_weights Sub_weights array that holds weights (unprocessed then processed) associated with each set result in multiple choice queries
+     * @param compound Compound score of sentiment
+     * @param key_results an array of all key results
      * @return Feedback instance representing stored data
      */
     public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, Float compound, String[] key_results){
@@ -449,7 +504,8 @@ public class DbConnection{
                 feedback_id = rs.getInt("feedback_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -475,7 +531,8 @@ public class DbConnection{
             stmt.setInt(2, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -511,7 +568,8 @@ public class DbConnection{
                 state = rs.getBoolean(1);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -534,8 +592,7 @@ public class DbConnection{
                 + "SELECT muted FROM participant_in_event WHERE "                
                 + "participant_in_event.participant_id=? "
                 + "AND "
-                + "participant_in_event.event_id=? " 
-                + ");";
+                + "participant_in_event.event_id=?;";
             stmt = this.conn.prepareStatement(queryMutedState);
             stmt.setInt(1, participant_id);
             stmt.setInt(2, event_id);
@@ -544,7 +601,8 @@ public class DbConnection{
                 muted = rs.getBoolean("muted");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -564,23 +622,88 @@ public class DbConnection{
         try{
             String muteParticipant = ""
                 + "UPDATE participant_in_event "
-                + "SET muted = TRUE"
+                + "SET muted = ?"
                 + "WHERE "
                 + "participant_in_event.participant_id=? "
                 + "AND "
-                + "participant_in_event.event_id=? " 
-                + ");";
+                + "participant_in_event.event_id=?;";
             stmt = this.conn.prepareStatement(muteParticipant);
-            stmt.setInt(1, participant_id);
-            stmt.setInt(2, event_id);
+            stmt.setBoolean(1, true);
+            stmt.setInt(2, participant_id);
+            stmt.setInt(3, event_id);
             stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
         }
         return participantInEventIsMuted(participant_id, event_id);
+    }
+
+    /**
+     * Check whether a template component is in a template
+     * @param component_id Component to be checked
+     * @param template_id Template which may contain this template component
+     * @return Method success state 
+     */
+    public boolean componentInTemplate(int component_id, int template_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Boolean state = null;
+        try{
+            String queryComponentInTemplate = ""
+                + "SELECT EXISTS "
+                + "(SELECT 1 FROM component_in_template WHERE "                
+                + "component_in_template.component_id=? "
+                + "AND "
+                + "component_in_template.template_id=? " 
+                + ");";
+            stmt = this.conn.prepareStatement(queryComponentInTemplate);
+            stmt.setInt(1, component_id);
+            stmt.setInt(2, template_id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                state = rs.getBoolean(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return state;
+    }
+
+    /**
+     * Add a template component to a template
+     * @param component_id Component 
+     * @param template_id Template which contains this template component
+     * @return Method success state 
+     */
+    public Boolean addComponentToTemplate(int component_id, int template_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try{
+            String addComponentToTemplate = ""
+                + "INSERT INTO component_in_template(component_id, template_id) "
+                + "VALUES(?, ?) ";
+            stmt = this.conn.prepareStatement(addComponentToTemplate);
+            stmt.setInt(1, component_id);
+            stmt.setInt(2, template_id);
+            stmt.executeUpdate();
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // return success state (select query)
+        return componentInTemplate(component_id, template_id);
     }
 
     /**
@@ -606,7 +729,47 @@ public class DbConnection{
                 host_id = rs.getInt("host_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        // get Host by ID
+        return getHost(host_id);
+    }
+
+    /**
+     * Get a Host object by their email address.
+     * @param e_address host email address
+     * @return host with email e_address
+     */
+    public Host getHostByEmail(String e_address){
+
+        // ensure the email is valid
+        if (!validator.eAddressIsValid(e_address)) 
+            return null;
+
+        // ensure the email exists in the system
+        if (!emailExists(e_address)) 
+            return null;
+
+        // host email address valid and exists --> query db
+        PreparedStatement stmt = null;
+        Integer host_id = null;
+        ResultSet rs = null;
+        try{
+            String queryHostByEmail= "SELECT host_id FROM host WHERE e_address=? LIMIT 1;";
+            stmt = this.conn.prepareStatement(queryHostByEmail);
+            stmt.setString(1, e_address);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                host_id = rs.getInt("host_id");
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -639,7 +802,8 @@ public class DbConnection{
                 template_id = rs.getInt("template_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -650,9 +814,10 @@ public class DbConnection{
     }
 
     /**
-     * Get a Template object by its code.
-     * @param template_code template code
-     * @return Template object corresponding to its code
+     * Get an array of templates created by a host
+     * ordered in descending order of creation
+     * @param host_id host's ID
+     * @return array of templates
      */
     public Template[] getTemplatesByHostID(int host_id){
         // template code valid and exists --> query db
@@ -660,23 +825,27 @@ public class DbConnection{
         ResultSet rs = null;
         Template[] foundTemplates = new Template[0];
         try{
-            String queryTemplateByCode = "SELECT * FROM template WHERE host_id=?;";
+            String queryTemplateByCode = "SELECT * FROM template WHERE host_id=? ORDER BY timestamp DESC;";
             stmt = this.conn.prepareStatement(queryTemplateByCode, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, host_id);
             rs = stmt.executeQuery();
+
+            // TODO: consider using count()
             rs.last();
             int rsSize= rs.getRow();
             foundTemplates = new Template[rsSize];
             Template foundTemplate = null;
             int templateCount = 0;
             rs.beforeFirst();
-            if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), null);
+            while (rs.next()) {
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_name"), rs.getString("template_code"), rs.getTimestamp("timestamp"));
                 foundTemplates[templateCount] = foundTemplate;
+                foundTemplate = null;
                 templateCount++;
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -708,7 +877,8 @@ public class DbConnection{
                 event_id = rs.getInt("event_id");
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -720,41 +890,44 @@ public class DbConnection{
 
     // PRIVATE METHODS
 
-    // // TODO: comment
-    // private TemplateComponent getTemplateComponent(int tc_id){
-    //     PreparedStatement stmt = null;
-    //     ResultSet rs = null;
-    //     TemplateComponent tc = null;
-    //     try{
-    //         String selectComponentByID = ""
-    //             + "SELECT * FROM template_component "
-    //             + "WHERE template_component.tc_id = ? "
-    //             + "LIMIT 1;";
-    //         stmt = this.conn.prepareStatement(selectComponentByID);
-    //         stmt.setInt(1, tc_id);
+    /**
+     * Get a template component instance using template component ID
+     * @param tc_id Template component ID
+     * @return Found TemplateComponent instance
+     */
+    private TemplateComponent getTemplateComponent(int tc_id){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        TemplateComponent tc = null;
+        try{
+            String selectComponentByID = ""
+                + "SELECT * FROM template_component "
+                + "WHERE template_component.tc_id = ? "
+                + "LIMIT 1;";
+            stmt = this.conn.prepareStatement(selectComponentByID);
+            stmt.setInt(1, tc_id);
 
-    //         rs = stmt.executeQuery();
-    //         if (rs.next()) {
-    //             int id = rs.getInt("tc_id");
-    //             String name = rs.getString("tc_name");
-    //             String type = rs.getString("tc_type");
-    //             String prompt = rs.getString("tc_prompt");
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("tc_id");
+                String name = rs.getString("tc_name");
+                String type = rs.getString("tc_type");
+                String prompt = rs.getString("tc_prompt");
+                String[] options = (String[]) rs.getArray("tc_options").getArray();
+                Boolean[] options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
+                String text_response = rs.getString("tc_text_response");
 
-    //             String[] options = rs.getArray("tc_options").getArray();
-    //             Boolean[] options_ans = rs.getArray("tc_options_ans").getArray();
-    //             String text_response = rs.getBoolean("tc_text_response");
-
-    //             tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
-                
-    //         }
-    //     } catch (SQLException e){
-    //         System.out.println(e.getMessage().toUpperCase());;
-    //     } finally {
-    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-    //     }
-    //     return tc;
-    // }
+                tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        return tc;
+    }
 
     /**
      * Get an Host object from a host ID
@@ -785,7 +958,8 @@ public class DbConnection{
                 host = new Host(host_id, host_code, e_address, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -795,7 +969,7 @@ public class DbConnection{
 
     /**
      * Get an Template object from an template ID
-     * @param template_id template ID
+     * @param template_id Template ID
      * @return Template object with ID of template_id
      */
     private Template getTemplate(int template_id){
@@ -806,8 +980,10 @@ public class DbConnection{
         Template template = null;
         TemplateComponent templateComponent = null;
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
-        int host_id = 0;
-        String template_code = "";
+        Integer host_id = null;
+        String template_code = null;
+        String template_name = null;
+        Timestamp timestamp = null;
         try{
             String selectTemplateByID = ""
                 + "SELECT * FROM template "
@@ -815,9 +991,19 @@ public class DbConnection{
                 + "LIMIT 1;";
 
             String selectComponentsByID = ""
-                + "SELECT * FROM template_component INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
-                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(component_id)"
+                + "SELECT * FROM template_component "
+                + "INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(tc_id)"
+                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(tc_id)"
                 + "WHERE template.template_id = ? ";
+            
+            // works but has extra fields
+            String alternativeSelectComponentsByID = ""
+                + "SELECT * FROM template_component "
+                + "INNER JOIN component_in_template "
+                    + "ON (template_component.tc_id = component_in_template.component_id) "
+                + "INNER JOIN template "
+                    + "ON (component_in_template.template_id = template.template_id) " 
+                + "WHERE (template.template_id = ?);";
 
             stmt1 = this.conn.prepareStatement(selectTemplateByID);
             stmt1.setInt(1, template_id);
@@ -826,9 +1012,11 @@ public class DbConnection{
             if (rs1.next()) {
                 template_id = rs1.getInt("template_id");
                 host_id = rs1.getInt("host_id");
+                template_name = rs1.getString("template_name");
                 template_code = rs1.getString("template_code");
+                timestamp = rs1.getTimestamp("timestamp");
             }
-            stmt2 = this.conn.prepareStatement(selectComponentsByID);
+            stmt2 = this.conn.prepareStatement(alternativeSelectComponentsByID);
             stmt2.setInt(1, template_id);
 
             rs2 = stmt2.executeQuery();
@@ -843,7 +1031,7 @@ public class DbConnection{
                 templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
                 components.add(templateComponent);
             }
-            template = new Template(template_id, host_id, template_code, components);
+            template = new Template(template_id, host_id, template_name, template_code, timestamp, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
             e.printStackTrace();
@@ -858,7 +1046,7 @@ public class DbConnection{
 
     /**
      * Get an Participant object from an participant ID
-     * @param participant_id participant ID
+     * @param participant_id Participant ID
      * @return Participant object with ID of participant_id
      */
     public Participant getParticipant(int participant_id){
@@ -883,7 +1071,8 @@ public class DbConnection{
                 participant = new Participant(participant_id, f_name, l_name, sys_ban);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -893,7 +1082,7 @@ public class DbConnection{
 
     /**
      * Get an Event object from an event ID
-     * @param event_id event ID
+     * @param event_id Event ID
      * @return Event object with ID of event_id
      */
     private Event getEvent(int event_id){
@@ -924,7 +1113,8 @@ public class DbConnection{
                 event = new Event(event_id, host_id, template_id, title, description, type, start_time, end_time, event_code);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -934,7 +1124,7 @@ public class DbConnection{
 
     /**
      * Get an archived Event object from an event ID
-     * @param event_id event ID
+     * @param event_id Event ID
      * @return ArchivedEvent object with ID of event_id
      */
     public ArchivedEvent getArchivedEvent(int event_id){
@@ -963,7 +1153,8 @@ public class DbConnection{
                 archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -971,7 +1162,11 @@ public class DbConnection{
         return archivedEvent;
     }
 
-    // TODO: comment
+    /**
+     * Get a feedback instance using feedback ID
+     * @param feedback_id Feedback ID
+     * @return Found feedback instance
+     */
     public Feedback getFeedback(int feedback_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -998,6 +1193,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1006,7 +1202,11 @@ public class DbConnection{
         return feedback;
     }
 
-    // TODO: comment
+    /**
+     * Get an array of feedback instances by event ID
+     * @param event_id Event ID
+     * @return An array of found feedback instances in this event
+     */
     public Feedback[] getFeedbacksByEventID(int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1041,8 +1241,13 @@ public class DbConnection{
         return foundFeedbacks;
     }
 
-    // TODO comment
-    // in descending order of time generated (newest first)
+    /**
+     * Get an array of feedback instances by event ID
+     * @param event_id Event ID
+     * @param participant_id Participant ID
+     * @return An array of found feedback instances by a specific participant in this event in descending order of time generated (newest first)
+     */
+    // 
     public Feedback[] getFeedbacksInEventByParticipantID(int event_id, int participant_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1051,6 +1256,7 @@ public class DbConnection{
             String queryFeedbackByEventID = "SELECT * FROM feedback WHERE event_id=? AND participant_id=? ORDER BY feedback.time_stamp DESC;";
             stmt = this.conn.prepareStatement(queryFeedbackByEventID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, event_id);
+            stmt.setInt(2, participant_id);
             rs = stmt.executeQuery();
             rs.last();
             int rsSize= rs.getRow();
@@ -1151,6 +1357,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1163,7 +1370,7 @@ public class DbConnection{
      * @param template_code template code
      * @return existence state of template_code
      */
-    private Boolean templateCodeExists(String template_code){
+    public Boolean templateCodeExists(String template_code){
         template_code = validator.sanitizeTemplateCode(template_code);
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1179,6 +1386,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1207,6 +1415,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1260,7 +1469,11 @@ public class DbConnection{
         return host_code;
     }
 
-    // TODO not working, and comment
+    /**
+     * Check whether an email address is already registered
+     * @param e_address Email address
+     * @return Return True if email address is exist
+     */
     public Boolean emailExists(String e_address){
         // ensure email is valid
         if (!validator.eAddressIsValid(e_address)) return false;
@@ -1270,7 +1483,7 @@ public class DbConnection{
         Boolean emailExists = false;
         try{
             String queryHostEmailExists = ""
-                + "SELECT EXISTS(SELECT 1 FROM host WHERE e_address=?::citext);";
+                + "SELECT EXISTS(SELECT * FROM host WHERE e_address=?);";
             stmt = this.conn.prepareStatement(queryHostEmailExists);
             stmt.setString(1, e_address);
             rs = stmt.executeQuery();
@@ -1279,6 +1492,7 @@ public class DbConnection{
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
@@ -1288,7 +1502,7 @@ public class DbConnection{
 
     /**
      * ban host using host ID 
-     * @host_id banned hostID
+     * @param host_id banned hostID
      * @return ban status
      */
     protected Boolean banHost(int host_id){
@@ -1304,7 +1518,8 @@ public class DbConnection{
             stmt.setInt(2, host_id);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1314,7 +1529,7 @@ public class DbConnection{
 
     /**
      * ban host using email address 
-     * @host_id banned hostID
+     * @param host_id banned hostID
      * @return ban status
      */
     protected Boolean banHost(String eAddress){
@@ -1330,7 +1545,8 @@ public class DbConnection{
             stmt.setString(2, eAddress);
             bannedHost = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1339,8 +1555,8 @@ public class DbConnection{
     }
 
     /**
-     * ban participant using participant ID 
-     * @participant_id banned participantID
+     * Ban participant using participant ID 
+     * @param participant_id banned participantID
      * @return ban status
      */
     protected Boolean banParticipant(int participant_id){
@@ -1356,7 +1572,8 @@ public class DbConnection{
             stmt.setInt(2, participant_id);
             bannedParticipant = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1383,7 +1600,8 @@ public class DbConnection{
     //         stmt.setInt(2, template_id);
     //         templateFound = stmt.executeUpdate();
     //     } catch (SQLException e){
-    //         System.out.println(e.getMessage().toUpperCase());;
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
     //     } finally {
     //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
     //     }
@@ -1393,7 +1611,7 @@ public class DbConnection{
 
     /**
      * Delete host by ID
-     * @host_id host ID of the host needed to be deleted
+     * @param host_id host ID of the host needed to be deleted
      * @return delete status
      */
     protected Boolean deleteHost(int host_id){
@@ -1407,7 +1625,8 @@ public class DbConnection{
             stmt.setInt(1, host_id);
             hostDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1417,13 +1636,17 @@ public class DbConnection{
 
     /**
      * Delete template by ID
-     * @template_id template ID of the template needed to be deleted
+     * @param template_id template ID of the template needed to be deleted
      * @return delete status
      */
-    protected Boolean deleteTemplate(int template_id){
+    public Boolean deleteTemplate(int template_id){
         PreparedStatement stmt = null;
         Integer templateDeleted = null;
         try{
+            Template template = getTemplate(template_id);
+            for (TemplateComponent templateComponent : template.getComponents()) {
+                deleteTemplateComponent(templateComponent.getId());
+            }
             String deleteTemplate = ""
                 + "DELETE FROM template "
                 + "WHERE template_id = ?;";
@@ -1431,7 +1654,8 @@ public class DbConnection{
             stmt.setInt(1, template_id);
             templateDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1440,8 +1664,33 @@ public class DbConnection{
     }
 
     /**
+     * Delete template component by ID
+     * @param tc_id template component ID of the template needed to be deleted
+     * @return Delete status
+     */
+    public Boolean deleteTemplateComponent(int tc_id){
+        PreparedStatement stmt = null;
+        Integer templateComponentDeleted = null;
+        try{
+            String deleteTemplateComponent = ""
+                + "DELETE FROM template_component "
+                + "WHERE tc_id = ?;";
+            stmt = this.conn.prepareStatement(deleteTemplateComponent);
+            stmt.setInt(1, tc_id);
+            templateComponentDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        if (templateComponentDeleted == null) return null;
+        return (templateComponentDeleted != 0);
+    }
+
+    /**
      * Delete participant by ID
-     * @participant_id participant ID of the participant needed to be deleted
+     * @param participant_id participant ID of the participant needed to be deleted
      * @return delete status
      */
     protected Boolean deleteParticipant(int participant_id){
@@ -1455,7 +1704,8 @@ public class DbConnection{
             stmt.setInt(1, participant_id);
             participantDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1465,7 +1715,7 @@ public class DbConnection{
 
     /**
      * Delete event by ID
-     * @event_id event ID of archived event needed to be deleted
+     * @param event_id event ID of archived event needed to be deleted
      * @return delete status
      */
     protected Boolean deleteEvent(int event_id){
@@ -1479,7 +1729,8 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1489,7 +1740,7 @@ public class DbConnection{
 
     /**
      * Delete archived event by ID
-     * @event_id event ID of archived event needed to be deleted
+     * @param event_id event ID of archived event needed to be deleted
      * @return delete status
      */
     protected Boolean deleteArchivedEvent(int event_id){
@@ -1503,7 +1754,8 @@ public class DbConnection{
             stmt.setInt(1, event_id);
             eventDeleted = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1513,7 +1765,7 @@ public class DbConnection{
 
     /**
      * Delete participant and event pair by ID
-     * @feedback_id feedback ID of the feedback needed to be deleted
+     * @param feedback_id feedback ID of the feedback needed to be deleted
      * @return delete status
      */
     protected Boolean deleteFeedback(int feedback_id){
@@ -1537,8 +1789,8 @@ public class DbConnection{
 
     /**
      * Remove participant from event (by IDs)
-     * @participant_id participant ID of the pair needed to be deleted
-     * @event_id event ID of the pair needed to be deleted
+     * @param participant_id participant ID of the pair needed to be deleted
+     * @param event_id event ID of the pair needed to be deleted
      * @return delete status
      */
     protected Boolean removeParticipantFromEvent(int participant_id, int event_id){
@@ -1550,10 +1802,11 @@ public class DbConnection{
                 + "WHERE participant_id = ? AND event_id = ?;";
             stmt = this.conn.prepareStatement(participantInEventDeleted);
             stmt.setInt(1, participant_id);
-            stmt.setInt(1, event_id);
+            stmt.setInt(2, event_id);
             deletedLink = stmt.executeUpdate();
         } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());;
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
         }
@@ -1563,8 +1816,8 @@ public class DbConnection{
 
     /**
      * Delete finished events and add it to archivedEvents 
-     * @event_id eventID of event that has already finished
-     * @total_mood mood of participants in this event
+     * @param event_id eventID of event that has already finished
+     * @param total_mood mood of participants in this event
      * @return added archiveEvent status
      */
     protected Boolean archiveEvent(int event_id, String total_mood){

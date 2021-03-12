@@ -385,6 +385,15 @@ textarea {
     border-radius: 15px 15px 0 0;
 }
 
+.feedbackElementEmpty {
+    padding: 60px 20px;
+    border: 1px solid #cacaca;
+    margin: 10px 0 0;
+    grid-column: span 2;
+    border-radius: 15px;
+    text-align: center;
+}
+
 .formInput, .formInputBullet {
     width: 100%;
     margin-bottom: 10px;
@@ -486,7 +495,7 @@ textarea {
 
 #hostHomeContainer {
     background-color: #552d62;
-    max-width: 1000px;
+    max-width: 780px;
     margin: 60px auto;
     width: 100%;
     padding: 40px;

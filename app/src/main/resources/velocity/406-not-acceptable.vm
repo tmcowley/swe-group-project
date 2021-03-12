@@ -1,0 +1,29 @@
+#parse("/velocity/head.vm")
+#@mainLayout()
+<div id="mainBodyContainerOneCol">
+    <div id="landingMain">
+        <div id="landingContainer">
+            <h1>Not Acceptable</h1>
+            <!-- Holds error messages relating to this form -->
+
+            #if($errorFrom)
+                <br>
+                <h2>Error from: $errorFrom</h2>
+                <br>
+            #else 
+                <h2>Error: </h2>
+            #end
+
+            #if($errorMessage)
+                <label id="formErrorMessage">$errorMessage</label>
+            #end
+            <!-- Holds error redirect relating to this form -->
+            #if($errorRedirect)
+                <a id="hostCodeContinue" href="/">Return to Homepage</a>
+            #else 
+                <a id="hostCodeContinue" href=$errorRedirect>Return</a>
+            #end
+        </div>
+    </div>
+</div>
+#end

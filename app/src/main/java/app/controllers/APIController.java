@@ -13,11 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Date;
+import java.util.Calendar;
+
 import spark.*;
+import spark.utils.StringUtils;
 
 public class APIController {
 
-    // thread safe (no DB interaction)
+    // get validator from singleton App instance; thread safe (no DB interaction)
     static Validator v = App.getInstance().getValidator();
 
     /**
@@ -26,6 +30,8 @@ public class APIController {
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect attributes from API call-point (request)
@@ -83,12 +89,21 @@ public class APIController {
      */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        Session session = request.session(true);
+        if (session.isNew()) {
             System.out.println("Error:  APIController:createEvent session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createEvent session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -100,31 +115,44 @@ public class APIController {
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
-        // timestamp in format yyyy-[m]m-[d]d hh:mm:ss[.f...]
+        String[] startTimes = request.queryParams("startTime").split(":");
+        String[] endTimes = request.queryParams("endTime").split(":");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimes[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(startTimes[1]));
+        calendar.set(Calendar.SECOND, 0);
+        Date sTime =(Date) calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimes[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(endTimes[1]));
+        calendar.set(Calendar.SECOND, 0);
+        Date eTime =(Date) calendar.getTime();       
+        Timestamp startTime = new Timestamp(sTime.getTime());
+        Timestamp endTime = new Timestamp(eTime.getTime());    
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        Timestamp startTime, endTime;
-
-        // TODO ((Temporary fix for broken timestamp input))
-        try {
-            startTime = Timestamp.valueOf(request.queryParams("startTime"));
-            endTime = Timestamp.valueOf(request.queryParams("endTime"));
-        } catch (java.lang.IllegalArgumentException iae) {
-            startTime = current;
-            endTime = current;
-        }
 
         // validate input before database interaction
-        if (!v.eventTitleIsValid(title))
-            return "Error: Event title is not valid";
-        if (!v.eventDescriptionIsValid(description))
-            return "Error: Event description is invalid";
-        if (!v.eventTypeIsValid(type))
-            return "Error: Event type is invalid";
-        /*
-        if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
-        return "Error: start and end time not in order";
-        */
+        if (!v.eventTitleIsValid(title)) {
+            session.attribute("errorMessageCreateEvent", "Error: Event title is not valid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+        if (!v.eventDescriptionIsValid(description)) {
+            session.attribute("errorMessageCreateEvent", "Error: Event description is invalid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+        if (!v.eventTypeIsValid(type)) {
+            session.attribute("errorMessageCreateEvent", "Error: Event type is invalid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+        if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
+            session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
+            response.redirect("/host/create-event");
+            return null;
+        }
 
+        // create an event object
         if (templateCode.equals("noTemplate")) {
             // create an event without a template
             System.out.println("Notice: no template has been provided");
@@ -136,9 +164,12 @@ public class APIController {
             event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
         }
 
+        // ensure event created is valid
         if (!v.isEventValid(event)){
             // return not found if event is not created or input is not valid
-            return "Error: event not created or considered invalid - check inputs";
+            session.attribute("errorMessageCreateEvent", "Error: event not created or considered invalid - check inputs");
+            response.redirect("/host/create-event");
+            return null;
         }
 
         // store event in session for host event page
@@ -155,6 +186,8 @@ public class APIController {
      */
     public static Route joinEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: joinEvent API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect form attributes
@@ -208,12 +241,21 @@ public class APIController {
      */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("\nNotice: createFeedback API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        Session session = request.session(true);
+        if (session.isNew()) {
             System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure participant and event exist in current session
+        if (session.attribute("event") == null || session.attribute("participant") == null){
+            System.out.println("Error:  APIController:createFeedback session found, event or participant not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -253,4 +295,201 @@ public class APIController {
         response.redirect("/event/participant/feedback");
         return null;
     };
+
+    /**
+     * host API end-point: generate an empty (but named) template
+     */
+    public static Route createEmptyTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: createEmptyTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createEmptyTemplate session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // get host from session
+        Host host = session.attribute("host");
+        int hostID = host.getHostID();
+
+        // collect template name from form
+        String template_name = request.queryParams("templateName");
+        System.out.println("Notice: template name collected: " + template_name);
+
+        if (StringUtils.isBlank(template_name)){
+            System.out.println("Error:  APIController:createEmptyTemplate template name is blank");
+            session.attribute("errorMessageCreateEmptyTemplate", "Error: template name is blank");
+            response.redirect("/host/templates/new");
+            return null;
+        }
+
+        // template name valid; generate empty template in DB
+        db.createEmptyTemplate(hostID, template_name, new Timestamp(System.currentTimeMillis()));
+
+        // redirect to host templates page
+        // (links to MyTemplatesController.servePage)
+        response.redirect("/host/templates");
+        return null;
+    };
+
+    /**
+     * host API POST end-point: generate a populated template
+     */
+    public static Route createTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: createTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createTemplate session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host code sent in POST request
+        if (request.queryParams("hostCode") == null){
+            System.out.println("Error:  APIController:createTemplate host code not in POST request");
+            session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // get host from session
+        Host host = session.attribute("host");
+
+        // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate", "value");
+
+        //TODO
+
+        // get template code (stored in form) 
+        String templateCode = request.queryParams("templateCode");
+
+        // collect form data
+        // form data -> components
+        // components -> template
+        
+        // ensure template is valid
+
+        // store template in DB
+
+        // return to "/host/templates/edit/code"
+        // (links to TemplateEditController.servePage)
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
+        return null;
+    };
+
+    public static Route createTemplateComponent = (Request request, Response response) -> {
+        return null;
+    };
+
+    public static Route deleteTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: deleteTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:deleteTemplate session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:deleteTemplate session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host code sent in POST request
+        if (request.queryParams("templateCode") == null){
+            System.out.println("Error:  APIController:deleteTemplate template code not in POST request");
+            session.attribute("errorMessageDeleteTemplate", "Error: template code not in form attributes");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        String templateCode = request.queryParams("templateCode");
+
+        // get template from templateCode; delete corresponding template
+        Template template = db.getTemplateByCode(templateCode);
+        db.deleteTemplate(template.getTemplateID());
+
+        // redirect host to templates page
+        response.redirect("/host/templates");
+        return null;
+    };
+
+    public static Route deleteTemplateComponent = (Request request, Response response) -> {
+        System.out.println("\nNotice: deleteTemplateComponent API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:deleteTemplateComponent session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:deleteTemplateComponent session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure component ID sent in POST request
+        if (request.queryParams("component_id") == null){
+            System.out.println("Error:  APIController:deleteTemplateComponent TemplateComponent ID not in POST request");
+            session.attribute("errorMessageDeleteTemplateComponent", "Error: TemplateComponent ID not in form attributes");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // collect host from session
+        Host host = session.attribute("host");
+
+        // parse component_id from form input
+        int component_id = Integer.parseInt(request.queryParams("component_id"));
+
+        // get template code (stored in form) 
+        String templateCode = request.queryParams("templateCode");
+
+        // delete template component by ID
+        db.deleteTemplateComponent(component_id);
+
+        // return to "/host/templates/edit/code"
+        // (links to TemplateEditController.servePage)
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
+        return null;
+    };
+
+
 }

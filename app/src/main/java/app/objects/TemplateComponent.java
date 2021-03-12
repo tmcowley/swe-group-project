@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class TemplateComponent {
 
-  private int id; // component ID
+  private Integer id; // component ID
   private String name; // component name (simplified prompt)
   private String type; // question, or radio, or checkbox
   private String prompt; // question/ prompt
@@ -20,6 +20,17 @@ public class TemplateComponent {
   private String textResponse;
 
   public TemplateComponent() {}
+
+  // constructor for TCs without IDs
+  public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse) {
+    this.id = null;
+    this.name = name;
+    this.type = type;
+    this.prompt = prompt;
+    this.options = options;
+    this.optionsAns = optionsAns;
+    this.textResponse = textResponse;
+  }
 
   /**
    * Template component constructor
@@ -56,7 +67,7 @@ public class TemplateComponent {
    * 
    * @return component id
    */
-  public int getId() {
+  public Integer getId() {
     return this.id;
   }
 

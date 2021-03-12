@@ -51,8 +51,8 @@ CREATE TABLE template(
                     UNIQUE          NOT NULL
                     -- simulate lower-case alphanumeric
                     CHECK (template_code ~* '^[a-z0-9]+$'),
-    component_count INTEGER         NOT NULL
-                    DEFAULT 0,
+    template_name   VARCHAR(128)    NOT NULL,
+    timestamp       TIMESTAMP       NOT NULL,
     FOREIGN KEY (host_id) 
         REFERENCES host(host_id) 
         ON DELETE CASCADE,

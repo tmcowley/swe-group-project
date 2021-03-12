@@ -19,13 +19,22 @@ public class HostHomeController {
 
         System.out.println("\nNotice: HostHomeController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        request.session(true);
+        Session session = request.session();
+        if (session.isNew()) {
             System.out.println("Error:  HostHomeController:servePage session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  HostHomeController:servePage session found, host not in session");
             response.redirect("/error/401");
             return null;
         }

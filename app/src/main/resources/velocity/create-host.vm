@@ -1,17 +1,17 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-##set( $errorMessageLogin = "Login Error Message" )
-##set( $errorMessageCreate = "Create Host Error Message" )
 <div id="mainBodyContainerOneCol">
     <div id="landingMain">
         <div id="landingContainer">
-            <!-- Section for previously created users to log in (with their code) -->
+            <!-- Section for existing users to log in (with their code) -->
             <h1>Host Login</h1>
             <div id="landingJoinContainer">
                 <form id="landingSubContainer" name="hostCodeLogin" action="/host/home" method="post">
                     <input type="text" id="hostCode" name="hostCode" placeholder="Enter your code">
                     <!-- Holds error messages relating to this form -->
-                    <label id="formErrorMessage">$errorMessageLogin</label>
+                    #if($errorMessageLogin)
+                        <label id="formErrorMessage">$errorMessageLogin</label>
+                    #end
                     <input id="landingJoinButton" type="submit" value="Login">
                 </form>
             </div>
@@ -25,7 +25,9 @@
                     <input type="text" id="hostLName" name="hostLName" placeholder="Second Name">
                     <input type="text" id="hostEmail" name="hostEmail" placeholder="Email">
                     <!-- Holds error messages relating to this form -->
-                    <label id="formErrorMessage">$errorMessageCreate</label>
+                    #if($errorMessageCreate)
+                        <label id="formErrorMessage">$errorMessageCreate</label>
+                    #end
                     <input id="landingHostButton" type="submit" value="Signup">
                 </form>
             </div>

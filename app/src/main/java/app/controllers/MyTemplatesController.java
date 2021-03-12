@@ -75,9 +75,11 @@ public class MyTemplatesController {
         Map<String, Object> model = new HashMap<>();
         model.put("hostTemplates", hostTemplates);
         model.put("errorMessageMyTemplates", session.attribute("errorMessageMyTemplates"));
+        model.put("errorMessageDeleteTemplate", session.attribute("errorMessageDeleteTemplate"));
 
         // unset error messages
         session.removeAttribute("errorMessageMyTemplates");
+        session.removeAttribute("errorMessageDeleteTemplate");
 
         // render template overview page
         return ViewUtil.render(request, model, "/velocity/templates.vm");

@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.graalvm.compiler.lir.LIRInstruction.Temp;
+
 import java.util.Date;
 import java.util.Calendar;
 
@@ -404,6 +407,37 @@ public class APIController {
     };
 
     public static Route deleteTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: deleteTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:deleteTemplate session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:deleteTemplate session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure host code sent in POST request
+        if (request.queryParams("templateCode") == null){
+            System.out.println("Error:  APIController:deleteTemplate template code not in POST request");
+            session.attribute("errorMessageDeleteTemplate", "Error: template code not in form attributes");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        Template template = db.getTemplateByCode(request.queryParams("templateCode"));
+        db.deleteTemplate(template.getTemplateID());
+        response.redirect("/host/templates");
         return null;
     };
 

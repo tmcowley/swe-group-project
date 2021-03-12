@@ -1502,7 +1502,7 @@ public class DbConnection{
 
     /**
      * ban host using host ID 
-     * @host_id banned hostID
+     * @param host_id banned hostID
      * @return ban status
      */
     protected Boolean banHost(int host_id){
@@ -1529,7 +1529,7 @@ public class DbConnection{
 
     /**
      * ban host using email address 
-     * @host_id banned hostID
+     * @param host_id banned hostID
      * @return ban status
      */
     protected Boolean banHost(String eAddress){
@@ -1555,8 +1555,8 @@ public class DbConnection{
     }
 
     /**
-     * ban participant using participant ID 
-     * @participant_id banned participantID
+     * Ban participant using participant ID 
+     * @param participant_id banned participantID
      * @return ban status
      */
     protected Boolean banParticipant(int participant_id){
@@ -1611,7 +1611,7 @@ public class DbConnection{
 
     /**
      * Delete host by ID
-     * @host_id host ID of the host needed to be deleted
+     * @param host_id host ID of the host needed to be deleted
      * @return delete status
      */
     protected Boolean deleteHost(int host_id){
@@ -1636,13 +1636,17 @@ public class DbConnection{
 
     /**
      * Delete template by ID
-     * @template_id template ID of the template needed to be deleted
+     * @param template_id template ID of the template needed to be deleted
      * @return delete status
      */
-    protected Boolean deleteTemplate(int template_id){
+    public Boolean deleteTemplate(int template_id){
         PreparedStatement stmt = null;
         Integer templateDeleted = null;
         try{
+            Template template = getTemplate(template_id);
+            for (TemplateComponent templateComponent : template.getComponents()) {
+                deleteTemplateComponent(templateComponent.getId());
+            }
             String deleteTemplate = ""
                 + "DELETE FROM template "
                 + "WHERE template_id = ?;";
@@ -1660,8 +1664,33 @@ public class DbConnection{
     }
 
     /**
+     * Delete template component by ID
+     * @param tc_id template component ID of the template needed to be deleted
+     * @return Delete status
+     */
+    public Boolean deleteTemplateComponent(int tc_id){
+        PreparedStatement stmt = null;
+        Integer templateComponentDeleted = null;
+        try{
+            String deleteTemplateComponent = ""
+                + "DELETE FROM template_component "
+                + "WHERE tc_id = ?;";
+            stmt = this.conn.prepareStatement(deleteTemplateComponent);
+            stmt.setInt(1, tc_id);
+            templateComponentDeleted = stmt.executeUpdate();
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        if (templateComponentDeleted == null) return null;
+        return (templateComponentDeleted != 0);
+    }
+
+    /**
      * Delete participant by ID
-     * @participant_id participant ID of the participant needed to be deleted
+     * @param participant_id participant ID of the participant needed to be deleted
      * @return delete status
      */
     protected Boolean deleteParticipant(int participant_id){
@@ -1686,7 +1715,7 @@ public class DbConnection{
 
     /**
      * Delete event by ID
-     * @event_id event ID of archived event needed to be deleted
+     * @param event_id event ID of archived event needed to be deleted
      * @return delete status
      */
     protected Boolean deleteEvent(int event_id){
@@ -1711,7 +1740,7 @@ public class DbConnection{
 
     /**
      * Delete archived event by ID
-     * @event_id event ID of archived event needed to be deleted
+     * @param event_id event ID of archived event needed to be deleted
      * @return delete status
      */
     protected Boolean deleteArchivedEvent(int event_id){
@@ -1736,7 +1765,7 @@ public class DbConnection{
 
     /**
      * Delete participant and event pair by ID
-     * @feedback_id feedback ID of the feedback needed to be deleted
+     * @param feedback_id feedback ID of the feedback needed to be deleted
      * @return delete status
      */
     protected Boolean deleteFeedback(int feedback_id){
@@ -1760,8 +1789,8 @@ public class DbConnection{
 
     /**
      * Remove participant from event (by IDs)
-     * @participant_id participant ID of the pair needed to be deleted
-     * @event_id event ID of the pair needed to be deleted
+     * @param participant_id participant ID of the pair needed to be deleted
+     * @param event_id event ID of the pair needed to be deleted
      * @return delete status
      */
     protected Boolean removeParticipantFromEvent(int participant_id, int event_id){
@@ -1787,8 +1816,8 @@ public class DbConnection{
 
     /**
      * Delete finished events and add it to archivedEvents 
-     * @event_id eventID of event that has already finished
-     * @total_mood mood of participants in this event
+     * @param event_id eventID of event that has already finished
+     * @param total_mood mood of participants in this event
      * @return added archiveEvent status
      */
     protected Boolean archiveEvent(int event_id, String total_mood){

@@ -17,7 +17,9 @@ import java.util.Date;
 import java.util.Calendar;
 
 import spark.*;
-import spark.utils.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 
 public class APIController {
 
@@ -448,7 +450,90 @@ public class APIController {
         return null;
     };
 
+    // GET request for adding an empty component by type
     public static Route createEmptyComponent = (Request request, Response response) -> {
+        System.out.println("\nNotice: createEmptyComponent API endpoint recognized request");
+
+        // get db conn from singleton App instance
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(true);
+        if (session.isNew()) {
+            System.out.println("Error:  APIController:createTemplateComponent session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+        // ensure host exists in current session
+        if (session.attribute("host") == null){
+            System.out.println("Error:  APIController:createTemplateComponent session found, host not in session");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // collect POST request parameters
+        String templateCode = request.queryParams("templateCode");
+        String componentType = request.queryParams("componentType");
+
+        // ensure GET request params are correct
+        if (templateCode == null || componentType == null){
+            System.out.println("Error:  APIController:createTemplateComponent incorrect parameters to GET request");
+            response.redirect("/host/templates");
+            return null;
+        }
+        System.out.println("Notice: templateCode:" + templateCode + ", componentType:" + componentType);
+
+        // ensure template code exists in system
+        if (!db.templateCodeExists(templateCode)){
+            System.out.println("Error:  APIController:createTemplateComponent template code invalid");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // ensure component type is valid
+        if (!v.componentTypeIsValid(componentType)){
+            System.out.println("Error:  APIController:createTemplateComponent component type invalid");
+            // return to "/host/templates/edit/code"
+            // (links to TemplateEditController.servePage)
+            response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
+            return null;
+        }
+
+        // get template by code
+        Template template = db.getTemplateByCode(templateCode);
+
+        TemplateComponent component = null;
+
+        if (componentType.equals("question")){
+            component = new TemplateComponent("component_name", "question", "", null, null, "");
+        }
+        else if (componentType.equals("checkbox")){
+            component = new TemplateComponent("component_name", "checkbox", "", new String[0], new Boolean[0], null);
+        }
+        else if (componentType.equals("radio")){
+            component = new TemplateComponent("component_name", "radio", "", new String[0], new Boolean[0], null);
+        }
+
+        // ensure component created is valid
+        if (!v.isComponentValid(component)){
+            System.out.println("Error:  APIController:createTemplateComponent invalid component generated");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // store created (valid) component
+        component = db.createTemplateComponent(component);
+
+        Boolean added = db.addComponentToTemplate(component.getId(), template.getTemplateID());
+
+        if (BooleanUtils.isNotTrue(added)){
+            System.out.println("Error:  APIController:createTemplateComponent component not added to template correctly");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // redirect user to template edit page
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;
     };
 

@@ -103,9 +103,7 @@ public class App {
                 // template POST-API endpoint mappings
                 post("/new", APIController.createEmptyTemplate);
                 post("/edit/code", APIController.createTemplate);
-
                 post("/edit/code/create-empty-component", APIController.createEmptyComponent);
-                post("/edit/code/create-full-template", APIController.createTemplate);
                 post("/edit/code/delete-template", APIController.deleteTemplate);
             });
 

@@ -141,11 +141,32 @@ public class DbConnection{
      * @return Stored template component
      */
     public TemplateComponent createTemplateComponent(TemplateComponent tc){
-        // component with an ID already exists
-        if (tc.getId() != null) 
+
+        Validator v = App.getInstance().getValidator();
+
+        // ensure template component is valid
+        if (!v.isComponentValid(tc)){
+            return null;
+        }
+
+        // component with an ID already exists in sys
+        if (tc.getId() != null){
             return tc;
-        // component without ID; store component
-        return createTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns(), tc.getTextResponse());
+        }
+
+        // if component is of type question
+        if (tc.getType().equals("question")){
+            return createQuestionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getTextResponse());
+        }
+
+        // if component is of type option
+        if (tc.getType().equals("radio") || tc.getType().equals("checkbox")){
+            return createOptionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns());
+        }
+
+        else {
+            return null;
+        }
     }
 
     /**
@@ -165,9 +186,9 @@ public class DbConnection{
         try{
             // create empty template object
             String createTemplateComponent = ""
-                + "INSERT INTO template_component(tc_id, tc_name, tc_type, tc_prompt, tc_options, tc_options_ans, tc_text_response) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?) "
-                + "RETURNING template_id";
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_ans, tc_text_response) "
+                + "VALUES(?, ?, ?, ?, ?, ?) "
+                + "RETURNING tc_id";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
@@ -175,6 +196,73 @@ public class DbConnection{
             stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
             stmt.setArray(5, this.conn.createArrayOf("BOOLEAN", optionsAns));
             stmt.setString(6, textResponse);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                tc_id = rs.getInt("tc_id");
+            }
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Template object by ID
+        return getTemplateComponent(tc_id);
+    }
+
+    public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer tc_id = null;
+        try{
+            // create empty template object
+            String createTemplateComponent = ""
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_ans) "
+                + "VALUES(?, ?, ?, ?, ?) "
+                + "RETURNING tc_id";
+            stmt = this.conn.prepareStatement(createTemplateComponent);
+            stmt.setString(1, name);
+            stmt.setString(2, type);
+            stmt.setString(3, prompt);
+            stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
+            stmt.setArray(5, this.conn.createArrayOf("BOOLEAN", optionsAns));
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                tc_id = rs.getInt("tc_id");
+            }
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        // get Template object by ID
+        return getTemplateComponent(tc_id);
+    }
+
+    public TemplateComponent createQuestionTemplateComponent(String name, String type, String prompt, String textResponse){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer tc_id = null;
+        try{
+            // create empty template object
+            String createTemplateComponent = ""
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_text_response) "
+                + "VALUES(?, ?, ?, ?) "
+                + "RETURNING tc_id";
+            stmt = this.conn.prepareStatement(createTemplateComponent);
+            stmt.setString(1, name);
+            stmt.setString(2, type);
+            stmt.setString(3, prompt);
+            stmt.setString(4, textResponse);
             rs = stmt.executeQuery();
 
             if (rs.next()) {

@@ -234,26 +234,53 @@ public class DBConnTest {
 
     @Test
     public void test_Bans(){
+        //system object dummy data
         String f_name = "testFName";
         String l_name = "testLName";
         String e_address = generateUniqueEmail();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-
+        //create participant
         Participant testPart = db.createParticipant(f_name, l_name);
         assertFalse(testPart == null);
         int testPartID = testPart.getParticipantID();
-
+        //create host
         Host testHost = db.createHost(f_name, l_name, e_address);
         assertFalse(testHost == null);
         int testHostID = testHost.getHostID();
+        //ban host and participant
         db.banParticipant(testPartID);
         db.banHost(testHostID);
+        //check to see if they were banned
         testPart = db.getParticipant(testPartID);
         testHost = db.getHostByCode(testHost.getHostCode());
         assertTrue(testHost.getSysBan());
         assertTrue(testPart.getSysBan());
-
+        //db cleanup
         db.deleteHost(testHostID);
         db.deleteParticipant(testPartID);
+    }
+
+    //@Test
+    public void test_templateComponents(){
+        //system object dummy data
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
+        Timestamp timestamp_now = new Timestamp(System.currentTimeMillis());
+        //create host
+        Host testHost = db.createHost(f_name, l_name, e_address);
+        assertFalse(testHost == null);
+        int testHostID = testHost.getHostID();
+        //create template and template component
+        TemplateComponent tc = db.createTemplateComponent("name", "question", "prompt", null, null, "textResponse");
+        Template testTemplate = db.createTemplate(testHostID, "template-name", timestamp_now,  null);
+        //add component to template and check it has been added
+        db.addComponentToTemplate(tc.getId(), testTemplate.getTemplateID());
+        testTemplate = db.getTemplateByCode(testTemplate.getTemplateCode());
+        assertTrue(db.componentInTemplate(tc.getId(), testTemplate.getTemplateID()));
+        //db cleanup
+        db.deleteHost(testHostID);
+        db.deleteTemplate(testTemplate.getTemplateID());
+        db.deleteTemplateComponent(tc.getId());
     }
 }

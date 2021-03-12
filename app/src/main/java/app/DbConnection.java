@@ -180,8 +180,13 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
-    // TODO: fix, comments
-    public Template createTemplate(int host_id, ArrayList<TemplateComponent> components){
+    // TODO: comments
+    public Template createEmptyTemplate(int host_id, String template_name, Timestamp timestamp){
+        return createTemplate(host_id, template_name, timestamp, new ArrayList<TemplateComponent>());
+    }
+
+    // TODO: comments
+    public Template createTemplate(int host_id, String template_name, Timestamp timestamp, ArrayList<TemplateComponent> components){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
 
@@ -189,14 +194,16 @@ public class DbConnection{
         ResultSet rs = null;
         Integer template_id = null;
         try{
-            // create empty template object
+            // create empty template
             String createTemplate = ""
-                + "INSERT INTO template(host_id, template_code) "
-                + "VALUES(?, ?) "
+                + "INSERT INTO template(host_id, template_code, template_name, timestamp) "
+                + "VALUES(?, ?, ?, ?) "
                 + "RETURNING template_id";
             stmt = this.conn.prepareStatement(createTemplate);
             stmt.setInt(1, host_id);
             stmt.setString(2, template_code);
+            stmt.setString(3, template_name);
+            stmt.setTimestamp(4, timestamp);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 template_id = rs.getInt("template_id");
@@ -721,9 +728,10 @@ public class DbConnection{
     }
 
     /**
-     * Get a Template object by its code.
-     * @param template_code template code
-     * @return Template object corresponding to its code
+     * Get an array of templates created by a host
+     * ordered in descending order of creation
+     * @param host_id host's ID
+     * @return array of templates
      */
     public Template[] getTemplatesByHostID(int host_id){
         // template code valid and exists --> query db
@@ -731,19 +739,22 @@ public class DbConnection{
         ResultSet rs = null;
         Template[] foundTemplates = new Template[0];
         try{
-            String queryTemplateByCode = "SELECT * FROM template WHERE host_id=?;";
+            String queryTemplateByCode = "SELECT * FROM template WHERE host_id=? ORDER BY timestamp DESC;";
             stmt = this.conn.prepareStatement(queryTemplateByCode, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, host_id);
             rs = stmt.executeQuery();
+
+            // TODO: consider using count()
             rs.last();
             int rsSize= rs.getRow();
             foundTemplates = new Template[rsSize];
             Template foundTemplate = null;
             int templateCount = 0;
             rs.beforeFirst();
-            if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_name"), rs.getString("template_code"), new ArrayList<TemplateComponent>());
+            while (rs.next()) {
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_name"), rs.getString("template_code"), rs.getTimestamp("timestamp"));
                 foundTemplates[templateCount] = foundTemplate;
+                foundTemplate = null;
                 templateCount++;
             }
         } catch (SQLException e){
@@ -882,6 +893,7 @@ public class DbConnection{
         Integer host_id = null;
         String template_code = null;
         String template_name = null;
+        Timestamp timestamp = null;
         try{
             String selectTemplateByID = ""
                 + "SELECT * FROM template "
@@ -889,9 +901,19 @@ public class DbConnection{
                 + "LIMIT 1;";
 
             String selectComponentsByID = ""
-                + "SELECT * FROM template_component INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(component_id)"
-                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(component_id)"
+                + "SELECT * FROM template_component "
+                + "INNER JOIN (component_in_template ct INNER JOIN template t USING(template_id)) USING(tc_id)"
+                + "INNER JOIN (component_in_template INNER JOIN template USING(template_id)) USING(tc_id)"
                 + "WHERE template.template_id = ? ";
+            
+            // works but has extra fields
+            String alternativeSelectComponentsByID = ""
+                + "SELECT * FROM template_component "
+                + "INNER JOIN component_in_template "
+                    + "ON (template_component.tc_id = component_in_template.component_id) "
+                + "INNER JOIN template "
+                    + "ON (component_in_template.template_id = template.template_id) " 
+                + "WHERE (template.template_id = ?);";
 
             stmt1 = this.conn.prepareStatement(selectTemplateByID);
             stmt1.setInt(1, template_id);
@@ -902,8 +924,9 @@ public class DbConnection{
                 host_id = rs1.getInt("host_id");
                 template_name = rs1.getString("template_name");
                 template_code = rs1.getString("template_code");
+                timestamp = rs1.getTimestamp("timestamp");
             }
-            stmt2 = this.conn.prepareStatement(selectComponentsByID);
+            stmt2 = this.conn.prepareStatement(alternativeSelectComponentsByID);
             stmt2.setInt(1, template_id);
 
             rs2 = stmt2.executeQuery();
@@ -918,7 +941,7 @@ public class DbConnection{
                 templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
                 components.add(templateComponent);
             }
-            template = new Template(template_id, host_id, template_name, template_code, components);
+            template = new Template(template_id, host_id, template_name, template_code, timestamp, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
             e.printStackTrace();

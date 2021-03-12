@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import app.objects.*;
 
@@ -52,12 +51,16 @@ public class DBConnTest {
 
     //@Test
     public void testCreationAndDeletion(){
+
+        // create timestamp
+        Timestamp timestamp_now = new Timestamp(System.currentTimeMillis());
+
         // test host creation
         Host testHost = db.createHost("testFName", "testLName", "test@test.com");
         int testHostID = testHost.getHostID();
 
         // test template creation
-        Template testTemplate = db.createTemplate(testHostID, null);
+        Template testTemplate = db.createTemplate(testHostID, "template-name", timestamp_now,  null);
         int testTemplateID = testTemplate.getTemplateID();
 
         // test participant creation
@@ -65,11 +68,11 @@ public class DBConnTest {
         int testPartID = testPart.getParticipantID();
 
         // test event creation
-        Event testEvent = db.createEvent(testHostID, testTemplateID, "event title", "event desc", "seminar", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+        Event testEvent = db.createEvent(testHostID, testTemplateID, "event title", "event desc", "seminar", timestamp_now, timestamp_now);
         int testEventID = testEvent.getEventID();
 
         // test archived_event creation
-        ArchivedEvent testArchivedEvent = db.createArchivedEvent(testHostID, "", "event title", "event desc", "seminar", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+        ArchivedEvent testArchivedEvent = db.createArchivedEvent(testHostID, "", "event title", "event desc", "seminar", timestamp_now, timestamp_now);
         int testArchivedEventID = testArchivedEvent.getEventID();
 
         // test feedback creation

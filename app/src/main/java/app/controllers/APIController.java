@@ -276,6 +276,7 @@ public class APIController {
 
         // collect template name from form
         String template_name = request.queryParams("templateName");
+        System.out.println("Notice: template name collected: " + template_name);
 
         if (StringUtils.isBlank(template_name)){
             System.out.println("Error:  APIController:createEmptyTemplate template name is blank");
@@ -285,7 +286,7 @@ public class APIController {
         }
 
         // template name valid; generate empty template in DB
-        db.createTemplate(hostID, new ArrayList<TemplateComponent>());
+        db.createEmptyTemplate(hostID, template_name, new Timestamp(System.currentTimeMillis()));
 
         // redirect to host templates page
         // (links to MyTemplatesController.servePage)

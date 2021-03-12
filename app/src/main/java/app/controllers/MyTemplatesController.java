@@ -4,8 +4,13 @@ package app.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import spark.*;
+import app.App;
+import app.DbConnection;
 import app.objects.Host;
+import app.objects.Template;
 import app.util.*;
 
 public class MyTemplatesController {
@@ -14,6 +19,8 @@ public class MyTemplatesController {
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: MyTemplatesController:servePage recognized request");
+
+        DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
         Session session = request.session(false);
@@ -29,10 +36,23 @@ public class MyTemplatesController {
 
 
         // get each template against the host
+        Template[] hostTemplates = db.getTemplatesByHostID(hostID);
 
+        if (hostTemplates == null){
+            System.out.println("Notice: MyTemplatesController:servePage hostTemplates array is null");
+            return null;
+        }
+
+        //System.out.println("Notice: hostTemplates' array length: " + hostTemplates.length);
+
+        int templateIndex = 0;
+        for (Template template : hostTemplates){
+            if (template == null) System.out.println("Error: templates[" +templateIndex+ "] is null");
+            templateIndex++;
+        }
 
         Map<String, Object> model = new HashMap<>();
-        model.put("test1", "this");
+        model.put("hostTemplates", hostTemplates);
         return ViewUtil.render(request, model, "/velocity/templates.vm");
     };
 

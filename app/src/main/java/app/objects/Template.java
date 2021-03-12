@@ -1,5 +1,6 @@
 package app.objects;
 
+import java.sql.Timestamp;
 // for ArrayList of components
 import java.util.ArrayList;
 import app.objects.TemplateComponent;
@@ -8,10 +9,13 @@ import app.objects.TemplateComponent;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class Template {
-    private int template_id;
-    private int host_id;
-    private String template_name;
-    private String template_code;
+
+    private int template_id; // template ID
+    private int host_id; // author's host ID
+    private String template_name; // template name
+    private String template_code; // template's unique code
+    private Timestamp timestamp; // template's creation timestamp
+    // components within the template
     private ArrayList<TemplateComponent> components;
 
     /**
@@ -23,12 +27,13 @@ public class Template {
      * @param template_code
      * @param components
      */
-    public Template(int template_id, int host_id, String template_name, String template_code,
+    public Template(int template_id, int host_id, String template_name, String template_code, Timestamp timestamp,
             ArrayList<TemplateComponent> components) {
         this.template_id = template_id;
         this.host_id = host_id;
         this.template_name = template_name;
         this.template_code = template_code;
+        this.timestamp = timestamp;
 
         if (components == null) {
             this.components = new ArrayList<TemplateComponent>();
@@ -38,19 +43,20 @@ public class Template {
     }
 
     /**
-     * overloaded template constructor missing components
-     * it is assumed the template is empty (has no components
-     * )
+     * overloaded template constructor missing components it is assumed the template
+     * is empty (has no components )
+     * 
      * @param template_id
      * @param host_id
      * @param template_name
      * @param template_code
      */
-    public Template(int template_id, int host_id, String template_name, String template_code) {
+    public Template(int template_id, int host_id, String template_name, String template_code, Timestamp timestamp) {
         this.template_id = template_id;
         this.host_id = host_id;
         this.template_name = template_name;
         this.template_code = template_code;
+        this.timestamp = timestamp;
         this.components = new ArrayList<TemplateComponent>();
     }
 
@@ -91,6 +97,15 @@ public class Template {
     }
 
     /**
+     * get timestamp
+     * 
+     * @return timestamp
+     */
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    /**
      * gets templates components
      * 
      * @return components
@@ -106,6 +121,15 @@ public class Template {
      */
     public void setTemplate_name(String template_name) {
         this.template_name = template_name;
+    }
+
+    /**
+     * set timestamp
+     * 
+     * @param timestamp timestamp
+     */
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import spark.*;
+import app.objects.Host;
 import app.util.*;
 
 public class MyTemplatesController {
@@ -22,8 +23,16 @@ public class MyTemplatesController {
             return null;
         }
 
+        // get host from session
+        Host host = session.attribute("host");
+        int hostID = host.getHostID();
+
+
+        // get each template against the host
+
+
         Map<String, Object> model = new HashMap<>();
-        model.put("test1", "this is a test variable!");
+        model.put("test1", "this");
         return ViewUtil.render(request, model, "/velocity/templates.vm");
     };
 

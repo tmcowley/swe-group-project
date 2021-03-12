@@ -1,11 +1,9 @@
 #parse("/velocity/head.vm")
 #@mainLayout()
-##set( $errorMessageLogin = "Login Error Message" )
-##set( $errorMessageCreate = "Create Host Error Message" )
 <div id="mainBodyContainerOneCol">
     <div id="landingMain">
         <div id="landingContainer">
-            <!-- Section for previously created users to log in (with their code) -->
+            <!-- Section for existing users to log in (with their code) -->
             <h1>Host Login</h1>
             <div id="landingJoinContainer">
                 <form id="landingSubContainer" name="hostCodeLogin" action="/host/home" method="post">

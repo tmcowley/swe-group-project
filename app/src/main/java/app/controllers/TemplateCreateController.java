@@ -22,7 +22,18 @@ public class TemplateCreateController {
             return null;
         }
 
+        // if error message is unset, then set it to empty string
+        if (session.attribute("errorMessageCreateEmptyTemplate") == null)
+            session.attribute("errorMessageCreateEmptyTemplate", "");
+        
+        // generate model for front-end; include error message
         Map<String, Object> model = new HashMap<>();
+        model.put("errorMessageCreateEmptyTemplate", session.attribute("errorMessageCreateEmptyTemplate"));
+
+        // unset session error attributes
+        session.removeAttribute("errorMessageCreateEmptyTemplate");
+
+        // render initial template creation page
         return ViewUtil.render(request, model, "/velocity/create-template.vm");
     };
 

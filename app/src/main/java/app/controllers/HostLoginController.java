@@ -15,21 +15,21 @@ public class HostLoginController {
         System.out.println("\nNotice: HostLoginController:servePage recognized request");
 
         // start session
-        request.session(true);
+        Session session = request.session(true);
 
-        if (request.session().attribute("errorMessageLogin") == null)
-            request.session().attribute("errorMessageLogin", "");
+        if (session.attribute("errorMessageLogin") == null)
+            session.attribute("errorMessageLogin", "");
         
-        if (request.session().attribute("errorMessageCreate") == null)
-            request.session().attribute("errorMessageCreate", "");
+        if (session.attribute("errorMessageCreate") == null)
+            session.attribute("errorMessageCreate", "");
 
         Map<String, Object> model = new HashMap<>();
-        model.put("errorMessageLogin", request.session().attribute("errorMessageLogin"));
-        model.put("errorMessageCreate", request.session().attribute("errorMessageCreate"));
+        model.put("errorMessageLogin", session.attribute("errorMessageLogin"));
+        model.put("errorMessageCreate", session.attribute("errorMessageCreate"));
 
         // unset session error attributes
-        request.session().removeAttribute("errorMessageLogin");
-        request.session().removeAttribute("errorMessageCreate");
+        session.removeAttribute("errorMessageLogin");
+        session.removeAttribute("errorMessageCreate");
 
         return ViewUtil.render(request, model, "/velocity/create-host.vm");
     };

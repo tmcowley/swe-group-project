@@ -94,6 +94,7 @@ public class App {
             // host POST-API endpoint mappings
             post("/get-code", APIController.createHost);
             post("/home", AuthController.authHost);
+            post("/templates/new", APIController.createEmptyTemplate);
         });
         path("/event", () -> {
             // event GET-API endpoint mappings

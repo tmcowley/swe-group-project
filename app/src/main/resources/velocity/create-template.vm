@@ -11,10 +11,10 @@
 </header>
 <div id="mainBodyContainerOneCol">
     <div id="hostHomeContainer">
-        <!-- Basic form - only template name needed + error messages and submit button -->
-        <form>
+        <!-- Basic form - only template name needed, error messages and submit button -->
+        <form id="landingSubContainer" name="createEmptyTemplate" action="/host/templates/new" method="post">
             <input type="text" id="templateName" name="templateName" placeholder="Template Name">
-            <label id="formErrorMessage">Error Message</label>
+            <label id="formErrorMessage">$errorMessageCreateEmptyTemplate</label>
             <input id="hostCodeContinue" type="submit" value="Submit">
         </form>
     </div>

@@ -742,7 +742,7 @@ public class DbConnection{
             int templateCount = 0;
             rs.beforeFirst();
             if (rs.next()) {
-                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_code"), null);
+                foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_name"), rs.getString("template_code"), new ArrayList<TemplateComponent>());
                 foundTemplates[templateCount] = foundTemplate;
                 templateCount++;
             }
@@ -879,8 +879,9 @@ public class DbConnection{
         Template template = null;
         TemplateComponent templateComponent = null;
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
-        int host_id = 0;
-        String template_code = "";
+        Integer host_id = null;
+        String template_code = null;
+        String template_name = null;
         try{
             String selectTemplateByID = ""
                 + "SELECT * FROM template "
@@ -899,6 +900,7 @@ public class DbConnection{
             if (rs1.next()) {
                 template_id = rs1.getInt("template_id");
                 host_id = rs1.getInt("host_id");
+                template_name = rs1.getString("template_name");
                 template_code = rs1.getString("template_code");
             }
             stmt2 = this.conn.prepareStatement(selectComponentsByID);
@@ -916,7 +918,7 @@ public class DbConnection{
                 templateComponent = new TemplateComponent(component_id, name, type, prompt, options, optionsAns, textResponse);
                 components.add(templateComponent);
             }
-            template = new Template(template_id, host_id, template_code, components);
+            template = new Template(template_id, host_id, template_name, template_code, components);
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
             e.printStackTrace();

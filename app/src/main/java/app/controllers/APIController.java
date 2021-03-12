@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import spark.*;
+import spark.utils.StringUtils;
 
 public class APIController {
 
@@ -251,6 +252,44 @@ public class APIController {
         // redirect to participant event page
         // (links to ParticipantEventController.servePage)
         response.redirect("/event/participant/feedback");
+        return null;
+    };
+
+    /**
+     * host API end-point: generate an empty (but named) template
+     */
+    public static Route createEmptyTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: createEmptyTemplate API endpoint recognized request");
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // get host from session
+        Host host = session.attribute("host");
+        int hostID = host.getHostID();
+
+        // collect template name from form
+        String template_name = request.queryParams("templateName");
+
+        if (StringUtils.isBlank(template_name)){
+            System.out.println("Error:  APIController:createEmptyTemplate template name is blank");
+            session.attribute("errorMessageCreateEmptyTemplate", "Error: template name is blank");
+            response.redirect("/host/templates/new");
+            return null;
+        }
+
+        // template name valid; generate empty template in DB
+        db.createTemplate(hostID, new ArrayList<TemplateComponent>());
+
+        // redirect to host templates page
+        // (links to MyTemplatesController.servePage)
+        response.redirect("/host/templates");
         return null;
     };
 }

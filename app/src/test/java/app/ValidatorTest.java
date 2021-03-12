@@ -188,7 +188,7 @@ public class ValidatorTest {
         TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null, "Tom");
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>(1);
         components.add(question);
-        Template testTemplate = new Template(1, 1, "a23fsg", components);
+        Template testTemplate = new Template(1, 1, "template_name", "a23fsg", components);
 
         // assertTrue(v.isTemplateValid(testTemplate));
     }

@@ -144,21 +144,17 @@ public class DBConnTest {
      * @return unique host email
      */
     private String generateUniqueEmail(){
-        // pick valid email
-        String e_address = "test@test.com";
+        String e_address;
+        do {
+            // pick valid email
+            e_address = "test@test.com";
 
-        // append 8-digit length random alphanumeric string to avoid collision
-        e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
+            // append 8-digit length random alphanumeric string to avoid collision
+            e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
 
-        // ensure email has not collided
-        if (db.emailExists(e_address)){
-            // get host by email address
-            Host host = db.getHostByEmail(e_address);
-            // remove email from database
-            db.deleteHost(host.getHostID());
-        }
+        } while (db.emailExists(e_address));
 
-        // ensure host email cleared
+        // ensure host email has not collided
         assertFalse(db.emailExists(e_address));
 
         // return unique email

@@ -112,14 +112,13 @@
                         #end
                     #end
                 </div>
-                <div class="templateControlsSection">
+                <div class="templateAddControlsSection">
                     <!-- Buttons to add new sections -->
                     <a href="#">Add Textarea</a>
-                    <a href="#">Add Emojis</a>
+                    <!-- <a href="#">Add Emojis</a> -->
                     <a href="#">Add Radio Buttons</a>
                     <a href="#">Add Tickboxes</a>
                 </div>
-                <br>
                 <label id="formErrorMessage">$errorMessageCreateTemplate</label>
                 <!-- Space for error messages -->
                 <div class="templateControlsSection">

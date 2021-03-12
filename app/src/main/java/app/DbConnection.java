@@ -741,6 +741,45 @@ public class DbConnection{
     }
 
     /**
+     * Get a Host object by their email address.
+     * @param e_address host email address
+     * @return host with email e_address
+     */
+    public Host getHostByEmail(String e_address){
+
+        // ensure the email is valid
+        if (!validator.eAddressIsValid(e_address)) 
+            return null;
+
+        // ensure the email exists in the system
+        if (!emailExists(e_address)) 
+            return null;
+
+        // host email address valid and exists --> query db
+        PreparedStatement stmt = null;
+        Integer host_id = null;
+        ResultSet rs = null;
+        try{
+            String queryHostByEmail= "SELECT host_id FROM host WHERE e_address=? LIMIT 1;";
+            stmt = this.conn.prepareStatement(queryHostByEmail);
+            stmt.setString(1, e_address);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                host_id = rs.getInt("host_id");
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+        
+        // get Host by ID
+        return getHost(host_id);
+    }
+
+    /**
      * Get a Template object by its code.
      * @param template_code template code
      * @return Template object corresponding to its code

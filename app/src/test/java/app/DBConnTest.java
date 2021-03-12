@@ -1,5 +1,7 @@
 package app;
 
+import app.objects.*;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -8,7 +10,8 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import app.objects.*;
+// used in unique e_address generation
+import org.apache.commons.lang3.RandomStringUtils;
 
 // Unit tests against DBConnection.java
 public class DBConnTest {
@@ -136,11 +139,29 @@ public class DBConnTest {
         db.deleteParticipant(commonPartID);
     }
 
+    /**
+     * generate a unique host email address
+     * @return unique host email
+     */
     private String generateUniqueEmail(){
+        // pick valid email
         String e_address = "test@test.com";
-        while (db.emailExists(e_address)){
-            e_address += "a";
+
+        // append 8-digit length random alphanumeric string to avoid collision
+        e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
+
+        // ensure email has not collided
+        if (db.emailExists(e_address)){
+            // get host by email address
+            Host host = db.getHostByEmail(e_address);
+            // remove email from database
+            db.deleteHost(host.getHostID());
         }
+
+        // ensure host email cleared
+        assertFalse(db.emailExists(e_address));
+
+        // return unique email
         return e_address;
     }
 

@@ -18,12 +18,6 @@ public class HostLoginController {
         request.session(true);
         Session session = request.session();
 
-        if (session.attribute("errorMessageLogin") == null)
-            session.attribute("errorMessageLogin", "");
-        
-        if (session.attribute("errorMessageCreate") == null)
-            session.attribute("errorMessageCreate", "");
-
         Map<String, Object> model = new HashMap<>();
         model.put("errorMessageLogin", session.attribute("errorMessageLogin"));
         model.put("errorMessageCreate", session.attribute("errorMessageCreate"));

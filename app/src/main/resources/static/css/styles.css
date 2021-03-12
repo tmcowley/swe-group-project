@@ -428,19 +428,19 @@ textarea {
 
 .templateControlsSection {
     display: flex;
-    justify-content: space-around;
-    margin: 10px;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     border-radius: 15px;
     background-color: #886c91;
+    margin: 0 auto 10px;
 }
 
 .templateAddControlsSection {
     display: flex;
-    justify-content: space-around;
-    margin: 10px 10px 0;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     border-radius: 15px;
+    margin-top: 10px;
 }
 
 .templateControlsSection a, .templateAddControlsSection a {

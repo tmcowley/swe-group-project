@@ -13,6 +13,20 @@
     <div id="mainFormSection">
         <div id="mainForm">
             <form action="" method="post">
+                <h1>Template Name</h1>
+                <label id="formErrorMessage">$errorMessageCreateTemplate</label>
+                <!-- Space for error messages -->
+                <div class="templateControlsSection">
+                    <!-- Buttons to add new sections -->
+                    <input
+                        type="submit"
+                        id="submitButtonTemplate"
+                        value="Save"
+                        formaction="/host/templates/edit/code"
+                        method="post">
+                    <a href="#">Delete</a>
+                    <a href="#">Back</a>
+                </div>
                 <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
                     <input class="formInput" name="hostCode" type="hidden" value="$template.getTemplateCode()">
                     #if($template.getComponents().size() == 0)
@@ -118,20 +132,7 @@
                     <!-- <a href="#">Add Emojis</a> -->
                     <a href="#">Add Radio Buttons</a>
                     <a href="#">Add Tickboxes</a>
-                </div>
-                <label id="formErrorMessage">$errorMessageCreateTemplate</label>
-                <!-- Space for error messages -->
-                <div class="templateControlsSection">
-                    <!-- Buttons to add new sections -->
-                    <input
-                        type="submit"
-                        id="submitButtonTemplate"
-                        value="Save"
-                        formaction="/host/templates/edit/code"
-                        method="post">
-                    <a href="#">Delete</a>
-                    <a href="#">Back</a>
-                </div>
+                </div>                
             </form>
         </div>
     </div>

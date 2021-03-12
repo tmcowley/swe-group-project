@@ -401,16 +401,18 @@ textarea {
 }
 
 .formInputBullet {
-    width: calc(100% - 30px);
+    width: calc(100% - 200px);
 }
 
 .formInputBulletLabel {
-    margin-left: 30px;
+    margin-left: 15px;
 }
-
 
 .formInputBulletRating {
     margin-bottom: 20px;
+    padding-left: 8px;
+    border-radius: 15px 0 0 15px;
+    max-width: 50px;
 }
 
 .formInputBulletIcon {
@@ -476,6 +478,9 @@ textarea {
 
 .feedbackElementFooter input {
     margin-bottom: 10px;
+    padding-left: 8px;
+    border-radius: 15px 0 0 15px;
+    max-width: 50px;
 }
 
 .feedbackDelButton {

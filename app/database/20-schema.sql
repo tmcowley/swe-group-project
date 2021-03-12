@@ -63,8 +63,8 @@ CREATE TABLE template(
 CREATE TABLE template_component(
     tc_id           SERIAL          NOT NULL,
     tc_name         VARCHAR(35)     NOT NULL,
-    tc_type         VARCHAR(35)     NOT NULL,
-        CHECK (tc_type = 'text' or tc_type = 'radio' or tc_type = 'checkbox'),
+    tc_type         TEXT            
+                    CHECK (tc_type IN ('question', 'radio', 'checkbox')),
     tc_prompt       VARCHAR(128)    NOT NULL
                     DEFAULT FALSE,
     tc_options      TEXT[],

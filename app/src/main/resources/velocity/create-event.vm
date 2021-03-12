@@ -35,7 +35,9 @@
             <label for="endTime">End Time</label>
             <input type="time" id="endTime" name="endTime">
             <!-- Label to hold error messages -->
-            <label id="formErrorMessage">Error Message</label>
+            #if ($errorMessageCreateEvent)
+            <label id="formErrorMessage">$errorMessageCreateEvent</label>
+            #end
             <input id="hostCodeContinue" type="submit" value="Submit">
         </form>
     </div>

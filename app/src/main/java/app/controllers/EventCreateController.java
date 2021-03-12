@@ -54,6 +54,7 @@ public class EventCreateController {
         }
 
         model.put("templateCount", templateCount);
+        model.put("errorMessageCreateEvent", request.session().attribute("errorMessageCreateEvent"));
         return ViewUtil.render(request, model, "/velocity/create-event.vm");
     };
 }

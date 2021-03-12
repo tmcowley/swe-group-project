@@ -116,12 +116,22 @@ public class APIController {
         }
 
         // validate input before database interaction
-        if (!v.eventTitleIsValid(title))
-            return "Error: Event title is not valid";
-        if (!v.eventDescriptionIsValid(description))
-            return "Error: Event description is invalid";
-        if (!v.eventTypeIsValid(type))
-            return "Error: Event type is invalid";
+        if (!v.eventTitleIsValid(title)) {
+            request.session().attribute("errorMessageCreateEvent", "Error: Event title is not valid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+        if (!v.eventDescriptionIsValid(description)) {
+            request.session().attribute("errorMessageCreateEvent", "Error: Event description is invalid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+        if (!v.eventTypeIsValid(type)) {
+            request.session().attribute("errorMessageCreateEvent", "Error: Event type is invalid");
+            response.redirect("/host/create-event");
+            return null;
+        }
+
         /*
         if (startTime.compareTo(endTime) < 0 && endTime.compareTo(current) > 0)
         return "Error: start and end time not in order";
@@ -140,7 +150,9 @@ public class APIController {
 
         if (!v.isEventValid(event)){
             // return not found if event is not created or input is not valid
-            return "Error: event not created or considered invalid - check inputs";
+            request.session().attribute("errorMessageCreateEvent", "Error: event not created or considered invalid - check inputs");
+            response.redirect("/host/create-event");
+            return null;
         }
 
         // store event in session for host event page

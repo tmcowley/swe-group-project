@@ -150,8 +150,7 @@ public class DBConnTest {
             e_address = "test@test.com";
 
             // append 8-digit length random alphanumeric string to avoid collision
-            e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
-
+            e_address = e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
         } while (db.emailExists(e_address));
 
         // ensure host email has not collided
@@ -231,5 +230,30 @@ public class DBConnTest {
         db.deleteParticipant(testPartID);
         db.deleteHost(testHostID);
         db.deleteEvent(testEventID);
+    }
+
+    @Test
+    public void test_Bans(){
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+
+        Participant testPart = db.createParticipant(f_name, l_name);
+        assertFalse(testPart == null);
+        int testPartID = testPart.getParticipantID();
+
+        Host testHost = db.createHost(f_name, l_name, e_address);
+        assertFalse(testHost == null);
+        int testHostID = testHost.getHostID();
+        db.banParticipant(testPartID);
+        db.banHost(testHostID);
+        testPart = db.getParticipant(testPartID);
+        testHost = db.getHostByCode(testHost.getHostCode());
+        assertTrue(testHost.getSysBan());
+        assertTrue(testPart.getSysBan());
+
+        db.deleteHost(testHostID);
+        db.deleteParticipant(testPartID);
     }
 }

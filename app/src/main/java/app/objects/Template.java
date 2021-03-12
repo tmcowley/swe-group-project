@@ -83,7 +83,7 @@ public class Template {
      * 
      * @return template name
      */
-    public String getTemplate_name() {
+    public String getTemplateName() {
         return template_name;
     }
 
@@ -119,7 +119,7 @@ public class Template {
      * 
      * @param template_name template name
      */
-    public void setTemplate_name(String template_name) {
+    public void setTemplateName(String template_name) {
         this.template_name = template_name;
     }
 

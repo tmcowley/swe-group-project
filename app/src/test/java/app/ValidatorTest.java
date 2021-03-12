@@ -124,8 +124,8 @@ public class ValidatorTest {
 
     @Test
     public void test_eventDescriptionIsValid() {
-        String[] validDescriptions = { "Lecture 1", "lecfsertwtwet", "lecture1", "        " };
-        String[] invalidDescriptions = { "", null };
+        String[] validDescriptions = { "lecture", "Lecture 1", "lecture1" };
+        String[] invalidDescriptions = { " ", "", null };
         for (String validDescription : validDescriptions) {
             assertTrue(v.eventDescriptionIsValid(validDescription));
         }
@@ -170,8 +170,7 @@ public class ValidatorTest {
 
     @Test
     public void test_isHostValid() {
-        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com",
-                "Moustafa", "Eledwy", false);
+        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com", "Moustafa", "Eledwy", false);
 
         assertTrue(v.isHostValid(testHost));
     }
@@ -185,10 +184,12 @@ public class ValidatorTest {
 
     @Test
     public void test_isTemplateValid() {
-        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null, "Tom");
+        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null,
+                "Tom");
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>(1);
         components.add(question);
-        Template testTemplate = new Template(1, 1, "template_name", "a23fsg", new Timestamp(System.currentTimeMillis()), components);
+        Template testTemplate = new Template(1, 1, "template_name", "a23fsg", new Timestamp(System.currentTimeMillis()),
+                components);
 
         // assertTrue(v.isTemplateValid(testTemplate));
     }

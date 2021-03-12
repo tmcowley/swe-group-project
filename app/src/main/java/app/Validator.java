@@ -144,18 +144,16 @@ public class Validator {
      * @return name validity state
      */
     public boolean nameIsValid(String name){
-        // if (name != null && !name.isEmpty()) {
-		// 	// first name regular expression
-		// 	String regex = "^[A-Z][a-z]+$";
+        // ensure name is a valid string
+        if (!stringIsValid(name))
+            return false;
+        return true;
+    }
 
-        //     // return true if name matches with the regular expression
-        //     if (name.matches(regex)) {
-        //         return true;
-        //     }
-        // }
-
-        if (StringUtils.isBlank(name))
-            // name is not null, empty, or blank
+    // TODO: comment
+    public boolean stringIsValid(String string){
+        // ensure name is not null, empty, or blank
+        if (StringUtils.isBlank(string))
             return false;
         return true;
     }
@@ -186,15 +184,19 @@ public class Validator {
      * @return description validity state
      */
     public boolean eventDescriptionIsValid(String data){
-        if (data != null && !data.isEmpty()) {
-			// description regular expression
-			String regex = "^.+( .)*";
-
-            // return true if description matches with the regular expression
-            if (data.matches(regex)) {
-                return true;
-            }
+        // ensure event description is not null, empty, or blank
+        if (StringUtils.isBlank(data)){
+            return false;
         }
+
+        // description regular expression
+        String descRegex = "^.+( .)*";
+
+        // return true if description matches the regular expression
+        if (data.matches(descRegex)) {
+            return true;
+        }
+
         return false;
     }
 
@@ -353,20 +355,95 @@ public class Validator {
     }
 
     /**
-     * Check if Template is valid:
-     * check every data inside
-     * @param template Template instance to be checked
-     * @return Template validity state
+     * null-safe template validity check:
+     * assessing each attribute
+     * @param template template
+     * @return template validity state
      */
     public boolean isTemplateValid(Template template){
-        if (template != null&&
-            templateCodeIsValid(template.getTemplateCode())&&
-            idIsValid(template.getTemplateID())&&
-            idIsValid(template.getHostID())
-            ) {
-            return true;
+        // ensure template is not null
+        if (template == null)
+            return false;
+        // ensure IDs are valid
+        if (!idIsValid(template.getTemplateID()))
+            return false;
+        if (!idIsValid(template.getHostID()))
+            return false;
+        // ensure template code is valid
+        if (!templateCodeIsValid(template.getTemplateCode()))
+            return false;
+        // ensure template title/ name is valid
+        if (!nameIsValid(template.getTemplateName()))
+            return false;
+        // ensure template timestamp is non-null
+        if (template.getTimestamp() == null)
+            return false;
+        // ensure components ArrayList is not null
+        if (template.getComponents() == null)
+            return false;
+
+        // validate each template component in template
+        boolean allValid = true;
+        for (TemplateComponent component : template.getComponents()){
+            allValid = (allValid && isComponentValid(component));
         }
-        return false;
+
+        return allValid;
+    }
+
+    /**
+     * null-safe component validity check
+     * @param component component checked
+     * @return component validity state
+     */
+    public boolean isComponentValid(TemplateComponent component){
+        // ensure template component is not null
+        if (component == null)
+            return false;
+        // ensure component ID is valid
+        if (!idIsValid(component.getId()))
+            return false;
+        if (!nameIsValid(component.getName()))
+            return false;
+        if (!componentTypeIsValid(component.getType()))
+            return false;
+        if (!stringIsValid(component.getPrompt())){
+            return false;
+        }
+        String componentType = component.getType();
+        // case the component is of radio or checkbox type
+        if (componentType == "radio" || componentType == "checkbox"){
+            if (component.getOptions() == null)
+                return false;
+            if (component.getOptionsAns() == null)
+                return false;
+            if (component.getOptions().length != component.getOptionsAns().length)
+                return false;
+        }
+        // case the component is of question type
+        if (componentType == "question"){
+            if (!stringIsValid(component.getTextResponse()))
+                return false;
+            if (component.getOptions() != null)
+                return false;
+            if (component.getOptionsAns() != null)
+                return false;
+        }
+        // component is valid
+        return true;
+    }
+
+    /**
+     * null-safe component type validity check
+     * @param type component type
+     * @return component type validity state
+     */
+    private boolean componentTypeIsValid(String type){
+        // ensure component type is not null
+        if (type == null)
+            return false;
+        // ensure type is either "question", "radio", or "checkbox"
+        return (type.equals("question") || type.equals("radio") || type.equals("checkbox"));
     }
 
     /**

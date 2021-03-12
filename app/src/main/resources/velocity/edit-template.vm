@@ -13,7 +13,113 @@
     <div id="mainFormSection">
         <div id="mainForm">
             <form action="" method="post">
+
                 <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
+
+                    <input class="formInput" name="hostCode" type="hidden" value=$template.getTemplateCode()>
+
+                    #foreach($component in $template.getComponents())
+
+                        # component is of type question
+                        #if($component.getType() == "question")
+                            <div class="feedbackElement">
+                                <h3> Question </h3>
+                                <!-- Textarea -->
+                                <input class="formInput" type="text" placeholder="Enter Prompt" value=$component.getPrompt()>
+                                <input class="formInput" type="hidden" value=$component.getType()>
+                                <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
+                            </div>
+                            <button class="feedbackDelButton"><img src="/images/delete-icon.png" /></button>
+                            <!-- feedbackElementFooter will contain extra properties to be set -->
+                            <div class="feedbackElementFooter">
+                                <input type="checkbox" id="consider1" name="consider1" value="Consider">
+                                <label for="consider1">
+                                    Consider in sentiment analysis</label><br>
+                                <label for="rating1">Rating (1-5):</label>
+                                <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
+                            </div>
+
+                        # component is of type checkbox
+                        #elseif($component.getType() == "checkbox")
+                            <div class="feedbackElement">
+                                <h3> Checkbox </h3>
+                                <input class="formInput" type="text" placeholder="Enter Prompt" value=$component.getPrompt()>
+                                <input class="formInput" type="hidden" value=$component.getType()>
+                                <!-- Radio buttons section -->
+                                <!-- Radio buttons are just 5 text boxes -->
+                                #foreach($option in $component.getOptions())
+                                    <div class="formInputBulletIcon">&bull;</div>
+                                    <input class="formInputBullet" type="text" placeholder="Enter Text" value=$option>
+                                    <label class="formInputBulletLabel" for="bulletrating1">Rating (1-7):</label>
+                                    <input class="formInputBulletRating" type="number" id="bulletrating1" name="bulletrating1" min="1" max="7"><br>
+                                    <div class="formInputBulletIcon">&bull;</div>
+                                #end
+                            </div>
+                            <button class="feedbackDelButton"><img src="/images/delete-icon.png" /></button>
+                            <div class="feedbackElementFooter">
+                                <input type="checkbox" id="consider3" name="consider3" value="Consider">
+                                <label for="consider3">
+                                    Consider in sentiment</label><br>
+                                <label for="rating3">Rating (1-5):</label>
+                                <input type="number" id="rating3" name="rating3" min="1" max="5"><br>
+                                <input type="checkbox" id="highlight3" name="highlight3" value="Consider">
+                                <label for="highlight3">
+                                    Highlight?</label>
+                            </div>
+
+                        # component is of type radio
+                        #elseif($component.getType() == "radio")
+                            <div class="feedbackElement">
+                                <h3> Radio </h3>
+                                <!-- Emoji selector -->
+                                <input class="formInput" type="text" placeholder="Enter Prompt" value=$component.getPrompt()>
+                                <input class="formInput" type="hidden" value=$component.getType()>
+                                <div class="feelingRadioContainer">
+                                    #foreach($option in $component.getOptions())
+                                        <div class="formInputBulletIcon">&bull;</div>
+                                        <input class="formInputBullet" type="text" placeholder="Enter Text" value=option>
+                                        <label class="formInputBulletLabel" for="bulletrating2">Rating (1-7):</label>
+                                        <input class="formInputBulletRating" type="number" id="bulletrating2" name="bulletrating2" min="1" max="7"><br>
+                                        <div class="formInputBulletIcon">&bull;</div>
+                                    #end
+                                </div>
+                            </div>
+                            <button class="feedbackDelButton"><img src="/images/delete-icon.png" /></button>
+                            <div class="feedbackElementFooter">
+                                <input type="checkbox" id="consider2" name="consider2" value="Consider">
+                                <label for="consider2">
+                                    Consider in sentiment</label><br>
+                                <label for="rating2">Rating (1-5):</label>
+                                <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
+                            </div>
+
+                        #end
+
+                    #end
+                    <div class="templateControlsSection"> <!-- Buttons to add new sections -->
+                    <a href="#">Add Textarea</a>
+                    <a href="#">Add Emojis</a>
+                    <a href="#">Add Radio Buttons</a>
+                    <a href="#">Add Tickboxes</a>
+                </div>
+                <br>
+                <label id="formErrorMessage">$errorMessageCreateTemplate</label> <!-- Space for error messages -->
+                <div class="templateControlsSection"> <!-- Buttons to add new sections -->
+                    <input type="submit" id="submitButtonTemplate" value="Save" formaction="/host/templates/edit/code" method="post">
+                    <a href="#">Delete</a>
+                    <a href="#">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br><br><br><br>
+    <h1 style="text-align:center;">BELOW IS STATIC STUFF</h1>
+    <br><br>
+
+    <div id="mainFormSection">
+        <div id="mainForm">
+            <form action="" method="post">
                     <div class="feedbackElement">
                         <!-- Textarea -->
                         <input class="formInput" type="text" placeholder="Enter Text">
@@ -27,6 +133,7 @@
                         <label for="rating1">Rating (1-5):</label>
                         <input type="number" id="rating1" name="rating1" min="1" max="5"><br>
                     </div>
+
                     <div class="feedbackElement">
                         <!-- Emoji selector -->
                         <input class="formInput" type="text" placeholder="Enter Text">
@@ -53,6 +160,7 @@
                         <label for="rating2">Rating (1-5):</label>
                         <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
                     </div>
+
                     <div class="feedbackElement">
                         <input class="formInput" type="text" placeholder="Enter Text">
                         <!-- Radio buttons section -->
@@ -89,6 +197,7 @@
                         <label for="highlight3">
                             Highlight?</label>
                     </div>
+
                     <div class="feedbackElement">
                         <input class="formInput" type="text" placeholder="Enter Text">
                         <!-- Checkbox section -->
@@ -123,6 +232,7 @@
                         <input type="number" id="rating4" name="rating4" min="1" max="5"><br>
                     </div>
                 </div>
+
                 <div class="templateControlsSection"> <!-- Buttons to add new sections -->
                     <a href="#">Add Textarea</a>
                     <a href="#">Add Emojis</a>

@@ -18,7 +18,7 @@
                 <a href="/host/templates/new" id="landingHostButton">Create New Template</a>
             </div>
             #foreach($template in $hostTemplates)
-                <a id="hostCodeContinue" href="/host/templates/edit/code?templateCode=$template.getTemplateCode()">Template: $template.getTemplate_name()</a>
+                <a id="hostCodeContinue" href="/host/templates/edit/code?templateCode=$template.getTemplateCode()">Template: $template.getTemplateName()</a>
             #end
         </div>
     </div>

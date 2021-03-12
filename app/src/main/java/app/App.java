@@ -87,14 +87,23 @@ public class App {
             get("/get-code", GetCodeController.servePage);
             get("/home", HostHomeController.servePage);
             get("/create-event", EventCreateController.servePage);
-            get("/templates", MyTemplatesController.servePage);
-            get("/templates/new", TemplateCreateController.servePage);
-            get("/templates/edit/code", TemplateEditController.servePage);
-            
+
             // host POST-API endpoint mappings
             post("/get-code", APIController.createHost);
             post("/home", AuthController.authHost);
-            post("/templates/new", APIController.createEmptyTemplate);
+
+            // template API endpoint mappings
+            path("/templates", () -> {
+                // template GET-API endpoint mappings
+                get("", MyTemplatesController.servePage);
+                get("/new", TemplateCreateController.servePage);
+                get("/edit/code", TemplateEditController.servePage);
+
+                // template POST-API endpoint mappings
+                post("/new", APIController.createEmptyTemplate);
+                post("/edit/code", APIController.createTemplate);
+            });
+
         });
         path("/event", () -> {
             // event GET-API endpoint mappings

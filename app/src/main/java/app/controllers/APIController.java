@@ -293,4 +293,57 @@ public class APIController {
         response.redirect("/host/templates");
         return null;
     };
+
+    /**
+     * host API end-point: generate a populated template
+     */
+    public static Route createTemplate = (Request request, Response response) -> {
+        System.out.println("\nNotice: createTemplate API endpoint recognized request");
+        DbConnection db = App.getInstance().getDbConnection();
+
+        // get current session; ensure session is live
+        Session session = request.session(false);
+        if (session == null) {
+            System.out.println("Error:  APIController:createFeedback session not found");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // get host from session
+        Host host = session.attribute("host");
+
+        // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate", "value");
+
+        //TODO
+
+        // get template hostCode (stored in form) 
+        String hostCode = request.queryParams("hostCode");
+
+        // collect form data
+        // form data -> components
+        // components -> template
+        
+        // ensure template is valid
+
+        // store template in DB
+
+        // return to "/host/templates/edit/code"
+        // (links to TemplateEditController.servePage)
+        response.redirect("/host/templates/edit/code" + "?hostCode=" + hostCode);
+        return null;
+    };
+
+    public static Route createTemplateComponent = (Request request, Response response) -> {
+        return null;
+    };
+
+    public static Route deleteTemplate = (Request request, Response response) -> {
+        return null;
+    };
+
+    public static Route deleteTemplateComponent = (Request request, Response response) -> {
+        return null;
+    };
+
+
 }

@@ -188,7 +188,7 @@ public class DbConnection{
             String createTemplateComponent = ""
                 + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_ans, tc_text_response) "
                 + "VALUES(?, ?, ?, ?, ?, ?) "
-                + "RETURNING tc_id";
+                + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
@@ -223,7 +223,7 @@ public class DbConnection{
             String createTemplateComponent = ""
                 + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_ans) "
                 + "VALUES(?, ?, ?, ?, ?) "
-                + "RETURNING tc_id";
+                + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
@@ -252,17 +252,22 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
+        if (name == null || type == null || prompt == null || textResponse == null){
+            System.out.println("CALL POINT giving NULLS");
+        }
+        System.out.println("type: " + type);
         try{
             // create empty template object
             String createTemplateComponent = ""
                 + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_text_response) "
                 + "VALUES(?, ?, ?, ?) "
-                + "RETURNING tc_id";
+                + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
             stmt.setString(3, prompt);
             stmt.setString(4, textResponse);
+
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -1001,9 +1006,20 @@ public class DbConnection{
                 String name = rs.getString("tc_name");
                 String type = rs.getString("tc_type");
                 String prompt = rs.getString("tc_prompt");
-                String[] options = (String[]) rs.getArray("tc_options").getArray();
-                Boolean[] options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
-                String text_response = rs.getString("tc_text_response");
+                String[] options = null;
+                Boolean[] options_ans = null;
+                String text_response = null;
+
+                // component is of type question
+                if (type.equals("question")){
+                    text_response = rs.getString("tc_text_response");
+                }
+
+                // component is of type options
+                if (type.equals("radio") || type.equals("checkbox")){
+                    options = (String[]) rs.getArray("tc_options").getArray();
+                    options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
+                }
 
                 tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
             }

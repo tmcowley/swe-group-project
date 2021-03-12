@@ -27,8 +27,9 @@ public class HostEventController {
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        request.session(true);
+        Session session = request.session();
+        if (session.isNew()) {
             System.out.println("Error:  HostEventController:servePage session not found");
             response.redirect("/error/401");
             return null;

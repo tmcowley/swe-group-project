@@ -23,8 +23,9 @@ public class GetCodeController {
         Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
-        Session session = request.session(false);
-        if (session == null) {
+        request.session(true);
+        Session session = request.session();
+        if (session.isNew()) {
             System.out.println("Error:  GetCodeController:servePage session not found");
             response.redirect("/error/401");
             return null;

@@ -15,7 +15,8 @@ public class HostLoginController {
         System.out.println("\nNotice: HostLoginController:servePage recognized request");
 
         // start session
-        Session session = request.session(true);
+        request.session(true);
+        Session session = request.session();
 
         if (session.attribute("errorMessageLogin") == null)
             session.attribute("errorMessageLogin", "");

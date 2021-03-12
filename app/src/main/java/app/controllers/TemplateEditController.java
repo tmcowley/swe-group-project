@@ -21,6 +21,8 @@ public class TemplateEditController {
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: TemplateEditController:servePage recognized request");
+
+        // get db conn, validator from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 

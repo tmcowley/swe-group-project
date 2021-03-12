@@ -24,6 +24,7 @@ public class HostEventController {
 
         System.out.println("\nNotice: HostEventController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 

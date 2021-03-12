@@ -20,7 +20,7 @@ import spark.utils.StringUtils;
 
 public class APIController {
 
-    // thread safe (no DB interaction)
+    // get validator from singleton App instance; thread safe (no DB interaction)
     static Validator v = App.getInstance().getValidator();
 
     /**
@@ -29,6 +29,8 @@ public class APIController {
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect attributes from API call-point (request)
@@ -86,6 +88,8 @@ public class APIController {
      */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
@@ -181,6 +185,8 @@ public class APIController {
      */
     public static Route joinEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: joinEvent API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // collect form attributes
@@ -234,6 +240,8 @@ public class APIController {
      */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("\nNotice: createFeedback API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
@@ -292,6 +300,8 @@ public class APIController {
      */
     public static Route createEmptyTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: createEmptyTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
@@ -338,6 +348,8 @@ public class APIController {
      */
     public static Route createTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: createTemplate API endpoint recognized request");
+
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live

@@ -18,6 +18,7 @@ public class AuthController {
 
         System.out.println("\nNotice: AuthController:authHost API endpoint recognized request");
 
+        // get db conn, validator from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
         Validator v = App.getInstance().getValidator();
 

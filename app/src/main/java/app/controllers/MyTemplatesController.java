@@ -20,6 +20,7 @@ public class MyTemplatesController {
 
         System.out.println("\nNotice: MyTemplatesController:servePage recognized request");
 
+        // get db conn from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live

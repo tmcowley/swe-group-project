@@ -20,6 +20,7 @@ public class EventCreateController {
 
         System.out.println("\nNotice: EventCreateController:servePage recognized request");
 
+        // get db conn, validator from singleton App instance
         Validator v = App.getInstance().getValidator();
         DbConnection db = App.getInstance().getDbConnection();
 

@@ -135,7 +135,11 @@ public class DbConnection{
         return getHost(host_id);
     }
 
-    // TODO: COMMENT
+    /**
+     * Create a template component in the database using a TemplateComponent object
+     * @param tc TemplateComponent object
+     * @return Stored template component
+     */
     public TemplateComponent createTemplateComponent(TemplateComponent tc){
         // component with an ID already exists
         if (tc.getId() != null) 
@@ -144,7 +148,16 @@ public class DbConnection{
         return createTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns(), tc.getTextResponse());
     }
 
-    // TODO: COMMENT
+    /**
+     * Create a template component in the database
+     * @param name Component name
+     * @param type Question, or radio, or checkbox
+     * @param prompt Question/ prompt
+     * @param options Array of radio or checkbox options
+     * @param optionsAns Array of boolean responses to options array e.g. t, f, t for checkbox type; empty if type is question
+     * @param textResponse Text response field following prompt (null if type radio or checkbox)
+     * @return Stored template component
+     */
     public TemplateComponent createTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -180,12 +193,25 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
-    // TODO: comments
+    /**
+     * Create an empty template in the database
+     * @param host_id Creator ID
+     * @param template_name Name of the template
+     * @param timestamp Created time
+     * @return Stored template instance
+     */
     public Template createEmptyTemplate(int host_id, String template_name, Timestamp timestamp){
         return createTemplate(host_id, template_name, timestamp, new ArrayList<TemplateComponent>());
     }
 
-    // TODO: comments
+    /**
+     * Create an empty template in the database
+     * @param host_id Creator ID
+     * @param template_name Name of the template
+     * @param timestamp Created time
+     * @param components An arraylist of linked template components
+     * @return Stored template instance
+     */
     public Template createTemplate(int host_id, String template_name, Timestamp timestamp, ArrayList<TemplateComponent> components){
         // generate unique template code
         String template_code = generateUniqueTemplateCode();
@@ -413,7 +439,11 @@ public class DbConnection{
     }
 
 
-    // TODO: comment
+    /**
+     * Create an instance of feedback against an event using feedback objects
+     * @param feedback Feedback object to be stored
+     * @return Feedback instance representing stored data
+     */
     public Feedback createFeedback(Feedback feedback){
 
         // convert key_results from String ArrayList to String array
@@ -425,11 +455,17 @@ public class DbConnection{
 
     /**
      * Create an instance of feedback against an event
-     * TODO: ADD param comments
      * @param participant_id Participant id of the participant who created this feedback
      * @param event_id Event id of the event which this feedback is written for
      * @param anonymous Whether this feedback is anonymous
      * @param time_stamp Time when the feedback was created
+     * @param results Results array to specific feedback queries
+     * @param weights Weights array (for weighted mean) associated with each result
+     * @param types Type array of query that produced each result
+     * @param keys Keys array that holds whether a result is a key result or not
+     * @param sub_weights Sub_weights array that holds weights (unprocessed then processed) associated with each set result in multiple choice queries
+     * @param compound Compound score of sentiment
+     * @param key_results an array of all key results
      * @return Feedback instance representing stored data
      */
     public Feedback createFeedback(int participant_id, int event_id, boolean anonymous, Timestamp time_stamp, String[] results, Float[] weights, byte[] types, Boolean[] keys, byte[][] sub_weights, Float compound, String[] key_results){
@@ -606,7 +642,12 @@ public class DbConnection{
         return participantInEventIsMuted(participant_id, event_id);
     }
 
-    // TODO comment
+    /**
+     * Check whether a template component is in a template
+     * @param component_id Component to be checked
+     * @param template_id Template which may contain this template component
+     * @return Method success state 
+     */
     public boolean componentInTemplate(int component_id, int template_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -636,6 +677,12 @@ public class DbConnection{
         return state;
     }
 
+    /**
+     * Add a template component to a template
+     * @param component_id Component 
+     * @param template_id Template which contains this template component
+     * @return Method success state 
+     */
     public Boolean addComponentToTemplate(int component_id, int template_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -804,7 +851,11 @@ public class DbConnection{
 
     // PRIVATE METHODS
 
-    // TODO: comment
+    /**
+     * Get a template component instance using template component ID
+     * @param tc_id Template component ID
+     * @return Found TemplateComponent instance
+     */
     private TemplateComponent getTemplateComponent(int tc_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -879,7 +930,7 @@ public class DbConnection{
 
     /**
      * Get an Template object from an template ID
-     * @param template_id template ID
+     * @param template_id Template ID
      * @return Template object with ID of template_id
      */
     private Template getTemplate(int template_id){
@@ -956,7 +1007,7 @@ public class DbConnection{
 
     /**
      * Get an Participant object from an participant ID
-     * @param participant_id participant ID
+     * @param participant_id Participant ID
      * @return Participant object with ID of participant_id
      */
     public Participant getParticipant(int participant_id){
@@ -992,7 +1043,7 @@ public class DbConnection{
 
     /**
      * Get an Event object from an event ID
-     * @param event_id event ID
+     * @param event_id Event ID
      * @return Event object with ID of event_id
      */
     private Event getEvent(int event_id){
@@ -1034,7 +1085,7 @@ public class DbConnection{
 
     /**
      * Get an archived Event object from an event ID
-     * @param event_id event ID
+     * @param event_id Event ID
      * @return ArchivedEvent object with ID of event_id
      */
     public ArchivedEvent getArchivedEvent(int event_id){
@@ -1072,7 +1123,11 @@ public class DbConnection{
         return archivedEvent;
     }
 
-    // TODO: comment
+    /**
+     * Get a feedback instance using feedback ID
+     * @param feedback_id Feedback ID
+     * @return Found feedback instance
+     */
     public Feedback getFeedback(int feedback_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1108,7 +1163,11 @@ public class DbConnection{
         return feedback;
     }
 
-    // TODO: comment
+    /**
+     * Get an array of feedback instances by event ID
+     * @param event_id Event ID
+     * @return An array of found feedback instances in this event
+     */
     public Feedback[] getFeedbacksByEventID(int event_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1143,8 +1202,13 @@ public class DbConnection{
         return foundFeedbacks;
     }
 
-    // TODO comment
-    // in descending order of time generated (newest first)
+    /**
+     * Get an array of feedback instances by event ID
+     * @param event_id Event ID
+     * @param participant_id Participant ID
+     * @return An array of found feedback instances by a specific participant in this event in descending order of time generated (newest first)
+     */
+    // 
     public Feedback[] getFeedbacksInEventByParticipantID(int event_id, int participant_id){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -1366,7 +1430,11 @@ public class DbConnection{
         return host_code;
     }
 
-    // TODO not working, and comment
+    /**
+     * Check whether an email address is already registered
+     * @param e_address Email address
+     * @return Return True if email address is exist
+     */
     public Boolean emailExists(String e_address){
         // ensure email is valid
         if (!validator.eAddressIsValid(e_address)) return false;
@@ -1376,7 +1444,7 @@ public class DbConnection{
         Boolean emailExists = false;
         try{
             String queryHostEmailExists = ""
-                + "SELECT EXISTS(SELECT 1 FROM host WHERE e_address=?::citext);";
+                + "SELECT EXISTS(SELECT * FROM host WHERE e_address=?);";
             stmt = this.conn.prepareStatement(queryHostEmailExists);
             stmt.setString(1, e_address);
             rs = stmt.executeQuery();

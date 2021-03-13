@@ -449,11 +449,6 @@ public class DbConnection{
      * @param end_time End time of the event
      * @return Event instance representing stored data
      */
-
-    // String createEvent = ""
-    // + "INSERT INTO event(host_id, template_id, title, description, type, start_time, end_time, event_code) "
-    // + "VALUES(?, ?, ?, ?, ?::event_type, ?, ?, ?) "
-    // + "RETURNING event_id";
     public Event createEvent(int host_id, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
         // generate unique event code
         String event_code = generateUniqueEventCode();

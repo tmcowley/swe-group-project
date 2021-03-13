@@ -102,6 +102,36 @@ public class DBConnTest {
         db.deleteHost(commonHostID);
     }
 
+    //@Test
+    public void test_createEvent() {
+        // host dummy data: first, last names and email
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+
+        // generate a host (for event generation)
+        Host testHost = db.createHost(f_name, l_name, e_address);
+        assertFalse(testHost == null);
+        int testHostID = testHost.getHostID();
+
+        // generate an event
+        Event testEvent = db.createEvent(testHostID, "title", "desc", "lecture", ts, ts);
+        assertFalse(testEvent == null);
+        String eventCode = testEvent.getEventCode();
+        int testEventID = testEvent.getEventID();
+
+        Event localEvent = new Event(testEventID, testHostID, 0, "title", "desc", "lecture", ts, ts, eventCode);
+
+        // ensure local and stored events match
+        assertTrue(localEvent.equals(testEvent));
+
+        // DB cleanup
+        db.deleteHost(testHostID);
+        db.deleteHost(testEventID);
+        
+    }
+
     @Test
     public void test_participantInEvent_addParticipantToEvent() {
         // system object dummy data

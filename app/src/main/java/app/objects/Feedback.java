@@ -240,7 +240,7 @@ public class Feedback {
             return false;
         }
         // ensure timestamps are equal
-        if (this.timestamp != that.getTimestamp()){
+        if (!this.timestamp.equals(that.getTimestamp())){
             return false;
         }
         // feedback instances considered equal

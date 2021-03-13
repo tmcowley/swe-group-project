@@ -54,11 +54,17 @@ public class EventCreateController {
         int templateCount = 0;
         if (templates.length != 0) {
             String[] templateCodes = new String[templates.length];
+            String[] templateNames = new String[templates.length];
+            int[] templateCounts = new int[templates.length];
             for (Template template : templates) {
                 templateCodes[templateCount] = template.getTemplateCode();
+                templateNames[templateCount] = template.getTemplateName();
+                templateCounts[templateCount] = templateCount;
                 templateCount++;
             }
             model.put("templateCodes", templateCodes);
+            model.put("templateNames", templateNames);
+            model.put("templateCounts", templateCounts);
         }
 
         model.put("templateCount", templateCount);

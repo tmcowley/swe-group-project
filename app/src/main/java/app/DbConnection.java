@@ -252,6 +252,9 @@ public class DbConnection{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
+
+        System.out.println("createQuestionTemplateComponent inputs: name" + name + ", type: " + type + ", prompt: " + prompt + ", text response: " + textResponse);
+
         try{
             // create empty template object
             String createTemplateComponent = ""
@@ -276,6 +279,10 @@ public class DbConnection{
         } finally {
             try { if (stmt != null) stmt.close(); } catch (Exception e) {};
             try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+        }
+
+        if (tc_id == null){
+            System.out.println("createQuestionTemplateComponent: tc_id is null -> not collected");
         }
 
         // get Template object by ID

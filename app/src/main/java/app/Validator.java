@@ -463,9 +463,11 @@ public class Validator {
         if (!stringIsValid(component.getName())){
             return false;
         }
+        // ensure component type is valid (is question, radio or checkbox)
         if (!componentTypeIsValid(component.getType())){
             return false;
         }
+        // ensure prompt is not null - when unfilled, should be empty string
         if (component.getPrompt() == null) {
             return false;
         }
@@ -475,21 +477,25 @@ public class Validator {
 
         // case the component is of radio or checkbox type
         if (componentType == "radio" || componentType == "checkbox") {
+            // options and options ans arrays should be populated
             if (component.getOptions() == null){
                 return false;
             }
             if (component.getOptionsAns() == null){
                 return false;
             }
+            // text response should be null since it isn't necessary
             if (component.getTextResponse() != null){
                 return false;
             }
+            // ensure options and options answer arrays are equal in length
             if (component.getOptions().length != component.getOptionsAns().length){
                 return false;
             }
         }
         // case the component is of question type
         else if (componentType == "question") {
+            // ensure options and options answer arrays are empty
             if (component.getOptions() != null){
                 return false;
             }

@@ -253,7 +253,8 @@ public class DbConnection{
         ResultSet rs = null;
         Integer tc_id = null;
 
-        System.out.println("createQuestionTemplateComponent inputs: name" + name + ", type: " + type + ", prompt: " + prompt + ", text response: " + textResponse);
+        // debugging statements
+        // System.out.println("createQuestionTemplateComponent inputs: name" + name + ", type: " + type + ", prompt: " + prompt + ", text response: " + textResponse);
 
         try{
             // create empty template object
@@ -282,7 +283,8 @@ public class DbConnection{
         }
 
         if (tc_id == null){
-            System.out.println("createQuestionTemplateComponent: tc_id is null -> not collected");
+            System.out.println("Error in DB: createQuestionTemplateComponent: tc_id is null -> inputs not collected");
+            return null;
         }
 
         // get Template object by ID

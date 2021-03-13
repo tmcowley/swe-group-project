@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 // Unit tests against SentimentAnalyser.java
 public class SentimentTest {
 
-    // Feedback instances shared by all methods
+    // global Feedback instances
     Feedback test;
     Feedback test2;
 
@@ -43,6 +43,7 @@ public class SentimentTest {
         test2 = new Feedback(0, 0, results, weights, types, keys, sub_weights, false, timestamp);
 
         try {
+            // run sentiment analysis on both feedback objects
             SentimentAnalyser.main(test);
             SentimentAnalyser.main(test2);
         } catch (Exception e) {
@@ -253,6 +254,7 @@ public class SentimentTest {
 
     @Test
     public void test_main_consistency() throws IOException {
+        // assertTrue(test.equals(test2));
         assertTrue(test.getWeights().equals(test2.getWeights()));
         assertTrue(test.getCompound().equals(test2.getCompound()));
         assertTrue(test.getKey_Results().equals(test2.getKey_Results()));

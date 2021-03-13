@@ -190,33 +190,60 @@ public class Feedback {
         this.key_results.add(new_key_result);
     }
     /**
-     * compares 2 feedback objects
-     * @param that
-     * @return True or False
+     * null-safe feedback comparison
+     * @param that other feedback
+     * @return this equals that
      */
     public boolean equals(Feedback that) {
-        if (this.event_id != that.getEventID())
+        // ensure other feedback is not null
+        if (that == null){
             return false;
-        if (this.participant_id != that.getParticipantID())
+        }
+        // ensure feedback IDs match
+        if (this.feedback_id != that.getFeedbackID()){
             return false;
-        if (this.feedback_id != that.getFeedbackID())
+        }
+        // ensure event IDs match
+        if (this.event_id != that.getEventID()){
             return false;
-        if (!Arrays.equals(this.results, that.getResults()))
+        }
+        // ensure participant IDs match
+        if (this.participant_id != that.getParticipantID()){
             return false;
-        if (!Arrays.equals(this.weights, that.getWeights()))
+        }
+        // ensure results arrays are equal
+        if (!Arrays.equals(this.results, that.getResults())){
             return false;
-        if (!Arrays.equals(this.types, that.getTypes()))
+        }
+        // ensure weights arrays are equal
+        if (!Arrays.equals(this.weights, that.getWeights())){
             return false;
-        if (!Arrays.equals(this.keys, that.getKeys()))
+        }
+        // ensure types arrays are equal
+        if (!Arrays.equals(this.types, that.getTypes())){
             return false;
-        if (!this.compound.equals(that.getCompound()))
+        }
+        // ensure keys arrays are equal
+        if (!Arrays.equals(this.keys, that.getKeys())){
             return false;
-        if (this.key_results != that.getKey_Results())
+        }
+        // ensure compounds are equal
+        if (!this.compound.equals(that.getCompound())){
             return false;
-        if (this.anonymous != that.getAnonymous())
+        }
+        // ensure key results arrays are equal
+        if (this.key_results != that.getKey_Results()){
             return false;
-        if (this.timestamp != that.getTimestamp())
+        }
+        // ensure anonymity states are equal
+        if (this.anonymous != that.getAnonymous()){
             return false;
+        }
+        // ensure timestamps are equal
+        if (this.timestamp != that.getTimestamp()){
+            return false;
+        }
+        // feedback instances considered equal
         return true;
     }
 }

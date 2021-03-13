@@ -2,20 +2,21 @@ package app;
 
 import app.objects.*;
 
+// testing
+import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-
-import org.junit.Test;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-// used in unique e_address generation
+// used for unique email address generation
 import org.apache.commons.lang3.RandomStringUtils;
 
 // Unit tests against DBConnection.java
 public class DBConnTest {
 
+    // global DBConn and Validator; set by constructor
     DbConnection db;
     Validator validator;
 
@@ -23,7 +24,8 @@ public class DBConnTest {
         try {
             db = new DbConnection();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            // database connection failed; most likely isn't running
+            System.out.println(e.getMessage().toUpperCase());
             throw e;
         }
         validator = new Validator();
@@ -31,19 +33,19 @@ public class DBConnTest {
 
     @Test
     public void testCodeGeneration() {
-        // Test ten uniquely generated event codes
+        // test ten uniquely generated event codes
         for (int i = 0; i < 10; i++) {
             String event_code = db.generateUniqueEventCode();
             assertTrue(validator.eventCodeIsValid(event_code));
         }
 
-        // Test ten unique host codes
+        // test ten unique host codes
         for (int i = 0; i < 10; i++) {
             String host_code = db.generateUniqueHostCode();
             assertTrue(validator.hostCodeIsValid(host_code));
         }
 
-        // Test ten unique template codes
+        // test ten unique template codes
         for (int i = 0; i < 10; i++) {
             String template_code = db.generateUniqueTemplateCode();
             assertTrue(validator.templateCodeIsValid(template_code));
@@ -61,18 +63,19 @@ public class DBConnTest {
         assertFalse(storedParticipant == null);
 
         // generate local version using local variables
-        int commonPartID = storedParticipant.getParticipantID();
-        Participant localParticipant = new Participant(commonPartID, f_name, l_name);
+        int commonParticipantID = storedParticipant.getParticipantID();
+        Participant localParticipant = new Participant(commonParticipantID, f_name, l_name);
+        assertFalse(localParticipant == null);
 
         // get stored variant of participant object
-        storedParticipant = db.getParticipant(commonPartID);
+        storedParticipant = db.getParticipant(commonParticipantID);
         assertFalse(storedParticipant == null);
 
         // ensure local and stored participants match
         assertTrue(localParticipant.equals(storedParticipant));
 
         // DB cleanup
-        db.deleteParticipant(commonPartID);
+        db.deleteParticipant(commonParticipantID);
     }
 
     @Test
@@ -186,11 +189,13 @@ public class DBConnTest {
         assertFalse(testHost == null);
         int testHostID = testHost.getHostID();
 
-        // create template and template component
+        // create template
         TemplateComponent component = db.createTemplateComponent("name", "question", "prompt", null, null,
                 "textResponse");
         assertFalse(component == null);
         int component_id = component.getId();
+
+        // create template component
         Template testTemplate = db.createTemplate(testHostID, "template-name", timestamp_now, null);
         assertFalse(testTemplate == null);
         int template_id = testTemplate.getTemplateID();
@@ -220,8 +225,8 @@ public class DBConnTest {
             // pick valid email
             e_address = "test@test.com";
 
-            // append 8-digit length random alphanumeric string to avoid collision
-            e_address = e_address.concat(RandomStringUtils.randomAlphanumeric(8).toLowerCase());
+            // append 2-digit length random alphanumeric string to avoid collision
+            e_address = e_address.concat(RandomStringUtils.randomAlphanumeric(2).toLowerCase());
         } while (db.emailExists(e_address));
 
         // ensure host email has not collided

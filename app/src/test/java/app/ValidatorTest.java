@@ -169,16 +169,18 @@ public class ValidatorTest {
 
     @Test
     public void test_isHostValid() {
-        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com", "name", "name", false);
-
-        assertTrue(v.isHostValid(testHost));
+        // create a valid host
+        Host validHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com", "name", "name", false);
+        // ensure valid host is recognised as valid
+        assertTrue(v.isHostValid(validHost));
     }
 
     @Test
     public void test_isParticipantValid() {
-        Participant testParticipant = new Participant(0001, "name", "name", false);
-
-        assertTrue(v.isParticipantValid(testParticipant));
+        // create a valid participant
+        Participant validParticipant = new Participant(0001, "name", "name", false);
+        // ensure valid participant is recognised as valid
+        assertTrue(v.isParticipantValid(validParticipant));
     }
 
     @Test

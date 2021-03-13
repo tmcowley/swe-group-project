@@ -132,9 +132,9 @@ public class Event {
             return false;
         if (!this.type.equals(that.getType()))
             return false;
-        if (this.start_time != that.getStartTime())
+        if (!this.start_time.equals(that.getStartTime()))
             return false;
-        if (this.end_time != that.getEndTime())
+        if (!this.end_time.equals(that.getEndTime()))
             return false;
         if (!this.eventCode.equals(that.getEventCode()))
             return false;

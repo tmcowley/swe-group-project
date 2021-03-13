@@ -102,7 +102,7 @@ public class DBConnTest {
         db.deleteHost(commonHostID);
     }
 
-    //@Test
+    @Test
     public void test_createEvent() {
         // host dummy data: first, last names and email
         String f_name = "testFName";

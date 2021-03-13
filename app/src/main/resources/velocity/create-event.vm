@@ -25,7 +25,7 @@
             <select id="eventTemplate" name="eventTemplate">
         #if ($templateCount>0)
             #foreach ($i in $templateCounts)
-                <option value=$templateCodes.get($i)>$templateNames.get($i)</option>
+                <option value=$templates.get($i).getTemplateCode()>$templates.get($i).getTemplateName()</option>
             #end
         #end
                 <option value="noTemplate">Do not use a template</option>

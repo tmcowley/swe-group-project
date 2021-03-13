@@ -1,12 +1,12 @@
 -- RESET, DROPS (order important)
 DROP TABLE IF EXISTS participant_in_event;
+DROP TABLE IF EXISTS component_in_template;
 DROP TABLE IF EXISTS template_component;
 DROP TABLE IF EXISTS feedback;
 DROP TABLE IF EXISTS archived_event;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS participant;
 DROP TABLE IF EXISTS template;
-DROP TABLE IF EXISTS component_in_template;
 DROP TABLE IF EXISTS host;
 
 DROP EXTENSION IF EXISTS citext;

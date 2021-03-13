@@ -105,6 +105,7 @@ public class App {
                 post("/edit/code", APIController.createTemplate);
                 post("/edit/code/create-empty-component", APIController.createEmptyComponent);
                 post("/edit/code/delete-template", APIController.deleteTemplate);
+                post("/edit/code/delete-template-component", APIController.deleteTemplateComponent);
             });
 
         });

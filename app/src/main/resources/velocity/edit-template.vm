@@ -25,10 +25,11 @@
                         formaction="/host/templates/edit/code"
                         method="post">
                     <a href="#">Delete</a>
+
                     <a href="#">Back</a>
                 </div>
                 <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
-                    <input class="formInput" name="hostCode" type="hidden" value="$template.getTemplateCode()">
+                    <input class="formInput" name="templateCode" type="hidden" value="$template.getTemplateCode()">
                     #if($template.getComponents().size() == 0)
                         <div class="feedbackElementEmpty">
                             <h2>There are no elements in the current template - use the buttons below to add some.</h2>
@@ -45,7 +46,7 @@
                             <input class="formInput" type="hidden" value="$component.getType()">
                             <!-- <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea> -->
                         </div>
-                        <button class="feedbackDelButton"><img src="/images/delete-icon.png"/></button>
+                        <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <!-- feedbackElementFooter will contain extra properties to be set -->
                         <div class="feedbackElementFooter">
                             <input type="checkbox" id="consider1" name="consider1" value="Consider">
@@ -78,7 +79,7 @@
                                 <div class="formInputBulletIcon">&bull;</div>
                             #end
                         </div>
-                        <button class="feedbackDelButton"><img src="/images/delete-icon.png"/></button>
+                        <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
                             <input type="checkbox" id="consider3" name="consider3" value="Consider">
                             <label for="consider3">
@@ -110,7 +111,7 @@
                                     max="3"><br>
                             #end
                         </div>
-                        <button class="feedbackDelButton"><img src="/images/delete-icon.png"/></button>
+                        <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
                             <input type="checkbox" id="consider2" name="consider2" value="Consider">
                             <label for="consider2">

@@ -1107,12 +1107,10 @@ public class DbConnection{
             
             // works but has extra fields
             String selectComponentsByID = ""
-                + "SELECT * FROM template_component "
-                + "INNER JOIN component_in_template "
-                    + "ON (template_component.tc_id = component_in_template.component_id) "
-                + "INNER JOIN template "
-                    + "ON (component_in_template.template_id = template.template_id) " 
-                + "WHERE (template.template_id = ?);";
+                + "SELECT * FROM template_component c "
+                + "INNER JOIN component_in_template ct " 
+                + "ON (c.tc_id = ct.component_id) "
+                + "WHERE (ct.template_id = ?);";
 
             stmt1 = this.conn.prepareStatement(selectTemplateByID);
             stmt1.setInt(1, template_id);

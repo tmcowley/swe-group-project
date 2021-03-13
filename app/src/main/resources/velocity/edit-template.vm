@@ -146,7 +146,7 @@
                     <button name="componentType" value="checkbox">Add Tickboxes</button>
                 </form>
 
-                <!-- <a href="#">Add Emojis</a> -->
+                <!-- <a href="#">Add Emojis</a>
                 <a href="#">Add Radio Buttons</a>
                 <a href="#">Add Tickboxes</a>
                 -->

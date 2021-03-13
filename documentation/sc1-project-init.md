@@ -90,14 +90,45 @@ It was discovered during sentiment analysis development that the Maven packaged 
 ```
 <dependencies>
     <dependency>
-        <groupId>com.vader.sentiment</groupId>
-        <artifactId>vader-sentiment-analyzer</artifactId>
-        <version>1.0</version>
-        <scope>system</scope>
-        <systemPath>${basedir}/lib/vader-sentiment-analyzer-1.0.jar</systemPath>
+      <groupId>com.vader.sentiment</groupId>
+      <artifactId>vader-sentiment-analyzer</artifactId>
+      <version>1.0</version>
     </dependency>
 ...
 </dependencies>
+
+<build>
+  <pluginManagement>
+      <plugins>
+        <!-- see https://stackoverflow.com/questions/10935135/maven-and-adding-jars-to-system-scope -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+          <executions>
+            <execution>
+              <id>install-external</id>
+              <phase>clean</phase>
+              <configuration>
+                  <file>${basedir}/lib/vader-sentiment-analyzer-1.0.jar</file>
+                  <repositoryLayout>default</repositoryLayout>
+                  <groupId>com.vader.sentiment</groupId>
+                  <artifactId>vader-sentiment-analyzer</artifactId>
+                  <version>1.0</version>
+                  <packaging>jar</packaging>
+                  <generatePom>true</generatePom>
+              </configuration>
+              <goals>
+                  <goal>install-file</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        ...
+    </plugins>
+  </pluginManagement>
+</build>
+...
 ```
 <br>
 

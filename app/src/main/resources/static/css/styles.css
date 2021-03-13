@@ -458,6 +458,19 @@ textarea {
     text-align: center;
 }
 
+.templateControlsSection button, .templateAddControlsSection button {
+    background-color: #552d62;
+    color: white;
+    border: 1px solid #451c52;
+    border-radius: 40px;
+    padding: 10px 40px;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    margin: 10px;
+    text-align: center;
+}
+
 #submitButtonTemplate {
     background-color: #552d62;
     color: white;

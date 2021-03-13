@@ -145,6 +145,7 @@ public class APIController {
             response.redirect("/host/create-event");
             return null;
         }
+        // TODO: broken
         // if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
         //     session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
         //     response.redirect("/host/create-event");
@@ -166,7 +167,7 @@ public class APIController {
         // ensure event created is valid
         if (!v.isEventValid(event)){
             // return not found if event is not created or input is not valid
-            session.attribute("errorMessageCreateEvent", "Error: event not created or considered invalid - check inputs");
+            session.attribute("errorMessageCreateEvent", "Error: event not created or invalid - check inputs");
             response.redirect("/host/create-event");
             return null;
         }

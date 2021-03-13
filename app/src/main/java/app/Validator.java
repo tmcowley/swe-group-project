@@ -264,36 +264,47 @@ public class Validator {
     public boolean isEventValid(Event event) {
         // ensure event is not null
         if (event == null) {
-            return false;
-        }
-        // ensure event title is valid
-        if (!eventTitleIsValid(event.getTitle())) {
-            return false;
-        }
-        // ensure event description is valid
-        if (!eventDescriptionIsValid(event.getDescription())) {
-            return false;
-        }
-        // ensure event type is valid
-        if (!eventTypeIsValid(event.getType())) {
-            return false;
-        }
-        // ensure event code is valid
-        if (!eventCodeIsValid(event.getEventCode())) {
+            System.out.println("here");
             return false;
         }
         // ensure event identifier is valid
         if (!idIsValid(event.getEventID())) {
+            System.out.println("event id");
             return false;
         }
         // ensure event author (host) ID is valid
         if (!idIsValid(event.getHostID())) {
+            System.out.println("host id");
             return false;
         }
-        if (event.getTemplateID() == -1 || idIsValid(event.getTemplateID())) {
-            return true;
+        // ensure either template does not exist, or does exist and is valid
+        Integer template_id = event.getTemplateID();
+        if ((template_id != null) && (!idIsValid(template_id))) {
+            System.out.println("template id");
+            return false;
         }
-        return false;
+        // ensure event title is valid
+        if (!eventTitleIsValid(event.getTitle())) {
+            System.out.println("title");
+            return false;
+        }
+        // ensure event description is valid
+        if (!eventDescriptionIsValid(event.getDescription())) {
+            System.out.println("desc");
+            return false;
+        }
+        // ensure event type is valid
+        if (!eventTypeIsValid(event.getType())) {
+            System.out.println("type");
+            return false;
+        }
+        // ensure event code is valid
+        if (!eventCodeIsValid(event.getEventCode())) {
+            System.out.println("event code");
+            return false;
+        }
+        // event is valid if each attribute is valid
+        return true;
     }
 
     /**
@@ -583,9 +594,8 @@ public class Validator {
             return false;
         }
         // ensure component ID is valid (if set)
-        if (component.getId() != null) {
-            if (!idIsValid(component.getId()))
-                return false;
+        if (component.getId() != null && !idIsValid(component.getId())) {
+            return false;
         }
         // ensure component name is valid (not null, empty, or blank)
         if (!stringIsValid(component.getName())) {
@@ -621,7 +631,7 @@ public class Validator {
                 return false;
             }
         }
-        // case the component is of question type
+        // case the component is of type: question
         else if (componentType == "question") {
             // ensure options and options answer arrays are empty
             if (component.getOptions() != null) {
@@ -643,8 +653,9 @@ public class Validator {
      */
     public boolean componentTypeIsValid(String type) {
         // ensure component type is not null
-        if (type == null)
+        if (type == null){
             return false;
+        }
         // ensure type is either "question", "radio", or "checkbox"
         return (type.equals("question") || type.equals("radio") || type.equals("checkbox"));
     }
@@ -656,8 +667,11 @@ public class Validator {
      * @return lower-case event code (null if invalid)
      */
     public String sanitizeEventCode(String eventCode) {
-        if (!eventCodeIsValid(eventCode))
+        // ensure event code is valid
+        if (!eventCodeIsValid(eventCode)){
             return null;
+        }
+        // return lowercase variant
         return eventCode.toLowerCase();
     }
 
@@ -668,8 +682,11 @@ public class Validator {
      * @return lower-case template code (null if invalid)
      */
     public String sanitizeTemplateCode(String templateCode) {
-        if (!templateCodeIsValid(templateCode))
+        // ensure template code is valid
+        if (!templateCodeIsValid(templateCode)){
             return null;
+        }
+        // return lowercase variant
         return templateCode.toLowerCase();
     }
 
@@ -680,51 +697,11 @@ public class Validator {
      * @return lower-case host code (null if invalid)
      */
     public String sanitizeHostCode(String hostCode) {
-        if (!hostCodeIsValid(hostCode))
+        // ensure host code is valid
+        if (!hostCodeIsValid(hostCode)){
             return null;
+        }
+        // return lowercase variant
         return hostCode.toLowerCase();
     }
 }
-
-// DEPRECIATED METHODS
-
-/*
- * // Check if IP address is valid // @param ip_address IP address to be checked
- * // @return IP address validity state // public boolean
- * ipAddressIsValid(String ip_address){ if (StringUtils.isBlank(ip_address))
- * return false; // ip-address regular expression - source? ... String regex =
- * "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\." +
- * "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
- * +"(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." +
- * "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"; if (!ip_address.matches(regex))
- * return false; return true; }
- */
-
-// /**
-// * Check if the given host code is valid:
-// * non-null, alpha-numeric (and space) characters only,
-// * of the form [word word word word] with each word in word-list
-// * @param hostCode host code to be checked
-// * @return host code validity state
-// */
-// public boolean hostCodeIsValid(String hostCode){
-// if (StringUtils.isBlank(hostCode))
-// // host code is null, empty or whitespace only
-// return false;
-// if (hostCode.length() > (peakWordSizeInList*4 + 3))
-// // host code exceeds upper-bound
-// return false;
-// if (StringUtils.countMatches(hostCode, " ") != 3)
-// // host code not of format: [word word word word]
-// return false;
-// if (!StringUtils.isAlphaSpace(hostCode)){
-// // illegal character in host code
-// return false;
-// }
-// String[] hostCodeArray = hostCode.split(" ");
-// for (String word : hostCodeArray){
-// if (!wordListHashSet.contains(word))
-// return false;
-// }
-// return true; // host code is valid
-// }

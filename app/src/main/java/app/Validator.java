@@ -157,8 +157,8 @@ public class Validator {
     }
 
     /**
-     * check if a string is valid:
-     * not null, empty, or blank
+     * check if a string is valid: not null, empty, or blank
+     * 
      * @param string string being tested
      * @return string validity state
      */
@@ -170,8 +170,7 @@ public class Validator {
     }
 
     /**
-     * Check if event title is valid: 
-     * contains alpha-numeric (and blank) characters
+     * Check if event title is valid: contains alpha-numeric (and blank) characters
      * only
      * 
      * @param data title to be checked
@@ -180,7 +179,7 @@ public class Validator {
     public boolean eventTitleIsValid(String data) {
 
         // ensure data is not null, blank, or empty
-        if (StringUtils.isBlank(data)){
+        if (StringUtils.isBlank(data)) {
             return false;
         }
 
@@ -220,8 +219,7 @@ public class Validator {
     }
 
     /**
-     * null-safe event type validity check;
-     * event only allows five types: 'lecture',
+     * null-safe event type validity check; event only allows five types: 'lecture',
      * 'seminar', 'conference', 'workshop', 'other'
      * 
      * @param data type to be checked
@@ -229,11 +227,11 @@ public class Validator {
      */
     public boolean eventTypeIsValid(String data) {
         // ensure event type is not null
-        if (data == null){
+        if (data == null) {
             return false;
         }
-        if ((data.equals("lecture") || data.equals("seminar") || data.equals("conference")
-                || data.equals("workshop") || data.equals("other"))) {
+        if ((data.equals("lecture") || data.equals("seminar") || data.equals("conference") || data.equals("workshop")
+                || data.equals("other"))) {
             return true;
         }
         return false;
@@ -246,11 +244,10 @@ public class Validator {
      * @return ArchivedEvent validity state
      */
     public boolean isArchivedEventValid(ArchivedEvent archivedEvent) {
-        if (archivedEvent == null){
+        if (archivedEvent == null) {
             return false;
         }
-        if (eventTitleIsValid(archivedEvent.getTitle())
-                && eventDescriptionIsValid(archivedEvent.getDescription())
+        if (eventTitleIsValid(archivedEvent.getTitle()) && eventDescriptionIsValid(archivedEvent.getDescription())
                 && eventDescriptionIsValid(archivedEvent.getType()) && idIsValid(archivedEvent.getEventID())
                 && idIsValid(archivedEvent.getHostID())) {
             return true;
@@ -258,42 +255,39 @@ public class Validator {
         return false;
     }
 
-    // (0001, 0001, 0001, "Lecture 1", "event desc", "seminar", now, now, "CCCC");
-
     /**
-     * null-safe check for event validity
-     * considers every attribute in event
+     * null-safe check for event validity considers every attribute in event
      * 
      * @param event Event instance to be checked
      * @return Event validity state
      */
     public boolean isEventValid(Event event) {
         // ensure event is not null
-        if (event == null){
+        if (event == null) {
             return false;
         }
         // ensure event title is valid
-        if (!eventTitleIsValid(event.getTitle())){
+        if (!eventTitleIsValid(event.getTitle())) {
             return false;
         }
         // ensure event description is valid
-        if (!eventDescriptionIsValid(event.getDescription())){
+        if (!eventDescriptionIsValid(event.getDescription())) {
             return false;
         }
         // ensure event type is valid
-        if (!eventTypeIsValid(event.getType())){
+        if (!eventTypeIsValid(event.getType())) {
             return false;
         }
         // ensure event code is valid
-        if (!eventCodeIsValid(event.getEventCode())){
+        if (!eventCodeIsValid(event.getEventCode())) {
             return false;
         }
         // ensure event identifier is valid
-        if (!idIsValid(event.getEventID())){
+        if (!idIsValid(event.getEventID())) {
             return false;
         }
         // ensure event author (host) ID is valid
-        if (!idIsValid(event.getHostID())){
+        if (!idIsValid(event.getHostID())) {
             return false;
         }
         if (event.getTemplateID() == -1 || idIsValid(event.getTemplateID())) {
@@ -303,134 +297,268 @@ public class Validator {
     }
 
     /**
-     * TODO: validate more data TODO: Check all values in sub_weights are between 0
-     * and 7 TODO: Check results, weights, types, keys are of the same length and
-     * that length is at least 1 TODO: check sub_weights holds as many arrays as
-     * results (and the other arrays) hold items - (sub weights has x rows) TODO:
-     * check each array held in sub_weights is of size 5 - (sub weights has 5
-     * columns) TODO: add a test that checks either all values in weights are int
-     * between 0 and 7 or all values sum to 1.0 Check if Feedback is valid: check
-     * every data inside
+     * feedback instance validity check
      * 
      * @param feedback Feedback instance to be checked
-     * @return Feedback validity state
+     * @return feedback validity state
      */
     public boolean isFeedbackValid(Feedback feedback) {
-        if (feedback == null)
+        // ensure feedback object is not null
+        if (feedback == null) {
             return false;
-
-        // validate IDs:
-        if (!idIsValid(feedback.getFeedbackID()))
-            return false;
-        if (!idIsValid(feedback.getEventID()))
-            return false;
-        if (!idIsValid(feedback.getParticipantID()))
-            return false;
-
-        // validate Sentiment fields
-
-        // validates results array
-        String[] results = feedback.getResults();
-        if (ArrayUtils.isEmpty(results))
-            return false;
-
-        for (int i = 0; i < results.length; i++) {
-            if (StringUtils.isBlank(results[i]))
-                return false;
         }
 
-        // checks type array
-        byte[] types = feedback.getTypes();
-        for (int i = 0; i < types.length; i++) {
-            if (types[i] > 2 || types[i] < 0)
-                return false;
+        // validate fields: IDs:
+        if (!idIsValid(feedback.getFeedbackID())) {
+            return false;
         }
-
-        // //checks weights array
-        // Float[] weights = feedback.getWeights();
-        // float total = 0;
-        // for (int i = 0; i < weights.length; i++){
-        // if (weights[i] > 7.0 || weights[i] < 0.0)
-        // return false;
-        // total += weights[i];
-        // }
-
+        if (!idIsValid(feedback.getEventID())) {
+            return false;
+        }
+        if (!idIsValid(feedback.getParticipantID())) {
+            return false;
+        }
+        // note: anonymous boolean already valid
         // validate timestamp
-        if (feedback.getTimestamp() == null)
+        if (feedback.getTimestamp() == null) {
             return false;
+        }
+
+        // ensure arrays are not null, nor empty
+        if (ArrayUtils.isEmpty(feedback.getTypes())) {
+            System.out.println("Error: main array:types is null or empty");
+            return false;
+        }
+        if (ArrayUtils.isEmpty(feedback.getResults())) {
+            System.out.println("Error: main array:results is null or empty");
+            return false;
+        }
+        if (ArrayUtils.isEmpty(feedback.getKeys())) {
+            System.out.println("Error: main array:keys is null or empty");
+            return false;
+        }
+        if (ArrayUtils.isEmpty(feedback.getWeights())) {
+            System.out.println("Error: main array:weights is null or empty");
+            return false;
+        }
+
+        // collect arrays from feedback instance
+        String[] results = feedback.getResults();
+        Float[] weights = feedback.getWeights();
+        byte[] types = feedback.getTypes();
+        Boolean[] keys = feedback.getKeys();
+        byte[][] sub_weights = feedback.getSub_Weights();
+
+        // ensure length of arrays: results, weights, types, and keys are all equal
+        int array_length = results.length;
+        if (weights.length != array_length) {
+            return false;
+        }
+        if (types.length != array_length) {
+            return false;
+        }
+        if (keys.length != array_length) {
+            return false;
+        }
+        if (sub_weights.length != array_length){
+            return false;
+        }
+
+        // get compound (sentiment field)
+        Float compound = feedback.getCompound();
+        // ensure compound score is either null, or falls between -1 and 1
+        if ((compound != null) && (compound < -1 || compound > 1)){
+            return false;
+        }
+
+        // validate results array
+        for (int i = 0; i < results.length; i++) {
+            if (StringUtils.isBlank(results[i])) {
+                return false;
+            }
+        }
+
+        // validate weights array
+        if (!isNormalisedWeightsValid(weights) && !isNonNormalisedWeightsValid(weights)){
+            return false;
+        }
+
+        // validate types array
+        for (int i = 0; i < types.length; i++) {
+            if (types[i] > 2 || types[i] < 0) {
+                return false;
+            }
+        }
+
+        // TODO: Check all values in sub_weights are between 0 and 7
+        // validate sub-weights
+        for (Float weight : weights) {
+            // ensure no weight is null
+            if (weight == null) {
+                return false;
+            }
+            // ensure no weight is out of bounds
+            if (weight < 0 || weight > 7) {
+                return false;
+            }
+        }
+
+        // ensure sub_weights array is valid
+        // (each internal byte array is of length 5)
+        for (byte[] sub_weight : sub_weights){
+            if (sub_weight.length != 5){
+                return false;
+            }
+        }
+
+        // feedback is valid if all fields are valid
+        return true;
+    }
+
+    /**
+     * check if a non-normalised weights array is valid; 
+     * ensure every weight falls within 0-7
+     * 
+     * @param weights weights array
+     * @return valid state
+     */
+    private boolean isNonNormalisedWeightsValid(Float[] weights) {
+        // weights already found to be not null, nor empty
+
+        // ensure every weight is in-between 0 and 7 (closed interval)
+        for (Float weight : weights) {
+            // ensure no weight is null
+            if (weight == null) {
+                return false;
+            }
+            // ensure no weight is out of bounds
+            if (weight < 0 || weight > 7) {
+                return false;
+            }
+        }
 
         return true;
     }
 
     /**
-     * null-safe host validity check
+     * check if a normalised weights array is valid; 
+     * ensure every weight sums to 1.0
+     * 
+     * @param weights weights array
+     * @return valid state
+     */
+    private boolean isNormalisedWeightsValid(Float[] weights) {
+        // weights already found to be not null, nor empty
+
+        // ensure every weight sums to 1.0
+        float weight_sum = 0;
+        for (Float weight : weights) {
+            // ensure no weight is null
+            if (weight == null) {
+                return false;
+            }
+            weight_sum += weight;
+        }
+
+        // ensure every weight sums to 1.0 (account for loss of precision)
+        return (weight_sum > 0.99 && weight_sum < 1.01);
+    }
+
+    /**
+     * host instance validity check
      * 
      * @param host Host instance to be checked
      * @return Host validity state
      */
     public boolean isHostValid(Host host) {
-        // ensure host is valid
-        if (host == null){
+        // ensure host is not null
+        if (host == null) {
             return false;
         }
-        if (hostCodeIsValid(host.getHostCode()) && eAddressIsValid(host.getEAddress())
-                && nameIsValid(host.getFName()) && nameIsValid(host.getLName()) && idIsValid(host.getHostID())) {
-            return true;
+        // ensure host ID is valid
+        if (!idIsValid(host.getHostID())) {
+            return false;
         }
-        return false;
+        // ensure host code is valid
+        if (!hostCodeIsValid(host.getHostCode())) {
+            return false;
+        }
+        // ensure host email address is valid
+        if (!eAddressIsValid(host.getEAddress())) {
+            return false;
+        }
+        // ensure host first-name is valid
+        if (!nameIsValid(host.getFName())) {
+            return false;
+        }
+        // ensure host last-name is valid
+        if (!nameIsValid(host.getLName())) {
+            return false;
+        }
+        // host is true if all of its fields are true
+        return true;
     }
 
     /**
-     * Check if Participant is valid: check every data inside
+     * participant instance validity check
      * 
      * @param participant Participant instance to be checked
-     * @return Participant validity state
+     * @return participant validity state
      */
     public boolean isParticipantValid(Participant participant) {
         // ensure participant is not null
-        if (participant == null){
+        if (participant == null) {
             return false;
         }
-        if (nameIsValid(participant.getFName()) && nameIsValid(participant.getLName())
-                && idIsValid(participant.getParticipantID())) {
-            return true;
+        // ensure participant ID is valid
+        if (!idIsValid(participant.getParticipantID())) {
+            return false;
         }
-        return false;
+        // ensure participant first name is valid
+        if (!nameIsValid(participant.getFName())) {
+            return false;
+        }
+        // ensure participant last name is valid
+        if (!nameIsValid(participant.getLName())) {
+            return false;
+        }
+        // participant is valid if all of its fields are valid
+        return true;
     }
 
     /**
-     * null-safe template validity check
-     * assessing each attribute, and all components
+     * null-safe template validity check assessing each attribute, and all
+     * components
      * 
      * @param template template
      * @return template validity state
      */
     public boolean isTemplateValid(Template template) {
         // ensure template is not null
-        if (template == null){
+        if (template == null) {
             return false;
         }
         // ensure IDs are valid
-        if (!idIsValid(template.getTemplateID())){
+        if (!idIsValid(template.getTemplateID())) {
             return false;
         }
-        if (!idIsValid(template.getHostID())){
+        if (!idIsValid(template.getHostID())) {
             return false;
         }
         // ensure template code is valid
-        if (!templateCodeIsValid(template.getTemplateCode())){
+        if (!templateCodeIsValid(template.getTemplateCode())) {
             return false;
         }
         // ensure template title/ name is valid
-        if (!nameIsValid(template.getTemplateName())){
+        if (!nameIsValid(template.getTemplateName())) {
             return false;
         }
         // ensure template timestamp is non-null
-        if (template.getTimestamp() == null){
+        if (template.getTimestamp() == null) {
             return false;
         }
         // ensure components ArrayList is not null
-        if (template.getComponents() == null){
+        if (template.getComponents() == null) {
             return false;
         }
 
@@ -451,20 +579,20 @@ public class Validator {
      */
     public boolean isComponentValid(TemplateComponent component) {
         // ensure template component is not null
-        if (component == null){
+        if (component == null) {
             return false;
         }
         // ensure component ID is valid (if set)
-        if (component.getId() != null){
+        if (component.getId() != null) {
             if (!idIsValid(component.getId()))
                 return false;
         }
         // ensure component name is valid (not null, empty, or blank)
-        if (!stringIsValid(component.getName())){
+        if (!stringIsValid(component.getName())) {
             return false;
         }
         // ensure component type is valid (is question, radio or checkbox)
-        if (!componentTypeIsValid(component.getType())){
+        if (!componentTypeIsValid(component.getType())) {
             return false;
         }
         // ensure prompt is not null - when unfilled, should be empty string
@@ -478,28 +606,28 @@ public class Validator {
         // case the component is of radio or checkbox type
         if (componentType == "radio" || componentType == "checkbox") {
             // options and options ans arrays should be populated
-            if (component.getOptions() == null){
+            if (component.getOptions() == null) {
                 return false;
             }
-            if (component.getOptionsAns() == null){
+            if (component.getOptionsAns() == null) {
                 return false;
             }
             // text response should be null since it isn't necessary
-            if (component.getTextResponse() != null){
+            if (component.getTextResponse() != null) {
                 return false;
             }
             // ensure options and options answer arrays are equal in length
-            if (component.getOptions().length != component.getOptionsAns().length){
+            if (component.getOptions().length != component.getOptionsAns().length) {
                 return false;
             }
         }
         // case the component is of question type
         else if (componentType == "question") {
             // ensure options and options answer arrays are empty
-            if (component.getOptions() != null){
+            if (component.getOptions() != null) {
                 return false;
             }
-            if (component.getOptionsAns() != null){
+            if (component.getOptionsAns() != null) {
                 return false;
             }
         }

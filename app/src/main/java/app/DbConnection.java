@@ -1217,10 +1217,10 @@ public class DbConnection{
 
             rs = stmt.executeQuery();
             if (rs.next()) {
+                // collect event attributes
                 event_id = rs.getInt("event_id");
                 int host_id = rs.getInt("host_id");
-                int template_id = rs.getInt("template_id");
-
+                Integer template_id = (Integer) rs.getObject("template_id");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 String type = rs.getString("type");

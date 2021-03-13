@@ -19,8 +19,6 @@ public class TemplateComponent {
   // null if type radio or checkbox
   private String textResponse;
 
-  public TemplateComponent() {}
-
   // constructor for TCs without IDs
   public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse) {
     this.id = null;

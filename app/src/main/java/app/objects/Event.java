@@ -2,19 +2,14 @@ package app.objects;
 
 import java.sql.Timestamp;
 
-// enum eventType {
-//     lecture, 
-//     seminar, 
-//     conference, 
-//     workshop, 
-//     other
-// }
+// for object comparison (including null equality)
+import java.util.Objects;
 
 public class Event {
 
     private int event_id;
     private int host_id;
-    private int template_id;
+    private Integer template_id;
     private String title;
     private String description;
     private String type;
@@ -34,7 +29,7 @@ public class Event {
      * @param end_time
      * @param eventCode
      */
-    public Event(int event_id, int host_id, int template_id, String title, String description, String type,
+    public Event(int event_id, int host_id, Integer template_id, String title, String description, String type,
             Timestamp start_time, Timestamp end_time, String eventCode) {
         this.event_id = event_id;
         this.host_id = host_id;
@@ -65,7 +60,7 @@ public class Event {
      * gets template id
      * @return template id
      */
-    public int getTemplateID() {
+    public Integer getTemplateID() {
         return this.template_id;
     }
     /** 
@@ -110,35 +105,21 @@ public class Event {
     public String getEventCode() {
         return this.eventCode;
     }
+
     /**
-     * null-safe event comparison
-     * @param that other event
-     * @return equals state
+     * check if the event has a template
+     * @return event has template
      */
-    public boolean equals(Event that) {
-        // ensure other event is not null
-        if (that == null){
-            return false;
-        }
-        if (this.event_id != that.getEventID())
-            return false;
-        if (this.host_id != that.getHostID())
-            return false;
-        if (this.template_id != that.getTemplateID())
-            return false;
-        if (!this.title.equals(that.getTitle()))
-            return false;
-        if (!this.description.equals(that.getDescription()))
-            return false;
-        if (!this.type.equals(that.getType()))
-            return false;
-        if (!this.start_time.equals(that.getStartTime()))
-            return false;
-        if (!this.end_time.equals(that.getEndTime()))
-            return false;
-        if (!this.eventCode.equals(that.getEventCode()))
-            return false;
-        return true;
+    public boolean hasTemplate(){
+        return (this.template_id != null);
+    }
+
+    /**
+     * check if the event does not have a template
+     * @return event does not have template
+     */
+    public boolean hasNoTemplate(){
+        return (this.template_id == null);
     }
 
     /**
@@ -204,4 +185,59 @@ public class Event {
     public void setTemplateID(int id){
         this.template_id = id;
     }
+
+    /**
+     * null-safe event comparison
+     * @param that other event
+     * @return equals state
+     */
+    public boolean equals(Event that) {
+        // ensure other event is not null
+        if (that == null){
+            return false;
+        }
+        // ensure event IDs match
+        if (this.event_id != that.getEventID()){
+            return false;
+        }
+        // ensure host IDs match
+        if (this.host_id != that.getHostID()){
+            return false;
+        }
+        // ensure template IDs match (or are both null)
+        if(!Objects.equals(this.template_id, that.getTemplateID())){
+            return false;
+        }
+        // boolean both_with_template = (this.hasTemplate() && that.hasTemplate());
+        // if (!both_with_template && (this.template_id != that.getTemplateID())){
+        //     return false;
+        // }
+        // ensure titles are equal
+        if (!this.title.equals(that.getTitle())){
+            return false;
+        }
+        // ensure descriptions are equal
+        if (!this.description.equals(that.getDescription())){
+            return false;
+        }
+        // ensure types are equal
+        if (!this.type.equals(that.getType())){
+            return false;
+        }
+        // ensure start times are equal
+        if (!this.start_time.equals(that.getStartTime())){
+            return false;
+        }
+        // ensure end times are equal
+        if (!this.end_time.equals(that.getEndTime())){
+            return false;
+        }
+        // ensure event codes are equal
+        if (!this.eventCode.equals(that.getEventCode())){
+            return false;
+        }
+        // events are equal if all their fields are equal
+        return true;
+    }
+
 }

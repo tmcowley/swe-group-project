@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 // used for unique email address generation
 import org.apache.commons.lang3.RandomStringUtils;
@@ -103,7 +104,7 @@ public class DBConnTest {
     }
 
     @Test
-    public void test_createEvent() {
+    public void test_createEventWithoutTemplate() {
         // host dummy data: first, last names and email
         String f_name = "testFName";
         String l_name = "testLName";
@@ -115,13 +116,15 @@ public class DBConnTest {
         assertFalse(testHost == null);
         int testHostID = testHost.getHostID();
 
-        // generate an event
+        // create an event within the database
         Event testEvent = db.createEvent(testHostID, "title", "desc", "lecture", ts, ts);
         assertFalse(testEvent == null);
         String eventCode = testEvent.getEventCode();
         int testEventID = testEvent.getEventID();
 
-        Event localEvent = new Event(testEventID, testHostID, 0, "title", "desc", "lecture", ts, ts, eventCode);
+        // create an equal event within the back-end
+        Event localEvent = new Event(testEventID, testHostID, null, "title", "desc", "lecture", ts, ts, eventCode);
+        assertFalse(localEvent == null);
 
         // ensure local and stored events match
         assertTrue(localEvent.equals(testEvent));
@@ -129,7 +132,46 @@ public class DBConnTest {
         // DB cleanup
         db.deleteHost(testHostID);
         db.deleteHost(testEventID);
-        
+    }
+
+    @Test
+    public void test_createEventWithTemplate() {
+        // host dummy data: first, last names and email
+        String f_name = "testFName";
+        String l_name = "testLName";
+        String e_address = generateUniqueEmail();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+
+        // generate a host (for event generation)
+        Host testHost = db.createHost(f_name, l_name, e_address);
+        assertFalse(testHost == null);
+        int testHostID = testHost.getHostID();
+
+        // create a template 
+        TemplateComponent component = new TemplateComponent("name", "question", "enter response:", null, null, "");
+        assertFalse(component == null);
+        ArrayList<TemplateComponent> components = new ArrayList<>(1);
+        components.add(component);
+        Template template = db.createTemplate(testHostID, "template_name", ts, components);
+        assertFalse(template == null);
+        int template_id = template.getTemplateID();
+
+        // create an event within the database
+        Event databaseEvent = db.createEvent(testHostID, template_id, "title", "desc", "lecture", ts, ts);
+        assertFalse(databaseEvent == null);
+        String eventCode = databaseEvent.getEventCode();
+        int databaseEventID = databaseEvent.getEventID();
+
+        // create an equal event within the back-end
+        Event backendEvent = new Event(databaseEventID, testHostID, template_id, "title", "desc", "lecture", ts, ts, eventCode);
+        assertFalse(backendEvent == null);
+
+        // ensure local and stored events match
+        assertTrue(backendEvent.equals(databaseEvent));
+
+        // DB cleanup
+        db.deleteHost(testHostID);
+        db.deleteHost(databaseEventID);
     }
 
     @Test

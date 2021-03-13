@@ -112,6 +112,8 @@ public class APIController {
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
+
+        // parse Timestamps from event creation
         String[] startTimes = request.queryParams("startTime").split(":");
         String[] endTimes = request.queryParams("endTime").split(":");
         Calendar calendar = Calendar.getInstance();
@@ -143,11 +145,11 @@ public class APIController {
             response.redirect("/host/create-event");
             return null;
         }
-        if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
-            session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
-            response.redirect("/host/create-event");
-            return null;
-        }
+        // if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
+        //     session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
+        //     response.redirect("/host/create-event");
+        //     return null;
+        // }
 
         // create an event object
         if (templateCode.equals("noTemplate")) {

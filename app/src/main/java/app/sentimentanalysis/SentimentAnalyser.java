@@ -46,23 +46,6 @@ public class SentimentAnalyser {
         float sum = 0f; // Sum of all weights, used in weights processing
         float[] compounds = new float[amount]; // Holds compound score for each feedback result
 
-        // ensure non-empty arrays
-        if (!ArrayUtils.isNotEmpty(types)) {
-            System.out.println("Error: main array:types is null or empty");
-            return;
-        }
-        if (!ArrayUtils.isNotEmpty(results)) {
-            System.out.println("Error: main array:results is null or empty");
-            return;
-        }
-        if (!ArrayUtils.isNotEmpty(keys)) {
-            System.out.println("Error: main array:keys is null or empty");
-            return;
-        }
-        if (!ArrayUtils.isNotEmpty(weights)) {
-            System.out.println("Error: main array:weights is null or empty");
-            return;
-        }
         if (!ArrayUtils.isNotEmpty(compounds)) {
             System.out.println("Error: main array:compounds is null or empty");
             return;

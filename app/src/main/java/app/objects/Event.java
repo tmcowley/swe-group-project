@@ -21,6 +21,7 @@ public class Event {
     private Timestamp start_time;
     private Timestamp end_time;
     private String eventCode;
+
     /**
      * Event constructor
      * @param event_id
@@ -110,11 +111,15 @@ public class Event {
         return this.eventCode;
     }
     /**
-     * compares all fields of 2 event objects
-     * @param that
-     * @return True or False
+     * null-safe event comparison
+     * @param that other event
+     * @return equals state
      */
     public boolean equals(Event that) {
+        // ensure other event is not null
+        if (that == null){
+            return false;
+        }
         if (this.event_id != that.getEventID())
             return false;
         if (this.host_id != that.getHostID())

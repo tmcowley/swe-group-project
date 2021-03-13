@@ -147,7 +147,6 @@ public class DBConnTest {
         String f_name = "testFName";
         String l_name = "testLName";
         String e_address = generateUniqueEmail();
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
 
         // create participant
         Participant testPart = db.createParticipant(f_name, l_name);

@@ -44,6 +44,20 @@ public class ParticipantEventController {
         Event event = session.attribute("event");
         Participant participant = session.attribute("participant");
 
+        // ensure event is valid
+        if (v.isEventValid(event)){
+            System.out.println("Error:  ParticipantEventController:servePage event in session invalid");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure participant in session valid
+        if (v.isParticipantValid(participant)){
+            System.out.println("Error:  ParticipantEventController:servePage participant in session invalid");
+            response.redirect("/error/401");
+            return null;
+        }
+
         Map<String, Object> model = new HashMap<>();
         Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
         int feedbackCount = 0;

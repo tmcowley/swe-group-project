@@ -86,7 +86,7 @@ mvn archetype:generate -DgroupId=app -DartifactId=app -DarchetypeArtifactId=mave
 
 #### The Sentiment Analyser (Vader) dependency
 Our proposed sentiment analysis tool was the Java variant of [Vader](https://github.com/cjhutto/vaderSentiment). See the research paper from which Vader was created [Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.](https://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8109/8122).
-It was discovered during sentiment analysis development that the Maven packaged version `1.0` of the analysis tool was out of date and contained bugs, making it unusable. We therefore generated a `Jar` file from the most up to date source code, placed this in `/lib/`, and then imported the local file to Maven's `pom.xml`. This method was chosen over an `mvn install:install-file` command due to its simplicity: no additional commands other than `mvn compile` and `mvn exec:java` are needed to launch the back-end.
+It was discovered during sentiment analysis development that the Maven packaged version `1.0` of the analysis tool was out of date and contained bugs, making it unusable. To mitigate this we generated a `Jar` file from the most up to date source code (with `mvn package`), placed this in `/lib/`, and then imported the local file to Maven's `pom.xml`. This variant was chosen over an `mvn install:install-file` command due to its simplicity: no additional commands other than `mvn clean compile` and `mvn exec:java` are needed to launch the back-end.
 ```
 <dependencies>
     <dependency>

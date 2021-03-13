@@ -3,7 +3,6 @@ package app.objects;
 import java.sql.Timestamp;
 // for ArrayList of components
 import java.util.ArrayList;
-import app.objects.TemplateComponent;
 
 // for ArrayList comparison
 import org.apache.commons.collections4.CollectionUtils;

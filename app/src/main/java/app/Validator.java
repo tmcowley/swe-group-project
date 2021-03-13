@@ -156,7 +156,12 @@ public class Validator {
         return true;
     }
 
-    // TODO: comment
+    /**
+     * check if a string is valid:
+     * not null, empty, or blank
+     * @param string string being tested
+     * @return string validity state
+     */
     public boolean stringIsValid(String string) {
         // ensure name is not null, empty, or blank
         if (StringUtils.isBlank(string))
@@ -165,22 +170,29 @@ public class Validator {
     }
 
     /**
-     * Check if event title is valid: contains alpha-numeric (and blank) characters
+     * Check if event title is valid: 
+     * contains alpha-numeric (and blank) characters
      * only
      * 
      * @param data title to be checked
      * @return title validity state
      */
     public boolean eventTitleIsValid(String data) {
-        if (data != null && !data.isEmpty()) {
-            // title regular expression
-            String regex = "^(\\w+)( \\w+)*";
 
-            // return true if title matches with the regular expression
-            if (data.matches(regex)) {
-                return true;
-            }
+        // ensure data is not null, blank, or empty
+        if (StringUtils.isBlank(data)){
+            return false;
         }
+
+        // title regular expression
+        String regex = "^(\\w+)( \\w+)*";
+
+        // title matches with the regular expression
+        if (data.matches(regex)) {
+            return true;
+        }
+
+        // event title is invalid
         return false;
     }
 
@@ -208,33 +220,36 @@ public class Validator {
     }
 
     /**
-     * Check if event type is valid: event only allows five types 'lecture',
+     * null-safe event type validity check;
+     * event only allows five types: 'lecture',
      * 'seminar', 'conference', 'workshop', 'other'
      * 
      * @param data type to be checked
      * @return type validity state
      */
     public boolean eventTypeIsValid(String data) {
-        if (data != null && (data.equals("lecture") || data.equals("seminar") || data.equals("conference")
+        // ensure event type is not null
+        if (data == null){
+            return false;
+        }
+        if ((data.equals("lecture") || data.equals("seminar") || data.equals("conference")
                 || data.equals("workshop") || data.equals("other"))) {
             return true;
         }
         return false;
     }
 
-    // // TODO; LATER IN DEV
-    public boolean sentimentIsValid(String data) {
-        return false;
-    }
-
     /**
-     * Check if ArchivedEvent is valid: check every data inside
+     * null-safe archived-event validity check
      * 
      * @param archivedEvent ArchivedEvent instance to be checked
      * @return ArchivedEvent validity state
      */
     public boolean isArchivedEventValid(ArchivedEvent archivedEvent) {
-        if (archivedEvent != null && eventTitleIsValid(archivedEvent.getTitle())
+        if (archivedEvent == null){
+            return false;
+        }
+        if (eventTitleIsValid(archivedEvent.getTitle())
                 && eventDescriptionIsValid(archivedEvent.getDescription())
                 && eventDescriptionIsValid(archivedEvent.getType()) && idIsValid(archivedEvent.getEventID())
                 && idIsValid(archivedEvent.getHostID())) {
@@ -243,17 +258,45 @@ public class Validator {
         return false;
     }
 
+    // (0001, 0001, 0001, "Lecture 1", "event desc", "seminar", now, now, "CCCC");
+
     /**
-     * Check if Event is valid: check every data inside
+     * null-safe check for event validity
+     * considers every attribute in event
      * 
      * @param event Event instance to be checked
      * @return Event validity state
      */
     public boolean isEventValid(Event event) {
-        if (event != null && eventTitleIsValid(event.getTitle()) && eventDescriptionIsValid(event.getDescription())
-                && eventTypeIsValid(event.getType()) && eventCodeIsValid(event.getEventCode())
-                && idIsValid(event.getEventID()) && (event.getTemplateID() == -1 || idIsValid(event.getTemplateID()))
-                && idIsValid(event.getHostID())) {
+        // ensure event is not null
+        if (event == null){
+            return false;
+        }
+        // ensure event title is valid
+        if (!eventTitleIsValid(event.getTitle())){
+            return false;
+        }
+        // ensure event description is valid
+        if (!eventDescriptionIsValid(event.getDescription())){
+            return false;
+        }
+        // ensure event type is valid
+        if (!eventTypeIsValid(event.getType())){
+            return false;
+        }
+        // ensure event code is valid
+        if (!eventCodeIsValid(event.getEventCode())){
+            return false;
+        }
+        // ensure event identifier is valid
+        if (!idIsValid(event.getEventID())){
+            return false;
+        }
+        // ensure event author (host) ID is valid
+        if (!idIsValid(event.getHostID())){
+            return false;
+        }
+        if (event.getTemplateID() == -1 || idIsValid(event.getTemplateID())) {
             return true;
         }
         return false;
@@ -320,13 +363,17 @@ public class Validator {
     }
 
     /**
-     * Check if Host is valid: check every data inside
+     * null-safe host validity check
      * 
      * @param host Host instance to be checked
      * @return Host validity state
      */
     public boolean isHostValid(Host host) {
-        if (host != null && hostCodeIsValid(host.getHostCode()) && eAddressIsValid(host.getEAddress())
+        // ensure host is valid
+        if (host == null){
+            return false;
+        }
+        if (hostCodeIsValid(host.getHostCode()) && eAddressIsValid(host.getEAddress())
                 && nameIsValid(host.getFName()) && nameIsValid(host.getLName()) && idIsValid(host.getHostID())) {
             return true;
         }
@@ -340,7 +387,11 @@ public class Validator {
      * @return Participant validity state
      */
     public boolean isParticipantValid(Participant participant) {
-        if (participant != null && nameIsValid(participant.getFName()) && nameIsValid(participant.getLName())
+        // ensure participant is not null
+        if (participant == null){
+            return false;
+        }
+        if (nameIsValid(participant.getFName()) && nameIsValid(participant.getLName())
                 && idIsValid(participant.getParticipantID())) {
             return true;
         }
@@ -348,32 +399,40 @@ public class Validator {
     }
 
     /**
-     * null-safe template validity check: assessing each attribute
+     * null-safe template validity check
+     * assessing each attribute, and all components
      * 
      * @param template template
      * @return template validity state
      */
     public boolean isTemplateValid(Template template) {
         // ensure template is not null
-        if (template == null)
+        if (template == null){
             return false;
+        }
         // ensure IDs are valid
-        if (!idIsValid(template.getTemplateID()))
+        if (!idIsValid(template.getTemplateID())){
             return false;
-        if (!idIsValid(template.getHostID()))
+        }
+        if (!idIsValid(template.getHostID())){
             return false;
+        }
         // ensure template code is valid
-        if (!templateCodeIsValid(template.getTemplateCode()))
+        if (!templateCodeIsValid(template.getTemplateCode())){
             return false;
+        }
         // ensure template title/ name is valid
-        if (!nameIsValid(template.getTemplateName()))
+        if (!nameIsValid(template.getTemplateName())){
             return false;
+        }
         // ensure template timestamp is non-null
-        if (template.getTimestamp() == null)
+        if (template.getTimestamp() == null){
             return false;
+        }
         // ensure components ArrayList is not null
-        if (template.getComponents() == null)
+        if (template.getComponents() == null){
             return false;
+        }
 
         // validate each template component in template
         boolean allValid = true;
@@ -392,36 +451,53 @@ public class Validator {
      */
     public boolean isComponentValid(TemplateComponent component) {
         // ensure template component is not null
-        if (component == null)
+        if (component == null){
             return false;
-        // ensure component ID is valid
-        // if (!idIsValid(component.getId()))
-        //     return false;
-        if (component.getName() == null)
+        }
+        // ensure component ID is valid (if set)
+        if (component.getId() != null){
+            if (!idIsValid(component.getId()))
+                return false;
+        }
+        if (!idIsValid(component.getId())){
             return false;
-        if (!componentTypeIsValid(component.getType()))
+        }
+        if (component.getName() == null){
             return false;
+        }
+        if (!componentTypeIsValid(component.getType())){
+            return false;
+        }
         if (component.getPrompt() == null) {
             return false;
         }
+
+        // get component type
         String componentType = component.getType();
+
         // case the component is of radio or checkbox type
         if (componentType == "radio" || componentType == "checkbox") {
-            if (component.getOptions() == null)
+            if (component.getOptions() == null){
                 return false;
-            if (component.getOptionsAns() == null)
+            }
+            if (component.getOptionsAns() == null){
                 return false;
-            if (component.getTextResponse() != null)
+            }
+            if (component.getTextResponse() != null){
                 return false;
-            if (component.getOptions().length != component.getOptionsAns().length)
+            }
+            if (component.getOptions().length != component.getOptionsAns().length){
                 return false;
+            }
         }
         // case the component is of question type
-        if (componentType == "question") {
-            if (component.getOptions() != null)
+        else if (componentType == "question") {
+            if (component.getOptions() != null){
                 return false;
-            if (component.getOptionsAns() != null)
+            }
+            if (component.getOptionsAns() != null){
                 return false;
+            }
         }
         // component is valid
         return true;

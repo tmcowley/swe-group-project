@@ -19,7 +19,6 @@ import app.util.*;
 public class HostEventController {
 
     // serve host event page (following GET request)
-    // TODO: ensure host is author of event
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostEventController:servePage recognized request");
@@ -47,15 +46,30 @@ public class HostEventController {
         Event event = session.attribute("event");
         Host host = session.attribute("host");
 
+        // ensure host is valid
+        if (!v.isHostValid(host)){
+            System.out.println("Error:  HostEventController:servePage host is invalid");
+            return "Error:  host is invalid";
+        }
+        int host_id = host.getHostID();
+
+        // ensure event is valid
         if (!v.isEventValid(event)){
             System.out.println("Error:  HostEventController:servePage event is invalid");
             return "Error:  event is invalid";
         }
+        int event_id = event.getEventID();
+        int event_host_id = event.getHostID();
 
-        // return host event page if event is created
-        session.attribute("event", event);
+        // ensure host authors event
+        if (event_host_id != host_id){
+            System.out.println("Error:  HostEventController:servePage event not authored by host");
+            return "Error:  event not authored by host";
+        }
+
+        // collect feedback objects from the event
         Map<String, Object> model = new HashMap<>();
-        Feedback[] feedbacks = db.getFeedbacksByEventID(event.getEventID());
+        Feedback[] feedbacks = db.getFeedbacksByEventID(event_id);
         int feedbackCount = 0;
         if (feedbacks.length != 0) {
 
@@ -107,6 +121,8 @@ public class HostEventController {
         for (int i = 0; i < feedbackCount; i++) {
             feedbackCounts.add(i);
         }
+
+        // return host event page if event is created
         model.put("feedbackCounts", feedbackCounts);
         model.put("eventTitle", event.getTitle());
         model.put("eventDescription", event.getDescription());

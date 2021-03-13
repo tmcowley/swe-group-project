@@ -1,6 +1,5 @@
 package app.controllers;
 
-import java.util.ArrayList;
 // for ViewUtil velocity models
 import java.util.HashMap;
 import java.util.Map;
@@ -12,12 +11,11 @@ import app.DbConnection;
 import app.Validator;
 import app.objects.Host;
 import app.objects.Template;
-import app.objects.TemplateComponent;
 import app.util.*;
 
 public class TemplateEditController {
     
-    // serve the Template editor page (in response to GET request)
+    // serve the template editor page (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: TemplateEditController:servePage recognized request");

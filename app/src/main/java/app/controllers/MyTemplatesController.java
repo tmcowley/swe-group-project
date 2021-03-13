@@ -1,17 +1,16 @@
 package app.controllers;
 
-// for ViewUtil velocity models
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import spark.*;
 import app.App;
 import app.DbConnection;
 import app.objects.Host;
 import app.objects.Template;
 import app.util.*;
+
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.*;
 
 public class MyTemplatesController {
     

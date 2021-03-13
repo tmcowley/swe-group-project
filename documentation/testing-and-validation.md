@@ -1,5 +1,3 @@
-#### Sprint Cycle 5: Term 2, Week 8 (Mar 1st to Mar 7th)
-# Testing and Validation
 
 ## Unit Testing
 Development used of unit testing at the point of development, as planned in our `Design and Planning Document`. This means that unit testing was carried out between sprint cycles one and four.

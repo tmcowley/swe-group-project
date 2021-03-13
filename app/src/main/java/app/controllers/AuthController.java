@@ -1,9 +1,5 @@
 package app.controllers;
 
-// for ViewUtil velocity models
-import java.util.HashMap;
-import java.util.Map;
-
 import app.App;
 import app.Validator;
 import app.DbConnection;

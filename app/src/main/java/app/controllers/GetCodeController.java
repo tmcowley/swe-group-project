@@ -2,7 +2,6 @@ package app.controllers;
 
 import app.App;
 import app.DbConnection;
-import app.Validator;
 import app.util.*;
 
 // for ViewUtil velocity models
@@ -21,7 +20,6 @@ public class GetCodeController {
 
         // get db conn, validator from singleton App instance
         DbConnection db = App.getInstance().getDbConnection();
-        Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
         Session session = request.session(true);
@@ -41,11 +39,16 @@ public class GetCodeController {
         // collect host-code (attribute already valid)
         String hostCode = session.attribute("hostCode");
 
+        // double-check host code exists
+        if (!db.hostCodeExists(hostCode)){
+            System.out.println("Error:  GetCodeController:servePage host code invalid or inexistent");
+            response.redirect("/host/login"); //response.redirect("/error/401");
+            return null;
+        }
+
         Map<String, Object> model = new HashMap<>();
         model.put("hostCode", hostCode);
         return ViewUtil.render(request, model, "/velocity/get-code.vm");
-
-        //--> auth host??
     };
 
 }

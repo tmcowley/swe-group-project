@@ -51,8 +51,7 @@ public class SentimentTest {
         }
     }
 
-    // TODO - expand feedback object with many more diverse plaintext and
-    // non-plaintext
+    // TODO - expand feedback object with many more diverse plaintext and non-plaintext
     // TODO - comment properly
     @Test
     public void test_main() throws IOException {
@@ -145,7 +144,7 @@ public class SentimentTest {
         // wonderful! I paid lots of money and got value, I'm extatic, happy, and
         // feeling fucking good because this place is amazing. I love this place, I'd
         // rather become a traveller."));
-        // System.out.println(SentimentAnalyser.getCompoundFromText("Mclaren is a
+        // System.out.println(SentimentAnalyser.getCompoundFromText("McLaren is a
         // English formula one and performance car company. Wikipedia was launched on
         // January 15, 2001, by Jimmy Wales and Larry Sanger; Sanger coined its name as
         // a portmanteau of wiki and encyclopedia.Initially available only in English,
@@ -153,11 +152,11 @@ public class SentimentTest {
         // million articles as of March 2021, is the most normal of the 319 language
         // editions. Combined, Wikipedia's editions comprise more than 55 million
         // articles, and attract more than 17 million edits and more than 1.7 billion
-        // unique visitors per month. Also mclaren speedtail is a car that exists."));
+        // unique visitors per month. Also McLaren speedtail is a car that exists."));
         // System.out.println(SentimentAnalyser.getCompoundFromText("This place was
         // terrible! I paid lots of money and got no value, I'm furious, unhappy, and
         // feeling like shit because this place is shit. Screw this place, I'd rather
-        // become a traveller. Mclaren is a English formula one and performance car
+        // become a traveller. McLaren is a English formula one and performance car
         // company. Wikipedia was launched on January 15, 2001, by Jimmy Wales and Larry
         // Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -165,11 +164,11 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists."));
+        // McLaren speedtail is a car that exists."));
         // System.out.println(SentimentAnalyser.getCompoundFromText("This place was
         // wonderful! I paid lots of money and got value, I'm extatic, happy, and
         // feeling fucking good because this place is amazing. I love this place, I'd
-        // rather become a traveller. Mclaren is a English formula one and performance
+        // rather become a traveller. McLaren is a English formula one and performance
         // car company. Wikipedia was launched on January 15, 2001, by Jimmy Wales and
         // Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -177,11 +176,11 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists."));
+        // McLaren speedtail is a car that exists."));
         // System.out.println(SentimentAnalyser.getCompoundFromText("This place was
         // terrible! I paid lots of money and got no value, I'm furious, unhappy, and
         // feeling like shit because this place is shit. Screw this place, I'd rather
-        // become a traveller. Mclaren is a English formula one and performance car
+        // become a traveller. McLaren is a English formula one and performance car
         // company. Wikipedia was launched on January 15, 2001, by Jimmy Wales and Larry
         // Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -189,7 +188,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -197,7 +196,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -205,7 +204,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -213,11 +212,11 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists."));
+        // McLaren speedtail is a car that exists."));
         // System.out.println(SentimentAnalyser.getCompoundFromText("This place was
         // wonderful! I paid lots of money and got value, I'm extatic, happy, and
         // feeling fucking good because this place is amazing. I love this place, I'd
-        // rather become a traveller. Mclaren is a English formula one and performance
+        // rather become a traveller. McLaren is a English formula one and performance
         // car company. Wikipedia was launched on January 15, 2001, by Jimmy Wales and
         // Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -225,7 +224,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -233,7 +232,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -241,7 +240,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists. Mclaren is a English formula one and
+        // McLaren speedtail is a car that exists. McLaren is a English formula one and
         // performance car company. Wikipedia was launched on January 15, 2001, by Jimmy
         // Wales and Larry Sanger; Sanger coined its name as a portmanteau of wiki and
         // encyclopedia.Initially available only in English, versions in other languages
@@ -249,7 +248,7 @@ public class SentimentTest {
         // 2021, is the most normal of the 319 language editions. Combined, Wikipedia's
         // editions comprise more than 55 million articles, and attract more than 17
         // million edits and more than 1.7 billion unique visitors per month. Also
-        // mclaren speedtail is a car that exists."));
+        // McLaren speedtail is a car that exists."));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package app.controllers;
 
 import app.App;
-import app.DbConnection;
 import app.Validator;
 import app.objects.Host;
 import app.util.*;
@@ -19,13 +18,11 @@ public class HostHomeController {
 
         System.out.println("\nNotice: HostHomeController:servePage recognized request");
 
-        // get db conn, validator from singleton App instance
-        DbConnection db = App.getInstance().getDbConnection();
+        // get validator from singleton App instance
         Validator v = App.getInstance().getValidator();
 
         // get current session; ensure session is live
-        request.session(true);
-        Session session = request.session();
+        Session session = request.session(true);
         if (session.isNew()) {
             System.out.println("Error:  HostHomeController:servePage session not found");
             response.redirect("/error/401");
@@ -41,6 +38,12 @@ public class HostHomeController {
 
         // collect stored (valid) host
         Host host = session.attribute("host");
+
+        if (!v.isHostValid(host)){
+            System.out.println("Error:  HostHomeController:servePage host is null");
+            response.redirect("/error/401");
+            return null;
+        }
 
         // return host homepage
         Map<String, Object> model = new HashMap<>();

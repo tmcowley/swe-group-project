@@ -919,13 +919,15 @@ public class DbConnection{
             stmt.setInt(1, host_id);
             rs = stmt.executeQuery();
 
-            // TODO: consider using count()
+            // get count of results
             rs.last();
-            int rsSize= rs.getRow();
+            int rsSize = rs.getRow();
             foundTemplates = new Template[rsSize];
             Template foundTemplate = null;
             int templateCount = 0;
             rs.beforeFirst();
+            
+            // get each matched template
             while (rs.next()) {
                 foundTemplate = new Template(rs.getInt("template_id"), rs.getInt("host_id"), rs.getString("template_name"), rs.getString("template_code"), rs.getTimestamp("timestamp"));
                 foundTemplates[templateCount] = foundTemplate;

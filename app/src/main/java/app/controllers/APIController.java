@@ -5,13 +5,8 @@ import app.DbConnection;
 import app.Validator;
 import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
-import app.util.ViewUtil;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import java.util.Date;
 import java.util.Calendar;
@@ -353,7 +348,7 @@ public class APIController {
         System.out.println("\nNotice: createTemplate API endpoint recognized request");
 
         // get db conn from singleton App instance
-        DbConnection db = App.getInstance().getDbConnection();
+        //DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
         Session session = request.session(true);
@@ -379,7 +374,7 @@ public class APIController {
         }
 
         // get host from session
-        Host host = session.attribute("host");
+        //Host host = session.attribute("host");
 
         // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate", "value");
 
@@ -615,10 +610,27 @@ public class APIController {
         // get template code (stored in form) 
         String templateCode = request.queryParams("templateCode");
 
+        // get template by its code (used for ensuring host is author)
+        Template template = db.getTemplateByCode(templateCode);
+        // ensure template, template code exist
+        if (template == null){
+            System.out.println("Error:  APIController:deleteTemplateComponent template (by code) is null");
+            session.attribute("errorMessageDeleteTemplateComponent", "Error: no template corresponding to template code");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // ensure template is authored by host in session
+        if (host.getHostID() != template.getHostID()){
+            System.out.println("Error:  APIController:deleteTemplateComponent host does not own template by code");
+            response.redirect("/error/401");
+            return null;
+        }
+
         // delete template component by ID
         db.deleteTemplateComponent(component_id);
 
-        // return to "/host/templates/edit/code"
+        // return to template's edit page
         // (links to TemplateEditController.servePage)
         response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;

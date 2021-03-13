@@ -2,21 +2,22 @@ package app;
 
 import app.objects.*;
 
+// for testing
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
+// for core objects generation
 import java.sql.Timestamp;
 
-// Template generation
+// for template creation
 import java.util.ArrayList;
-import java.util.Arrays;
 
 // Unit tests against Validator.java
 public class ValidatorTest {
 
+    // global validator; set by constructor
     Validator v;
-
     public ValidatorTest() {
         v = new Validator();
     }
@@ -25,9 +26,11 @@ public class ValidatorTest {
     public void test_eventCodeIsValid() {
         String[] validCodes = { "CCCC", "4RF5", "ac4r", "abcd", "aBc7" };
         String[] invalidCodes = { "AAAAAA", "abcd-", "CC-C", " ", "", null };
+        // ensure valid codes are recognised as valid
         for (String validCode : validCodes) {
             assertTrue(v.eventCodeIsValid(validCode));
         }
+        // ensure invalid codes are not recognised as valid
         for (String invalidCode : invalidCodes) {
             assertFalse(v.eventCodeIsValid(invalidCode));
         }
@@ -35,24 +38,28 @@ public class ValidatorTest {
 
     @Test
     public void test_templateCodeIsValid() {
-        String[] validCodes = { "asdfgh", "a23fsg", "cgd352", "23fsd3", "a45sdf" };
-        String[] invalidCodes = { "AAAAAAA", "qwer1", "41as-f", " ", "", null };
+        String[] validCodes = { "abcdef", "1foo10", "cgd352", "23fsd3", "a45sdf", "123456" };
+        String[] invalidCodes = { "AAAAAAA", "foo1", "41as-f", " ", "", null };
         for (String validCode : validCodes) {
+            // ensure valid codes are recognised as valid
             assertTrue(v.templateCodeIsValid(validCode));
         }
         for (String invalidCode : invalidCodes) {
+            // ensure invalid codes are not recognised as valid
             assertFalse(v.templateCodeIsValid(invalidCode));
         }
     }
 
     @Test
     public void test_alphanumericIsValid() {
-        String[] validCodes = { "asdfg", "a23fs", "cgd35", "23Fsd", "a45sd" };
+        String[] validCodes = { "abcde", "a23fs", "cgd35", "23Fsd", "a45sd" };
         String[] invalidCodes = { "AAAAAA", "qwe1", "41a-fa", "     ", " ", "", null };
         for (String validCode : validCodes) {
+            // ensure valid codes are recognised as valid
             assertTrue(v.alphanumericIsValid(validCode, 5));
         }
         for (String invalidCode : invalidCodes) {
+            // ensure invalid codes are not recognised as valid
             assertFalse(v.alphanumericIsValid(invalidCode, 5));
         }
     }
@@ -63,9 +70,11 @@ public class ValidatorTest {
         String[] invalidCodes = { "xxxx-bird-brother-map", "fish-bird-brother-ma p", "fish-bird-brother map", " ", "",
                 null };
         for (String validCode : validCodes) {
+            // ensure valid codes are recognised as valid
             assertTrue(v.hostCodeIsValid(validCode));
         }
         for (String invalidCode : invalidCodes) {
+            // ensure invalid codes are not recognised as valid
             assertFalse(v.hostCodeIsValid(invalidCode));
         }
     }
@@ -96,7 +105,7 @@ public class ValidatorTest {
 
     @Test
     public void test_nameIsValid() {
-        String[] validNames = { "name", "Name", "NAME", "n'ame", "na-me" };
+        String[] validNames = { "name", "Name", "NAME", "a'b", "na-me" };
         String[] invalidNames = { " ", "", null };
         for (String validName : validNames) {
             assertTrue(v.nameIsValid(validName));
@@ -104,10 +113,6 @@ public class ValidatorTest {
         for (String invalidName : invalidNames) {
             assertFalse(v.nameIsValid(invalidName));
         }
-    }
-
-    @Test // TODO (after method made)
-    public void test_templateDataIsValid() {
     }
 
     @Test
@@ -137,7 +142,7 @@ public class ValidatorTest {
     @Test
     public void test_eventTypeIsValid() {
         String[] validTypes = { "lecture", "seminar", "conference", "workshop", "other" };
-        String[] invalidTypes = { " ", "", "qtaesf", null };
+        String[] invalidTypes = { "invalid", " ", "", null };
         for (String validType : validTypes) {
             assertTrue(v.eventTypeIsValid(validType));
         }
@@ -146,52 +151,54 @@ public class ValidatorTest {
         }
     }
 
-    @Test // TODO
-    public void test_sentimentIsValid() {
-    }
-
-    @Test // TODO
-    public void test_isArchivedEventValid() {
-    }
-
     @Test
     public void test_isEventValid() {
+        // generate dummy data
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        Event testEvent = new Event(0001, 0001, 0001, "Lecture 1", "event desc", "seminar", now, now, "CCCC");
-        Event newEvent = new Event(0001, 0001, 0001, "Lecture 1", "event desc", "movie", now, now, "CCCC");
 
-        assertTrue(v.isEventValid(testEvent));
-        assertFalse(v.isEventValid(newEvent));
-    }
+        // create a valid test
+        Event validEvent = new Event(0001, 0001, 0001, "Lecture1", "event desc", "seminar", now, now, "CCCC");
 
-    @Test // TODO
-    public void test_isFeedbackValid() {
+        // create an invalid test (event type is incorrect)
+        Event invalidEvent = new Event(0001, 0001, 0001, "Lecture1", "event desc", "wrong-type", now, now, "CCCC");
+
+        // ensure valid event is valid, and invalid event is invalid
+        assertTrue(v.isEventValid(validEvent));
+        assertFalse(v.isEventValid(invalidEvent));
     }
 
     @Test
     public void test_isHostValid() {
-        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com", "Moustafa", "Eledwy", false);
+        Host testHost = new Host(0001, "fish-bird-brother-map", "moustafa.edwy@gmail.com", "name", "name", false);
 
         assertTrue(v.isHostValid(testHost));
     }
 
     @Test
     public void test_isParticipantValid() {
-        Participant testParticipant = new Participant(0001, "Moustafa", "Eledwy", false);
+        Participant testParticipant = new Participant(0001, "name", "name", false);
 
         assertTrue(v.isParticipantValid(testParticipant));
     }
 
     @Test
     public void test_isTemplateValid() {
-        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null,
-                "Tom");
+        // generate dummy data
+        Timestamp timestamp_now = new Timestamp(System.currentTimeMillis());
+
+        // create component of type question
+        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", null, null, "Tom");
+        assertFalse(question == null);
+
+        // add the component to components
         ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>(1);
         components.add(question);
-        Template testTemplate = new Template(1, 1, "template_name", "a23fsg", new Timestamp(System.currentTimeMillis()),
-                components);
 
-        // assertTrue(v.isTemplateValid(testTemplate));
+        // create template storing components
+        Template testTemplate = new Template(1, 1, "template_name", "a23fsg", timestamp_now, components);
+        assertFalse(testTemplate == null);
+
+        assertTrue(v.isTemplateValid(testTemplate));
     }
 
     @Test

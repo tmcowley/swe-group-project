@@ -57,6 +57,9 @@
     #eventCode {
         width: 100%;
     }
+    .formInputBullet {
+        width: calc(100% - 40px);
+    }
 }
 
 @media screen and (max-width: 480px) {

@@ -142,10 +142,8 @@ public class DbConnection{
      */
     public TemplateComponent createTemplateComponent(TemplateComponent tc){
 
-        Validator v = App.getInstance().getValidator();
-
         // ensure template component is valid
-        if (!v.isComponentValid(tc)){
+        if (!validator.isComponentValid(tc)){
             return null;
         }
 

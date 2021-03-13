@@ -459,10 +459,8 @@ public class Validator {
             if (!idIsValid(component.getId()))
                 return false;
         }
-        if (!idIsValid(component.getId())){
-            return false;
-        }
-        if (component.getName() == null){
+        // ensure component name is valid (not null, empty, or blank)
+        if (!stringIsValid(component.getName())){
             return false;
         }
         if (!componentTypeIsValid(component.getType())){

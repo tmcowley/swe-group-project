@@ -56,7 +56,7 @@ public class SentimentTest {
 
     @Test
     public void test_main_consistency() throws IOException {
-        // assertTrue(test.equals(test2));
+        //assertTrue(test.equals(test2));
         assertTrue(test.getWeights().equals(test2.getWeights()));
         assertTrue(test.getCompound().equals(test2.getCompound()));
         assertTrue(test.getKey_Results().equals(test2.getKey_Results()));

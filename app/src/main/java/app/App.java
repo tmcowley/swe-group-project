@@ -22,17 +22,29 @@ public class App {
     // stores the validator class.
     private Validator validator;
 
-    // gets the singleton instance of this class
+    /**
+     * gets the singleton instance of this class
+     * 
+     * @return the singleton instance of this class
+     */
     public static App getInstance() {
         return app;
     }
 
-    // gets the database connection for this program
+    /**
+     * gets the database connection for this program
+     * 
+     * @return the database connection for this program
+     */
     public DbConnection getDbConnection() {
         return this.db;
     }
 
-    // gets the validator for this program
+    /**
+     * gets the validator for this program
+     * 
+     * @return the validator for this program
+     */
     public Validator getValidator() {
         return this.validator;
     }
@@ -45,6 +57,7 @@ public class App {
      * main entry point for the application
      * 
      * @param args command-line arguments supplied by the OS
+     * @throws SQLException
      */
     public static void main(String[] args) throws SQLException {
         // initialize and run the program
@@ -52,7 +65,11 @@ public class App {
         app.run();
     }
 
-    // Runs the program.
+    /**
+     * Runs the program.
+     * 
+     * @throws SQLException
+     */
     private void run() throws SQLException {
 
         // state location to static files

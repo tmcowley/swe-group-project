@@ -18,7 +18,9 @@ import spark.*;
 
 public class ParticipantEventController {
 
-    // serve the participant event page (in response to GET request)
+    /**
+     * serve the participant event page (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: ParticipantEventController:servePage recognized request");

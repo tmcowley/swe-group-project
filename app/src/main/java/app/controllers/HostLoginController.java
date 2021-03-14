@@ -9,7 +9,9 @@ import app.util.*;
 
 public class HostLoginController {
 
-    // serve the host login and sign-up page (in response to GET request)
+    /**
+     * serve the host login and sign-up page (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostLoginController:servePage recognized request");

@@ -9,7 +9,9 @@ import app.util.*;
 
 public class TemplateCreateController {
 
-    // serve the template initial-creation page (in response to GET request)
+    /**
+     * serve the template initial-creation page (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: TemplateCreateController:servePage recognized request");

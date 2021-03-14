@@ -340,7 +340,8 @@ public class APIController {
         if (!v.isFeedbackValid(feedback)){
             System.out.println("Error: feedback considered invalid (before SA)");
             session.attribute("errorMessageInParticipantEvent", "Error: feedback invalid");
-            return "Error: feedback considered invalid";
+            response.redirect("/event/participant/feedback");
+            return null;
         }
         
         // run sentiment analysis on feedback; ensure SA was successful

@@ -69,7 +69,8 @@ public class SentimentTest {
         krs.add("3");
         krs.add("1244");
         assertTrue(test.getKey_Results().equals(krs));
-        assertTrue(0.15 < test.getCompound() && test.getCompound() < 0.25); // Expected range for compound score
+        System.out.println(test.getCompound());
+        assertTrue(0.275 < test.getCompound() && test.getCompound() < 0.3); // Expected range for compound score
     }
 
     @Test

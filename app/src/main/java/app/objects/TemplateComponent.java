@@ -19,7 +19,16 @@ public class TemplateComponent {
   // null if type radio or checkbox
   private String textResponse;
 
-  // constructor for TCs without IDs
+  /**
+   * Template component constructor without IDs
+   * @param id component ID
+   * @param name component name (simplified prompt)
+   * @param type question, or radio, or checkbox
+   * @param prompt question/ prompt
+   * @param options array of radio or checkbox options
+   * @param optionsAns array of boolean responses to options array
+   * @param textResponse text response field following prompt null if type radio or checkbox
+   */
   public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns,
       String textResponse) {
     this.id = null;
@@ -32,15 +41,14 @@ public class TemplateComponent {
   }
 
   /**
-   * Template component constructor
-   * 
-   * @param id
-   * @param name
-   * @param type
-   * @param prompt
-   * @param options
-   * @param optionsAns
-   * @param textResponse
+   * Template component constructor with IDs
+   * @param id component ID
+   * @param name component name (simplified prompt)
+   * @param type question, or radio, or checkbox
+   * @param prompt question/ prompt
+   * @param options array of radio or checkbox options
+   * @param optionsAns array of boolean responses to options array
+   * @param textResponse text response field following prompt null if type radio or checkbox
    */
   public TemplateComponent(int id, String name, String type, String prompt, String[] options, Boolean[] optionsAns,
       String textResponse) {
@@ -54,7 +62,9 @@ public class TemplateComponent {
   }
 
   /**
-   * sets id for template component
+   * set id for template component
+   * @param id component ID
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setId(int id) {
     this.id = id;
@@ -62,19 +72,19 @@ public class TemplateComponent {
   }
 
   /**
-   * gets component id
+   * get component ID
    * 
-   * @return component id
+   * @return component ID
    */
   public Integer getId() {
     return this.id;
   }
 
   /**
-   * sets component name
+   * set component name
    * 
-   * @param name
-   * @return
+   * @param name component name 
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setName(String name) {
     this.name = name;
@@ -93,8 +103,8 @@ public class TemplateComponent {
   /**
    * sets component type
    * 
-   * @param type
-   * @return
+   * @param type component type
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setType(String type) {
     this.type = type;
@@ -113,8 +123,8 @@ public class TemplateComponent {
   /**
    * sets component prompt
    * 
-   * @param prompt
-   * @return
+   * @param prompt question/prompt
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setPrompt(String prompt) {
     this.prompt = prompt;
@@ -133,8 +143,8 @@ public class TemplateComponent {
   /**
    * sets component options
    * 
-   * @param options
-   * @return
+   * @param options array of radio or checkbox options
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setOptions(String[] options) {
     this.options = options;
@@ -153,8 +163,8 @@ public class TemplateComponent {
   /**
    * sets the answers for the options
    * 
-   * @param optionsAns
-   * @return
+   * @param optionsAns array of boolean responses to options array
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setOptionsAns(Boolean[] optionsAns) {
     this.optionsAns = optionsAns;
@@ -173,8 +183,8 @@ public class TemplateComponent {
   /**
    * sets the text response
    * 
-   * @param textResponse
-   * @return
+   * @param textResponse text response field following prompt null if type radio or checkbox
+   * @return edited TemplateComponent object
    */
   public TemplateComponent setTextResponse(String textResponse) {
     this.textResponse = textResponse;

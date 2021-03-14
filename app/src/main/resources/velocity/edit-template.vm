@@ -14,7 +14,9 @@
         <div id="mainForm">
             <form action="" method="post">
                 <h1>$template.getTemplateName()</h1>
+                #if ($errorMessageCreateTemplate)
                 <label id="formErrorMessage">$errorMessageCreateTemplate</label>
+                #end
                 <!-- Space for error messages -->
                 <div class="templateControlsSection">
                     <!-- Buttons to add new sections -->

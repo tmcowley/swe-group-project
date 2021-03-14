@@ -70,20 +70,24 @@
                             #end
                         </div>
 
-                        #elseif($component.getType() == "checkbox" && false) ## component is of type checkbox
+                        #elseif($component.getType() == "checkbox") ## component is of type checkbox
                         <div class="feedbackElement">
                             <h3>
                                 Checkbox
                             </h3>
-                            <input class="formInput" type="text" placeholder="Enter Prompt" value="$component.getPrompt()">
-                            <input class="formInput" type="hidden" value="$component.getType()">
+                            #if($component.isEmptyComponent())
+                                <input class="formInput" type="text" name="checkbox[${component.getID()}][prompt]" placeholder="Enter Prompt">
+                            #else 
+                                <input class="formInput" type="text" name="checkbox[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
+                            #end
                             <!-- Radio buttons section -->
                             <!-- Radio buttons are just 5 text boxes -->
                             #foreach($option in $component.getOptions())
                                 <div class="formInputBulletIcon">&bull;</div>
-                                <input class="formInputBullet" type="text" placeholder="Enter Text" value="$option">
-                                <label class="formInputBulletLabel" for="bulletrating1">Positivity (-3 to 3):</label>
-                                <input
+                                <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter Text" value="$option">
+                                <label class="formInputBulletLabel" for="bulletrating1">Positivity (-3 to 3):</label> 
+                                <!-- LINK BELOW INPUT TO BACKEND! -->
+                                <input 
                                     class="formInputBulletRating"
                                     type="number"
                                     id="bulletrating1"
@@ -92,30 +96,51 @@
                                     max="3"><br>
                                 <div class="formInputBulletIcon">&bull;</div>
                             #end
+                            <input class="formInput" type="hidden" name="checkbox[${component.getID()}][name]" value="${component.getName()}">
+                            <input class="formInput" type="hidden" name="checkbox[${component.getID()}][component_id]" value="${component.getID()}">
+                            <input class="formInput" type="hidden" name="checkbox[${component.getID()}][type]" value="${component.getType()}">
                         </div>
                         <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
-                            <input type="checkbox" id="consider3" name="consider3" value="Consider">
-                            <label for="consider3">
-                                Consider in sentiment analysis</label><br>
-                            <label for="rating3">Sentiment Influence (1-5):</label>
-                            <input type="number" id="rating3" name="rating3" min="1" max="5"><br>
-                            <input type="checkbox" id="highlight3" name="highlight3" value="Consider">
-                            <label for="highlight3">
-                                Highlight?</label>
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <input type="checkbox" name="checkbox[${component.getID()}][consider]" value="consider">
+                                <label for="checkbox[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #else 
+                                <input type="checkbox" name="checkbox[${component.getID()}][consider]" value="consider" checked="true">
+                                <label for="checkbox[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #end 
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="checkbox[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #else 
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="checkbox[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #end
                         </div>
 
-                        #elseif($component.getType() == "radio" && false) ## component is of type radio
+                        #elseif($component.getType() == "radio") ## component is of type radio
                         <div class="feedbackElement">
                             <h3>
                                 Radio
                             </h3>
-                            <input class="formInput" type="text" placeholder="Enter Prompt" value="$component.getPrompt()">
-                            <input class="formInput" type="hidden" value="$component.getType()">
+                            #if($component.isEmptyComponent())
+                                <input class="formInput" type="text" name="radio[${component.getID()}][prompt]" placeholder="Enter Prompt">
+                            #else 
+                                <input class="formInput" type="text" name="radio[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
+                            #end
                             #foreach($option in $component.getOptions())
                                 <div class="formInputBulletIcon">&bull;</div>
-                                <input class="formInputBullet" type="text" placeholder="Enter Text" value="option">
+                                <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter Text" value="option">
                                 <label class="formInputBulletLabel" for="bulletrating2">Positivity (-3 to 3):</label>
+                                <!-- LINK BELOW INPUT TO BACKEND! -->
                                 <input
                                     class="formInputBulletRating"
                                     type="number"
@@ -124,14 +149,34 @@
                                     min="-3"
                                     max="3"><br>
                             #end
+                            <input class="formInput" type="hidden" name="radio[${component.getID()}][name]" value="${component.getName()}">
+                            <input class="formInput" type="hidden" name="radio[${component.getID()}][component_id]" value="${component.getID()}">
+                            <input class="formInput" type="hidden" name="radio[${component.getID()}][type]" value="${component.getType()}">
                         </div>
                         <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
-                            <input type="checkbox" id="consider2" name="consider2" value="Consider">
-                            <label for="consider2">
-                                Consider in sentiment analysis</label><br>
-                            <label for="rating2">Sentiment Influence (1-5):</label>
-                            <input type="number" id="rating2" name="rating2" min="1" max="5"><br>
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <input type="checkbox" name="radio[${component.getID()}][consider]" value="consider">
+                                <label for="radio[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #else 
+                                <input type="checkbox" name="radio[${component.getID()}][consider]" value="consider" checked="true">
+                                <label for="radio[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #end 
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="radio[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #else 
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="radio[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #end
                         </div>
 
                         #end

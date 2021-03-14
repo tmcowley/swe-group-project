@@ -212,6 +212,15 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
+    /**
+     * Creates an option template component in the database
+     * @param name Component name
+     * @param type Question, or radio, or checkbox
+     * @param prompt Question/ prompt
+     * @param options Array of radio or checkbox options
+     * @param optionsAns Array of boolean responses to options array e.g. t, f, t for checkbox type; empty if type is question
+     * @return Stored template component
+     */
     public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -246,6 +255,14 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
+    /**
+     * Creates a question template component in the database
+     * @param name Component name
+     * @param type Question, or radio, or checkbox
+     * @param prompt Question/ prompt
+     * @param textResponse Text response field following prompt (null if type radio or checkbox)
+     * @return Stored template component
+     */
     public TemplateComponent createQuestionTemplateComponent(String name, String type, String prompt, String textResponse){
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -289,6 +306,12 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
+    /**
+     * Updates a question template component in the database
+     * @param tc_id template component id
+     * @param prompt Question/ prompt
+     * @return whether or not the template component was updated
+     */
     public Boolean updateQuestionTemplateComponent(int tc_id, String prompt){
         PreparedStatement stmt = null;
         Integer tcUpdated = null;

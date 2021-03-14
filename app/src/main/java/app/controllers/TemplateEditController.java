@@ -15,7 +15,9 @@ import app.util.*;
 
 public class TemplateEditController {
 
-    // serve the template editor page (in response to GET request)
+    /**
+     * serve the template editor page (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: TemplateEditController:servePage recognized request");

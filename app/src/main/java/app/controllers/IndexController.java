@@ -9,7 +9,9 @@ import app.util.*;
 
 public class IndexController {
 
-    // Serve the landing (index) page following GET request
+    /**
+     * Serve the landing (index) page following GET request
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: IndexController:servePage recognized request");

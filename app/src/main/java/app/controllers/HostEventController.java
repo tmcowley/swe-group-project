@@ -21,7 +21,9 @@ import spark.*;
 
 public class HostEventController {
 
-    // serve host event page (following GET request)
+    /**
+     * serve host event page (following GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostEventController:servePage recognized request");

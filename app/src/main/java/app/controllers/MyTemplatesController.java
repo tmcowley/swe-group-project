@@ -14,7 +14,9 @@ import spark.*;
 
 public class MyTemplatesController {
 
-    // serve the page containing all host templates (in response to GET request)
+    /**
+     * serve the page containing all host templates (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: MyTemplatesController:servePage recognized request");

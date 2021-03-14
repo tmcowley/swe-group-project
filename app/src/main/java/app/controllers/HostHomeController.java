@@ -13,7 +13,9 @@ import spark.*;
 
 public class HostHomeController {
 
-    // serve the host homepage (in response to GET request)
+    /**
+     * serve the host homepage (in response to GET request)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: HostHomeController:servePage recognized request");

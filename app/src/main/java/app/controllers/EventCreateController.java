@@ -15,7 +15,9 @@ import spark.*;
 
 public class EventCreateController {
 
-    // serve the event creation page for an authenticated host
+    /**
+     * serve the event creation page for an authenticated host
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: EventCreateController:servePage recognized request");

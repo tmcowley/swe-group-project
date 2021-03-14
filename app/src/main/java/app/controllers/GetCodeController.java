@@ -12,7 +12,9 @@ import spark.*;
 
 public class GetCodeController {
 
-    // serve the host-code displaying page (following GET request from host sign-up)
+    /**
+     * serve the host-code displaying page (following GET request from host sign-up)
+     */
     public static Route servePage = (Request request, Response response) -> {
 
         System.out.println("\nNotice: GetCodeController:servePage recognized request");

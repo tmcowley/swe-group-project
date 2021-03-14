@@ -3,6 +3,8 @@ package app.objects;
 // for array comparison in class equals method
 import java.util.Arrays;
 
+import org.apache.commons.lang.BooleanUtils;
+
 // for checking if a field is null, empty, or blank
 import spark.utils.StringUtils;
 
@@ -27,7 +29,7 @@ public class TemplateComponent {
     private Boolean[] optionsAns;
 
     // sentiment positivity rating (1 to 7)
-    private int[] tc_options_pos;
+    private Integer[] tc_options_pos;
 
     // text response field following prompt
     // null if type radio or checkbox
@@ -68,18 +70,20 @@ public class TemplateComponent {
      * @param textResponse text response field following prompt null if type radio
      *                     or checkbox
      */
-    public TemplateComponent(int id, String name, String type, String prompt, String[] options, Boolean[] optionsAns,
-            String textResponse) {
+    public TemplateComponent(int id, String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns, String textResponse) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.prompt = prompt;
+        this.tc_considered_in_sentiment = tc_considered_in_sentiment;
+        this.tc_sentiment_weight = tc_sentiment_weight;
         this.options = options;
         this.optionsAns = optionsAns;
+        this.tc_options_pos = tc_options_pos;
         this.textResponse = textResponse;
     }
 
-    public TemplateComponent(String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, int[] tc_options_pos, Boolean[] optionsAns,
+    public TemplateComponent(String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns,
             String textResponse) {
         this.name = name;
         this.type = type;
@@ -242,6 +246,34 @@ public class TemplateComponent {
      */
     public boolean isEmptyComponent() {
         return (StringUtils.isBlank(prompt));
+    }
+
+    public Integer[] getTc_options_pos() {
+        return tc_options_pos;
+    }
+
+    public void setTc_options_pos(Integer[] tc_options_pos) {
+        this.tc_options_pos = tc_options_pos;
+    }
+
+    public Integer getTc_sentiment_weight() {
+        return tc_sentiment_weight;
+    }
+
+    public void setTc_sentiment_weight(Integer tc_sentiment_weight) {
+        this.tc_sentiment_weight = tc_sentiment_weight;
+    }
+
+    public boolean component_for_sentiment(){
+        return(BooleanUtils.isTrue(this.tc_considered_in_sentiment));
+    }
+
+    public Boolean getTc_considered_in_sentiment() {
+        return tc_considered_in_sentiment;
+    }
+
+    public void setTc_considered_in_sentiment(Boolean tc_considered_in_sentiment) {
+        this.tc_considered_in_sentiment = tc_considered_in_sentiment;
     }
 
     /**

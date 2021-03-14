@@ -154,12 +154,12 @@ public class DbConnection{
 
         // if component is of type question
         if (tc.getType().equals("question")){
-            return createQuestionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getTextResponse());
+            return createQuestionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getTextResponse(), tc.getTc_considered_in_sentiment(), tc.getTc_sentiment_weight());
         }
 
         // if component is of type option
         if (tc.getType().equals("radio") || tc.getType().equals("checkbox")){
-            return createOptionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getOptionsAns());
+            return createOptionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getTc_options_pos(), tc.getOptionsAns());
         }
 
         else {
@@ -221,22 +221,29 @@ public class DbConnection{
      * @param optionsAns Array of boolean responses to options array e.g. t, f, t for checkbox type; empty if type is question
      * @return Stored template component
      */
-    public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns){
+    public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
         try{
             // create empty template object
             String createTemplateComponent = ""
-                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_ans) "
-                + "VALUES(?, ?, ?, ?, ?) "
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_pos, tc_options_ans) "
+                + "VALUES(?, ?, ?, ?, ?, ?) "
                 + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
             stmt.setString(3, prompt);
             stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
-            stmt.setArray(5, this.conn.createArrayOf("BOOLEAN", optionsAns));
+
+            if (tc_options_pos == null){
+                stmt.setArray(5, this.conn.createArrayOf("INT", new Integer[0]));
+            } else {
+                stmt.setArray(5, this.conn.createArrayOf("INT", optionsAns));
+            }
+
+            stmt.setArray(6, this.conn.createArrayOf("BOOLEAN", optionsAns));
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -263,7 +270,7 @@ public class DbConnection{
      * @param textResponse Text response field following prompt (null if type radio or checkbox)
      * @return Stored template component
      */
-    public TemplateComponent createQuestionTemplateComponent(String name, String type, String prompt, String textResponse){
+    public TemplateComponent createQuestionTemplateComponent(String name, String type, String prompt, String textResponse, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
@@ -274,14 +281,26 @@ public class DbConnection{
         try{
             // create empty template object
             String createTemplateComponent = ""
-                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_text_response) "
-                + "VALUES(?, ?, ?, ?) "
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_text_response, tc_considered_in_sentiment, tc_sentiment_weight) "
+                + "VALUES(?, ?, ?, ?, ?, ?) "
                 + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
             stmt.setString(3, prompt);
             stmt.setString(4, textResponse);
+
+            // set sentiment related fields
+            if (tc_considered_in_sentiment == null){
+                stmt.setObject(5, null);
+            } else {
+                stmt.setBoolean(5, tc_considered_in_sentiment);
+            }
+            if (tc_sentiment_weight == null){
+                stmt.setObject(6, null);
+            } else {
+                stmt.setInt(6, tc_sentiment_weight);
+            }
 
             rs = stmt.executeQuery();
 
@@ -1013,8 +1032,11 @@ public class DbConnection{
                 String name = rs.getString("tc_name");
                 String type = rs.getString("tc_type");
                 String prompt = rs.getString("tc_prompt");
+                Boolean tc_considered_in_sentiment = (Boolean) rs.getObject("tc_considered_in_sentiment");
+                Integer tc_sentiment_weight = (Integer) rs.getObject("tc_sentiment_weight");
                 String[] options = null;
                 Boolean[] options_ans = null;
+                Integer[] options_pos = null;
                 String text_response = null;
 
                 // component is of type question
@@ -1024,11 +1046,18 @@ public class DbConnection{
 
                 // component is of type options
                 if (type.equals("radio") || type.equals("checkbox")){
-                    options = (String[]) rs.getArray("tc_options").getArray();
-                    options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
+                    try{
+                        options = (String[]) rs.getArray("tc_options").getArray();
+                    } catch (Exception e) {;}
+                    try{
+                        options_pos = (Integer[]) rs.getArray("tc_options_pos").getArray();
+                    } catch (Exception e) {;}
+                    try{
+                        options_ans = (Boolean[]) rs.getArray("tc_options_ans").getArray();
+                    } catch (Exception e) {;}
                 }
 
-                tc = new TemplateComponent(id, name, type, prompt, options, options_ans, text_response);
+                tc = new TemplateComponent(id, name, type, prompt, tc_considered_in_sentiment, tc_sentiment_weight, options, options_pos, options_ans, text_response);
             }
         } catch (SQLException e){
             System.out.println(e.getMessage().toUpperCase());
@@ -1132,12 +1161,15 @@ public class DbConnection{
             // get all components
             rs2 = stmt2.executeQuery();
             while (rs2.next()) {
-                int component_id = rs2.getInt("tc_id");
+                int id = rs2.getInt("tc_id");
                 String name = rs2.getString("tc_name");
                 String type = rs2.getString("tc_type");
-                String prompt = rs2.getString("tc_prompt"); 
+                String prompt = rs2.getString("tc_prompt");
+                Boolean tc_considered_in_sentiment = (Boolean) rs2.getObject("tc_considered_in_sentiment");
+                Integer tc_sentiment_weight = (Integer) rs2.getObject("tc_sentiment_weight");
                 String[] options = null;
                 Boolean[] options_ans = null;
+                Integer[] options_pos = null;
                 String text_response = null;
 
                 // component is of type question
@@ -1148,10 +1180,11 @@ public class DbConnection{
                 // component is of type options
                 if (type.equals("radio") || type.equals("checkbox")){
                     options = (String[]) rs2.getArray("tc_options").getArray();
+                    options_pos = (Integer[]) rs2.getArray("tc_options_pos").getArray();
                     options_ans = (Boolean[]) rs2.getArray("tc_options_ans").getArray();
                 }
 
-                templateComponent = new TemplateComponent(component_id, name, type, prompt, options, options_ans, text_response);
+                templateComponent = new TemplateComponent(id, name, type, prompt, tc_considered_in_sentiment, tc_sentiment_weight, options, options_pos, options_ans, text_response);
                 components.add(templateComponent);
             }
             template = new Template(template_id, host_id, template_name, template_code, timestamp, components);

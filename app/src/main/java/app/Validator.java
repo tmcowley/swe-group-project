@@ -437,7 +437,7 @@ public class Validator {
                 return false;
             }
             // ensure no weight is out of bounds
-            if (weight < 0 || weight > 7) {
+            if (weight < 0 || weight > 5) {
                 return false;
             }
         }

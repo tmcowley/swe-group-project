@@ -3,6 +3,9 @@ package app.objects;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 public class Feedback {
 
@@ -301,8 +304,8 @@ public class Feedback {
         if (!Arrays.equals(this.keys, that.getKeys())) {
             return false;
         }
-        // ensure compounds are equal
-        if (!this.compound.equals(that.getCompound())) {
+        // ensure compounds are equal (null-safe)
+        if (!Objects.equals(this.compound, that.getCompound())){
             return false;
         }
         // ensure key results arrays are equal

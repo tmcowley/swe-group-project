@@ -9,12 +9,14 @@ import app.sentimentanalysis.SentimentAnalyser;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import spark.*;
 
 // for data validation
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang.ObjectUtils.Null;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
 public class APIController {
@@ -477,38 +479,57 @@ public class APIController {
 
         // for each component in the template
         for (TemplateComponent component : template.getComponents()){
+
             // collect component prompt
-            String prompt = request.queryParams("question["+component.getID()+"][prompt]");
-            if (StringUtils.isBlank(prompt)){
-                System.out.println("Notice:  prompt is blank or empty");
-                continue;
+            String prompt = request.queryParams("component["+component.getID()+"][prompt]");
+            // if (StringUtils.isBlank(prompt)){
+            //     System.out.println("Notice:  prompt is blank or empty");
+            //     continue;
+            // }
+            // System.out.println("NOTICE: question prompt collected");
+            String name = request.queryParams("component["+component.getID()+"][name]");
+            String type = request.queryParams("component["+component.getID()+"][type]");
+            int old_component_id = Integer.valueOf(request.queryParams("component["+component.getID()+"][component_id]"));
+            String consider_string = request.queryParams("component["+component.getID()+"][consider]");
+            Boolean considered;
+
+            // collect checkbox input
+            if (consider_string == null){
+                considered = false;
+            } else {
+                considered = true;
             }
-            System.out.println("NOTICE: prompt collected");
 
-            String name = request.queryParams("question["+component.getID()+"][name]");
-            String type = request.queryParams("question["+component.getID()+"][type]");
-            int old_component_id = Integer.valueOf(request.queryParams("question["+component.getID()+"][component_id]"));
-            // String consider = request.queryParams("question["+component.getID()+"][consider]");
-            // String weight = request.queryParams("question["+component.getID()+"][weight]");
-
-            // TODO
+            Integer weight = null;
             String[] options = null;
             Boolean[] optionsAns = null;
-            if (type.equals("radio") || type.equals("checkbox")) {
-                // optionsAnsStrings = request.queryParamsValues("tc_optionsAns");
-                // if (options == null || optionsAnsStrings == null){
-                //     System.out.println("Error:  form inputs for option type not collected");
-                //     return null;
-                // }
-                // optionsAns = new Boolean[optionsAnsStrings.length];
-                // for (int i = 0; i < optionsAnsStrings.length; i++) {
-                //     optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
-                // }
-                ;
+            Integer[] optionPos = null;
+
+            if (component.getType().equals("question")){
+
+                String weight_string = request.queryParams("component["+component.getID()+"][weight]");
+                weight = Integer.parseInt(weight_string);
+
+            }
+            else if (component.getType().equals("radio") || component.getType().equals("checkbox")) {
+
+                options = request.queryParamsValues("options-"+component.getID()+"[]");
+                if (options == null){
+                    System.out.println("Error:  form inputs for option type not collected");
+                    continue;
+                }
+
+                String[] options_pos_as_string = request.queryParamsValues("options-pos-"+component.getID()+"[]");
+                int array_len = options_pos_as_string.length;
+
+                optionPos = new Integer[array_len];
+                for (int i = 0; i < array_len; i++) {
+                    optionPos[i] = Integer.parseInt(options_pos_as_string[i]) + 4;
+                }
             }
 
-            TemplateComponent new_component = new TemplateComponent(name, type, prompt, options, optionsAns, "");
-            // ensure filled is valid
+            TemplateComponent new_component = new TemplateComponent(name, type, prompt, considered, weight, options, optionPos, optionsAns, "");
+            // ensure new component is valid
             if (!v.isComponentValid(new_component)){
                 System.out.println("Error:  filled component is invalid");
                 session.attribute("errorMessageCreateTemplate", "a component is invalid");
@@ -624,11 +645,11 @@ public class APIController {
         TemplateComponent component = null;
 
         if (componentType.equals("question")) {
-            component = new TemplateComponent("component_name", "question", "", null, null, "");
+            component = new TemplateComponent("component_name", "question", "", null, null, null, null, null, "");
         } else if (componentType.equals("checkbox")) {
-            component = new TemplateComponent("component_name", "checkbox", "", new String[0], new Boolean[0], null);
+            component = new TemplateComponent("component_name", "checkbox", "", null, null, new String[0], new Integer[0], new Boolean[0], null);
         } else if (componentType.equals("radio")) {
-            component = new TemplateComponent("component_name", "radio", "", new String[0], new Boolean[0], null);
+            component = new TemplateComponent("component_name", "radio", "", null, null, new String[0], new Integer[0], new Boolean[0], null);
         }
 
         // ensure component created is valid

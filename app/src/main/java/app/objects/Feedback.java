@@ -189,6 +189,44 @@ public class Feedback {
     public void addKey_Results(String new_key_result) {
         this.key_results.add(new_key_result);
     }
+
+    /**
+     * assess sentiment of compound
+     * @return sentiment (qualitative)
+     */
+    public String assessSentiment(){
+        Float compound = this.compound;
+        if (compound == null) {
+            return null;
+        }
+        if (compound > 1 || compound < -1){
+            return null;
+        }
+        if (compound > 0.15) {
+            if (compound < 0.45) {
+                return("slightly positive");
+            } 
+            else if (compound < 0.75) {
+                return("positive");
+            } 
+            else {
+                return("very positive");
+            }
+        } else if (compound < -0.15) {
+            if (compound > -0.45) {
+                return("slightly negative");
+            } 
+            else if (compound > -0.75) {
+                return("negative");
+            } 
+            else {
+                return("very negative");
+            }
+        } else {
+            return("neutral");
+        }
+    }
+
     /**
      * null-safe feedback comparison
      * @param that other feedback

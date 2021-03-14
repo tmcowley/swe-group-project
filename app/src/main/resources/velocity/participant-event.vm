@@ -13,7 +13,7 @@
         <a href="/">Resmodus</a>
     </div>
     <div id="headerRight">
-        login stuff goes here
+        Login stuff here
     </div>
 </header>
 <div id="mainBodyContainer">
@@ -42,7 +42,9 @@
                         <div class="feelingRadioImg sad"></div>
                     </div>
                 </div>
-                <label id="formErrorMessage">Error Message</label>
+                #if($errorMessageInParticipantEvent) 
+                <label id="formErrorMessage">$errorMessageInParticipantEvent</label>
+                #end
                 <div id="sumbitButtonContainer">
                     <input type="submit" id="submitButton" value="Submit">
                     <div id="submitAnonymous">

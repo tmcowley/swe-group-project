@@ -13,42 +13,38 @@ import java.sql.SQLException;
 
 public class App {
 
-    // Stores the singleton instance of this class.
+    // stores the singleton instance of this class
     private static App app;
 
-    // Stores the database connection.
+    // stores the database connection.
     private DbConnection db;
 
-    // Stores the validator class.
+    // stores the validator class.
     private Validator validator;
 
-    // Gets the singleton instance of this class.
+    // gets the singleton instance of this class
     public static App getInstance() {
         return app;
     }
 
-    // Gets the database connection for this program.
+    // gets the database connection for this program
     public DbConnection getDbConnection() {
         return this.db;
     }
 
-    // Gets the validator for this program.
+    // gets the validator for this program
     public Validator getValidator() {
         return this.validator;
     }
 
-    /**
-     * Explicitly mark constructor as private so no instances of this class can be
-     * created elsewhere.
-     */
+    // mark constructor as private to prevent external instances
     private App() {
-
     }
 
     /**
-     * The main entry point for the application.
+     * main entry point for the application
      * 
-     * @param args The command-line arguments supplied by the OS.
+     * @param args command-line arguments supplied by the OS
      */
     public static void main(String[] args) throws SQLException {
         // initialize and run the program
@@ -59,7 +55,7 @@ public class App {
     // Runs the program.
     private void run() throws SQLException {
 
-        // tell the Spark framework where to find static files
+        // state location to static files
         staticFiles.location("/static");
         Spark.port(4567);
 
@@ -68,13 +64,11 @@ public class App {
             db = new DbConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            //throw e;
+            // throw e;
         }
 
         // instantiate validator
         validator = new Validator();
-
-        // TODO: for each currently running event, generate /event/join/<code>
 
         // API endpoint mappings
         path("/", () -> {
@@ -88,18 +82,15 @@ public class App {
             get("/get-code", GetCodeController.servePage);
             get("/home", HostHomeController.servePage);
             get("/create-event", EventCreateController.servePage);
-
             // host POST-API endpoint mappings
             post("/get-code", APIController.createHost);
             post("/home", AuthController.authHost);
-
             // template API endpoint mappings
             path("/templates", () -> {
                 // template GET-API endpoint mappings
                 get("", MyTemplatesController.servePage);
                 get("/new", TemplateCreateController.servePage);
                 get("/edit/code", TemplateEditController.servePage);
-
                 // template POST-API endpoint mappings
                 post("/new", APIController.createEmptyTemplate);
                 post("/edit/code", APIController.createTemplate);
@@ -107,14 +98,12 @@ public class App {
                 post("/edit/code/delete-template", APIController.deleteTemplate);
                 post("/edit/code/delete-template-component", APIController.deleteTemplateComponent);
             });
-
         });
         path("/event", () -> {
             // event GET-API endpoint mappings
             get("/host/code", HostEventController.servePage);
             // get("/join/code", participantEventController.servePage);
             get("/participant/feedback", ParticipantEventController.servePage);
-
             // event POST-API endpoint mappings
             post("/join/code", APIController.joinEvent);
             post("/host/code", APIController.createEvent);
@@ -122,7 +111,7 @@ public class App {
         });
         path("/error", () -> {
             get("/401", ViewUtil.unauthAccess);
-            //get("/404", ViewUtil.notFound);
+            get("/404", ViewUtil.notFound);
             get("/406", ViewUtil.notAcceptable);
         });
 

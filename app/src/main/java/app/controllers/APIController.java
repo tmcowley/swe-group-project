@@ -8,11 +8,9 @@ import app.sentimentanalysis.SentimentAnalyser;
 
 import java.sql.Timestamp;
 
-import java.util.Date;
-import java.util.Calendar;
-
 import spark.*;
 
+// for data validation
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
@@ -108,26 +106,46 @@ public class APIController {
         // initialise event and input
         Event event = null;
         Host host = session.attribute("host");
+
+        // collect POST request parameters
         String title = request.queryParams("eventTitle");
         String description = request.queryParams("eventDescription");
         String type = request.queryParams("eventType");
         String templateCode = request.queryParams("eventTemplate");
 
-        // parse Timestamps from event creation
-        String[] startTimes = request.queryParams("startTime").split(":");
-        String[] endTimes = request.queryParams("endTime").split(":");
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimes[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(startTimes[1]));
-        calendar.set(Calendar.SECOND, 0);
-        Date sTime =(Date) calendar.getTime();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimes[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(endTimes[1]));
-        calendar.set(Calendar.SECOND, 0);
-        Date eTime =(Date) calendar.getTime();       
-        Timestamp startTime = new Timestamp(sTime.getTime());
-        Timestamp endTime = new Timestamp(eTime.getTime());    
+        // ensure all request parameters were collected
+        if (title == null || description == null || type == null || templateCode == null){
+            session.attribute("errorMessageCreateEvent", "Error: not all form inputs not collected");
+            response.redirect("/host/create-event");
+            return null;
+        }
+
+        // generate a timestamp for now
         Timestamp current = new Timestamp(System.currentTimeMillis());
+
+        /*
+            // parse start and end times from event creation
+            String[] start_time_string = request.queryParams("startTime").split(":");
+            String[] end_time_string = request.queryParams("endTime").split(":");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time_string[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(start_time_string[1]));
+            calendar.set(Calendar.SECOND, 0);
+            Date sTime =(Date) calendar.getTime();
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(end_time_string[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(end_time_string[1]));
+            calendar.set(Calendar.SECOND, 0);
+            Date eTime =(Date) calendar.getTime();       
+            Timestamp startTime = new Timestamp(sTime.getTime());
+            Timestamp endTime = new Timestamp(eTime.getTime());    
+            Timestamp current = new Timestamp(System.currentTimeMillis());
+            if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
+                // note: testing discovered errors in this
+                session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
+                response.redirect("/host/create-event");
+                return null;
+            }
+        */
 
         // validate input before database interaction
         if (!v.eventTitleIsValid(title)) {
@@ -145,23 +163,17 @@ public class APIController {
             response.redirect("/host/create-event");
             return null;
         }
-        // TODO: broken
-        // if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
-        //     session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
-        //     response.redirect("/host/create-event");
-        //     return null;
-        // }
 
         // create an event object
         if (templateCode.equals("noTemplate")) {
             // create an event without a template
             System.out.println("Notice: no template has been provided");
-            event = db.createEvent(host.getHostID(), title, description, type, startTime, endTime);
+            event = db.createEvent(host.getHostID(), title, description, type, current, current);
         } else if (v.templateCodeIsValid(templateCode)) {
             // create an event with a template
             System.out.println("Notice: a template has been provided");
             Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, startTime, endTime);
+            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, current, current);
         }
 
         // ensure event created is valid
@@ -202,6 +214,7 @@ public class APIController {
             response.redirect("/");
             return null;
         }
+        //System.out.println("Notice: form attributes collected, are valid");
 
         // ensure event-code exists in system
         if (!db.eventCodeExists(eventCode)) {
@@ -210,21 +223,30 @@ public class APIController {
             response.redirect("/");
             return null;
         }
+        //System.out.println("Notice: event code exists in system");
 
         // create Participant object in DB -> link to event
         Participant participant = db.createParticipant(f_name, l_name);
         Event event = db.getEventByCode(eventCode);
-        db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
 
-        // ensure event is valid
-        if (!v.isEventValid(event)){
-            System.out.println("Error:  the event was invalid");
-            request.session().attribute("errorMessageJoinEvent", "Error: the event was invalid");
+        // ensure event and participant creations were succeeded
+        if (!v.isParticipantValid(participant) || !v.isEventValid(event)){
+            System.out.println("Error:  participant/ event creation failed");
+            request.session().attribute("errorMessageJoinEvent", "Error: participant or event creation failed");
             response.redirect("/");
             return null;
         }
 
-        // startup session; add participant and event to session
+        // add participant to event; ensure success
+        Boolean added = db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
+        if (BooleanUtils.isNotTrue(added)){
+            System.out.println("Error:  adding participant to event failed");
+            request.session().attribute("errorMessageJoinEvent", "Error: adding participant to event failed");
+            response.redirect("/");
+            return null;
+        }
+
+        // start session; add participant and event to session
         request.session(true);
         request.session().attribute("participant", participant);
         request.session().attribute("event", event);
@@ -248,42 +270,88 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createFeedback session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure participant and event exist in current session
         if (session.attribute("event") == null || session.attribute("participant") == null){
-            System.out.println("Error:  APIController:createFeedback session found, event or participant not in session");
+            System.out.println("Error:  session found, event or participant not in session");
             response.redirect("/error/401");
             return null;
         }
 
-        // initialise event and input
+        // store event and participant from session; get IDs and codes
         Event event = session.attribute("event");
         Participant participant = session.attribute("participant");
+        int event_id = event.getEventID();
+        String event_code = event.getEventCode();
+        int participant_id = participant.getParticipantID();
+
+        // ensure event exists
+        if (!db.eventCodeExists(event_code)){
+            System.out.println("Error:  session found, event does not exist");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // ensure participant exists, and is in event
+        if (!db.participantInEvent(participant_id, event_id)){
+            System.out.println("Error:  session found, participant not in event");
+            response.redirect("/error/401");
+            return null;
+        }
+
+        // collect fields from form
         String[] results = { request.queryParams("feedbackData") };
+        int results_length = results.length;
+        String anonymous_string = request.queryParams("anon");
+
+        // ensure form inputs collected
+        if (request.queryParams("feedbackData") == null){
+            System.out.println("Error:  results array not set");
+            session.attribute("errorMessageInParticipantEvent", "Error: form inputs not collected (or empty)");
+            response.redirect("/event/participant/feedback");
+            return null;
+        }
+
         Float[] weights = { 4f };
         byte[] types = { 0 };
         Boolean[] keys = { false };
-        byte[][] sub_weights = new byte[0][0];
+        byte[][] sub_weights = new byte[results_length][5];
         Timestamp current = new Timestamp(System.currentTimeMillis());
+
+        // get feedback anonymity state
         Boolean anonymous = false;
-        if (request.queryParams("anon") != null && request.queryParams("anon").equals("Submit Anonymously")) {
+        if (StringUtils.equals(anonymous_string, "Submit Anonymously")){
             anonymous = true;
         }
 
-        System.out.println("Notice: generating feedback instance");
-        Feedback feedback = new Feedback(participant.getParticipantID(), event.getEventID(), results, weights, types, keys, sub_weights, anonymous, current);
-        
-        // run sentiment analysis on feedback
-        SentimentAnalyser.main(feedback);
-        if (feedback.getCompound() != null) System.out.println("Notice: SA on feedback successful");
+        System.out.println("Notice: generating new feedback instance");
+        Feedback feedback = new Feedback(participant_id, event_id, results, weights, types, keys, sub_weights, anonymous, current);
 
         // ensure feedback is valid
         if (!v.isFeedbackValid(feedback)){
-            System.out.println("Error: APIController:createFeedback: feedback considered invalid");
+            System.out.println("Error: feedback considered invalid (before SA)");
+            session.attribute("errorMessageInParticipantEvent", "Error: feedback invalid");
+            return "Error: feedback considered invalid";
+        }
+        
+        // run sentiment analysis on feedback; ensure SA was successful
+        SentimentAnalyser.main(feedback);
+        if (feedback.getCompound() == null) {
+            System.out.println("Notice: SA on feedback failed");
+            session.attribute("errorMessageInParticipantEvent", "Error: sentiment analysis failed");
+            response.redirect("/event/participant/feedback");
+            return null;
+        }
+        System.out.println("Notice: SA on feedback successful");
+
+        // ensure feedback is valid
+        if (!v.isFeedbackValid(feedback)){
+            System.out.println("Error: feedback considered invalid (after SA)");
+            session.attribute("errorMessageInParticipantEvent", "Error: feedback invalid");
             return "Error: feedback considered invalid";
         }
 

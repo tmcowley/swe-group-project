@@ -147,7 +147,7 @@ public class Event {
      * sets description
      * @param desc
      */
-    public void setDesciption(String desc){
+    public void setDescription(String desc){
         this.description = desc;
     }
     /**

@@ -316,22 +316,28 @@ public class Validator {
     public boolean isFeedbackValid(Feedback feedback) {
         // ensure feedback object is not null
         if (feedback == null) {
+            System.out.println("null");
             return false;
         }
 
         // validate fields: IDs:
-        if (!idIsValid(feedback.getFeedbackID())) {
+        Integer feedback_id = feedback.getFeedbackID();
+        if ((feedback_id != null) && (!idIsValid(feedback_id))) {
+            System.out.println("null");
             return false;
         }
         if (!idIsValid(feedback.getEventID())) {
+            System.out.println("event id");
             return false;
         }
         if (!idIsValid(feedback.getParticipantID())) {
+            System.out.println("part id");
             return false;
         }
         // note: anonymous boolean already valid
         // validate timestamp
         if (feedback.getTimestamp() == null) {
+            System.out.println("timestamp");
             return false;
         }
 
@@ -363,15 +369,20 @@ public class Validator {
         // ensure length of arrays: results, weights, types, and keys are all equal
         int array_length = results.length;
         if (weights.length != array_length) {
+            System.out.println("weights array length diff");
             return false;
         }
         if (types.length != array_length) {
+            System.out.println("types array length diff");
             return false;
         }
         if (keys.length != array_length) {
+            System.out.println("keys array length diff");
             return false;
         }
         if (sub_weights.length != array_length){
+            System.out.println("results len: " + array_length + ", sub weights len: " + sub_weights.length);
+            System.out.println("sub weights array length diff");
             return false;
         }
 
@@ -379,37 +390,28 @@ public class Validator {
         Float compound = feedback.getCompound();
         // ensure compound score is either null, or falls between -1 and 1
         if ((compound != null) && (compound < -1 || compound > 1)){
+            System.out.println("compound");
             return false;
         }
 
         // validate results array
         for (int i = 0; i < results.length; i++) {
             if (StringUtils.isBlank(results[i])) {
+                System.out.println("element in results is null");
                 return false;
             }
         }
 
         // validate weights array
         if (!isNormalisedWeightsValid(weights) && !isNonNormalisedWeightsValid(weights)){
+            System.out.println("weights array");
             return false;
         }
 
         // validate types array
         for (int i = 0; i < types.length; i++) {
             if (types[i] > 2 || types[i] < 0) {
-                return false;
-            }
-        }
-
-        // TODO: Check all values in sub_weights are between 0 and 7
-        // validate sub-weights
-        for (Float weight : weights) {
-            // ensure no weight is null
-            if (weight == null) {
-                return false;
-            }
-            // ensure no weight is out of bounds
-            if (weight < 0 || weight > 7) {
+                System.out.println("a type not in range");
                 return false;
             }
         }
@@ -418,6 +420,7 @@ public class Validator {
         // (each internal byte array is of length 5)
         for (byte[] sub_weight : sub_weights){
             if (sub_weight.length != 5){
+                System.out.println("sub weights");
                 return false;
             }
         }

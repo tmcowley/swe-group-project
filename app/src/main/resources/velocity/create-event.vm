@@ -30,10 +30,12 @@
         #end
                 <option value="noTemplate">Do not use a template</option>
             </select>
+            <!-- 
             <label for="startTime">Start Time</label>
             <input type="time" id="startTime" name="startTime">
             <label for="endTime">End Time</label>
             <input type="time" id="endTime" name="endTime">
+             -->
             <!-- Label to hold error messages -->
             #if ($errorMessageCreateEvent)
             <label id="formErrorMessage">$errorMessageCreateEvent</label>

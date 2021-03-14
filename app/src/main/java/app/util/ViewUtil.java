@@ -13,7 +13,13 @@ public class ViewUtil {
         return strictVelocityEngine().render(new ModelAndView(model, templatePath));
     }
 
-    // unauthorized page access (HTTP_401)
+    /**
+     * unauthorized page access (HTTP_401)
+     * 
+     * Guide to make an error for this page:
+     * response.redirect("/error/401");
+     * return null;
+     */
     public static Route unauthAccess = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:unauthAccess (401) called");
         response.status(HttpStatus.UNAUTHORIZED_401);
@@ -24,7 +30,13 @@ public class ViewUtil {
     };
 
 
-    // page not found Route (HTTP_404)
+    /**
+     * page not found Route (HTTP_404)
+     * 
+     * Guide to make an error for this page:
+     * response.redirect("/error/404");
+     * return null;
+     */
     public static Route notFound = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:notFound (404) called");
         response.status(HttpStatus.NOT_FOUND_404);
@@ -34,7 +46,17 @@ public class ViewUtil {
         return ViewUtil.render(request, model, "/velocity/404-not-found.vm");
     };
 
-    // general error page: not acceptable (HTTP_406)
+    /**
+     * general error page: not acceptable (HTTP_406)
+     * 
+     * Guide to make an error for this page:
+     * session.attribute("errorFrom", ""); 
+     * session.attribute("errorMessage", ""); 
+     * session.attribute("errorRedirect", "");
+     * response.redirect("/error/406");
+     * return null;
+     * 
+     */
     public static Route notAcceptable = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:notAcceptable (406) called");
         response.status(HttpStatus.NOT_ACCEPTABLE_406);

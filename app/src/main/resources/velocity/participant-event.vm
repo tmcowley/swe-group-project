@@ -23,7 +23,7 @@
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/info-icon.png"></span>
         <div id="mainForm">
             <!-- Feedback form -->
-#if($components)
+#if($components.size() != 0)
             <form action="/event/participant/feedback" method="post">
                 #foreach($i in $components)
                     #if($i.getType() == "question")
@@ -91,7 +91,7 @@
         </div>
 #if($feedbacks)
     #foreach($i in $feedbacks)
-        #if($componentCounts)
+        #if($componentCounts.size() != 0)
             <div class="feedbackBox">
                 #foreach($c in $componentCounts)
                     <p>

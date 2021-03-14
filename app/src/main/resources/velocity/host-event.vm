@@ -30,7 +30,7 @@
     #foreach($i in $feedbackCounts)
         <div class="feedbackBox">
             <h1>$participantFName.get($i) $participantLName.get($i)</h1>
-            #if($componentCounts)
+            #if($componentCounts.size() != 0)
                 #foreach($c in $componentCounts)
                     <p>
                         <strong>$questionComponents.get($c).getPrompt():

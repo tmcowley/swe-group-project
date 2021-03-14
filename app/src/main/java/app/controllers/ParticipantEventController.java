@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.velocity.runtime.directive.Foreach;
+
 import spark.*;
 
 public class ParticipantEventController {
@@ -43,7 +45,18 @@ public class ParticipantEventController {
         // collect event and participant from session
         Event event = session.attribute("event");
         Participant participant = session.attribute("participant");
-
+        Template template = db.getTemplate(event.getTemplateID());
+        ArrayList<TemplateComponent> components = template.getComponents();
+        ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
+        int componentCount = 0;
+        List<Integer> componentCounts = new ArrayList<Integer>();
+        for (TemplateComponent component: components) {
+            if (component.getType().equals("question")) {
+                questionComponents.add(component);
+                componentCounts.add(componentCount);
+                componentCount++;
+            }
+        }
         // ensure event is valid
         if (!v.isEventValid(event)){
             System.out.println("Error:  event in session invalid");
@@ -75,34 +88,37 @@ public class ParticipantEventController {
 
         Map<String, Object> model = new HashMap<>();
         Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
-        int feedbackCount = 0;
-        if (feedbacks.length != 0) {
-            List<String> participantFName = new ArrayList<String>();
-            List<String> participantLName = new ArrayList<String>();
-            List<String> feedbackData = new ArrayList<String>();
-            List<String> sentiment = new ArrayList<String>();
-            List<String> time = new ArrayList<String>();
-            for (Feedback feedback : feedbacks) {
-                feedbackData.add(feedback.getResults()[0]);
-                sentiment.add(feedback.assessSentiment());
-                time.add(feedback.getTimestamp().toString());
-                feedbackCount++;
-            }
-            model.put("participantFName", participantFName);
-            model.put("participantLName", participantLName);
-            model.put("feedbackData", feedbackData);
-            model.put("sentiment", sentiment);
-            model.put("time", time);
-        }
-        List<Integer> feedbackCounts = new ArrayList<Integer>();
-        for (int i = 0; i < feedbackCount; i++) {
-            feedbackCounts.add(i);
-        }
+        // int feedbackCount = 0;
+        // if (feedbacks.length != 0) {
+        //     List<String> participantFName = new ArrayList<String>();
+        //     List<String> participantLName = new ArrayList<String>();
+        //     List<String> feedbackData = new ArrayList<String>();
+        //     List<String> sentiment = new ArrayList<String>();
+        //     List<String> time = new ArrayList<String>();
+        //     for (Feedback feedback : feedbacks) {
+        //         feedbackData.add(feedback.getResults()[0]);
+        //         sentiment.add(feedback.assessSentiment());
+        //         time.add(feedback.getTimestamp().toString());
+        //         feedbackCount++;
+        //     }
+        //     model.put("participantFName", participantFName);
+        //     model.put("participantLName", participantLName);
+        //     model.put("feedbackData", feedbackData);
+        //     model.put("sentiment", sentiment);
+        //     model.put("time", time);
+        // }
+        // List<Integer> feedbackCounts = new ArrayList<Integer>();
+        // for (int i = 0; i < feedbackCount; i++) {
+        //     feedbackCounts.add(i);
+        // }
 
         // generate front-page model (place variables in front-end page)
-        model.put("feedbackCounts", feedbackCounts);
+        model.put("feedbacks", feedbacks);
         model.put("eventTitle", event.getTitle());
         model.put("eventDescription", event.getDescription());
+        model.put("components", components);
+        model.put("questionComponents", questionComponents);
+        model.put("componentCounts", componentCounts);
         model.put("errorMessageInParticipantEvent", session.attribute("errorMessageInParticipantEvent"));
 
         // unset session stored error message

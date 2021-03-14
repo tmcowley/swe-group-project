@@ -23,7 +23,42 @@
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/info-icon.png"></span>
         <div id="mainForm">
             <!-- Feedback form -->
+#if($components)
             <form action="/event/participant/feedback" method="post">
+                #foreach($i in $components)
+                    #if($i.getType() == "question")
+                        <h1>$i.getPrompt()</h1>
+                        <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
+                    #end
+                #end
+                <h1>Please rate how you're feeling.</h1>
+                <!-- the images are radio buttons -->
+                <div class="feelingRadioContainer">
+                    <div class="feelingRadio">
+                        <input type="radio" id="happy" name="feeling" value="happy">
+                        <div class="feelingRadioImg happy"></div>
+                    </div>
+                    <div class="feelingRadio">
+                        <input type="radio" id="ok" name="feeling" value="ok">
+                        <div class="feelingRadioImg ok"></div>
+                    </div>
+                    <div class="feelingRadio">
+                        <input type="radio" id="sad" name="feeling" value="sad">
+                        <div class="feelingRadioImg sad"></div>
+                    </div>
+                </div>
+                #if($errorMessageInParticipantEvent) 
+                <label id="formErrorMessage">$errorMessageInParticipantEvent</label>
+                #end
+                <div id="sumbitButtonContainer">
+                    <input type="submit" id="submitButton" value="Submit">
+                    <div id="submitAnonymous">
+                        <label for="anon"><input type="checkbox" id="anon" name="anon" value="Submit Anonymously">Submit Anonymously</label>
+                    </div>
+                </div>
+            </form>
+#else
+                <form action="/event/participant/feedback" method="post">
                 <h1>How are you finding the meeting?</h1>
                 <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                 <h1>Please rate how you're feeling.</h1>
@@ -52,17 +87,31 @@
                     </div>
                 </div>
             </form>
+#end
         </div>
-#if($feedbackCounts)
-    #foreach($i in $feedbackCounts)
-        <div class="feedbackBox">
-            <p>
-                <strong>How are you finding the meeting?:
-                </strong>$feedbackData.get($i)
-            </p>
-            <h2>Sentiment: $sentiment.get($i)</h2>
-            <span>Submitted at $time.get($i)</span>
-        </div>
+#if($feedbacks)
+    #foreach($i in $feedbacks)
+        #if($componentCounts)
+            <div class="feedbackBox">
+                #foreach($c in $componentCounts)
+                    <p>
+                        <strong>$questionComponents.get($c).getPrompt():
+                        </strong>$i.getResults().get($c)
+                    </p>
+                #end
+                <h2>Sentiment: $i.assessSentiment()</h2>
+                <span>Submitted at $i.getTimestamp().toString()</span>
+            </div>
+        #else
+            <div class="feedbackBox">
+                <p>
+                    <strong>How are you finding the meeting?:
+                    </strong>$i.getResults().get(0)
+                </p>
+                <h2>Sentiment: $i.assessSentiment()</h2>
+                <span>Submitted at $i.getTimestamp().toString()</span>
+            </div>
+        #end
     #end
 #end
     </div>

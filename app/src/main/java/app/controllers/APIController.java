@@ -305,7 +305,7 @@ public class APIController {
         }
 
         // collect fields from form
-        String[] results = { request.queryParams("feedbackData") };
+        String[] results = request.queryParamsValues("feedbackData");
         int results_length = results.length;
         String anonymous_string = request.queryParams("anon");
 
@@ -317,12 +317,16 @@ public class APIController {
             return null;
         }
 
-        Float[] weights = { 4f };
-        byte[] types = { 0 };
-        Boolean[] keys = { false };
+        Float[] weights = new Float[results_length];
+        byte[] types = new byte[results_length];
+        Boolean[] keys = new Boolean[results_length];
         byte[][] sub_weights = new byte[results_length][5];
         Timestamp current = new Timestamp(System.currentTimeMillis());
-
+        for (int i=0;i<results_length;i++) {
+            weights[i] = 4f;
+            types[i] = 0;
+            keys[i] = false;
+        }
         // get feedback anonymity state
         Boolean anonymous = false;
         if (StringUtils.equals(anonymous_string, "Submit Anonymously")){

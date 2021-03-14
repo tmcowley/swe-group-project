@@ -1105,7 +1105,7 @@ public class DbConnection{
      * @param template_id Template ID
      * @return Template object with ID of template_id
      */
-    private Template getTemplate(int template_id){
+    public Template getTemplate(int template_id){
         PreparedStatement stmt1 = null;
         PreparedStatement stmt2 = null;
         ResultSet rs1 = null;

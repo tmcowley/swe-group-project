@@ -14,6 +14,8 @@ import app.objects.Event;
 import app.objects.Feedback;
 import app.objects.Host;
 import app.objects.Participant;
+import app.objects.Template;
+import app.objects.TemplateComponent;
 import app.util.*;
 
 public class HostEventController {
@@ -45,6 +47,18 @@ public class HostEventController {
         // get event, host from session
         Event event = session.attribute("event");
         Host host = session.attribute("host");
+        Template template = db.getTemplate(event.getTemplateID());
+        ArrayList<TemplateComponent> components = template.getComponents();
+        ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
+        int componentCount = 0;
+        List<Integer> componentCounts = new ArrayList<Integer>();
+        for (TemplateComponent component: components) {
+            if (component.getType().equals("question")) {
+                questionComponents.add(component);
+                componentCounts.add(componentCount);
+                componentCount++;
+            }
+        }
 
         // ensure host is valid
         if (!v.isHostValid(host)){
@@ -75,7 +89,7 @@ public class HostEventController {
 
             List<String> participantFName = new ArrayList<String>();
             List<String> participantLName = new ArrayList<String>();
-            List<String> feedbackData = new ArrayList<String>();
+            List<String[]> feedbackData = new ArrayList<String[]>();
             List<String> sentiment = new ArrayList<String>();
             List<String> time = new ArrayList<String>();
             for (Feedback feedback : feedbacks) {
@@ -87,7 +101,7 @@ public class HostEventController {
                     participantFName.add("Anonymous");
                     participantLName.add("");
                 }
-                feedbackData.add(feedback.getResults()[0]);
+                feedbackData.add(feedback.getResults());
                 sentiment.add(feedback.assessSentiment());
                 time.add(feedback.getTimestamp().toString());
                 feedbackCount++;
@@ -105,6 +119,10 @@ public class HostEventController {
         }
 
         // return host event page if event is created
+        model.put("questionComponents", questionComponents);
+        model.put("components", components);
+        model.put("questionComponents", questionComponents);
+        model.put("componentCounts", componentCounts);
         model.put("feedbackCounts", feedbackCounts);
         model.put("eventTitle", event.getTitle());
         model.put("eventDescription", event.getDescription());

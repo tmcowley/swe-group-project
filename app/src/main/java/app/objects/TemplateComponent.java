@@ -12,11 +12,22 @@ public class TemplateComponent {
     private String name; // component name (simplified prompt)
     private String type; // question, or radio, or checkbox
     private String prompt; // question/ prompt
-    private String[] options; // array of radio or checkbox options
+
+    // is the component considered in sentiment analysis
+    private Boolean tc_considered_in_sentiment;
+
+    // sentiment weight (1-5)
+    private Integer tc_sentiment_weight;
+
+    // array of radio or checkbox options
+    private String[] options;
 
     // array of boolean responses to options array
     // e.g. t, f, t for checkbox type; empty if type is question
     private Boolean[] optionsAns;
+
+    // sentiment positivity rating (1 to 7)
+    private int[] tc_options_pos;
 
     // text response field following prompt
     // null if type radio or checkbox
@@ -65,6 +76,19 @@ public class TemplateComponent {
         this.prompt = prompt;
         this.options = options;
         this.optionsAns = optionsAns;
+        this.textResponse = textResponse;
+    }
+
+    public TemplateComponent(String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, int[] tc_options_pos, Boolean[] optionsAns,
+            String textResponse) {
+        this.name = name;
+        this.type = type;
+        this.prompt = prompt;
+        this.tc_considered_in_sentiment = tc_considered_in_sentiment;
+        this.tc_sentiment_weight = tc_sentiment_weight;
+        this.options = options;
+        this.optionsAns = optionsAns;
+        this.tc_options_pos = tc_options_pos;
         this.textResponse = textResponse;
     }
 

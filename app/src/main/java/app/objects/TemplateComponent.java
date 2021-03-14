@@ -19,7 +19,16 @@ public class TemplateComponent {
   // null if type radio or checkbox
   private String textResponse;
 
-  // constructor for TCs without IDs
+  /**
+   * Template component constructor without IDs
+   * @param id component ID
+   * @param name component name (simplified prompt)
+   * @param type question, or radio, or checkbox
+   * @param prompt question/ prompt
+   * @param options array of radio or checkbox options
+   * @param optionsAns array of boolean responses to options array
+   * @param textResponse text response field following prompt null if type radio or checkbox
+   */
   public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns,
       String textResponse) {
     this.id = null;
@@ -32,15 +41,14 @@ public class TemplateComponent {
   }
 
   /**
-   * Template component constructor
-   * 
-   * @param id
-   * @param name
-   * @param type
-   * @param prompt
-   * @param options
-   * @param optionsAns
-   * @param textResponse
+   * Template component constructor with IDs
+   * @param id component ID
+   * @param name component name (simplified prompt)
+   * @param type question, or radio, or checkbox
+   * @param prompt question/ prompt
+   * @param options array of radio or checkbox options
+   * @param optionsAns array of boolean responses to options array
+   * @param textResponse text response field following prompt null if type radio or checkbox
    */
   public TemplateComponent(int id, String name, String type, String prompt, String[] options, Boolean[] optionsAns,
       String textResponse) {

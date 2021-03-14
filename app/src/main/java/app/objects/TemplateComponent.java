@@ -20,7 +20,8 @@ public class TemplateComponent {
   private String textResponse;
 
   // constructor for TCs without IDs
-  public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns, String textResponse) {
+  public TemplateComponent(String name, String type, String prompt, String[] options, Boolean[] optionsAns,
+      String textResponse) {
     this.id = null;
     this.name = name;
     this.type = type;
@@ -196,22 +197,39 @@ public class TemplateComponent {
    * @return true or false
    */
   public boolean equals(TemplateComponent that) {
-    if (that == null)
+    // ensure other component is not null
+    if (that == null) {
       return false;
-    if (this.id != that.getId())
+    }
+    // ensure component IDs match
+    if (this.id != that.getId()) {
       return false;
-    if (!this.name.equals(that.getName()))
+    }
+    // ensure component names match
+    if (!this.name.equals(that.getName())) {
       return false;
-    if (!Arrays.equals(this.options, that.getOptions()))
+    }
+    // ensure options arrays match
+    if (!Arrays.equals(this.options, that.getOptions())) {
       return false;
-    if (!Arrays.equals(this.optionsAns, that.getOptionsAns()))
+    }
+    // ensure option answer arrays are equal
+    if (!Arrays.equals(this.optionsAns, that.getOptionsAns())) {
       return false;
-    if (!this.prompt.equals(that.getPrompt()))
+    }
+    // ensure component prompts match
+    if (!this.prompt.equals(that.getPrompt())) {
       return false;
-    if (!this.textResponse.equals(that.getTextResponse()))
+    }
+    // ensure text responses are equal
+    if (!this.textResponse.equals(that.getTextResponse())) {
       return false;
-    if (!this.type.equals(that.getType()))
+    }
+    // ensure component types are equal
+    if (!this.type.equals(that.getType())) {
       return false;
+    }
+    // template components are equal
     return true;
   }
 }

@@ -10,14 +10,15 @@ public class Host {
     private boolean sys_ban;
 
     /**
-     * Host constructor
+     * create a host; 
+     * all attributes controllable
      * 
-     * @param host_id
-     * @param host_code
-     * @param e_address
-     * @param f_name
-     * @param l_name
-     * @param sys_ban
+     * @param host_id host identifier
+     * @param host_code host unique token
+     * @param e_address host email address
+     * @param f_name host first name
+     * @param l_name host last name
+     * @param sys_ban host system ban state
      */
     public Host(int host_id, String host_code, String e_address, String f_name, String l_name, boolean sys_ban) {
         this.host_id = host_id;
@@ -29,13 +30,13 @@ public class Host {
     }
 
     /**
-     * Host constructor
+     * create a host with a default ban state of false
      * 
-     * @param host_id
-     * @param host_code
-     * @param e_address
-     * @param f_name
-     * @param l_name
+     * @param host_id host identifier
+     * @param host_code host unique token
+     * @param e_address host email address
+     * @param f_name host first name
+     * @param l_name host last name
      */
     public Host(int host_id, String host_code, String e_address, String f_name, String l_name) {
         this.host_id = host_id;
@@ -43,6 +44,8 @@ public class Host {
         this.e_address = e_address;
         this.f_name = f_name;
         this.l_name = l_name;
+
+        // host is not banned, by default
         this.sys_ban = false;
     }
 
@@ -101,69 +104,96 @@ public class Host {
     }
 
     /**
+     * sets first name
+     * 
+     * @param name
+     */
+    public void setFName(String name) {
+        this.f_name = name;
+    }
+
+    /**
+     * sets last name
+     * 
+     * @param name
+     */
+    public void setLName(String name) {
+        this.l_name = name;
+    }
+
+    /**
+     * sets email address
+     * 
+     * @param email
+     */
+    public void setEAddress(String email) {
+        this.e_address = email;
+    }
+
+    /**
+     * sets system ban
+     * 
+     * @param ban
+     */
+    public void setSysBan(Boolean ban) {
+        this.sys_ban = ban;
+    }
+
+    /**
+     * sets host code
+     * 
+     * @param code
+     */
+    public void setHostCode(String code) {
+        this.host_code = code;
+    }
+
+    /**
+     * sets host id
+     * 
+     * @param id
+     */
+    public void setHostID(int id) {
+        this.host_id = id;
+    }
+
+    /**
      * compares 2 host objects
      * 
      * @param that
      * @return True or False
      */
     public boolean equals(Host that) {
-        if (this.host_id != that.getHostID())
+        // ensure other host is not null
+        if (that == null) {
             return false;
-        if (!this.host_code.equals(that.getHostCode()))
+        }
+        // ensure host IDs match
+        if (this.host_id != that.getHostID()) {
             return false;
-        // if (!this.ip_address.equals(that.getIPAddress()))
-        // return false;
-        if (!this.e_address.equals(that.getEAddress()))
+        }
+        // ensure host codes match
+        if (!this.host_code.equals(that.getHostCode())) {
             return false;
-        if (!this.f_name.equals(that.getFName()))
+        }
+        // ensure email addresses match
+        if (!this.e_address.equals(that.getEAddress())) {
             return false;
-        if (!this.l_name.equals(that.getLName()))
+        }
+        // ensure first names match
+        if (!this.f_name.equals(that.getFName())) {
             return false;
-        if (this.sys_ban != that.getSysBan())
+        }
+        // ensure last names match
+        if (!this.l_name.equals(that.getLName())) {
             return false;
+        }
+        // ensure system ban states match
+        if (this.sys_ban != that.getSysBan()) {
+            return false;
+        }
+        // two hosts are equal
         return true;
-    }
-    /**
-     * sets first name
-     * @param name
-     */
-    public void setFName(String name){
-        this.f_name = name;
-    }
-    /**
-     * sets last name
-     * @param name
-     */
-    public void setLName(String name){
-        this.l_name = name;
-    }
-    /**
-     * sets email address
-     * @param email
-     */
-    public void setEAddress(String email){
-        this.e_address = email;
-    }
-    /**
-     * sets system ban
-     * @param ban
-     */
-    public void setSysBan(Boolean ban){
-        this.sys_ban = ban;
-    }
-    /**
-     * sets host code
-     * @param code
-     */
-    public void setHostCode(String code){
-        this.host_code = code;
-    }
-     /**
-     * sets host id
-     * @param id
-     */
-    public void setHostID(int id){
-        this.host_id = id;
     }
 
 }

@@ -1,6 +1,8 @@
 package app.objects;
 
+// for creation time
 import java.sql.Timestamp;
+
 // for ArrayList of components
 import java.util.ArrayList;
 
@@ -20,11 +22,11 @@ public class Template {
     /**
      * Template constructor
      * 
-     * @param template_id
-     * @param host_id
-     * @param template_name
-     * @param template_code
-     * @param components
+     * @param template_id template identifier
+     * @param host_id host (author) identifier
+     * @param template_name template name
+     * @param template_code template token
+     * @param components template sub-components
      */
     public Template(int template_id, int host_id, String template_name, String template_code, Timestamp timestamp,
             ArrayList<TemplateComponent> components) {
@@ -42,13 +44,13 @@ public class Template {
     }
 
     /**
-     * overloaded template constructor missing components it is assumed the template
-     * is empty (has no components )
+     * overloaded template constructor missing components
+     * it is assumed the template is empty (without components)
      * 
-     * @param template_id
-     * @param host_id
-     * @param template_name
-     * @param template_code
+     * @param template_id template identifier
+     * @param host_id host (author) identifier
+     * @param template_name template name
+     * @param template_code template token
      */
     public Template(int template_id, int host_id, String template_name, String template_code, Timestamp timestamp) {
         this.template_id = template_id;
@@ -132,20 +134,33 @@ public class Template {
     }
 
     /**
-     * compares 2 template objects
+     * compare this template to another template for equality
      * 
-     * @param that
-     * @return True or False
+     * @param that other participant
+     * @return this equals that
      */
     public boolean equals(Template that) {
-        if (this.template_id != that.getTemplateID())
+        // ensure other template is not null
+        if (that == null){
             return false;
-        if (this.host_id != that.getHostID())
+        }
+        // ensure template IDs match
+        if (this.template_id != that.getTemplateID()){
             return false;
-        if (!this.template_code.equals(that.getTemplateCode()))
+        }
+        // ensure author (host) IDs match
+        if (this.host_id != that.getHostID()){
             return false;
-        if (!CollectionUtils.isEqualCollection(this.components, that.getComponents()))
+        }
+        // ensure template tokens (codes) match
+        if (!this.template_code.equals(that.getTemplateCode())){
             return false;
+        }
+        // ensure component ArrayLists match
+        if (!CollectionUtils.isEqualCollection(this.components, that.getComponents())){
+            return false;
+        }
+        // templates match
         return true;
     }
 

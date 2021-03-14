@@ -2,14 +2,14 @@ package app.objects;
 
 public class Participant {
 
-    private int participant_id;
-    private String ip_address;
-    private String f_name;
-    private String l_name;
-    private boolean sys_ban;
+    private int participant_id; // participant identifier
+    private String ip_address; // participant IP address
+    private String f_name; // participant first name
+    private String l_name; // participant last name
+    private boolean sys_ban; // participant system ban state
 
     /**
-     * Participant constructor
+     * construct a participant
      * 
      * @param f_name  participant first-name
      * @param l_name  participant last-name
@@ -23,7 +23,7 @@ public class Participant {
     }
 
     /**
-     * Participant constructor
+     * construct a participant with a default ban state of false
      * 
      * @param f_name participant first-name
      * @param l_name participant last-name
@@ -32,6 +32,8 @@ public class Participant {
         this.participant_id = participant_id;
         this.f_name = f_name;
         this.l_name = l_name;
+
+        // participant is not banned, by default
         this.sys_ban = false;
     }
 
@@ -81,52 +83,69 @@ public class Participant {
     }
 
     /**
+     * sets first name
+     * 
+     * @param name
+     */
+    public void setFName(String name) {
+        this.f_name = name;
+    }
+
+    /**
+     * sets last name
+     * 
+     * @param name
+     */
+    public void setLName(String name) {
+        this.l_name = name;
+    }
+
+    /**
+     * sets system ban
+     * 
+     * @param ban
+     */
+    public void setSysBan(Boolean ban) {
+        this.sys_ban = ban;
+    }
+
+    /**
+     * sets participant id
+     * 
+     * @param id
+     */
+    public void setPartID(int id) {
+        this.participant_id = id;
+    }
+
+    /**
      * compares 2 participant objects
      * 
      * @param that
      * @return True or False
      */
     public boolean equals(Participant that) {
-        if (that == null)
+        // ensure other host is not null
+        if (that == null) {
             return false;
-        if (this.participant_id != that.getParticipantID())
+        }
+        // ensure participant IDs match
+        if (this.participant_id != that.getParticipantID()) {
             return false;
-        // if (this.ip_address.equals(that.getIPAddress()))
-        // return false;
-        if (!this.f_name.equals(that.getFName()))
+        }
+        // ensure first names match
+        if (!this.f_name.equals(that.getFName())) {
             return false;
-        if (!this.l_name.equals(that.getLName()))
+        }
+        // ensure last names match
+        if (!this.l_name.equals(that.getLName())) {
             return false;
-        if (this.sys_ban != that.getSysBan())
+        }
+        // ensure system ban states match
+        if (this.sys_ban != that.getSysBan()) {
             return false;
+        }
+        // participants are equal
         return true;
-    }
-    /**
-     * sets first name
-     * @param name
-     */
-    public void setFName(String name){
-        this.f_name = name;
-    }
-    /**
-     * sets last name
-     * @param name
-     */
-    public void setLName(String name){
-        this.l_name = name;
-    }
-    /**
-     * sets system ban
-     * @param ban
-     */
-    public void setSysBan(Boolean ban){
-        this.sys_ban = ban;
-    }
-     /**
-     * sets participant id
-     * @param id
-     */
-    public void setPartID(int id){
-        this.participant_id = id;
     }
 }

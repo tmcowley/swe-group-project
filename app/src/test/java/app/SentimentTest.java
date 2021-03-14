@@ -36,7 +36,7 @@ public class SentimentTest {
                 "Terrible, just terrible.",
                 "I'm having a great time. I really appreciate how you speak clearly and slowly. One of the best lectures I've had the pleasure of listening to!",
                 "3", "1244" };
-        Float[] weights = { 4f, 4f, 4f, 4f, 5f, 6f, 2f, 3f };
+        Float[] weights = { 3f, 3f, 3f, 3f, 1f, 5f, 2f, 4f };
         byte[] types = { 0, 0, 0, 0, 0, 0, 1, 2 };
         Boolean[] keys = { false, false, false, false, true, false, true, true };
         byte[][] sub_weights = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },

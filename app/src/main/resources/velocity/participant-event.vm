@@ -22,12 +22,13 @@
         <span id="exitButtonMobile"><a href="/"><img src="/images/exit-icon.png"></a></span>
         <span id="infoButtonMobile" onclick="openNav()"><img src="/images/info-icon.png"></span>
         <div id="mainForm">
+
             <!-- Feedback form -->
 #if($components.size() != 0)
             <form action="/event/participant/feedback" method="post">
-                #foreach($i in $components)
-                    #if($i.getType() == "question")
-                        <h1>$i.getPrompt()</h1>
+                #foreach($component in $components)
+                    #if($component.getType() == "question" && !$component.isEmptyComponent())
+                        <h1>$component.getPrompt()</h1>
                         <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                     #end
                 #end
@@ -91,26 +92,26 @@
         </div>
         <br>
 #if($feedbacks)
-    #foreach($i in $feedbacks)
+    #foreach($feedback in $feedbacks)
         #if($componentCounts.size() != 0)
             <div class="feedbackBox">
                 #foreach($c in $componentCounts)
                     <p>
                         <strong>$questionComponents.get($c).getPrompt():
-                        </strong>$i.getResults().get($c)
+                        </strong>$feedback.getResults().get($c)
                     </p>
                 #end
-                <h2>Sentiment: $i.assessSentiment()</h2>
-                <span>Submitted at $i.getTimestamp().toString()</span>
+                <h2>Sentiment: $feedback.assessSentiment()</h2>
+                <span>Submitted at $feedback.getTimestamp().toString()</span>
             </div>
         #else
             <div class="feedbackBox">
                 <p>
                     <strong>How are you finding the meeting?:
-                    </strong>$i.getResults().get(0)
+                    </strong>$feedback.getResults().get(0)
                 </p>
-                <h2>Sentiment: $i.assessSentiment()</h2>
-                <span>Submitted at $i.getTimestamp().toString()</span>
+                <h2>Sentiment: $feedback.assessSentiment()</h2>
+                <span>Submitted at $feedback.getTimestamp().toString()</span>
             </div>
         #end
     #end

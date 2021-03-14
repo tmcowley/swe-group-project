@@ -93,7 +93,7 @@ public class App {
                 get("/edit/code", TemplateEditController.servePage);
                 // template POST-API endpoint mappings
                 post("/new", APIController.createEmptyTemplate);
-                post("/edit/code/save", APIController.createTemplate);
+                post("/edit/code/save", APIController.fillTemplate);
                 post("/edit/code/create-empty-component", APIController.createEmptyComponent);
                 post("/edit/code/delete-template", APIController.deleteTemplate);
                 post("/edit/code/delete-template-component", APIController.deleteTemplateComponent);

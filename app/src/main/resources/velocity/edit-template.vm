@@ -13,57 +13,64 @@
 <div id="mainBodyContainerOneCol">
     <div id="mainFormSection">
         <div id="mainForm">
-            <form action="" method="post">
+            <form action="/host/templates/edit/code/save" method="post">
                 <h1>$template.getTemplateName()</h1>
                 #if ($errorMessageCreateTemplate)
                 <label id="formErrorMessage">$errorMessageCreateTemplate</label>
                 #end
                 <!-- Space for error messages -->
-                <div class="templateControlsSection">
-                    <!-- Buttons to add new sections -->
-                    <input
-                        type="submit"
-                        id="submitButtonTemplate"
-                        value="Save"
-                        formaction="/host/templates/edit/code/save"
-                        method="post">
-                    <input
-                        type="submit"
-                        id="submitButtonTemplate"
-                        value="Delete"
-                        formaction="/host/templates/edit/code/delete-template"
-                        method="post">
-
-                </div>
                 <div id="feedbackFormMain"> <!-- Section to hold the key elements of template creation form -->
-                    <input class="formInput" name="templateCode" type="hidden" value="$template.getTemplateCode()">
+                    <input class="formInput" name="templateCode" type="hidden" value="${template.getTemplateCode()}">
                     #if($template.getComponents().size() == 0)
                         <div class="feedbackElementEmpty">
                             <h2>There are no elements in the current template - use the buttons below to add some.</h2>
                         </div>
                     #end
                     #foreach($component in $template.getComponents())
-                        #if($component.getType() == "question") ## component is of type question 
+                        #if($component.getType() == "question") ## component is of type question
                         <div class="feedbackElement">
                             <h3>
                                 Question
                             </h3>
                             <!-- Textarea -->
-                            <input class="formInput" type="text" name="$component.getId()" placeholder="Enter Prompt" value="$component.getPrompt()">
-                            <input class="formInput" type="hidden" value="$component.getType()">
+                            #if($component.isEmptyComponent())
+                                <input class="formInput" type="text" name="question[${component.getID()}][prompt]" placeholder="Enter Prompt">
+                            #else 
+                                <input class="formInput" type="text" name="question[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
+                            #end
+                            <input class="formInput" type="hidden" name="question[${component.getID()}][name]" value="${component.getName()}">
+                            <input class="formInput" type="hidden" name="question[${component.getID()}][component_id]" value="${component.getID()}">
+                            <input class="formInput" type="hidden" name="question[${component.getID()}][type]" value="${component.getType()}">
                             <!-- <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea> -->
                         </div>
-                        <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
+                        <button class="feedbackDelButton" name="component_id" value ="$component.getID()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <!-- feedbackElementFooter will contain extra properties to be set -->
                         <div class="feedbackElementFooter">
-                            <input type="checkbox" name="$component.getId()" name="consider1" value="Consider">
-                            <label for="consider1">
-                                Consider in sentiment analysis</label><br>
-                            <label for="rating1">Sentiment Influence (1-5):</label>
-                            <input type="number" name="$component.getId()" name="rating1" min="1" max="5" value="5"><br>
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <input type="checkbox" name="question[${component.getID()}][consider]" value="consider">
+                                <label for="question[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #else 
+                                <input type="checkbox" name="question[${component.getID()}][consider]" value="consider" checked="true">
+                                <label for="question[${component.getID()}][consider]">
+                                    Consider in sentiment analysis
+                                </label><br>
+                            #end 
+
+                            <!-- todo: map value to component attribute -->
+                            #if (true)
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="question[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #else 
+                                <label for="rating1">Sentiment Influence (1-5):</label>
+                                <input type="number" name="question[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                            #end
                         </div>
 
-                        #elseif($component.getType() == "checkbox") ## component is of type checkbox 
+                        #elseif($component.getType() == "checkbox" && false) ## component is of type checkbox
                         <div class="feedbackElement">
                             <h3>
                                 Checkbox
@@ -98,7 +105,7 @@
                                 Highlight?</label>
                         </div>
 
-                        #elseif($component.getType() == "radio") ## component is of type radio 
+                        #elseif($component.getType() == "radio" && false) ## component is of type radio
                         <div class="feedbackElement">
                             <h3>
                                 Radio
@@ -130,6 +137,28 @@
                         #end
                     #end
                 </div>
+
+                <br>
+
+                <div class="templateControlsSection">
+                    <!-- Buttons to add save and delete -->
+                    <input
+                        type="submit" 
+                        id="submitButtonTemplate" 
+                        value="Save" 
+                        method="post">
+                    <!-- 
+                    <input
+                        type="submit"
+                        id="submitButtonTemplate"
+                        value="Delete"
+                        formaction="/host/templates/edit/code/delete-template"
+                        method="post">
+                    -->
+
+                </div>
+
+                <br>
             </form>
             <div class="templateAddControlsSection">
                 <!-- Buttons to add new sections -->

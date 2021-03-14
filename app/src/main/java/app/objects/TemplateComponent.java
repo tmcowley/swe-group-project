@@ -3,6 +3,9 @@ package app.objects;
 // for array comparison in class equals method
 import java.util.Arrays;
 
+// for checking if a field is null, empty, or blank
+import spark.utils.StringUtils;
+
 public class TemplateComponent {
 
     private Integer id; // component ID
@@ -82,6 +85,9 @@ public class TemplateComponent {
      * @return component ID
      */
     public Integer getId() {
+        return this.id;
+    }
+    public Integer getID() {
         return this.id;
     }
 
@@ -204,6 +210,14 @@ public class TemplateComponent {
      */
     public String getTextResponse() {
         return this.textResponse;
+    }
+
+    /**
+     * check if a component is empty (has no prompt)
+     * @return empty state
+     */
+    public boolean isEmptyComponent() {
+        return (StringUtils.isBlank(prompt));
     }
 
     /**

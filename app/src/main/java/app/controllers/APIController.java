@@ -8,11 +8,13 @@ import app.sentimentanalysis.SentimentAnalyser;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Map;
 
 import spark.*;
 
 // for data validation
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.apache.commons.lang3.BooleanUtils;
 
 public class APIController {
@@ -428,7 +430,7 @@ public class APIController {
     /**
      * host API POST end-point: generate a populated template
      */
-    public static Route createTemplate = (Request request, Response response) -> {
+    public static Route fillTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: createTemplate API endpoint recognized request");
 
         // get db conn from singleton App instance
@@ -441,6 +443,7 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
+        System.out.println("session valid");
 
         // ensure host exists in current session
         if (session.attribute("host") == null) {
@@ -448,98 +451,120 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
-
-        // // ensure host code sent in POST request
-        // if (request.queryParams("hostCode") == null){
-        // System.out.println("Error: host code not in POST request");
-        // session.attribute("errorMessageCreateTemplate", "Error: host code not in form
-        // attributes");
-        // response.redirect("/host/templates");
-        // return null;
-        // }
+        System.out.println("host in session");
 
         // get host from session
-        // Host host = session.attribute("host");
+        Host host = session.attribute("host");
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+            System.out.println("Error:  host in session invalid or non-existent in database");
+            response.redirect("/error/401");
+            return null;
+        }
+        int host_id = host.getHostID();
+        System.out.println("host in session valid, exists");
 
-        // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate",
-        // "value");
+        //session.attribute("errorMessageCreateTemplate", "value");
 
-        // TODO
-
-        // get template code (stored in form)
+        // get template code (stored in form); ensure exists in system
         String templateCode = request.queryParams("templateCode");
+        if (!db.templateCodeExists(templateCode)) {
+            System.out.println("Error:  template code invalid or null");
+            response.redirect("/host/templates");
+            return null;
+        }
         Template template = db.getTemplateByCode(templateCode);
-        ArrayList<TemplateComponent> components = template.getComponents();
-        // collect form data
-        // form data -> components
-        // components -> template
+        int template_id = template.getTemplateID();
 
-        // ensure template is valid
+        // for each component in the template
+        for (TemplateComponent component : template.getComponents()){
+            // collect component prompt
+            String prompt = request.queryParams("question["+component.getID()+"][prompt]");
+            if (StringUtils.isBlank(prompt)){
+                System.out.println("Notice:  prompt is blank or empty");
+                continue;
+            }
+            System.out.println("NOTICE: prompt collected");
 
-        // store template in DB
-        for (TemplateComponent templateComponent : components) {
-            String[] data = request.queryParamsValues(String.valueOf(templateComponent.getId()));
-            if (templateComponent.getType().equals("question")) {
-                db.updateQuestionTemplateComponent(templateComponent.getId(), data[0]);
+            String name = request.queryParams("question["+component.getID()+"][name]");
+            String type = request.queryParams("question["+component.getID()+"][type]");
+            int old_component_id = Integer.valueOf(request.queryParams("question["+component.getID()+"][component_id]"));
+            // String consider = request.queryParams("question["+component.getID()+"][consider]");
+            // String weight = request.queryParams("question["+component.getID()+"][weight]");
+
+            // TODO
+            String[] options = null;
+            Boolean[] optionsAns = null;
+            if (type.equals("radio") || type.equals("checkbox")) {
+                // optionsAnsStrings = request.queryParamsValues("tc_optionsAns");
+                // if (options == null || optionsAnsStrings == null){
+                //     System.out.println("Error:  form inputs for option type not collected");
+                //     return null;
+                // }
+                // optionsAns = new Boolean[optionsAnsStrings.length];
+                // for (int i = 0; i < optionsAnsStrings.length; i++) {
+                //     optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
+                // }
+                ;
+            }
+
+            TemplateComponent new_component = new TemplateComponent(name, type, prompt, options, optionsAns, "");
+            // ensure filled is valid
+            if (!v.isComponentValid(new_component)){
+                System.out.println("Error:  filled component is invalid");
+                session.attribute("errorMessageCreateTemplate", "a component is invalid");
+                
+                // return to "/host/templates/edit/code"
+                // (links to TemplateEditController.servePage)
+                response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
+            }
+
+            try{
+                Boolean filled = fillComponent(db, template_id, old_component_id, new_component);
+                if (BooleanUtils.isNotTrue(filled)){
+                    System.out.println("Error:  filled did not work");
+                }
+                System.out.println("Error:  filled did work");
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
 
-        // return to host home page
-        response.redirect("/host/home");
+        // return to "/host/templates/edit/code"
+        // (links to TemplateEditController.servePage)
+        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;
     };
 
+
     /**
-     * create a template component (POST request API endpoint)
+     * create a template component, derivative method of API
      */
-    public static Route createTemplateComponent = (Request request, Response response) -> {
-        System.out.println("\nNotice: createTemplateComponent API endpoint recognized request");
+    public static Boolean fillComponent (DbConnection db, int template_id, int old_component_id, TemplateComponent component) {
+        System.out.println("\nNotice: fillComponent API derivative function called");
 
-        // get db conn from singleton App instance
-        DbConnection db = App.getInstance().getDbConnection();
-
-        // get current session; ensure session is live
-        Session session = request.session(true);
-        if (session.isNew()) {
-            System.out.println("Error:  session not found");
-            response.redirect("/error/401");
-            return null;
+        // delete empty component in system
+        Boolean empty_component_removed = db.deleteTemplateComponent(old_component_id);
+        if (BooleanUtils.isNotTrue(empty_component_removed)){
+            System.out.println("Error:  empty component not removed");
+            return false;
         }
 
-        // ensure host exists in current session
-        if (session.attribute("host") == null) {
-            System.out.println("Error:  session found, host not in session");
-            response.redirect("/error/401");
-            return null;
+        // add new, filled component; ensure valid
+        component = db.createTemplateComponent(component);
+        if (!v.isComponentValid(component)){
+            System.out.println("Error:  filled component (after db insertion) is invalid");
+            return false;
+        }
+        int component_id = component.getId();
+
+        // add component to template; ensure addition successful
+        Boolean component_added_to_template = db.addComponentToTemplate(component_id, template_id);
+        if (BooleanUtils.isNotTrue(component_added_to_template)){
+            System.out.println("Error:  new component not added to template");
+            return false;
         }
 
-        String name = request.queryParams("tc_name");
-        String type = request.queryParams("tc_type");
-        String prompt = request.queryParams("tc_prompt");
-        String[] options = request.queryParamsValues("tc_options");
-        String[] optionsAnsStrings = request.queryParamsValues("tc_optionsAns");
-        Boolean[] optionsAns = new Boolean[optionsAnsStrings.length];
-        for (int i = 0; i < optionsAnsStrings.length; i++) {
-            optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
-        }
-        String textResponse;
-        if (type.equals("radio") || type.equals("checkbox")) {
-            textResponse = null;
-        } else {
-            textResponse = request.queryParams("tc_textResponse");
-        }
-
-        // create template component; ensure component is valid
-        TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns,
-                textResponse);
-        if (!v.isComponentValid(templateComponent)) {
-            System.out.println("Error: template component considered invalid");
-            return "Error: TemplateComponent considered invalid";
-        }
-
-        // create component in database
-        db.createTemplateComponent(templateComponent);
-        return null;
+        return true;
     };
 
     /**

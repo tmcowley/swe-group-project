@@ -24,7 +24,7 @@
                         type="submit"
                         id="submitButtonTemplate"
                         value="Save"
-                        formaction="/host/templates/edit/code"
+                        formaction="/host/templates/edit/code/save"
                         method="post">
                     <input
                         type="submit"
@@ -48,18 +48,18 @@
                                 Question
                             </h3>
                             <!-- Textarea -->
-                            <input class="formInput" type="text" placeholder="Enter Prompt" value="$component.getPrompt()">
+                            <input class="formInput" type="text" name="$component.getId()" placeholder="Enter Prompt" value="$component.getPrompt()">
                             <input class="formInput" type="hidden" value="$component.getType()">
                             <!-- <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea> -->
                         </div>
                         <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <!-- feedbackElementFooter will contain extra properties to be set -->
                         <div class="feedbackElementFooter">
-                            <input type="checkbox" id="$component.getId()" name="consider1" value="Consider">
+                            <input type="checkbox" name="$component.getId()" name="consider1" value="Consider">
                             <label for="consider1">
                                 Consider in sentiment analysis</label><br>
                             <label for="rating1">Sentiment Influence (1-5):</label>
-                            <input type="number" id="$component.getId()" name="rating1" min="1" max="5" placeholder="5"><br>
+                            <input type="number" name="$component.getId()" name="rating1" min="1" max="5" value="5"><br>
                         </div>
 
                         #elseif($component.getType() == "checkbox") ## component is of type checkbox 

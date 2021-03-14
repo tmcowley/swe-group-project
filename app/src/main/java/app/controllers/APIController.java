@@ -7,6 +7,7 @@ import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import spark.*;
 
@@ -419,7 +420,7 @@ public class APIController {
         System.out.println("\nNotice: createTemplate API endpoint recognized request");
 
         // get db conn from singleton App instance
-        //DbConnection db = App.getInstance().getDbConnection();
+        DbConnection db = App.getInstance().getDbConnection();
 
         // get current session; ensure session is live
         Session session = request.session(true);
@@ -436,13 +437,13 @@ public class APIController {
             return null;
         }
 
-        // ensure host code sent in POST request
-        if (request.queryParams("hostCode") == null){
-            System.out.println("Error:  host code not in POST request");
-            session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
-            response.redirect("/host/templates");
-            return null;
-        }
+        // // ensure host code sent in POST request
+        // if (request.queryParams("hostCode") == null){
+        //     System.out.println("Error:  host code not in POST request");
+        //     session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
+        //     response.redirect("/host/templates");
+        //     return null;
+        // }
 
         // get host from session
         //Host host = session.attribute("host");
@@ -453,7 +454,8 @@ public class APIController {
 
         // get template code (stored in form) 
         String templateCode = request.queryParams("templateCode");
-
+        Template template = db.getTemplateByCode(templateCode);
+        ArrayList<TemplateComponent> components = template.getComponents();
         // collect form data
         // form data -> components
         // components -> template
@@ -461,10 +463,15 @@ public class APIController {
         // ensure template is valid
 
         // store template in DB
-
-        // return to "/host/templates/edit/code"
-        // (links to TemplateEditController.servePage)
-        response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
+        for (TemplateComponent templateComponent : components) {
+            String[] data = request.queryParamsValues(String.valueOf(templateComponent.getId()));
+            if (templateComponent.getType().equals("question")) {
+                db.updateQuestionTemplateComponent(templateComponent.getId(), data[0]);
+            }
+        }
+        
+        // return to host home page
+        response.redirect("/host/home");
         return null;
     };
 

@@ -289,6 +289,35 @@ public class DbConnection{
         return getTemplateComponent(tc_id);
     }
 
+    public Boolean updateQuestionTemplateComponent(int tc_id, String prompt){
+        PreparedStatement stmt = null;
+        Integer tcUpdated = null;
+
+        // debugging statements
+        // System.out.println("createQuestionTemplateComponent inputs: name" + name + ", type: " + type + ", prompt: " + prompt + ", text response: " + textResponse);
+
+        try{
+            // create empty template object
+            String  updateQuestionTemplateComponent = ""
+                + "UPDATE template_component "
+                + "SET tc_prompt=? "
+                + "WHERE tc_id=?;";
+            stmt = this.conn.prepareStatement(updateQuestionTemplateComponent);
+            stmt.setString(1, prompt);
+            stmt.setInt(2, tc_id);
+
+            tcUpdated = stmt.executeUpdate();
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage().toUpperCase());
+            e.printStackTrace();
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+        }
+        if (tcUpdated == null) return null;
+        return (tcUpdated != 0);
+    }
+
     /**
      * Create an empty template in the database
      * @param host_id Creator ID

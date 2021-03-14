@@ -114,8 +114,7 @@ public class ParticipantEventController {
 
 }
 
-// FROM OLD POST API endpoint: createFeedback
-/*
+/* FROM OLD POST API endpoint: createFeedback
 if (v.isFeedbackValid(feedback)) {
     System.out.println("Notice: feedback considered valid");
     String[] arrs = new String[feedback.getKey_Results().size()];

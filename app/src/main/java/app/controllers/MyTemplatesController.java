@@ -25,14 +25,14 @@ public class MyTemplatesController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  MyTemplatesController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  MyTemplatesController:servePage session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -46,7 +46,7 @@ public class MyTemplatesController {
 
         // ensure the host template array is non-null
         if (hostTemplates == null){
-            System.out.println("Notice: MyTemplatesController:servePage hostTemplates array is null");
+            System.out.println("Notice:  hostTemplates array is null");
             // send to generic error page 
             session.attribute("errorRedirect", request.contextPath());
             session.attribute("errorMessage", "host template array is null");

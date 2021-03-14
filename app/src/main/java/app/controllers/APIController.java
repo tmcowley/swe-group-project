@@ -91,14 +91,14 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createEvent session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:createEvent session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -424,21 +424,21 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createFeedback session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:createTemplate session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host code sent in POST request
         if (request.queryParams("hostCode") == null){
-            System.out.println("Error:  APIController:createTemplate host code not in POST request");
+            System.out.println("Error:  host code not in POST request");
             session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
             response.redirect("/host/templates");
             return null;
@@ -477,14 +477,14 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createTemplateComponent session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:createTemplateComponent session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -505,13 +505,14 @@ public class APIController {
             textResponse = request.queryParams("tc_textResponse");
         }
 
+        // create template component; ensure component is valid
         TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns, textResponse);
-        
         if (!v.isComponentValid(templateComponent)){
-            System.out.println("Error: APIController:createTemplateComponent: TemplateComponent considered invalid");
+            System.out.println("Error: template component considered invalid");
             return "Error: TemplateComponent considered invalid";
         }
 
+        // create component in database
         db.createTemplateComponent(templateComponent);
         return null;
     };
@@ -526,13 +527,13 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createTemplateComponent session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:createTemplateComponent session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
@@ -543,7 +544,7 @@ public class APIController {
 
         // ensure GET request params are correct
         if (templateCode == null || componentType == null){
-            System.out.println("Error:  APIController:createTemplateComponent incorrect parameters to GET request");
+            System.out.println("Error:  incorrect parameters to GET request");
             response.redirect("/host/templates");
             return null;
         }
@@ -551,14 +552,14 @@ public class APIController {
 
         // ensure template code exists in system
         if (!db.templateCodeExists(templateCode)){
-            System.out.println("Error:  APIController:createTemplateComponent template code invalid");
+            System.out.println("Error:  template code invalid");
             response.redirect("/host/templates");
             return null;
         }
 
         // ensure component type is valid
         if (!v.componentTypeIsValid(componentType)){
-            System.out.println("Error:  APIController:createTemplateComponent component type invalid");
+            System.out.println("Error:  component type invalid");
             // return to "/host/templates/edit/code"
             // (links to TemplateEditController.servePage)
             response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
@@ -582,7 +583,7 @@ public class APIController {
 
         // ensure component created is valid
         if (!v.isComponentValid(component)){
-            System.out.println("Error:  APIController:createTemplateComponent invalid component generated");
+            System.out.println("Error:  invalid component generated");
             response.redirect("/host/templates");
             return null;
         }
@@ -593,7 +594,7 @@ public class APIController {
         Boolean added = db.addComponentToTemplate(component.getId(), template.getTemplateID());
 
         if (BooleanUtils.isNotTrue(added)){
-            System.out.println("Error:  APIController:createTemplateComponent component not added to template correctly");
+            System.out.println("Error:  component not added to template correctly");
             response.redirect("/host/templates");
             return null;
         }
@@ -612,21 +613,21 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:deleteTemplate session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:deleteTemplate session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host code sent in POST request
         if (request.queryParams("templateCode") == null){
-            System.out.println("Error:  APIController:deleteTemplate template code not in POST request");
+            System.out.println("Error:  template code not in POST request");
             session.attribute("errorMessageDeleteTemplate", "Error: template code not in form attributes");
             response.redirect("/host/templates");
             return null;
@@ -652,21 +653,21 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:deleteTemplateComponent session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  APIController:deleteTemplateComponent session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure component ID sent in POST request
         if (request.queryParams("component_id") == null){
-            System.out.println("Error:  APIController:deleteTemplateComponent TemplateComponent ID not in POST request");
+            System.out.println("Error:  TemplateComponent ID not in POST request");
             session.attribute("errorMessageDeleteTemplateComponent", "Error: TemplateComponent ID not in form attributes");
             response.redirect("/host/templates");
             return null;
@@ -683,9 +684,8 @@ public class APIController {
 
         // get template by its code (used for ensuring host is author)
         Template template = db.getTemplateByCode(templateCode);
-        // ensure template, template code exist
         if (template == null){
-            System.out.println("Error:  APIController:deleteTemplateComponent template (by code) is null");
+            System.out.println("Error:  template (by code) is null");
             session.attribute("errorMessageDeleteTemplateComponent", "Error: no template corresponding to template code");
             response.redirect("/host/templates");
             return null;
@@ -693,7 +693,7 @@ public class APIController {
 
         // ensure template is authored by host in session
         if (host.getHostID() != template.getHostID()){
-            System.out.println("Error:  APIController:deleteTemplateComponent host does not own template by code");
+            System.out.println("Error:  host does not own template by code");
             response.redirect("/error/401");
             return null;
         }

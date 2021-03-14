@@ -27,7 +27,7 @@ public class AuthController {
 
         // ensure host-code is valid
         if (!v.hostCodeIsValid(hostCode)){
-            System.out.println("Error: host-code is invalid");
+            System.out.println("Error:  host-code is invalid");
             session.attribute("errorMessageLogin", "Error: host-code is invalid");
             session.attribute("errorMessageCreate", "");
             response.redirect("/host/login");
@@ -36,7 +36,7 @@ public class AuthController {
 
         // ensure host-code exists in the system
         if (!db.hostCodeExists(hostCode)){
-            System.out.println("Error: host-code does not yet exist");
+            System.out.println("Error:  host-code does not yet exist");
             session.attribute("errorMessageLogin", "Error: host-code does not yet exist");
             session.attribute("errorMessageCreate", "");
             response.redirect("/host/login");

@@ -24,15 +24,15 @@ public class GetCodeController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  GetCodeController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host code is set; return user to sign-up page if not
         if (session.attribute("hostCode") == null){
-            System.out.println("Error:  GetCodeController:servePage host code not set");
-            response.redirect("/host/login"); //response.redirect("/error/401");
+            System.out.println("Error:  host code not set");
+            response.redirect("/host/login"); 
             return null;
         }
 
@@ -41,7 +41,7 @@ public class GetCodeController {
 
         // double-check host code exists
         if (!db.hostCodeExists(hostCode)){
-            System.out.println("Error:  GetCodeController:servePage host code invalid or inexistent");
+            System.out.println("Error:  host code invalid or inexistent");
             response.redirect("/host/login"); //response.redirect("/error/401");
             return null;
         }

@@ -30,32 +30,32 @@ public class HostEventController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  HostEventController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host and event exist in current session
         if (session.attribute("event") == null || session.attribute("host") == null){
-            System.out.println("Error:  HostEventController:servePage session found, event or host not in session");
+            System.out.println("Error:  session found, event or host not in session");
             response.redirect("/error/401");
             return null;
         }
 
-        // initialise event
+        // get event, host from session
         Event event = session.attribute("event");
         Host host = session.attribute("host");
 
         // ensure host is valid
         if (!v.isHostValid(host)){
-            System.out.println("Error:  HostEventController:servePage host is invalid");
+            System.out.println("Error:  host is invalid");
             return "Error:  host is invalid";
         }
         int host_id = host.getHostID();
 
         // ensure event is valid
         if (!v.isEventValid(event)){
-            System.out.println("Error:  HostEventController:servePage event is invalid");
+            System.out.println("Error:  event is invalid");
             return "Error:  event is invalid";
         }
         int event_id = event.getEventID();
@@ -63,7 +63,7 @@ public class HostEventController {
 
         // ensure host authors event
         if (event_host_id != host_id){
-            System.out.println("Error:  HostEventController:servePage event not authored by host");
+            System.out.println("Error:  event not authored by host");
             return "Error:  event not authored by host";
         }
 
@@ -88,25 +88,7 @@ public class HostEventController {
                     participantLName.add("");
                 }
                 feedbackData.add(feedback.getResults()[0]);
-                if (feedback.getCompound() > 0.15) {
-                    if (feedback.getCompound() < 0.45) {
-                        sentiment.add("slightly positive");
-                    } else if (feedback.getCompound() < 0.75) {
-                        sentiment.add("positive");
-                    } else {
-                        sentiment.add("very positive");
-                    }
-                } else if (feedback.getCompound() < -0.15) {
-                    if (feedback.getCompound() > -0.45) {
-                        sentiment.add("slightly negative");
-                    } else if (feedback.getCompound() > -0.75) {
-                        sentiment.add("negative");
-                    } else {
-                        sentiment.add("very negative");
-                    }
-                } else {
-                    sentiment.add("neutral");
-                }
+                sentiment.add(feedback.assessSentiment());
                 time.add(feedback.getTimestamp().toString());
                 feedbackCount++;
             }

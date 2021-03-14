@@ -24,23 +24,22 @@ public class HostHomeController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  HostHomeController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  HostHomeController:servePage session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
-        // collect stored (valid) host
+        // collect stored (valid) host; ensure host is valid
         Host host = session.attribute("host");
-
         if (!v.isHostValid(host)){
-            System.out.println("Error:  HostHomeController:servePage host is null");
+            System.out.println("Error:  host is null");
             response.redirect("/error/401");
             return null;
         }

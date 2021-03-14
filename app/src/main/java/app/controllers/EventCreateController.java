@@ -28,23 +28,24 @@ public class EventCreateController {
         request.session(true);
         Session session = request.session();
         if (session.isNew()) {
-            System.out.println("Error:  EventCreateController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host is set
         if (session.attribute("host") == null){
-            System.out.println("Error:  EventCreateController:servePage host not set");
+            System.out.println("Error:  host not set");
             response.redirect("/error/401");
             return null;
         }
 
-        // get host from session
+        // get host from session; ensure host is valid
         Host host = request.session().attribute("host");
-
         if (!v.isHostValid(host)) {
-            return "Error:  host is invalid";
+            System.out.println("Error: host from session invalid");
+            response.redirect("/error/401");
+            return null;
         }
 
         // model holds data to be sent to front-end variables (w/ Velocity)
@@ -60,10 +61,16 @@ public class EventCreateController {
             }
             model.put("templateCounts", templateCounts);
         }
+
+        // use server-side variables in event creation page
         model.put("templates", templates);
         model.put("templateCount", templateCount);
         model.put("errorMessageCreateEvent", session.attribute("errorMessageCreateEvent"));
+
+        // unset error message
         session.removeAttribute("errorMessageCreateEvent");
+
+        // render event creation page
         return ViewUtil.render(request, model, "/velocity/create-event.vm");
     };
 }

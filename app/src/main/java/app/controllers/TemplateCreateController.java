@@ -17,14 +17,14 @@ public class TemplateCreateController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  TemplateCreateController:servePage session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null){
-            System.out.println("Error:  TemplateCreateController:servePage session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }

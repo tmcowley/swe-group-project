@@ -1,12 +1,5 @@
 package app.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-// for ViewUtil velocity models
-import java.util.HashMap;
-import java.util.Map;
-
-import spark.*;
 import app.App;
 import app.DbConnection;
 import app.Validator;
@@ -17,6 +10,14 @@ import app.objects.Participant;
 import app.objects.Template;
 import app.objects.TemplateComponent;
 import app.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+// for ViewUtil velocity models
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.*;
 
 public class HostEventController {
 
@@ -44,41 +45,49 @@ public class HostEventController {
             return null;
         }
 
-        // get event, host from session
+        // collect event from session; ensure valid and exists
         Event event = session.attribute("event");
-        Host host = session.attribute("host");
-        Template template = db.getTemplate(event.getTemplateID());
-        ArrayList<TemplateComponent> components = template.getComponents();
-        ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
-        int componentCount = 0;
-        List<Integer> componentCounts = new ArrayList<Integer>();
-        for (TemplateComponent component: components) {
-            if (component.getType().equals("question")) {
-                questionComponents.add(component);
-                componentCounts.add(componentCount);
-                componentCount++;
-            }
-        }
-
-        // ensure host is valid
-        if (!v.isHostValid(host)){
-            System.out.println("Error:  host is invalid");
-            return "Error:  host is invalid";
-        }
-        int host_id = host.getHostID();
-
-        // ensure event is valid
-        if (!v.isEventValid(event)){
-            System.out.println("Error:  event is invalid");
-            return "Error:  event is invalid";
+        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())){
+            System.out.println("Error:  event invalid or does not exist in database");
+            response.redirect("/error/401");
+            return null;
         }
         int event_id = event.getEventID();
         int event_host_id = event.getHostID();
+
+        // collect host from session; ensure valid and exists
+        Host host = session.attribute("host");
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+            System.out.println("Error:  host invalid or does not exist in database");
+            response.redirect("/error/401");
+            return null;
+        }
+        int host_id = host.getHostID();
 
         // ensure host authors event
         if (event_host_id != host_id){
             System.out.println("Error:  event not authored by host");
             return "Error:  event not authored by host";
+        }
+
+        // set empty components lists
+        ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
+        ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
+        List<Integer> componentCounts = new ArrayList<Integer>();
+
+        // case event has template
+        if (event.hasTemplate()){
+            int template_id = event.getTemplateID();
+            Template template = db.getTemplate(template_id);
+            components = template.getComponents();
+            int componentCount = 0;
+            for (TemplateComponent component: components) {
+                if (component.getType().equals("question")) {
+                    questionComponents.add(component);
+                    componentCounts.add(componentCount);
+                    componentCount++;
+                }
+            }
         }
 
         // collect feedback objects from the event

@@ -306,16 +306,15 @@ public class APIController {
 
         // collect fields from form
         String[] results = request.queryParamsValues("feedbackData");
-        int results_length = results.length;
-        String anonymous_string = request.queryParams("anon");
-
         // ensure form inputs collected
-        if (request.queryParams("feedbackData") == null){
+        if (results == null || request.queryParams("feedbackData") == null){
             System.out.println("Error:  results array not set");
             session.attribute("errorMessageInParticipantEvent", "Error: form inputs not collected (or empty)");
             response.redirect("/event/participant/feedback");
             return null;
         }
+        int results_length = results.length;
+        String anonymous_string = request.queryParams("anon");
 
         Float[] weights = new Float[results_length];
         byte[] types = new byte[results_length];

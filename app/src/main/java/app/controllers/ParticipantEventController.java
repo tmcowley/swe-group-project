@@ -42,75 +42,71 @@ public class ParticipantEventController {
             return null;
         }
 
-        // collect event and participant from session
+        // collect event from session; ensure valid and exists
         Event event = session.attribute("event");
+        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())){
+            System.out.println("Error:  event invalid or does not exist in database");
+            response.redirect("/error/401");
+            return null;
+        }
+        int event_id = event.getEventID();
+        int event_host_id = event.getHostID();
+
+        // collect participant from session; ensure valid and exists
         Participant participant = session.attribute("participant");
-        Template template = db.getTemplate(event.getTemplateID());
-        ArrayList<TemplateComponent> components = template.getComponents();
+        if (!v.isParticipantValid(participant) || !db.participantInEvent(participant.getParticipantID(), event_id)){
+            System.out.println("Error:  participant invalid or does not exist within event");
+            response.redirect("/error/401");
+            return null;
+        }
+        int participant_id = participant.getParticipantID();
+
+        // set empty components lists (case event has no templates)
         ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
-        int componentCount = 0;
+        ArrayList<TemplateComponent> components = new ArrayList<TemplateComponent>();
         List<Integer> componentCounts = new ArrayList<Integer>();
-        for (TemplateComponent component: components) {
-            if (component.getType().equals("question")) {
-                questionComponents.add(component);
-                componentCounts.add(componentCount);
-                componentCount++;
+
+        // case event has template
+        if (event.hasTemplate()){
+            int template_id = event.getTemplateID();
+            Template template = db.getTemplate(template_id);
+            components = template.getComponents();
+            int componentCount = 0;
+            for (TemplateComponent component: components) {
+                if (component.getType().equals("question")) {
+                    questionComponents.add(component);
+                    componentCounts.add(componentCount);
+                    componentCount++;
+                }
             }
-        }
-        // ensure event is valid
-        if (!v.isEventValid(event)){
-            System.out.println("Error:  event in session invalid");
-            response.redirect("/error/401");
-            return null;
-        }
-
-        // ensure participant in session valid
-        if (!v.isParticipantValid(participant)){
-            System.out.println("Error:  participant in session invalid");
-            response.redirect("/error/401");
-            return null;
-        }
-
-        // ensure event exists in system
-        if (!db.eventCodeExists(event.getEventCode())) {
-            System.out.println("Error:  event does not exist");
-            response.redirect("/error/401");
-            return null;
-        }
-
-        // ensure participant in event
-        if (!db.participantInEvent(participant.getParticipantID(), event.getEventID())){
-            System.out.println("Error:  participant not in event");
-            request.session().attribute("errorMessageJoinEvent", "Error:  participant not in event");
-            response.redirect("/error/401");
-            return null;
         }
 
         Map<String, Object> model = new HashMap<>();
         Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
-        // int feedbackCount = 0;
-        // if (feedbacks.length != 0) {
-        //     List<String> participantFName = new ArrayList<String>();
-        //     List<String> participantLName = new ArrayList<String>();
-        //     List<String> feedbackData = new ArrayList<String>();
-        //     List<String> sentiment = new ArrayList<String>();
-        //     List<String> time = new ArrayList<String>();
-        //     for (Feedback feedback : feedbacks) {
-        //         feedbackData.add(feedback.getResults()[0]);
-        //         sentiment.add(feedback.assessSentiment());
-        //         time.add(feedback.getTimestamp().toString());
-        //         feedbackCount++;
-        //     }
-        //     model.put("participantFName", participantFName);
-        //     model.put("participantLName", participantLName);
-        //     model.put("feedbackData", feedbackData);
-        //     model.put("sentiment", sentiment);
-        //     model.put("time", time);
-        // }
-        // List<Integer> feedbackCounts = new ArrayList<Integer>();
-        // for (int i = 0; i < feedbackCount; i++) {
-        //     feedbackCounts.add(i);
-        // }
+
+        int feedbackCount = 0;
+        if (feedbacks.length != 0) {
+            List<String> participantFName = new ArrayList<String>();
+            List<String> participantLName = new ArrayList<String>();
+            List<String> feedbackData = new ArrayList<String>();
+            List<String> sentiment = new ArrayList<String>();
+            List<String> time = new ArrayList<String>();
+            for (Feedback feedback : feedbacks) {
+                feedbackData.add(feedback.getResults()[0]);
+                sentiment.add(feedback.assessSentiment());
+                time.add(feedback.getTimestamp().toString());
+                feedbackCount++;
+            }
+            model.put("participantFName", participantFName);
+            model.put("participantLName", participantLName);
+            model.put("feedbackData", feedbackData);
+            model.put("sentiment", sentiment);
+            model.put("time", time);
+        }
+        List<Integer> feedbackCounts = new ArrayList<Integer>();
+        for (int i = 0; i < feedbackCount; i++) {
+            feedbackCounts.add(i);
+        }
 
         // generate front-page model (place variables in front-end page)
         model.put("feedbacks", feedbacks);

@@ -67,8 +67,15 @@ CREATE TABLE template_component(
                     CHECK (tc_type IN ('question', 'radio', 'checkbox')),
     tc_prompt       TEXT            NOT NULL
                     DEFAULT FALSE,
+    tc_considered_in_sentiment 
+                    BOOLEAN 
+                    DEFAULT TRUE,
+    tc_sentiment_weight
+                    INT 
+                    DEFAULT 5,
     tc_options      TEXT[],
     tc_options_ans  BOOLEAN[],
+    tc_options_pos  INT[],
     tc_text_response TEXT,
     PRIMARY KEY (tc_id)
 );

@@ -27,6 +27,16 @@
     #mainHostEventBodyContainer {
         grid-template-columns: 100%;
     }
+    header {
+        padding: 20px;
+    }
+    #headerRight a {
+        padding: 10px 20px;
+        border-radius: 20px;
+    }
+}
+
+@media screen and (max-width: 815px) {
     #hostHomeContainer {
         margin: 60px 20px;
         width: auto;

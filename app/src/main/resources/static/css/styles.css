@@ -52,6 +52,16 @@ input {
 
 #headerRight {
     float: right;
+    overflow: visible;
+}
+
+#headerRight a {
+    background-color: white;
+    color: black;
+    padding: 5px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-left: 10px;
 }
 
 #mainBodyContainer {

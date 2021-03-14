@@ -2,10 +2,11 @@
 #@mainLayout()
 <header>
     <div id="headerLeft">
-        <a href="/">Resmodus</a>
+        Resmodus
     </div>
     <div id="headerRight">
-        login stuff goes here
+        <a href="/host/home">Home</a>
+        <a href="/">Logout</a>
     </div>
 </header>
 <div id="mainBodyContainerOneCol">

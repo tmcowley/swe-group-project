@@ -10,10 +10,10 @@
 </div>
 <header>
     <div id="headerLeft">
-        <a href="/">Resmodus</a>
+        Resmodus
     </div>
     <div id="headerRight">
-        Login stuff here
+        <a href="/">Logout</a>
     </div>
 </header>
 <div id="mainBodyContainer">

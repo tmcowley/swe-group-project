@@ -89,6 +89,7 @@
             </form>
 #end
         </div>
+        <br>
 #if($feedbacks)
     #foreach($i in $feedbacks)
         #if($componentCounts.size() != 0)

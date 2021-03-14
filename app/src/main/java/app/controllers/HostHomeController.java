@@ -30,7 +30,7 @@ public class HostHomeController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -38,7 +38,7 @@ public class HostHomeController {
 
         // collect stored (valid) host; ensure host is valid
         Host host = session.attribute("host");
-        if (!v.isHostValid(host)){
+        if (!v.isHostValid(host)) {
             System.out.println("Error:  host is null");
             response.redirect("/error/401");
             return null;

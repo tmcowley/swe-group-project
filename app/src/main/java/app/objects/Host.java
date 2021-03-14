@@ -10,15 +10,14 @@ public class Host {
     private boolean sys_ban;
 
     /**
-     * create a host; 
-     * all attributes controllable
+     * create a host; all attributes controllable
      * 
-     * @param host_id host identifier
+     * @param host_id   host identifier
      * @param host_code host unique token
      * @param e_address host email address
-     * @param f_name host first name
-     * @param l_name host last name
-     * @param sys_ban host system ban state
+     * @param f_name    host first name
+     * @param l_name    host last name
+     * @param sys_ban   host system ban state
      */
     public Host(int host_id, String host_code, String e_address, String f_name, String l_name, boolean sys_ban) {
         this.host_id = host_id;
@@ -32,11 +31,11 @@ public class Host {
     /**
      * create a host with a default ban state of false
      * 
-     * @param host_id host identifier
+     * @param host_id   host identifier
      * @param host_code host unique token
      * @param e_address host email address
-     * @param f_name host first name
-     * @param l_name host last name
+     * @param f_name    host first name
+     * @param l_name    host last name
      */
     public Host(int host_id, String host_code, String e_address, String f_name, String l_name) {
         this.host_id = host_id;

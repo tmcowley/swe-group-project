@@ -10,9 +10,8 @@ import java.util.Map;
 
 import spark.*;
 
-
 public class GetCodeController {
-    
+
     // serve the host-code displaying page (following GET request from host sign-up)
     public static Route servePage = (Request request, Response response) -> {
 
@@ -30,9 +29,9 @@ public class GetCodeController {
         }
 
         // ensure host code is set; return user to sign-up page if not
-        if (session.attribute("hostCode") == null){
+        if (session.attribute("hostCode") == null) {
             System.out.println("Error:  host code not set");
-            response.redirect("/host/login"); 
+            response.redirect("/host/login");
             return null;
         }
 
@@ -40,9 +39,9 @@ public class GetCodeController {
         String hostCode = session.attribute("hostCode");
 
         // double-check host code exists
-        if (!db.hostCodeExists(hostCode)){
+        if (!db.hostCodeExists(hostCode)) {
             System.out.println("Error:  host code invalid or inexistent");
-            response.redirect("/host/login"); //response.redirect("/error/401");
+            response.redirect("/host/login"); // response.redirect("/error/401");
             return null;
         }
 

@@ -147,7 +147,7 @@ public class DBConnTest {
         assertFalse(testHost == null);
         int testHostID = testHost.getHostID();
 
-        // create a template 
+        // create a template
         TemplateComponent component = new TemplateComponent("name", "question", "enter response:", null, null, "");
         assertFalse(component == null);
         ArrayList<TemplateComponent> components = new ArrayList<>(1);
@@ -163,7 +163,8 @@ public class DBConnTest {
         int databaseEventID = databaseEvent.getEventID();
 
         // create an equal event within the back-end
-        Event backendEvent = new Event(databaseEventID, testHostID, template_id, "title", "desc", "lecture", ts, ts, eventCode);
+        Event backendEvent = new Event(databaseEventID, testHostID, template_id, "title", "desc", "lecture", ts, ts,
+                eventCode);
         assertFalse(backendEvent == null);
 
         // ensure local and stored events match

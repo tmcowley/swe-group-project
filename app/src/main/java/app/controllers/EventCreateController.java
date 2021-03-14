@@ -34,7 +34,7 @@ public class EventCreateController {
         }
 
         // ensure host is set
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  host not set");
             response.redirect("/error/401");
             return null;
@@ -55,7 +55,7 @@ public class EventCreateController {
         int templateCount = 0;
         if (templates.length != 0) {
             int[] templateCounts = new int[templates.length];
-            for (int i=0; i<templates.length;i++) {
+            for (int i = 0; i < templates.length; i++) {
                 templateCounts[templateCount] = templateCount;
                 templateCount++;
             }

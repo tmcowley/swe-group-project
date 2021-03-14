@@ -21,8 +21,7 @@ public class APIController {
     static Validator v = App.getInstance().getValidator();
 
     /**
-     * creates a new host when a new user signs-up as a host
-     * form sent from front-end to back-end to create host
+     * creates a new host following host sign-up
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
@@ -36,13 +35,13 @@ public class APIController {
         String e_address = request.queryParams("hostEmail");
 
         // attribute validation
-        if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name)){
+        if (!v.nameIsValid(f_name) || !v.nameIsValid(l_name)) {
             System.out.println("Error:  the name provided is considered invalid");
             request.session().attribute("errorMessageCreate", "Error: name is invalid");
             response.redirect("/host/login");
             return null;
         }
-        if (!v.eAddressIsValid(e_address)){
+        if (!v.eAddressIsValid(e_address)) {
             System.out.println("Error:  the email provided is considered invalid");
             request.session().attribute("errorMessageCreate", "Error: email is invalid");
             response.redirect("/host/login");
@@ -50,7 +49,7 @@ public class APIController {
         }
 
         // ensure email uniqueness
-        if (db.emailExists(e_address)){
+        if (db.emailExists(e_address)) {
             System.out.println("Error:  the email provided is non-unique");
             request.session().attribute("errorMessageCreate", "Error: email is already in use");
             response.redirect("/host/login");
@@ -61,7 +60,7 @@ public class APIController {
         Host host = db.createHost(f_name, l_name, e_address);
 
         // ensure host is valid
-        if (!v.isHostValid(host)){
+        if (!v.isHostValid(host)) {
             System.out.println("Error:  created host considered invalid");
             request.session().attribute("errorMessageCreate", "Error: created host invalid; please try again");
             response.redirect("/host/login");
@@ -80,8 +79,7 @@ public class APIController {
     };
 
     /**
-     * Creates and event when a host user requests a new event to be made
-     * form sent by host to create an event
+     * create new event
      */
     public static Route createEvent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEvent API endpoint recognized request");
@@ -98,7 +96,7 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -115,7 +113,7 @@ public class APIController {
         String templateCode = request.queryParams("eventTemplate");
 
         // ensure all request parameters were collected
-        if (title == null || description == null || type == null || templateCode == null){
+        if (title == null || description == null || type == null || templateCode == null) {
             session.attribute("errorMessageCreateEvent", "Error: not all form inputs not collected");
             response.redirect("/host/create-event");
             return null;
@@ -125,28 +123,24 @@ public class APIController {
         Timestamp current = new Timestamp(System.currentTimeMillis());
 
         /*
-            // parse start and end times from event creation
-            String[] start_time_string = request.queryParams("startTime").split(":");
-            String[] end_time_string = request.queryParams("endTime").split(":");
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time_string[0]));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(start_time_string[1]));
-            calendar.set(Calendar.SECOND, 0);
-            Date sTime =(Date) calendar.getTime();
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(end_time_string[0]));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(end_time_string[1]));
-            calendar.set(Calendar.SECOND, 0);
-            Date eTime =(Date) calendar.getTime();       
-            Timestamp startTime = new Timestamp(sTime.getTime());
-            Timestamp endTime = new Timestamp(eTime.getTime());    
-            Timestamp current = new Timestamp(System.currentTimeMillis());
-            if (startTime.compareTo(endTime) > 0 || endTime.compareTo(current) < 0){
-                // note: testing discovered errors in this
-                session.attribute("errorMessageCreateEvent", "Error: start and end time not in order");
-                response.redirect("/host/create-event");
-                return null;
-            }
-        */
+         * // parse start and end times from event creation String[] start_time_string =
+         * request.queryParams("startTime").split(":"); String[] end_time_string =
+         * request.queryParams("endTime").split(":"); Calendar calendar =
+         * Calendar.getInstance(); calendar.set(Calendar.HOUR_OF_DAY,
+         * Integer.parseInt(start_time_string[0])); calendar.set(Calendar.MINUTE,
+         * Integer.parseInt(start_time_string[1])); calendar.set(Calendar.SECOND, 0);
+         * Date sTime =(Date) calendar.getTime(); calendar.set(Calendar.HOUR_OF_DAY,
+         * Integer.parseInt(end_time_string[0])); calendar.set(Calendar.MINUTE,
+         * Integer.parseInt(end_time_string[1])); calendar.set(Calendar.SECOND, 0); Date
+         * eTime =(Date) calendar.getTime(); Timestamp startTime = new
+         * Timestamp(sTime.getTime()); Timestamp endTime = new
+         * Timestamp(eTime.getTime()); Timestamp current = new
+         * Timestamp(System.currentTimeMillis()); if (startTime.compareTo(endTime) > 0
+         * || endTime.compareTo(current) < 0){ // note: testing discovered errors in
+         * this session.attribute("errorMessageCreateEvent",
+         * "Error: start and end time not in order");
+         * response.redirect("/host/create-event"); return null; }
+         */
 
         // validate input before database interaction
         if (!v.eventTitleIsValid(title)) {
@@ -174,11 +168,12 @@ public class APIController {
             // create an event with a template
             System.out.println("Notice: a template has been provided");
             Template template = db.getTemplateByCode(templateCode);
-            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, current, current);
+            event = db.createEvent(host.getHostID(), template.getTemplateID(), title, description, type, current,
+                    current);
         }
 
         // ensure event created is valid
-        if (!v.isEventValid(event)){
+        if (!v.isEventValid(event)) {
             // return not found if event is not created or input is not valid
             session.attribute("errorMessageCreateEvent", "Error: event not created or invalid - check inputs");
             response.redirect("/host/create-event");
@@ -215,7 +210,7 @@ public class APIController {
             response.redirect("/");
             return null;
         }
-        //System.out.println("Notice: form attributes collected, are valid");
+        // System.out.println("Notice: form attributes collected, are valid");
 
         // ensure event-code exists in system
         if (!db.eventCodeExists(eventCode)) {
@@ -224,14 +219,14 @@ public class APIController {
             response.redirect("/");
             return null;
         }
-        //System.out.println("Notice: event code exists in system");
+        // System.out.println("Notice: event code exists in system");
 
         // create Participant object in DB -> link to event
         Participant participant = db.createParticipant(f_name, l_name);
         Event event = db.getEventByCode(eventCode);
 
         // ensure event and participant creations were succeeded
-        if (!v.isParticipantValid(participant) || !v.isEventValid(event)){
+        if (!v.isParticipantValid(participant) || !v.isEventValid(event)) {
             System.out.println("Error:  participant/ event creation failed");
             request.session().attribute("errorMessageJoinEvent", "Error: participant or event creation failed");
             response.redirect("/");
@@ -240,7 +235,7 @@ public class APIController {
 
         // add participant to event; ensure success
         Boolean added = db.addParticipantToEvent(participant.getParticipantID(), event.getEventID());
-        if (BooleanUtils.isNotTrue(added)){
+        if (BooleanUtils.isNotTrue(added)) {
             System.out.println("Error:  adding participant to event failed");
             request.session().attribute("errorMessageJoinEvent", "Error: adding participant to event failed");
             response.redirect("/");
@@ -259,8 +254,7 @@ public class APIController {
     };
 
     /**
-     * allows a participant in an event to create an instance of feedback
-     * collects form sent by participant (in event) to create an instance of feedback
+     * allow a participant in an event to create an instance of feedback
      */
     public static Route createFeedback = (Request request, Response response) -> {
         System.out.println("\nNotice: createFeedback API endpoint recognized request");
@@ -277,7 +271,7 @@ public class APIController {
         }
 
         // ensure participant and event exist in current session
-        if (session.attribute("event") == null || session.attribute("participant") == null){
+        if (session.attribute("event") == null || session.attribute("participant") == null) {
             System.out.println("Error:  session found, event or participant not in session");
             response.redirect("/error/401");
             return null;
@@ -291,14 +285,14 @@ public class APIController {
         int participant_id = participant.getParticipantID();
 
         // ensure event exists
-        if (!db.eventCodeExists(event_code)){
+        if (!db.eventCodeExists(event_code)) {
             System.out.println("Error:  session found, event does not exist");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure participant exists, and is in event
-        if (!db.participantInEvent(participant_id, event_id)){
+        if (!db.participantInEvent(participant_id, event_id)) {
             System.out.println("Error:  session found, participant not in event");
             response.redirect("/error/401");
             return null;
@@ -307,7 +301,7 @@ public class APIController {
         // collect fields from form
         String[] results = request.queryParamsValues("feedbackData");
         // ensure form inputs collected
-        if (results == null || request.queryParams("feedbackData") == null){
+        if (results == null || request.queryParams("feedbackData") == null) {
             System.out.println("Error:  results array not set");
             session.attribute("errorMessageInParticipantEvent", "Error: form inputs not collected (or empty)");
             response.redirect("/event/participant/feedback");
@@ -321,28 +315,29 @@ public class APIController {
         Boolean[] keys = new Boolean[results_length];
         byte[][] sub_weights = new byte[results_length][5];
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        for (int i=0;i<results_length;i++) {
+        for (int i = 0; i < results_length; i++) {
             weights[i] = 4f;
             types[i] = 0;
             keys[i] = false;
         }
         // get feedback anonymity state
         Boolean anonymous = false;
-        if (StringUtils.equals(anonymous_string, "Submit Anonymously")){
+        if (StringUtils.equals(anonymous_string, "Submit Anonymously")) {
             anonymous = true;
         }
 
-        System.out.println("Notice: generating new feedback instance");
-        Feedback feedback = new Feedback(participant_id, event_id, results, weights, types, keys, sub_weights, anonymous, current);
+        // System.out.println("Notice: generating new feedback instance");
+        Feedback feedback = new Feedback(participant_id, event_id, results, weights, types, keys, sub_weights,
+                anonymous, current);
 
         // ensure feedback is valid
-        if (!v.isFeedbackValid(feedback)){
+        if (!v.isFeedbackValid(feedback)) {
             System.out.println("Error: feedback considered invalid (before SA)");
             session.attribute("errorMessageInParticipantEvent", "Error: feedback invalid");
             response.redirect("/event/participant/feedback");
             return null;
         }
-        
+
         // run sentiment analysis on feedback; ensure SA was successful
         SentimentAnalyser.main(feedback);
         if (feedback.getCompound() == null) {
@@ -351,10 +346,10 @@ public class APIController {
             response.redirect("/event/participant/feedback");
             return null;
         }
-        System.out.println("Notice: SA on feedback successful");
+        // System.out.println("Notice: SA on feedback successful");
 
         // ensure feedback is valid
-        if (!v.isFeedbackValid(feedback)){
+        if (!v.isFeedbackValid(feedback)) {
             System.out.println("Error: feedback considered invalid (after SA)");
             session.attribute("errorMessageInParticipantEvent", "Error: feedback invalid");
             return "Error: feedback considered invalid";
@@ -387,7 +382,7 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  APIController:createEmptyTemplate session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -401,7 +396,7 @@ public class APIController {
         String template_name = request.queryParams("templateName");
         System.out.println("Notice: template name collected: " + template_name);
 
-        if (StringUtils.isBlank(template_name)){
+        if (StringUtils.isBlank(template_name)) {
             System.out.println("Error:  APIController:createEmptyTemplate template name is blank");
             session.attribute("errorMessageCreateEmptyTemplate", "Error: template name is blank");
             response.redirect("/host/templates/new");
@@ -435,7 +430,7 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -443,27 +438,29 @@ public class APIController {
 
         // // ensure host code sent in POST request
         // if (request.queryParams("hostCode") == null){
-        //     System.out.println("Error:  host code not in POST request");
-        //     session.attribute("errorMessageCreateTemplate", "Error: host code not in form attributes");
-        //     response.redirect("/host/templates");
-        //     return null;
+        // System.out.println("Error: host code not in POST request");
+        // session.attribute("errorMessageCreateTemplate", "Error: host code not in form
+        // attributes");
+        // response.redirect("/host/templates");
+        // return null;
         // }
 
         // get host from session
-        //Host host = session.attribute("host");
+        // Host host = session.attribute("host");
 
-        // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate", "value");
+        // NOTE PLACE ERRORS IN: session.attribute("errorMessageCreateTemplate",
+        // "value");
 
-        //TODO
+        // TODO
 
-        // get template code (stored in form) 
+        // get template code (stored in form)
         String templateCode = request.queryParams("templateCode");
         Template template = db.getTemplateByCode(templateCode);
         ArrayList<TemplateComponent> components = template.getComponents();
         // collect form data
         // form data -> components
         // components -> template
-        
+
         // ensure template is valid
 
         // store template in DB
@@ -473,12 +470,15 @@ public class APIController {
                 db.updateQuestionTemplateComponent(templateComponent.getId(), data[0]);
             }
         }
-        
+
         // return to host home page
         response.redirect("/host/home");
         return null;
     };
 
+    /**
+     * create a template component (POST request API endpoint)
+     */
     public static Route createTemplateComponent = (Request request, Response response) -> {
         System.out.println("\nNotice: createTemplateComponent API endpoint recognized request");
 
@@ -494,7 +494,7 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -506,7 +506,7 @@ public class APIController {
         String[] options = request.queryParamsValues("tc_options");
         String[] optionsAnsStrings = request.queryParamsValues("tc_optionsAns");
         Boolean[] optionsAns = new Boolean[optionsAnsStrings.length];
-        for (int i=0; i < optionsAnsStrings.length;i++) {
+        for (int i = 0; i < optionsAnsStrings.length; i++) {
             optionsAns[i] = Boolean.parseBoolean(optionsAnsStrings[i]);
         }
         String textResponse;
@@ -517,8 +517,9 @@ public class APIController {
         }
 
         // create template component; ensure component is valid
-        TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns, textResponse);
-        if (!v.isComponentValid(templateComponent)){
+        TemplateComponent templateComponent = new TemplateComponent(name, type, prompt, options, optionsAns,
+                textResponse);
+        if (!v.isComponentValid(templateComponent)) {
             System.out.println("Error: template component considered invalid");
             return "Error: TemplateComponent considered invalid";
         }
@@ -528,7 +529,9 @@ public class APIController {
         return null;
     };
 
-    // GET request for adding an empty component by type
+    /**
+     * GET request for adding an empty component by type
+     */
     public static Route createEmptyComponent = (Request request, Response response) -> {
         System.out.println("\nNotice: createEmptyComponent API endpoint recognized request");
 
@@ -543,7 +546,7 @@ public class APIController {
             return null;
         }
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -554,7 +557,7 @@ public class APIController {
         String componentType = request.queryParams("componentType");
 
         // ensure GET request params are correct
-        if (templateCode == null || componentType == null){
+        if (templateCode == null || componentType == null) {
             System.out.println("Error:  incorrect parameters to GET request");
             response.redirect("/host/templates");
             return null;
@@ -562,14 +565,14 @@ public class APIController {
         System.out.println("Notice: templateCode:" + templateCode + ", componentType:" + componentType);
 
         // ensure template code exists in system
-        if (!db.templateCodeExists(templateCode)){
+        if (!db.templateCodeExists(templateCode)) {
             System.out.println("Error:  template code invalid");
             response.redirect("/host/templates");
             return null;
         }
 
         // ensure component type is valid
-        if (!v.componentTypeIsValid(componentType)){
+        if (!v.componentTypeIsValid(componentType)) {
             System.out.println("Error:  component type invalid");
             // return to "/host/templates/edit/code"
             // (links to TemplateEditController.servePage)
@@ -582,18 +585,16 @@ public class APIController {
 
         TemplateComponent component = null;
 
-        if (componentType.equals("question")){
+        if (componentType.equals("question")) {
             component = new TemplateComponent("component_name", "question", "", null, null, "");
-        }
-        else if (componentType.equals("checkbox")){
+        } else if (componentType.equals("checkbox")) {
             component = new TemplateComponent("component_name", "checkbox", "", new String[0], new Boolean[0], null);
-        }
-        else if (componentType.equals("radio")){
+        } else if (componentType.equals("radio")) {
             component = new TemplateComponent("component_name", "radio", "", new String[0], new Boolean[0], null);
         }
 
         // ensure component created is valid
-        if (!v.isComponentValid(component)){
+        if (!v.isComponentValid(component)) {
             System.out.println("Error:  invalid component generated");
             response.redirect("/host/templates");
             return null;
@@ -604,7 +605,7 @@ public class APIController {
 
         Boolean added = db.addComponentToTemplate(component.getId(), template.getTemplateID());
 
-        if (BooleanUtils.isNotTrue(added)){
+        if (BooleanUtils.isNotTrue(added)) {
             System.out.println("Error:  component not added to template correctly");
             response.redirect("/host/templates");
             return null;
@@ -615,6 +616,9 @@ public class APIController {
         return null;
     };
 
+    /**
+     * delete a template within the database (POST API endpoint)
+     */
     public static Route deleteTemplate = (Request request, Response response) -> {
         System.out.println("\nNotice: deleteTemplate API endpoint recognized request");
 
@@ -630,14 +634,14 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host code sent in POST request
-        if (request.queryParams("templateCode") == null){
+        if (request.queryParams("templateCode") == null) {
             System.out.println("Error:  template code not in POST request");
             session.attribute("errorMessageDeleteTemplate", "Error: template code not in form attributes");
             response.redirect("/host/templates");
@@ -655,6 +659,9 @@ public class APIController {
         return null;
     };
 
+    /**
+     * delete a template component within the database (POST API endpoint)
+     */
     public static Route deleteTemplateComponent = (Request request, Response response) -> {
         System.out.println("\nNotice: deleteTemplateComponent API endpoint recognized request");
 
@@ -670,16 +677,17 @@ public class APIController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure component ID sent in POST request
-        if (request.queryParams("component_id") == null){
+        if (request.queryParams("component_id") == null) {
             System.out.println("Error:  TemplateComponent ID not in POST request");
-            session.attribute("errorMessageDeleteTemplateComponent", "Error: TemplateComponent ID not in form attributes");
+            session.attribute("errorMessageDeleteTemplateComponent",
+                    "Error: TemplateComponent ID not in form attributes");
             response.redirect("/host/templates");
             return null;
         }
@@ -690,20 +698,21 @@ public class APIController {
         // parse component_id from form input
         int component_id = Integer.parseInt(request.queryParams("component_id"));
 
-        // get template code (stored in form) 
+        // get template code (stored in form)
         String templateCode = request.queryParams("templateCode");
 
         // get template by its code (used for ensuring host is author)
         Template template = db.getTemplateByCode(templateCode);
-        if (template == null){
+        if (template == null) {
             System.out.println("Error:  template (by code) is null");
-            session.attribute("errorMessageDeleteTemplateComponent", "Error: no template corresponding to template code");
+            session.attribute("errorMessageDeleteTemplateComponent",
+                    "Error: no template corresponding to template code");
             response.redirect("/host/templates");
             return null;
         }
 
         // ensure template is authored by host in session
-        if (host.getHostID() != template.getHostID()){
+        if (host.getHostID() != template.getHostID()) {
             System.out.println("Error:  host does not own template by code");
             response.redirect("/error/401");
             return null;
@@ -717,6 +726,5 @@ public class APIController {
         response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
         return null;
     };
-
 
 }

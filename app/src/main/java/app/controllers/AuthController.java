@@ -6,7 +6,6 @@ import app.DbConnection;
 import app.objects.Host;
 import spark.*;
 
-
 public class AuthController {
 
     // authorise host (following POST request) and redirect to host home page
@@ -26,7 +25,7 @@ public class AuthController {
         System.out.println("Notice: hostCode:" + hostCode);
 
         // ensure host-code is valid
-        if (!v.hostCodeIsValid(hostCode)){
+        if (!v.hostCodeIsValid(hostCode)) {
             System.out.println("Error:  host-code is invalid");
             session.attribute("errorMessageLogin", "Error: host-code is invalid");
             session.attribute("errorMessageCreate", "");
@@ -35,7 +34,7 @@ public class AuthController {
         }
 
         // ensure host-code exists in the system
-        if (!db.hostCodeExists(hostCode)){
+        if (!db.hostCodeExists(hostCode)) {
             System.out.println("Error:  host-code does not yet exist");
             session.attribute("errorMessageLogin", "Error: host-code does not yet exist");
             session.attribute("errorMessageCreate", "");
@@ -49,7 +48,7 @@ public class AuthController {
 
         // ensure the host object by host-code is valid
         // this should never happen since stored hosts must be valid
-        if (!v.isHostValid(host)){
+        if (!v.isHostValid(host)) {
             System.out.println("Error:  host matched to host-code is invalid");
             session.attribute("errorMessageLogin", "Error: host matched to host-code is invalid");
             session.attribute("errorMessageCreate", "");

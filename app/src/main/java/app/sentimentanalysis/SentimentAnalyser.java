@@ -1,10 +1,3 @@
-//TODO - Create a consitency test for this
-//TODO - create a does it return something in the correct format test
-//TODO - add set queries to the feedback testing
-//TODO change for loops to iterate through arrays
-//TODO check if one sd is enough/good
-//TODO: 
-
 package app.sentimentanalysis;
 
 import app.Validator;
@@ -22,6 +15,11 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 // for checking if an array is null or empty
 import org.apache.commons.lang3.ArrayUtils;
 
+//TODO - Create a consitency test for this
+//TODO - create a does it return something in the correct format test
+//TODO - add set queries to the feedback testing
+//TODO change for loops to iterate through arrays
+//TODO check if one sd is enough/good
 public class SentimentAnalyser {
 
     static Validator v = new Validator();
@@ -67,9 +65,10 @@ public class SentimentAnalyser {
         // on result type
         for (int i = 0; i < amount; i++) {
 
-            if (StringUtils.isBlank(results[i]))
+            if (StringUtils.isBlank(results[i])) {
                 continue;
-            
+            }
+
             if (types[i] == 0 && weights[i] != 0) {
                 compounds[i] = getCompoundFromText(results[i]);
             }
@@ -124,7 +123,7 @@ public class SentimentAnalyser {
      */
     private static Float getCompoundFromText(String plaintext) throws IOException {
 
-        if (StringUtils.isBlank(plaintext)){
+        if (StringUtils.isBlank(plaintext)) {
             System.out.println("Error: getCompoundFromText() plaintext is blank");
             return null;
         }
@@ -156,7 +155,7 @@ public class SentimentAnalyser {
         StandardDeviation sd = new StandardDeviation();
         double standev = sd.evaluate(values);
         for (double i : values) {
-            if ((i > 1*standev) != (i < -1*standev)) {
+            if ((i > 1 * standev) != (i < -1 * standev)) {
                 compound += i;
                 count++;
             }
@@ -180,7 +179,7 @@ public class SentimentAnalyser {
      */
     private static float getCompoundFromSingle(String data, int index, Feedback feedback) {
 
-        // Gets row of matrix which holds weights of each possible result, 
+        // Gets row of matrix which holds weights of each possible result,
         // selects correct result, normalises to between 1 and -1
         return ((feedback.getSub_WeightsRow(index)[Integer.parseInt(data)]) - 4f) / 3f;
     }
@@ -196,7 +195,7 @@ public class SentimentAnalyser {
     private static Float getCompoundFromMultiple(String data, int index, Feedback feedback) {
         byte[] results = feedback.getSub_WeightsRow(index); // Holds weights of results
 
-        if (ArrayUtils.isEmpty(results)){
+        if (ArrayUtils.isEmpty(results)) {
             System.out.println("Error: getCompoundFromMultiple() array:results is null or empty");
             return null;
         }

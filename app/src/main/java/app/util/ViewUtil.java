@@ -16,9 +16,6 @@ public class ViewUtil {
     /**
      * unauthorized page access (HTTP_401)
      * 
-     * Guide to make an error for this page:
-     * response.redirect("/error/401");
-     * return null;
      */
     public static Route unauthAccess = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:unauthAccess (401) called");
@@ -27,15 +24,17 @@ public class ViewUtil {
         // render unauthorised access page
         Map<String, Object> model = new HashMap<>();
         return ViewUtil.render(request, model, "/velocity/401-unauth-access.vm");
-    };
 
+        // guide to make an error for this page:
+        //
+        // response.redirect("/error/401");
+        // return null;
+        //
+    };
 
     /**
      * page not found Route (HTTP_404)
      * 
-     * Guide to make an error for this page:
-     * response.redirect("/error/404");
-     * return null;
      */
     public static Route notFound = (Request request, Response response) -> {
         System.out.println("\nNotice: ViewUtil:notFound (404) called");
@@ -44,17 +43,16 @@ public class ViewUtil {
         // render page not found page
         Map<String, Object> model = new HashMap<>();
         return ViewUtil.render(request, model, "/velocity/404-not-found.vm");
+
+        // guide to make an error for this page:
+        //
+        // response.redirect("/error/404");
+        // return null;
+        //
     };
 
     /**
      * general error page: not acceptable (HTTP_406)
-     * 
-     * Guide to make an error for this page:
-     * session.attribute("errorFrom", ""); 
-     * session.attribute("errorMessage", ""); 
-     * session.attribute("errorRedirect", "");
-     * response.redirect("/error/406");
-     * return null;
      * 
      */
     public static Route notAcceptable = (Request request, Response response) -> {
@@ -77,13 +75,21 @@ public class ViewUtil {
 
         // render general error page
         return ViewUtil.render(request, model, "/velocity/406-not-acceptable.vm");
+
+        // guide to make an error for this page:
+        //
+        // session.attribute("errorFrom", ""); session.attribute("errorMessage", "");
+        // session.attribute("errorRedirect", ""); response.redirect("/error/406");
+        // return null;
+        //
     };
 
     private static VelocityTemplateEngine strictVelocityEngine() {
         VelocityEngine configuredEngine = new VelocityEngine();
         configuredEngine.setProperty("runtime.references.strict", true);
         configuredEngine.setProperty("resource.loader", "class");
-        configuredEngine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        configuredEngine.setProperty("class.resource.loader.class",
+                "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         return new VelocityTemplateEngine(configuredEngine);
     }
 }

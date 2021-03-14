@@ -8,7 +8,7 @@ import spark.*;
 import app.util.*;
 
 public class TemplateCreateController {
-    
+
     // serve the template initial-creation page (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
 
@@ -23,12 +23,12 @@ public class TemplateCreateController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
-        
+
         // generate model for front-end; include error message
         Map<String, Object> model = new HashMap<>();
         model.put("errorMessageCreateEmptyTemplate", session.attribute("errorMessageCreateEmptyTemplate"));

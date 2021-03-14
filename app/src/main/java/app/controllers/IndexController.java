@@ -8,7 +8,7 @@ import spark.*;
 import app.util.*;
 
 public class IndexController {
-    
+
     // Serve the landing (index) page following GET request
     public static Route servePage = (Request request, Response response) -> {
 

@@ -13,7 +13,7 @@ import java.util.Map;
 import spark.*;
 
 public class MyTemplatesController {
-    
+
     // serve the page containing all host templates (in response to GET request)
     public static Route servePage = (Request request, Response response) -> {
 
@@ -31,7 +31,7 @@ public class MyTemplatesController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("host") == null){
+        if (session.attribute("host") == null) {
             System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
@@ -45,9 +45,9 @@ public class MyTemplatesController {
         Template[] hostTemplates = db.getTemplatesByHostID(hostID);
 
         // ensure the host template array is non-null
-        if (hostTemplates == null){
+        if (hostTemplates == null) {
             System.out.println("Notice:  hostTemplates array is null");
-            // send to generic error page 
+            // send to generic error page
             session.attribute("errorRedirect", request.contextPath());
             session.attribute("errorMessage", "host template array is null");
             session.attribute("errorRedirect", "/host/template");
@@ -57,12 +57,12 @@ public class MyTemplatesController {
 
         // ensure each template is not-null
         int templateIndex = 0;
-        for (Template template : hostTemplates){
+        for (Template template : hostTemplates) {
             if (template == null) {
-                System.out.println("Error: templates[" +templateIndex+ "] is null");
-                // send to generic error page 
+                System.out.println("Error: templates[" + templateIndex + "] is null");
+                // send to generic error page
                 session.attribute("errorRedirect", request.contextPath());
-                session.attribute("errorMessage", "Error: templates[" +templateIndex+ "] is null");
+                session.attribute("errorMessage", "Error: templates[" + templateIndex + "] is null");
                 session.attribute("errorRedirect", "/host/home");
                 response.redirect("/error/406");
                 return null;

@@ -36,7 +36,7 @@ public class ParticipantEventController {
         }
 
         // ensure host exists in current session
-        if (session.attribute("event") == null || session.attribute("participant") == null){
+        if (session.attribute("event") == null || session.attribute("participant") == null) {
             System.out.println("Error:  session found, participant or event not in session");
             response.redirect("/error/401");
             return null;
@@ -44,7 +44,7 @@ public class ParticipantEventController {
 
         // collect event from session; ensure valid and exists
         Event event = session.attribute("event");
-        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())){
+        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())) {
             System.out.println("Error:  event invalid or does not exist in database");
             response.redirect("/error/401");
             return null;
@@ -54,7 +54,7 @@ public class ParticipantEventController {
 
         // collect participant from session; ensure valid and exists
         Participant participant = session.attribute("participant");
-        if (!v.isParticipantValid(participant) || !db.participantInEvent(participant.getParticipantID(), event_id)){
+        if (!v.isParticipantValid(participant) || !db.participantInEvent(participant.getParticipantID(), event_id)) {
             System.out.println("Error:  participant invalid or does not exist within event");
             response.redirect("/error/401");
             return null;
@@ -67,12 +67,12 @@ public class ParticipantEventController {
         List<Integer> componentCounts = new ArrayList<Integer>();
 
         // case event has template
-        if (event.hasTemplate()){
+        if (event.hasTemplate()) {
             int template_id = event.getTemplateID();
             Template template = db.getTemplate(template_id);
             components = template.getComponents();
             int componentCount = 0;
-            for (TemplateComponent component: components) {
+            for (TemplateComponent component : components) {
                 if (component.getType().equals("question")) {
                     questionComponents.add(component);
                     componentCounts.add(componentCount);
@@ -82,7 +82,8 @@ public class ParticipantEventController {
         }
 
         Map<String, Object> model = new HashMap<>();
-        Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
+        Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(),
+                participant.getParticipantID());
 
         int feedbackCount = 0;
         if (feedbacks.length != 0) {
@@ -119,73 +120,55 @@ public class ParticipantEventController {
 
         // unset session stored error message
         session.removeAttribute("errorMessageJoinEvent");
-        
+
         // render the participant event page
         return ViewUtil.render(request, model, "/velocity/participant-event.vm");
     };
 
 }
 
-/* FROM OLD POST API endpoint: createFeedback
-if (v.isFeedbackValid(feedback)) {
-    System.out.println("Notice: feedback considered valid");
-    String[] arrs = new String[feedback.getKey_Results().size()];
-    String[] keyResults = (String[]) feedback.getKey_Results().toArray(arrs);
-    db.createFeedback(feedback.getParticipantID(), feedback.getEventID(), feedback.getAnonymous(),
-            feedback.getTimestamp(), feedback.getResults(), feedback.getWeights(), feedback.getTypes(),
-            feedback.getKeys(), feedback.getSub_Weights(), feedback.getCompound(), keyResults);
-
-    //Display Feedback was recorded
-    Map<String, Object> model = new HashMap<>();
-
-    Feedback[] feedbacks = db.getFeedbacksInEventByParticipantID(event.getEventID(), participant.getParticipantID());
-    int feedbackCount = 0;
-    if (feedbacks.length != 0) {
-
-        List<String> participantFName = new ArrayList<String>();
-        List<String> participantLName = new ArrayList<String>();
-        List<String> feedbackData = new ArrayList<String>();
-        List<String> sentiment = new ArrayList<String>();
-        List<String> time = new ArrayList<String>();
-        for (Feedback feedbackOfParticipant : feedbacks) {
-            feedbackData.add(feedbackOfParticipant.getResults()[0]);
-            if (feedbackOfParticipant.getCompound() > 0.15) {
-                if (feedbackOfParticipant.getCompound() < 0.45) {
-                    sentiment.add("slightly positive");
-                } else if (feedbackOfParticipant.getCompound() < 0.75) {
-                    sentiment.add("positive");
-                } else {
-                    sentiment.add("very positive");
-                }
-            } else if (feedbackOfParticipant.getCompound() < -0.15) {
-                if (feedbackOfParticipant.getCompound() > -0.45) {
-                    sentiment.add("slightly negative");
-                } else if (feedbackOfParticipant.getCompound() > -0.75) {
-                    sentiment.add("negative");
-                } else {
-                    sentiment.add("very negative");
-                }
-            } else {
-                sentiment.add("neutral");
-            }
-            time.add(feedbackOfParticipant.getTimestamp().toString());
-            feedbackCount++;
-        }
-        model.put("participantFName", participantFName);
-        model.put("participantLName", participantLName);
-        model.put("feedbackData", feedbackData);
-        model.put("sentiment", sentiment);
-        model.put("time", time);
-
-    }
-    List<Integer> feedbackCounts = new ArrayList<Integer>();
-    for (int i = 0; i < feedbackCount; i++) {
-        feedbackCounts.add(i);
-    }
-
-    model.put("feedbackCounts", feedbackCounts);
-    model.put("eventTitle", event.getTitle());
-    model.put("eventDescription", event.getDescription());
-    return ViewUtil.render(request, model, "/velocity/participant-event.vm");
-}
-*/
+/*
+ * FROM OLD POST API endpoint: createFeedback if (v.isFeedbackValid(feedback)) {
+ * System.out.println("Notice: feedback considered valid"); String[] arrs = new
+ * String[feedback.getKey_Results().size()]; String[] keyResults = (String[])
+ * feedback.getKey_Results().toArray(arrs);
+ * db.createFeedback(feedback.getParticipantID(), feedback.getEventID(),
+ * feedback.getAnonymous(), feedback.getTimestamp(), feedback.getResults(),
+ * feedback.getWeights(), feedback.getTypes(), feedback.getKeys(),
+ * feedback.getSub_Weights(), feedback.getCompound(), keyResults);
+ * 
+ * //Display Feedback was recorded Map<String, Object> model = new HashMap<>();
+ * 
+ * Feedback[] feedbacks =
+ * db.getFeedbacksInEventByParticipantID(event.getEventID(),
+ * participant.getParticipantID()); int feedbackCount = 0; if (feedbacks.length
+ * != 0) {
+ * 
+ * List<String> participantFName = new ArrayList<String>(); List<String>
+ * participantLName = new ArrayList<String>(); List<String> feedbackData = new
+ * ArrayList<String>(); List<String> sentiment = new ArrayList<String>();
+ * List<String> time = new ArrayList<String>(); for (Feedback
+ * feedbackOfParticipant : feedbacks) {
+ * feedbackData.add(feedbackOfParticipant.getResults()[0]); if
+ * (feedbackOfParticipant.getCompound() > 0.15) { if
+ * (feedbackOfParticipant.getCompound() < 0.45) {
+ * sentiment.add("slightly positive"); } else if
+ * (feedbackOfParticipant.getCompound() < 0.75) { sentiment.add("positive"); }
+ * else { sentiment.add("very positive"); } } else if
+ * (feedbackOfParticipant.getCompound() < -0.15) { if
+ * (feedbackOfParticipant.getCompound() > -0.45) {
+ * sentiment.add("slightly negative"); } else if
+ * (feedbackOfParticipant.getCompound() > -0.75) { sentiment.add("negative"); }
+ * else { sentiment.add("very negative"); } } else { sentiment.add("neutral"); }
+ * time.add(feedbackOfParticipant.getTimestamp().toString()); feedbackCount++; }
+ * model.put("participantFName", participantFName);
+ * model.put("participantLName", participantLName); model.put("feedbackData",
+ * feedbackData); model.put("sentiment", sentiment); model.put("time", time);
+ * 
+ * } List<Integer> feedbackCounts = new ArrayList<Integer>(); for (int i = 0; i
+ * < feedbackCount; i++) { feedbackCounts.add(i); }
+ * 
+ * model.put("feedbackCounts", feedbackCounts); model.put("eventTitle",
+ * event.getTitle()); model.put("eventDescription", event.getDescription());
+ * return ViewUtil.render(request, model, "/velocity/participant-event.vm"); }
+ */

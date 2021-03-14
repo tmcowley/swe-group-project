@@ -22,11 +22,11 @@ public class Template {
     /**
      * Template constructor
      * 
-     * @param template_id template identifier
-     * @param host_id host (author) identifier
+     * @param template_id   template identifier
+     * @param host_id       host (author) identifier
      * @param template_name template name
      * @param template_code template token
-     * @param components template sub-components
+     * @param components    template sub-components
      */
     public Template(int template_id, int host_id, String template_name, String template_code, Timestamp timestamp,
             ArrayList<TemplateComponent> components) {
@@ -44,11 +44,11 @@ public class Template {
     }
 
     /**
-     * overloaded template constructor missing components
-     * it is assumed the template is empty (without components)
+     * overloaded template constructor missing components it is assumed the template
+     * is empty (without components)
      * 
-     * @param template_id template identifier
-     * @param host_id host (author) identifier
+     * @param template_id   template identifier
+     * @param host_id       host (author) identifier
      * @param template_name template name
      * @param template_code template token
      */
@@ -141,23 +141,23 @@ public class Template {
      */
     public boolean equals(Template that) {
         // ensure other template is not null
-        if (that == null){
+        if (that == null) {
             return false;
         }
         // ensure template IDs match
-        if (this.template_id != that.getTemplateID()){
+        if (this.template_id != that.getTemplateID()) {
             return false;
         }
         // ensure author (host) IDs match
-        if (this.host_id != that.getHostID()){
+        if (this.host_id != that.getHostID()) {
             return false;
         }
         // ensure template tokens (codes) match
-        if (!this.template_code.equals(that.getTemplateCode())){
+        if (!this.template_code.equals(that.getTemplateCode())) {
             return false;
         }
         // ensure component ArrayLists match
-        if (!CollectionUtils.isEqualCollection(this.components, that.getComponents())){
+        if (!CollectionUtils.isEqualCollection(this.components, that.getComponents())) {
             return false;
         }
         // templates match

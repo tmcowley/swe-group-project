@@ -39,7 +39,7 @@ public class HostEventController {
         }
 
         // ensure host and event exist in current session
-        if (session.attribute("event") == null || session.attribute("host") == null){
+        if (session.attribute("event") == null || session.attribute("host") == null) {
             System.out.println("Error:  session found, event or host not in session");
             response.redirect("/error/401");
             return null;
@@ -47,7 +47,7 @@ public class HostEventController {
 
         // collect event from session; ensure valid and exists
         Event event = session.attribute("event");
-        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())){
+        if (!v.isEventValid(event) || !db.eventCodeExists(event.getEventCode())) {
             System.out.println("Error:  event invalid or does not exist in database");
             response.redirect("/error/401");
             return null;
@@ -57,7 +57,7 @@ public class HostEventController {
 
         // collect host from session; ensure valid and exists
         Host host = session.attribute("host");
-        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())) {
             System.out.println("Error:  host invalid or does not exist in database");
             response.redirect("/error/401");
             return null;
@@ -65,7 +65,7 @@ public class HostEventController {
         int host_id = host.getHostID();
 
         // ensure host authors event
-        if (event_host_id != host_id){
+        if (event_host_id != host_id) {
             System.out.println("Error:  event not authored by host");
             return "Error:  event not authored by host";
         }
@@ -76,12 +76,12 @@ public class HostEventController {
         List<Integer> componentCounts = new ArrayList<Integer>();
 
         // case event has template
-        if (event.hasTemplate()){
+        if (event.hasTemplate()) {
             int template_id = event.getTemplateID();
             Template template = db.getTemplate(template_id);
             components = template.getComponents();
             int componentCount = 0;
-            for (TemplateComponent component: components) {
+            for (TemplateComponent component : components) {
                 if (component.getType().equals("question")) {
                     questionComponents.add(component);
                     componentCounts.add(componentCount);

@@ -250,41 +250,6 @@ public class Validator {
     }
 
     /**
-     * archived-event validity check
-     * 
-     * @param archivedEvent ArchivedEvent instance to be checked
-     * @return archivedEvent validity state
-     */
-    public boolean isArchivedEventValid(ArchivedEvent archivedEvent) {
-        // ensure archived event is not null
-        if (archivedEvent == null) {
-            return false;
-        }
-        // ensure event ID is valid
-        if (!idIsValid(archivedEvent.getEventID())){
-            return false;
-        }
-        // ensure event author (host) ID is valid
-        if (!idIsValid(archivedEvent.getHostID())){
-            return false;
-        }
-        // ensure event description is valid
-        if (!eventTypeIsValid(archivedEvent.getType())){
-            return false;
-        }
-        // ensure event description is valid
-        if (!eventDescriptionIsValid(archivedEvent.getDescription())){
-            return false;
-        }
-        // ensure event title is valid
-        if (!eventTitleIsValid(archivedEvent.getTitle())){
-            return false;
-        }
-        // archived event is valid if all of its fields are valid
-        return true;
-    }
-
-    /**
      * check for event validity; 
      * considers every event attribute
      * 
@@ -739,4 +704,43 @@ public class Validator {
         // return lowercase variant
         return hostCode.toLowerCase();
     }
+
+    // Depreciated methods
+
+    /**
+     * archived-event validity check
+     * 
+     * archived events are not functional within the system
+     * 
+     * @param archivedEvent ArchivedEvent instance to be checked
+     * @return archivedEvent validity state
+    */
+    // public boolean isArchivedEventValid(ArchivedEvent archivedEvent) {
+    //     // ensure archived event is not null
+    //     if (archivedEvent == null) {
+    //         return false;
+    //     }
+    //     // ensure event ID is valid
+    //     if (!idIsValid(archivedEvent.getEventID())){
+    //         return false;
+    //     }
+    //     // ensure event author (host) ID is valid
+    //     if (!idIsValid(archivedEvent.getHostID())){
+    //         return false;
+    //     }
+    //     // ensure event description is valid
+    //     if (!eventTypeIsValid(archivedEvent.getType())){
+    //         return false;
+    //     }
+    //     // ensure event description is valid
+    //     if (!eventDescriptionIsValid(archivedEvent.getDescription())){
+    //         return false;
+    //     }
+    //     // ensure event title is valid
+    //     if (!eventTitleIsValid(archivedEvent.getTitle())){
+    //         return false;
+    //     }
+    //     // archived event is valid if all of its fields are valid
+    //     return true;
+    // }
 }

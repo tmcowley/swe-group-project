@@ -513,51 +513,6 @@ public class DbConnection{
         return getEvent(event_id);
     }
 
-    /**
-     * Create an archived event in the database
-     * @param host_id Host id of its host
-     * @param total_mood Mood of participants in this event
-     * @param title Event title
-     * @param desc Event description
-     * @param type Event type
-     * @param start_time Start time of the event
-     * @param end_time End time of the event
-     * @return Event instance representing stored data
-     */
-    public ArchivedEvent createArchivedEvent(int host_id, String total_mood, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
-
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Integer event_id = null;
-        try{
-            String createArchivedEvent = ""
-                + "INSERT INTO archived_event(host_id, total_mood, title, description, type, start_time, end_time) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?) "
-                + "RETURNING event_id";
-            stmt = this.conn.prepareStatement(createArchivedEvent);
-            stmt.setInt(1, host_id);
-            stmt.setString(2, total_mood);
-            stmt.setString(3, title);
-            stmt.setString(4, desc);
-            stmt.setString(5, type);
-            stmt.setTimestamp(6, start_time);
-            stmt.setTimestamp(7, end_time);
-
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                event_id = rs.getInt("event_id");
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());
-            e.printStackTrace();
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-        }
-
-        return getArchivedEvent(event_id);
-    }
-
 
     /**
      * Create an instance of feedback against an event using feedback objects
@@ -1268,46 +1223,6 @@ public class DbConnection{
     }
 
     /**
-     * Get an archived Event object from an event ID
-     * @param event_id Event ID
-     * @return ArchivedEvent object with ID of event_id
-     */
-    public ArchivedEvent getArchivedEvent(int event_id){
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        ArchivedEvent archivedEvent = null;
-        try{
-            String selectArchivedEventByID = ""
-                + "SELECT * FROM archived_event "
-                + "WHERE archived_event.event_id = ? "
-                + "LIMIT 1;";
-            stmt = this.conn.prepareStatement(selectArchivedEventByID);
-            stmt.setInt(1, event_id);
-
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                event_id = rs.getInt("event_id");
-                int host_id = rs.getInt("host_id");
-                String total_mood = rs.getString("total_mood");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String type = rs.getString("type");
-                Timestamp start_time = rs.getTimestamp("start_time");
-                Timestamp end_time = rs.getTimestamp("end_time");
-
-                archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());
-            e.printStackTrace();
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-            try { if (rs != null)   rs.close(); }   catch (Exception e) {};
-        }
-        return archivedEvent;
-    }
-
-    /**
      * Get a feedback instance using feedback ID
      * @param feedback_id Feedback ID
      * @return Found feedback instance
@@ -1884,31 +1799,6 @@ public class DbConnection{
     }
 
     /**
-     * Delete archived event by ID
-     * @param event_id event ID of archived event needed to be deleted
-     * @return delete status
-     */
-    protected Boolean deleteArchivedEvent(int event_id){
-        PreparedStatement stmt = null;
-        Integer eventDeleted = null;
-        try{
-            String deleteEvent = ""
-                + "DELETE FROM archived_event "
-                + "WHERE event_id = ?;";
-            stmt = this.conn.prepareStatement(deleteEvent);
-            stmt.setInt(1, event_id);
-            eventDeleted = stmt.executeUpdate();
-        } catch (SQLException e){
-            System.out.println(e.getMessage().toUpperCase());
-            e.printStackTrace();
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {};
-        }
-        if (eventDeleted == null) return null;
-        return (eventDeleted != 0);
-    }
-
-    /**
      * Delete participant and event pair by ID
      * @param feedback_id feedback ID of the feedback needed to be deleted
      * @return delete status
@@ -1959,19 +1849,141 @@ public class DbConnection{
         return (deletedLink != 0);
     }
 
+    // Depreciated methods
+
     /**
-     * Delete finished events and add it to archivedEvents 
+     * Create an archived event in the database
+     * 
+     * archived events are not functional within the system
+     * 
+     * @param host_id Host id of its host
+     * @param total_mood Mood of participants in this event
+     * @param title Event title
+     * @param desc Event description
+     * @param type Event type
+     * @param start_time Start time of the event
+     * @param end_time End time of the event
+     * @return Event instance representing stored data
+     */
+    // public ArchivedEvent createArchivedEvent(int host_id, String total_mood, String title, String desc, String type, Timestamp start_time, Timestamp end_time){
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     Integer event_id = null;
+    //     try{
+    //         String createArchivedEvent = ""
+    //             + "INSERT INTO archived_event(host_id, total_mood, title, description, type, start_time, end_time) "
+    //             + "VALUES(?, ?, ?, ?, ?, ?, ?) "
+    //             + "RETURNING event_id";
+    //         stmt = this.conn.prepareStatement(createArchivedEvent);
+    //         stmt.setInt(1, host_id);
+    //         stmt.setString(2, total_mood);
+    //         stmt.setString(3, title);
+    //         stmt.setString(4, desc);
+    //         stmt.setString(5, type);
+    //         stmt.setTimestamp(6, start_time);
+    //         stmt.setTimestamp(7, end_time);
+    //         rs = stmt.executeQuery();
+    //         if (rs.next()) {
+    //             event_id = rs.getInt("event_id");
+    //         }
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+    //     return getArchivedEvent(event_id);
+    // }
+
+    /**
+     * Get an archived Event object from an event ID
+     * 
+     * archived events are not functional within the system
+     * 
+     * @param event_id Event ID
+     * @return ArchivedEvent object with ID of event_id
+     */
+    // public ArchivedEvent getArchivedEvent(int event_id){
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     ArchivedEvent archivedEvent = null;
+    //     try{
+    //         String selectArchivedEventByID = ""
+    //             + "SELECT * FROM archived_event "
+    //             + "WHERE archived_event.event_id = ? "
+    //             + "LIMIT 1;";
+    //         stmt = this.conn.prepareStatement(selectArchivedEventByID);
+    //         stmt.setInt(1, event_id);
+    //         rs = stmt.executeQuery();
+    //         if (rs.next()) {
+    //             event_id = rs.getInt("event_id");
+    //             int host_id = rs.getInt("host_id");
+    //             String total_mood = rs.getString("total_mood");
+    //             String title = rs.getString("title");
+    //             String description = rs.getString("description");
+    //             String type = rs.getString("type");
+    //             Timestamp start_time = rs.getTimestamp("start_time");
+    //             Timestamp end_time = rs.getTimestamp("end_time");
+    //             archivedEvent = new ArchivedEvent(event_id, host_id, total_mood, title, description, type, start_time, end_time);
+    //         }
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //         try { if (rs != null)   rs.close(); }   catch (Exception e) {};
+    //     }
+    //     return archivedEvent;
+    // }
+
+    /**
+     * delete finished events and add it to archivedEvents 
+     * 
+     * archived events are not functional within the system
+     * 
+     * 
      * @param event_id eventID of event that has already finished
      * @param total_mood mood of participants in this event
      * @return added archiveEvent status
      */
-    protected Boolean archiveEvent(int event_id, String total_mood){
-        Event event = getEvent(event_id);
-        ArchivedEvent archivedEvent = createArchivedEvent(event.getHostID(), total_mood, event.getTitle(), event.getDescription(), event.getType(), event.getStartTime(), event.getEndTime());
-        if (validator.isArchivedEventValid(archivedEvent)) {
-            return true;
-        }
-        return false;
-    }
+    // protected Boolean archiveEvent(int event_id, String total_mood){
+    //     Event event = getEvent(event_id);
+    //     ArchivedEvent archivedEvent = createArchivedEvent(event.getHostID(), total_mood, event.getTitle(), event.getDescription(), event.getType(), event.getStartTime(), event.getEndTime());
+    //     if (validator.isArchivedEventValid(archivedEvent)) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    /**
+     * Delete archived event by ID
+     * 
+     * archived events are not functional within the system
+     * 
+     * 
+     * @param event_id event ID of archived event needed to be deleted
+     * @return delete status
+     */
+    // protected Boolean deleteArchivedEvent(int event_id){
+    //     PreparedStatement stmt = null;
+    //     Integer eventDeleted = null;
+    //     try{
+    //         String deleteEvent = ""
+    //             + "DELETE FROM archived_event "
+    //             + "WHERE event_id = ?;";
+    //         stmt = this.conn.prepareStatement(deleteEvent);
+    //         stmt.setInt(1, event_id);
+    //         eventDeleted = stmt.executeUpdate();
+    //     } catch (SQLException e){
+    //         System.out.println(e.getMessage().toUpperCase());
+    //         e.printStackTrace();
+    //     } finally {
+    //         try { if (stmt != null) stmt.close(); } catch (Exception e) {};
+    //     }
+    //     if (eventDeleted == null) return null;
+    //     return (eventDeleted != 0);
+    // }
+
 
 }

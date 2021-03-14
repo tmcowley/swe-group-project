@@ -36,8 +36,8 @@ CREATE TABLE host(
     host_code       VARCHAR(64)
                     UNIQUE          NOT NULL,
     e_address       citext UNIQUE   NOT NULL,
-    f_name          VARCHAR(35)     NOT NULL,
-    l_name          VARCHAR(35)     NOT NULL,
+    f_name          VARCHAR(64)     NOT NULL,
+    l_name          VARCHAR(64)     NOT NULL,
     sys_ban         BOOLEAN         NOT NULL
                     DEFAULT FALSE,
     PRIMARY KEY (host_id)
@@ -51,7 +51,7 @@ CREATE TABLE template(
                     UNIQUE          NOT NULL
                     -- simulate lower-case alphanumeric
                     CHECK (template_code ~* '^[a-z0-9]+$'),
-    template_name   VARCHAR(128)    NOT NULL,
+    template_name   TEXT            NOT NULL,
     timestamp       TIMESTAMP       NOT NULL,
     FOREIGN KEY (host_id) 
         REFERENCES host(host_id) 
@@ -62,10 +62,10 @@ CREATE TABLE template(
 -- create component table which stores components data
 CREATE TABLE template_component(
     tc_id           SERIAL          NOT NULL,
-    tc_name         VARCHAR(35)     NOT NULL,
+    tc_name         TEXT            NOT NULL,
     tc_type         TEXT            
                     CHECK (tc_type IN ('question', 'radio', 'checkbox')),
-    tc_prompt       VARCHAR(128)    NOT NULL
+    tc_prompt       TEXT            NOT NULL
                     DEFAULT FALSE,
     tc_options      TEXT[],
     tc_options_ans  BOOLEAN[],
@@ -90,8 +90,8 @@ CREATE TABLE component_in_template(
 CREATE TABLE participant(
     participant_id  SERIAL          NOT NULL,
     ip_address      INET,
-    f_name          VARCHAR(35)     NOT NULL,
-    l_name          VARCHAR(35)     NOT NULL,
+    f_name          VARCHAR(64)     NOT NULL,
+    l_name          VARCHAR(64)     NOT NULL,
     sys_ban         BOOLEAN         NOT NULL
                     DEFAULT FALSE,
     PRIMARY KEY (participant_id)
@@ -102,8 +102,8 @@ CREATE TABLE event(
     event_id        SERIAL          NOT NULL,
     host_id         INT             NOT NULL,
     template_id     INT,
-    title           VARCHAR(32),
-    description     VARCHAR(128),
+    title           TEXT,
+    description     TEXT,
     type            VARCHAR(10)     CHECK (type = 'lecture' or
                                            type = 'seminar' or
                                            type = 'conference' or
@@ -125,12 +125,13 @@ CREATE TABLE event(
 );
 
 -- create archived event table which stores archived events data
+-- archived events are not functional within the system
 CREATE TABLE archived_event(
     event_id        SERIAL          NOT NULL,
     host_id         INT             NOT NULL,
     total_mood      VARCHAR(40)     NOT NULL,
     title           VARCHAR(32)     NOT NULL,
-    description     VARCHAR(128)    NOT NULL,
+    description     TEXT            NOT NULL,
     type            VARCHAR(10)     CHECK (type = 'lecture' or
                                            type = 'seminar' or
                                            type = 'conference' or

@@ -334,7 +334,7 @@ public class DbConnection{
      * @param host_id Creator ID
      * @param template_name Name of the template
      * @param timestamp Created time
-     * @param components An arraylist of linked template components
+     * @param components An array list of linked template components
      * @return Stored template instance
      */
     public Template createTemplate(int host_id, String template_name, Timestamp timestamp, ArrayList<TemplateComponent> components){
@@ -349,7 +349,7 @@ public class DbConnection{
             String createTemplate = ""
                 + "INSERT INTO template(host_id, template_code, template_name, timestamp) "
                 + "VALUES(?, ?, ?, ?) "
-                + "RETURNING template_id";
+                + "RETURNING template_id;";
             stmt = this.conn.prepareStatement(createTemplate);
             stmt.setInt(1, host_id);
             stmt.setString(2, template_code);

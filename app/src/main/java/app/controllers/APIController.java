@@ -376,35 +376,48 @@ public class APIController {
         // get current session; ensure session is live
         Session session = request.session(true);
         if (session.isNew()) {
-            System.out.println("Error:  APIController:createFeedback session not found");
+            System.out.println("Error:  session not found");
             response.redirect("/error/401");
             return null;
         }
 
         // ensure host exists in current session
         if (session.attribute("host") == null) {
-            System.out.println("Error:  APIController:createEmptyTemplate session found, host not in session");
+            System.out.println("Error:  session found, host not in session");
             response.redirect("/error/401");
             return null;
         }
 
-        // get host from session
+        // get host from session; ensure is valid and exists
         Host host = session.attribute("host");
-        int hostID = host.getHostID();
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+            System.out.println("Error:  host in session invalid or non-existent in database");
+            response.redirect("/error/401");
+            return null;
+        }
+        int host_id = host.getHostID();
 
-        // collect template name from form
+        // collect template name from form; ensure it's not blank
         String template_name = request.queryParams("templateName");
         System.out.println("Notice: template name collected: " + template_name);
-
         if (StringUtils.isBlank(template_name)) {
-            System.out.println("Error:  APIController:createEmptyTemplate template name is blank");
+            System.out.println("Error:  template name is blank");
             session.attribute("errorMessageCreateEmptyTemplate", "Error: template name is blank");
             response.redirect("/host/templates/new");
             return null;
         }
 
+        Timestamp timestamp_now = new Timestamp(System.currentTimeMillis());
+
         // template name valid; generate empty template in DB
-        db.createEmptyTemplate(hostID, template_name, new Timestamp(System.currentTimeMillis()));
+        Template emptyTemplate = db.createEmptyTemplate(host_id, template_name, timestamp_now);
+        if (!v.isTemplateValid(emptyTemplate) || !db.templateCodeExists(emptyTemplate.getTemplateCode())){
+            System.out.println("Error:  template creation failed");
+            session.attribute("errorMessageCreateEmptyTemplate", "Error: template creation failed");
+            response.redirect("/host/templates/new");
+            return null;
+        } 
+        //System.out.println("Notice: created template code: " + emptyTemplate.getTemplateCode());
 
         // redirect to host templates page
         // (links to MyTemplatesController.servePage)

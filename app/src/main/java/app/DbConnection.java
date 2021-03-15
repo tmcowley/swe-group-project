@@ -238,9 +238,10 @@ public class DbConnection{
             stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
 
             if (tc_options_pos == null){
+                System.out.println("AT COMPONENT CREATEION POS ARRAY IS NULL");
                 stmt.setArray(5, this.conn.createArrayOf("INT", new Integer[0]));
             } else {
-                stmt.setArray(5, this.conn.createArrayOf("INT", optionsAns));
+                stmt.setArray(5, this.conn.createArrayOf("INT", tc_options_pos));
             }
 
             stmt.setArray(6, this.conn.createArrayOf("BOOLEAN", optionsAns));
@@ -1177,11 +1178,17 @@ public class DbConnection{
                     text_response = rs2.getString("tc_text_response");
                 }
 
-                // component is of type options
+                // component is of type options - (sry for bad code)
                 if (type.equals("radio") || type.equals("checkbox")){
-                    options = (String[]) rs2.getArray("tc_options").getArray();
-                    options_pos = (Integer[]) rs2.getArray("tc_options_pos").getArray();
-                    options_ans = (Boolean[]) rs2.getArray("tc_options_ans").getArray();
+                    try{
+                        options = (String[]) rs2.getArray("tc_options").getArray();
+                    } catch (Exception e) {;}
+                    try{
+                        options_pos = (Integer[]) rs2.getArray("tc_options_pos").getArray();
+                    } catch (Exception e) {;}
+                    try{
+                        options_ans = (Boolean[]) rs2.getArray("tc_options_ans").getArray();
+                    } catch (Exception e) {;}
                 }
 
                 templateComponent = new TemplateComponent(id, name, type, prompt, tc_considered_in_sentiment, tc_sentiment_weight, options, options_pos, options_ans, text_response);
@@ -1785,6 +1792,7 @@ public class DbConnection{
      * @return Delete status
      */
     public Boolean deleteTemplateComponent(int tc_id){
+        System.out.println("DELETING TEMPLATE COMPONENT, ID: " + tc_id);
         PreparedStatement stmt = null;
         Integer templateComponentDeleted = null;
         try{

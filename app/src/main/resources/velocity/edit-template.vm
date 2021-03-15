@@ -26,6 +26,7 @@
                             <h2>There are no elements in the current template - use the buttons below to add some.</h2>
                         </div>
                     #end
+
                     #foreach($component in $template.getComponents())
                         #if($component.getType() == "question") ## component is of type question
                         <div class="feedbackElement">
@@ -36,7 +37,7 @@
                             #if($component.isEmptyComponent())
                                 <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="Enter Prompt">
                             #else 
-                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
+                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" value="${component.getPrompt()}">
                             #end
                             <input class="formInput" type="hidden" name="component[${component.getID()}][name]" value="${component.getName()}">
                             <input class="formInput" type="hidden" name="component[${component.getID()}][component_id]" value="${component.getID()}">
@@ -47,12 +48,12 @@
                         <!-- feedbackElementFooter will contain extra properties to be set -->
                         <div class="feedbackElementFooter">
                             #if ($component.component_for_sentiment())
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider" checked>
+                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider" checked>
                                 <label for="component[${component.getID()}][consider]">
                                     Consider in sentiment analysis
                                 </label><br>
                             #else 
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider">
+                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider">
                                 <label for="component[${component.getID()}][consider]">
                                     Consider in sentiment analysis
                                 </label><br>
@@ -60,40 +61,51 @@
 
                             <!-- todo: map value to component attribute -->
                             #if ($component.getTc_sentiment_weight())
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
+                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
                             #else 
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
                             #end
                         </div>
 
-                        #elseif($component.getType() == "checkbox") ## component is of type checkbox
+                        #elseif($component.getType() == "checkbox" || $component.getType() == "radio" ) ## component is of type checkbox
                         <div class="feedbackElement">
                             <h3>
-                                Checkbox
+                            #if($component.getType() == "checkbox")
+                                checkbox
+                            #else
+                                radio
+                            #end
                             </h3>
                             #if($component.isEmptyComponent())
                                 <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="Enter Prompt">
                             #else 
-                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
+                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" value="${component.getPrompt()}">
                             #end
                             <!-- Radio buttons section -->
                             <!-- Radio buttons are just 5 text boxes -->
                             #foreach($option in $component.getOptions())
-                                <div class="formInputBulletIcon">&bull;</div>
-                                <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter Text" value="$option">
-                                <label class="formInputBulletLabel" for="bulletrating1">Positivity (-3 to 3):</label> 
-                                <!-- LINK BELOW INPUT TO BACKEND! -->
-                                <input 
-                                    class="formInputBulletRating"
-                                    type="number"
-                                    id="bulletrating1"
-                                    name="options-pos-${component.getID()}[]"
-                                    min="-3"
-                                    max="3"
-                                    value="0"><br>
-                                <div class="formInputBulletIcon">&bull;</div>
+                                #if ($option)
+                                    <div class="formInputBulletIcon">&bull;</div>
+                                    <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter an option" value="${option}">
+                                    <br>
+                                    <label class="formInputBulletLabel" for="options-pos-${component.getID()}[]">Positivity (-3 to 3):</label> 
+                                    #if (${component.getTc_options_pos()})
+                                        #set( $index = $velocityCount - 1 )
+                                        #set( $pos_value = ${component.getTc_options_pos().get(${index})} - 4 )
+                                        <input class="formInputBulletRating" type="number" id="bulletrating1" name="options-pos-${component.getID()}[]" min="-3" max="3" value="${pos_value}"><br>
+                                    #else
+                                        <input class="formInputBulletRating" type="number" id="bulletrating1" name="options-pos-${component.getID()}[]" min="-3" max="3" value="0"><br>
+                                    #end
+                                #else 
+                                    <div class="formInputBulletIcon">&bull;</div>
+                                    <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter an option">
+                                    <br>
+                                    <label class="formInputBulletLabel" for="options-pos-${component.getID()}[]">Positivity (-3 to 3):</label> 
+                                    <!-- LINK BELOW INPUT TO BACKEND! -->
+                                    <input class="formInputBulletRating" type="number" id="bulletrating1" name="options-pos-${component.getID()}[]" min="-3" max="3" value="0"><br>
+                                #end
                             #end
                             <input class="formInput" type="hidden" name="component[${component.getID()}][name]" value="${component.getName()}">
                             <input class="formInput" type="hidden" name="component[${component.getID()}][component_id]" value="${component.getID()}">
@@ -102,63 +114,12 @@
                         <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <div class="feedbackElementFooter">
                             #if ($component.component_for_sentiment())
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider" checked>
+                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider" checked>
                                 <label for="component[${component.getID()}][consider]">
                                     Consider in sentiment analysis
                                 </label><br>
                             #else 
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider">
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #end 
-
-                            <!-- todo: map value to component attribute -->
-                            #if ($component.getTc_sentiment_weight())
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
-                            #else 
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
-                            #end
-                        </div>
-
-                        #elseif($component.getType() == "radio") ## component is of type radio
-                        <div class="feedbackElement">
-                            <h3>
-                                Radio
-                            </h3>
-                            #if($component.isEmptyComponent())
-                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="Enter Prompt">
-                            #else 
-                                <input class="formInput" type="text" name="component[${component.getID()}][prompt]" placeholder="${component.getPrompt()}">
-                            #end
-                            #foreach($option in $component.getOptions())
-                                <div class="formInputBulletIcon">&bull;</div>
-                                <input class="formInputBullet" type="text" name="options-${component.getID()}[]" placeholder="Enter Text" value="option">
-                                <label class="formInputBulletLabel" for="bulletrating2">Positivity (-3 to 3):</label>
-                                <!-- LINK BELOW INPUT TO BACKEND! -->
-                                <input
-                                    class="formInputBulletRating"
-                                    type="number"
-                                    id="bulletrating2"
-                                    name="bulletrating2"
-                                    min="-3"
-                                    max="3"><br>
-                            #end
-                            <input class="formInput" type="hidden" name="component[${component.getID()}][name]" value="${component.getName()}">
-                            <input class="formInput" type="hidden" name="component[${component.getID()}][component_id]" value="${component.getID()}">
-                            <input class="formInput" type="hidden" name="component[${component.getID()}][type]" value="${component.getType()}">
-                        </div>
-                        <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
-                        <div class="feedbackElementFooter">
-                            #if ($component.component_for_sentiment())
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider" checked>
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #else 
-                                <input type="checkbox" name="component[${component.getID()}][consider]" value="consider">
+                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider">
                                 <label for="component[${component.getID()}][consider]">
                                     Consider in sentiment analysis
                                 </label><br>
@@ -166,16 +127,16 @@
 
                             <!-- todo: map value to component attribute -->
                             #if ($component.getTc_sentiment_weight())
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
+                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
                             #else 
-                                <label for="rating1">Sentiment Influence (1-5):</label>
-                                <input type="number" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
                             #end
                         </div>
+                    #end ## end if statemenet for component types
 
-                        #end
-                    #end
+                #end ## end for loop
                 </div>
 
                 <br>

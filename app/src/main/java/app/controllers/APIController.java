@@ -445,7 +445,7 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
-        System.out.println("session valid");
+        //System.out.println("session valid");
 
         // ensure host exists in current session
         if (session.attribute("host") == null) {
@@ -453,7 +453,7 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
-        System.out.println("host in session");
+        //System.out.println("host in session");
 
         // get host from session
         Host host = session.attribute("host");
@@ -463,7 +463,7 @@ public class APIController {
             return null;
         }
         int host_id = host.getHostID();
-        System.out.println("host in session valid, exists");
+        //System.out.println("host in session valid, exists");
 
         //session.attribute("errorMessageCreateTemplate", "value");
 
@@ -480,16 +480,16 @@ public class APIController {
         // for each component in the template
         for (TemplateComponent component : template.getComponents()){
 
-            // collect component prompt
+            // collect component fields
             String prompt = request.queryParams("component["+component.getID()+"][prompt]");
-            // if (StringUtils.isBlank(prompt)){
-            //     System.out.println("Notice:  prompt is blank or empty");
-            //     continue;
-            // }
-            // System.out.println("NOTICE: question prompt collected");
             String name = request.queryParams("component["+component.getID()+"][name]");
             String type = request.queryParams("component["+component.getID()+"][type]");
-            int old_component_id = Integer.valueOf(request.queryParams("component["+component.getID()+"][component_id]"));
+            Integer old_component_id = null;
+            try{
+                old_component_id = Integer.valueOf(request.queryParams("component["+component.getID()+"][component_id]"));
+            } catch (Exception e){
+                old_component_id = component.getID();
+            } 
             String consider_string = request.queryParams("component["+component.getID()+"][consider]");
             Boolean considered;
 
@@ -513,10 +513,11 @@ public class APIController {
             }
             else if (component.getType().equals("radio") || component.getType().equals("checkbox")) {
 
+                System.out.println("we have an option type");
+
                 options = request.queryParamsValues("options-"+component.getID()+"[]");
                 if (options == null){
-                    System.out.println("Error:  form inputs for option type not collected");
-                    continue;
+                    System.out.println("Notice:  form inputs for option type not collected");
                 }
 
                 String[] options_pos_as_string = request.queryParamsValues("options-pos-"+component.getID()+"[]");
@@ -524,7 +525,9 @@ public class APIController {
 
                 optionPos = new Integer[array_len];
                 for (int i = 0; i < array_len; i++) {
+                    System.out.println("OPTION POS SCORE: " + options_pos_as_string[i]);
                     optionPos[i] = Integer.parseInt(options_pos_as_string[i]) + 4;
+                    System.out.println("OPTION POS SCORE (processed): " + optionPos[i]);
                 }
             }
 
@@ -644,12 +647,15 @@ public class APIController {
 
         TemplateComponent component = null;
 
+        // set default number of options to three
+        int default_option_count = 3;
+
         if (componentType.equals("question")) {
             component = new TemplateComponent("component_name", "question", "", null, null, null, null, null, "");
         } else if (componentType.equals("checkbox")) {
-            component = new TemplateComponent("component_name", "checkbox", "", null, null, new String[0], new Integer[0], new Boolean[0], null);
+            component = new TemplateComponent("component_name", "checkbox", "", null, null, new String[default_option_count], new Integer[default_option_count], new Boolean[default_option_count], null);
         } else if (componentType.equals("radio")) {
-            component = new TemplateComponent("component_name", "radio", "", null, null, new String[0], new Integer[0], new Boolean[0], null);
+            component = new TemplateComponent("component_name", "radio", "", null, null, new String[default_option_count], new Integer[default_option_count], new Boolean[default_option_count], null);
         }
 
         // ensure component created is valid

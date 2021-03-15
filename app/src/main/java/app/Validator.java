@@ -361,19 +361,19 @@ public class Validator {
         // ensure length of arrays: results, weights, types, and keys are all equal
         int array_length = results.length;
         if (weights.length != array_length) {
-            System.out.println("Error: weights array length diff");
+            //System.out.println("Error: weights array length diff");
             return false;
         }
         if (types.length != array_length) {
-            System.out.println("Error: types array length diff");
+            //System.out.println("Error: types array length diff");
             return false;
         }
         if (keys.length != array_length) {
-            System.out.println("Error: keys array length diff");
+            //System.out.println("Error: keys array length diff");
             return false;
         }
         if (sub_weights.length != array_length){
-            System.out.println("Error: sub weights array length diff");
+            //System.out.println("Error: sub weights array length diff");
             return false;
         }
 
@@ -387,7 +387,8 @@ public class Validator {
 
         // validate results array
         for (int i = 0; i < results.length; i++) {
-            if (StringUtils.isBlank(results[i])) {
+            //if (StringUtils.isBlank(results[i])) {
+            if (results[i] == null){
                 //System.out.println("Error: results invalid");
                 return false;
             }

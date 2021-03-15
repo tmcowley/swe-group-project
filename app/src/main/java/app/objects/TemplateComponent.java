@@ -97,6 +97,22 @@ public class TemplateComponent {
     }
 
     /**
+     * check if a component is empty (has no prompt)
+     * @return empty state
+     */
+    public boolean isEmptyComponent() {
+        return (StringUtils.isBlank(prompt));
+    }
+
+    /**
+     * check if a component is non-empty (has at least one component)
+     * @return non-empty state
+     */
+    public boolean isNotEmptyComponent() {
+        return (!isEmptyComponent());
+    }
+
+    /**
      * set id for template component
      * 
      * @param id component ID
@@ -241,37 +257,57 @@ public class TemplateComponent {
     }
 
     /**
-     * check if a component is empty (has no prompt)
-     * @return empty state
+     * get options positive scores array
+     * @return options positive scores array
      */
-    public boolean isEmptyComponent() {
-        return (StringUtils.isBlank(prompt));
-    }
-
     public Integer[] getTc_options_pos() {
         return tc_options_pos;
     }
 
+    /**
+     * set options positive scores array
+     * @param tc_options_pos new options positive scores array
+     */
     public void setTc_options_pos(Integer[] tc_options_pos) {
         this.tc_options_pos = tc_options_pos;
     }
 
+    /**
+     * get sentiment weight
+     * @return sentiment weight int
+     */
     public Integer getTc_sentiment_weight() {
         return tc_sentiment_weight;
     }
 
+    /**
+     * set sentiment weight
+     * @param tc_sentiment_weight new sentiment weight
+     */
     public void setTc_sentiment_weight(Integer tc_sentiment_weight) {
         this.tc_sentiment_weight = tc_sentiment_weight;
     }
 
+    /**
+     * check if component is for sentiment analysis
+     * @return for-SA state
+     */
     public boolean component_for_sentiment(){
         return(BooleanUtils.isTrue(this.tc_considered_in_sentiment));
     }
 
+    /**
+     * get considered in sentiment boolean
+     * @return considered in sentiment boolean
+     */
     public Boolean getTc_considered_in_sentiment() {
         return tc_considered_in_sentiment;
     }
 
+    /**
+     * set considered in sentiment state
+     * @param tc_considered_in_sentiment new considered in sentiment state
+     */
     public void setTc_considered_in_sentiment(Boolean tc_considered_in_sentiment) {
         this.tc_considered_in_sentiment = tc_considered_in_sentiment;
     }

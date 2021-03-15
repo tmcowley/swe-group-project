@@ -34,8 +34,11 @@
             #if($componentCounts.size() != 0)
                 #foreach($c in $componentCounts)
                     <p>
+                    #set( $result = $feedbackData.get($i).get($c) )
+                    #if($result && ($result != ""))
                         <strong>$questionComponents.get($c).getPrompt():
-                        </strong>$feedbackData.get($i).get($c)
+                        </strong>${result}
+                    #end
                     </p>
                 #end
             #else

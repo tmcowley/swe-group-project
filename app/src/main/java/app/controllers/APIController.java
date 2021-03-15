@@ -311,8 +311,17 @@ public class APIController {
             response.redirect("/event/participant/feedback");
             return null;
         }
-        int results_length = results.length;
         String anonymous_string = request.queryParams("anon");
+
+        // // strip empty or null components
+        // ArrayList<String> collected = new ArrayList<String>();
+        // for (String result : results){
+        //     if (StringUtils.isNotBlank(result)){
+        //         collected.add(result);
+        //     }
+        // }
+        // results = collected.toArray(new String[collected.size()]);
+        int results_length = results.length;
 
         Float[] weights = new Float[results_length];
         byte[] types = new byte[results_length];
@@ -324,6 +333,7 @@ public class APIController {
             types[i] = 0;
             keys[i] = false;
         }
+
         // get feedback anonymity state
         Boolean anonymous = false;
         if (StringUtils.equals(anonymous_string, "Submit Anonymously")) {

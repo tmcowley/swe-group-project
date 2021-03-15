@@ -25,6 +25,8 @@ This testing format is scalable: additional valid and invalid codes can easily b
 
 ## Component Testing
 
+Component testing involved running all unit tests for each component, and ensuring all tests within any component passed.
+
 ...
 
 <br>

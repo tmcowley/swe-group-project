@@ -24,38 +24,14 @@
         <div id="mainForm">
 
             <!-- Feedback form -->
-            #if($componentCounts.size() != 0)
+            #if($components.size() != 0)    
             <form action="/event/participant/feedback" method="post">
-                #foreach($component in $components) 
-                #if($component)
+                #foreach($component in $components)
                     #if($component.getType() == "question" && !$component.isEmptyComponent())
-                        <h1>Prompt: $component.getPrompt()</h1>
-                        <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here"></textarea>
-                    
-                    #elseif(false && $component.getType() == "radio" && !$component.isEmptyComponent())
-                        <h1>Prompt: $component.getPrompt()</h1>
-                        #foreach($option in $component.getOptions())
-                            #if($option && ($option != ""))
-                            <input type="radio" id="radio-response" name="choice">
-                            <label for="radio-response">${option}</label><br>
-                            #end
-                        #end
-
-                    #elseif(false && $component.getType() == "checkbox" && !$component.isEmptyComponent())
-                        <h1>Prompt: $component.getPrompt()</h1>
-                        #foreach($option in $component.getOptions())
-                            #if($option && ($option != ""))
-                            #set( $index = $velocityCount - 1 )
-                            <input type="checkbox" id="checkbox-response" name="choice" value="{'key':'value', }">
-                            <label for="checkbox-response">${option}</label><br>
-                            #end
-                        #end
+                        <h1>$component.getPrompt()</h1>
+                        <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                     #end
-
-                #end ## if component is not null
-                <br><br>
-                #end ## for loop for components
-
+                #end
                 <h1>Please rate how you're feeling.</h1>
                 <!-- the images are radio buttons -->
                 <div class="feelingRadioContainer">
@@ -72,9 +48,8 @@
                         <div class="feelingRadioImg sad"></div>
                     </div>
                 </div>
-
                 #if($errorMessageInParticipantEvent) 
-                    <label id="formErrorMessage">$errorMessageInParticipantEvent</label>
+                <label id="formErrorMessage">$errorMessageInParticipantEvent</label>
                 #end
                 <div id="sumbitButtonContainer">
                     <input type="submit" id="submitButton" value="Submit">
@@ -83,10 +58,9 @@
                     </div>
                 </div>
             </form>
-
-            #else ## component size is empty
+            #else
                 <form action="/event/participant/feedback" method="post">
-                <h1>How are you finding the ${template.getType()}?</h1>
+                <h1>How are you finding the meeting?</h1>
                 <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                 <h1>Please rate how you're feeling.</h1>
                 <!-- the images are radio buttons -->
@@ -117,18 +91,14 @@
 #end
         </div>
         <br>
-
 #if($feedbacks)
     #foreach($feedback in $feedbacks)
         #if($componentCounts.size() != 0)
             <div class="feedbackBox">
                 #foreach($c in $componentCounts)
                     <p>
-                    #set( $result = $feedback.getResults().get($c) )
-                    #if($result && ($result != ""))
                         <strong>$questionComponents.get($c).getPrompt():
-                        </strong>${result}
-                    #end
+                        </strong>$feedback.getResults().get($c)
                     </p>
                 #end
                 <h2>Sentiment: $feedback.assessSentiment()</h2>
@@ -149,9 +119,9 @@
     </div>
     <!-- Desktop info section -->
     <div id="infoSection">
-        <h1>Event Title: $eventTitle</h1>
+        <h1>$eventTitle</h1>
         <p>
-            Event Description: $eventDescription
+            $eventDescription
         </p>
     </div>
 </div>

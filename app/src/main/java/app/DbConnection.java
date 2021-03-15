@@ -159,7 +159,7 @@ public class DbConnection{
 
         // if component is of type option
         if (tc.getType().equals("radio") || tc.getType().equals("checkbox")){
-            return createOptionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getOptions(), tc.getTc_options_pos(), tc.getOptionsAns());
+            return createOptionTemplateComponent(tc.getName(), tc.getType(), tc.getPrompt(), tc.getTc_sentiment_weight(), tc.getOptions(), tc.getTc_options_pos(), tc.getOptionsAns());
         }
 
         else {
@@ -221,30 +221,40 @@ public class DbConnection{
      * @param optionsAns Array of boolean responses to options array e.g. t, f, t for checkbox type; empty if type is question
      * @return Stored template component
      */
-    public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns){
+    public TemplateComponent createOptionTemplateComponent(String name, String type, String prompt, Integer weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns){
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Integer tc_id = null;
         try{
             // create empty template object
             String createTemplateComponent = ""
-                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_options, tc_options_pos, tc_options_ans) "
-                + "VALUES(?, ?, ?, ?, ?, ?) "
+                + "INSERT INTO template_component(tc_name, tc_type, tc_prompt, tc_sentiment_weight, tc_options, tc_options_pos, tc_options_ans) "
+                + "VALUES(?, ?, ?, ?, ?, ? ,?) "
                 + "RETURNING tc_id;";
             stmt = this.conn.prepareStatement(createTemplateComponent);
             stmt.setString(1, name);
             stmt.setString(2, type);
             stmt.setString(3, prompt);
-            stmt.setArray(4, this.conn.createArrayOf("TEXT", options));
 
-            if (tc_options_pos == null){
-                System.out.println("AT COMPONENT CREATEION POS ARRAY IS NULL");
-                stmt.setArray(5, this.conn.createArrayOf("INT", new Integer[0]));
+            if (weight == null){
+                stmt.setObject(4, null);
             } else {
-                stmt.setArray(5, this.conn.createArrayOf("INT", tc_options_pos));
+                stmt.setInt(4, weight);
             }
 
-            stmt.setArray(6, this.conn.createArrayOf("BOOLEAN", optionsAns));
+            if (options == null){
+                stmt.setArray(5, this.conn.createArrayOf("TEXT", new String[0]));
+            } else {
+                stmt.setArray(5, this.conn.createArrayOf("TEXT", options));
+            }
+
+            if (tc_options_pos == null){
+                stmt.setArray(6, this.conn.createArrayOf("INT", new Integer[0]));
+            } else {
+                stmt.setArray(6, this.conn.createArrayOf("INT", tc_options_pos));
+            }
+
+            stmt.setArray(7, this.conn.createArrayOf("BOOLEAN", optionsAns));
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -1792,7 +1802,6 @@ public class DbConnection{
      * @return Delete status
      */
     public Boolean deleteTemplateComponent(int tc_id){
-        System.out.println("DELETING TEMPLATE COMPONENT, ID: " + tc_id);
         PreparedStatement stmt = null;
         Integer templateComponentDeleted = null;
         try{

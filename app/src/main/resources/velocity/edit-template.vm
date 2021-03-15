@@ -46,28 +46,6 @@
                         </div>
                         <button class="feedbackDelButton" name="component_id" value ="$component.getID()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
                         <!-- feedbackElementFooter will contain extra properties to be set -->
-                        <div class="feedbackElementFooter">
-                            #if ($component.component_for_sentiment())
-                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider" checked>
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #else 
-                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider">
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #end 
-
-                            <!-- todo: map value to component attribute -->
-                            #if ($component.getTc_sentiment_weight())
-                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
-                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
-                            #else 
-                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
-                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
-                            #end
-                        </div>
 
                         #elseif($component.getType() == "checkbox" || $component.getType() == "radio" ) ## component is of type checkbox
                         <div class="feedbackElement">
@@ -112,29 +90,31 @@
                             <input class="formInput" type="hidden" name="component[${component.getID()}][type]" value="${component.getType()}">
                         </div>
                         <button class="feedbackDelButton" name="component_id" value ="$component.getId()" formaction="/host/templates/edit/code/delete-template-component"><img src="/images/delete-icon.png"/></button>
-                        <div class="feedbackElementFooter">
-                            #if ($component.component_for_sentiment())
-                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider" checked>
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #else 
-                                <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider">
-                                <label for="component[${component.getID()}][consider]">
-                                    Consider in sentiment analysis
-                                </label><br>
-                            #end 
 
-                            <!-- todo: map value to component attribute -->
-                            #if ($component.getTc_sentiment_weight())
-                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
-                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
-                            #else 
-                                <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
-                                <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
-                            #end
-                        </div>
                     #end ## end if statemenet for component types
+
+                    <div class="feedbackElementFooter">
+                        #if ($component.component_for_sentiment())
+                            <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider" checked>
+                            <label for="component[${component.getID()}][consider]">
+                                Consider in sentiment analysis
+                            </label><br>
+                        #else 
+                            <input type="checkbox" id="component[${component.getID()}][consider]" name="component[${component.getID()}][consider]" value="consider">
+                            <label for="component[${component.getID()}][consider]">
+                                Consider in sentiment analysis
+                            </label><br>
+                        #end 
+
+                        <!-- todo: map value to component attribute -->
+                        #if ($component.getTc_sentiment_weight())
+                            <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                            <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="${component.getTc_sentiment_weight()}"><br>
+                        #else 
+                            <label for="component[${component.getID()}][weight]">Sentiment Influence (1-5):</label>
+                            <input type="number" id="component[${component.getID()}][weight]" name="component[${component.getID()}][weight]" min="1" max="5" value="5"><br>
+                        #end
+                    </div>
 
                 #end ## end for loop
                 </div>

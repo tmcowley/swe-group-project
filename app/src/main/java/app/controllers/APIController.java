@@ -476,8 +476,16 @@ public class APIController {
         }
         Template template = db.getTemplateByCode(templateCode);
         int template_id = template.getTemplateID();
+        int template_author_id = template.getHostID();
 
-        // for each component in the template
+        // ensure host authors template
+        if (host_id != template_author_id){
+            System.out.println("Error:  you do not have access to the template");
+            response.redirect("/host/templates");
+            return null;
+        }
+
+        // for each component within the template
         for (TemplateComponent component : template.getComponents()){
 
             // collect component fields
@@ -500,34 +508,35 @@ public class APIController {
                 considered = true;
             }
 
-            Integer weight = null;
+            // option-dependent fields
             String[] options = null;
             Boolean[] optionsAns = null;
             Integer[] optionPos = null;
 
-            if (component.getType().equals("question")){
+            // store component weight for sentiment analysis
+            String weight_string = request.queryParams("component["+component.getID()+"][weight]");
+            Integer weight = Integer.parseInt(weight_string);
 
-                String weight_string = request.queryParams("component["+component.getID()+"][weight]");
-                weight = Integer.parseInt(weight_string);
+            // if the component is an option type (question types already collected)
+            if (component.getType().equals("radio") || component.getType().equals("checkbox")) {
 
-            }
-            else if (component.getType().equals("radio") || component.getType().equals("checkbox")) {
-
-                System.out.println("we have an option type");
-
+                // query array of options
                 options = request.queryParamsValues("options-"+component.getID()+"[]");
                 if (options == null){
-                    System.out.println("Notice:  form inputs for option type not collected");
+                    System.out.println("Notice: form inputs for option type not collected");
                 }
 
+                // query array of option positive scores
                 String[] options_pos_as_string = request.queryParamsValues("options-pos-"+component.getID()+"[]");
+                if (options_pos_as_string == null){
+                    options_pos_as_string = new String[0];
+                }
                 int array_len = options_pos_as_string.length;
 
+                // convert option positive scores string array representation to Integer array
                 optionPos = new Integer[array_len];
                 for (int i = 0; i < array_len; i++) {
-                    System.out.println("OPTION POS SCORE: " + options_pos_as_string[i]);
                     optionPos[i] = Integer.parseInt(options_pos_as_string[i]) + 4;
-                    System.out.println("OPTION POS SCORE (processed): " + optionPos[i]);
                 }
             }
 
@@ -543,11 +552,12 @@ public class APIController {
             }
 
             try{
+                // store the updated component; ensure storage success
                 Boolean filled = fillComponent(db, template_id, old_component_id, new_component);
                 if (BooleanUtils.isNotTrue(filled)){
-                    System.out.println("Error:  filled did not work");
+                    System.out.println("Error:  component creation failed");
                 }
-                System.out.println("Error:  filled did work");
+                //System.out.println("Notice: component creation successful");
             } catch (Exception e){
                 e.printStackTrace();
             }

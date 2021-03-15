@@ -9,12 +9,12 @@ An application allowing for real-time event feedback
 * Date: January to March, 2021
 
 ## Solution Overview
-Web-based client, native Android application, native iOS application
+Web-based client, accessible by mobile devices
 
 ### Technologies
 <!-- Web Front-end (old): [React](https://reactjs.org/)<br> -->
 <!-- Mobile Front-end (old): [React Native](https://reactnative.dev/)<br> -->
-Web Front-end: [HTML5 with Velocity]()<br>
+Web Front-end: [HTML5 with Apache Velocity]()<br>
 Back-end: [Spark Java](https://sparkjava.com/)<br>
 Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 

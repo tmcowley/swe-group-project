@@ -15,11 +15,6 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 // for checking if an array is null or empty
 import org.apache.commons.lang3.ArrayUtils;
 
-//TODO - Create a consitency test for this
-//TODO - create a does it return something in the correct format test
-//TODO - add set queries to the feedback testing
-//TODO change for loops to iterate through arrays
-//TODO check if one sd is enough/good
 public class SentimentAnalyser {
 
     static Validator v = new Validator();
@@ -128,9 +123,6 @@ public class SentimentAnalyser {
             return null;
         }
 
-        // TODO - fix padding (maybe make 2 sds above or below mean)
-        // TODO make private, delete the direct tests from sentiment test
-
         float compound = 0; // Holds compound score derived from plaintext
         int count = 0; // used to mean compound scores
         ArrayList<String> sentences = new ArrayList<String>(); // Holds plaintext broken into sentences
@@ -153,9 +145,9 @@ public class SentimentAnalyser {
 
         // Remove compound scores that [fall within one standard deviation from 0]
         StandardDeviation sd = new StandardDeviation();
-        double standev = sd.evaluate(values);
+        double standard_deviation = sd.evaluate(values);
         for (double i : values) {
-            if ((i > 1 * standev) != (i < -1 * standev)) {
+            if ((i > 1 * standard_deviation) != (i < -1 * standard_deviation)) {
                 compound += i;
                 count++;
             }

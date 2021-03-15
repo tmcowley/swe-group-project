@@ -1,10 +1,13 @@
 package app.util;
 
-import org.apache.velocity.app.*;
-import org.eclipse.jetty.http.*;
+// for front-end model variable setting
+import java.util.Map;
+import java.util.HashMap;
+
 import spark.*;
 import spark.template.velocity.*;
-import java.util.*;
+import org.apache.velocity.app.*;
+import org.eclipse.jetty.http.*;
 
 public class ViewUtil {
 
@@ -17,13 +20,13 @@ public class ViewUtil {
      * unauthorized page access (HTTP_401)
      * 
      */
-    public static Route unauthAccess = (Request request, Response response) -> {
-        System.out.println("\nNotice: ViewUtil:unauthAccess (401) called");
+    public static Route nonAuthenticatedAccess = (Request request, Response response) -> {
+        System.out.println("\nNotice: ViewUtil:unauthenticatedAccess (401) called");
         response.status(HttpStatus.UNAUTHORIZED_401);
 
-        // render unauthorised access page
+        // render non-authenticated access page
         Map<String, Object> model = new HashMap<>();
-        return ViewUtil.render(request, model, "/velocity/401-unauth-access.vm");
+        return ViewUtil.render(request, model, "/velocity/401-non-authenticated-access.vm");
 
         // guide to make an error for this page:
         //

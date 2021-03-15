@@ -68,20 +68,20 @@ public class Validator {
      * alpha-numeric
      * 
      * @param string string to be checked
-     * @param len valid length of string
+     * @param len    valid length of string
      * @return string validity state
      */
     public boolean alphanumericIsValid(String string, int len) {
         // ensure string is not null
-        if (string == null){
+        if (string == null) {
             return false;
         }
         // ensure lengths are equal
-        if (string.length() != len){
+        if (string.length() != len) {
             return false;
         }
         // avoid illegal characters
-        if (!StringUtils.isAlphanumeric(string)){
+        if (!StringUtils.isAlphanumeric(string)) {
             return false;
         }
         // string is valid
@@ -97,25 +97,25 @@ public class Validator {
      * @return host code validity state
      */
     public boolean hostCodeIsValid(String hostCode) {
-        if (StringUtils.isBlank(hostCode)){
+        if (StringUtils.isBlank(hostCode)) {
             // host code is null, empty or whitespace only
             return false;
         }
-        if (hostCode.length() > (peakWordSizeInList * 4 + 3)){
+        if (hostCode.length() > (peakWordSizeInList * 4 + 3)) {
             // host code exceeds upper-bound
             return false;
         }
-        if (StringUtils.containsWhitespace(hostCode)){
+        if (StringUtils.containsWhitespace(hostCode)) {
             // host code contains illegal whitespace character
             return false;
         }
-        if (StringUtils.countMatches(hostCode, "-") != 3){
+        if (StringUtils.countMatches(hostCode, "-") != 3) {
             // host code not of format: [word-word-word-word]
             return false;
         }
         String[] hostCodeArray = hostCode.split("-");
         for (String word : hostCodeArray) {
-            if (!wordListHashSet.contains(word.toLowerCase())){
+            if (!wordListHashSet.contains(word.toLowerCase())) {
                 return false;
             }
         }
@@ -143,7 +143,7 @@ public class Validator {
      */
     public boolean eAddressIsValid(String e_address) {
         // ensure email is not blank, empty, or null
-        if (!stringIsValid(e_address)){
+        if (!stringIsValid(e_address)) {
             return false;
         }
         // email address regular expression
@@ -165,7 +165,7 @@ public class Validator {
      */
     public boolean nameIsValid(String name) {
         // ensure name is not blank, empty, or null
-        if (!stringIsValid(name)){
+        if (!stringIsValid(name)) {
             return false;
         }
         return true;
@@ -179,15 +179,15 @@ public class Validator {
      */
     public boolean stringIsValid(String string) {
         // ensure name is not null, empty, or blank
-        if (StringUtils.isBlank(string)){
+        if (StringUtils.isBlank(string)) {
             return false;
         }
         return true;
     }
 
     /**
-     * check if event title is valid: 
-     * contains alpha-numeric (and blank) characters only
+     * check if event title is valid: contains alpha-numeric (and blank) characters
+     * only
      * 
      * @param title title to be checked
      * @return title validity state
@@ -229,9 +229,8 @@ public class Validator {
     }
 
     /**
-     * event type validity check; 
-     * events have five possible types: 
-     * 'lecture', 'seminar', 'conference', 'workshop', 'other'
+     * event type validity check; events have five possible types: 'lecture',
+     * 'seminar', 'conference', 'workshop', 'other'
      * 
      * @param data type to be checked
      * @return type validity state
@@ -242,7 +241,8 @@ public class Validator {
             return false;
         }
         // ensure type is valid (5 valid types)
-        if ((type.equals("lecture") || type.equals("seminar") || type.equals("conference") || type.equals("workshop") || type.equals("other"))) {
+        if ((type.equals("lecture") || type.equals("seminar") || type.equals("conference") || type.equals("workshop")
+                || type.equals("other"))) {
             return true;
         }
         // doesn't match standard type -> is invalid
@@ -250,8 +250,7 @@ public class Validator {
     }
 
     /**
-     * check for event validity; 
-     * considers every event attribute
+     * check for event validity; considers every event attribute
      * 
      * @param event Event instance to be checked
      * @return event validity state
@@ -263,38 +262,38 @@ public class Validator {
         }
         // ensure event identifier is valid
         if (!idIsValid(event.getEventID())) {
-            //System.out.println("Error: event id invalid");
+            // System.out.println("Error: event id invalid");
             return false;
         }
         // ensure event author (host) ID is valid
         if (!idIsValid(event.getHostID())) {
-            //System.out.println("Error: host id invalid");
+            // System.out.println("Error: host id invalid");
             return false;
         }
         // ensure either template does not exist, or does exist and is valid
         Integer template_id = event.getTemplateID();
         if ((template_id != null) && (!idIsValid(template_id))) {
-            //System.out.println("Error: template id invalid");
+            // System.out.println("Error: template id invalid");
             return false;
         }
         // ensure event title is valid
         if (!eventTitleIsValid(event.getTitle())) {
-            //System.out.println("Error: title invalid");
+            // System.out.println("Error: title invalid");
             return false;
         }
         // ensure event description is valid
         if (!eventDescriptionIsValid(event.getDescription())) {
-            //System.out.println("Error: desc invalid");
+            // System.out.println("Error: desc invalid");
             return false;
         }
         // ensure event type is valid
         if (!eventTypeIsValid(event.getType())) {
-            //System.out.println("Error: type invalid");
+            // System.out.println("Error: type invalid");
             return false;
         }
         // ensure event code is valid
         if (!eventCodeIsValid(event.getEventCode())) {
-            //System.out.println("Error: event code invalid");
+            // System.out.println("Error: event code invalid");
             return false;
         }
         // event is valid if each attribute is valid
@@ -319,35 +318,35 @@ public class Validator {
             return false;
         }
         if (!idIsValid(feedback.getEventID())) {
-            //System.out.println("Error: event id invalid");
+            // System.out.println("Error: event id invalid");
             return false;
         }
         if (!idIsValid(feedback.getParticipantID())) {
-            //System.out.println("Error: part id invalid");
+            // System.out.println("Error: part id invalid");
             return false;
         }
         // note: anonymous boolean already valid
         // validate timestamp
         if (feedback.getTimestamp() == null) {
-            //System.out.println("Error: timestamp is null");
+            // System.out.println("Error: timestamp is null");
             return false;
         }
 
         // ensure arrays are not null, nor empty
         if (ArrayUtils.isEmpty(feedback.getTypes())) {
-            //System.out.println("Error: main array:types is null or empty");
+            // System.out.println("Error: main array:types is null or empty");
             return false;
         }
         if (ArrayUtils.isEmpty(feedback.getResults())) {
-            //System.out.println("Error: main array:results is null or empty");
+            // System.out.println("Error: main array:results is null or empty");
             return false;
         }
         if (ArrayUtils.isEmpty(feedback.getKeys())) {
-            //System.out.println("Error: main array:keys is null or empty");
+            // System.out.println("Error: main array:keys is null or empty");
             return false;
         }
         if (ArrayUtils.isEmpty(feedback.getWeights())) {
-            //System.out.println("Error: main array:weights is null or empty");
+            // System.out.println("Error: main array:weights is null or empty");
             return false;
         }
 
@@ -361,58 +360,58 @@ public class Validator {
         // ensure length of arrays: results, weights, types, and keys are all equal
         int array_length = results.length;
         if (weights.length != array_length) {
-            //System.out.println("Error: weights array length diff");
+            // System.out.println("Error: weights array length diff");
             return false;
         }
         if (types.length != array_length) {
-            //System.out.println("Error: types array length diff");
+            // System.out.println("Error: types array length diff");
             return false;
         }
         if (keys.length != array_length) {
-            //System.out.println("Error: keys array length diff");
+            // System.out.println("Error: keys array length diff");
             return false;
         }
-        if (sub_weights.length != array_length){
-            //System.out.println("Error: sub weights array length diff");
+        if (sub_weights.length != array_length) {
+            // System.out.println("Error: sub weights array length diff");
             return false;
         }
 
         // get compound (sentiment field)
         Float compound = feedback.getCompound();
         // ensure compound score is either null, or falls between -1 and 1
-        if ((compound != null) && (compound < -1 || compound > 1)){
-            //System.out.println("Error: compound invalid");
+        if ((compound != null) && (compound < -1 || compound > 1)) {
+            // System.out.println("Error: compound invalid");
             return false;
         }
 
         // validate results array
         for (int i = 0; i < results.length; i++) {
-            //if (StringUtils.isBlank(results[i])) {
-            if (results[i] == null){
-                //System.out.println("Error: results invalid");
+            // if (StringUtils.isBlank(results[i])) {
+            if (results[i] == null) {
+                // System.out.println("Error: results invalid");
                 return false;
             }
         }
 
         // validate weights array
-        if (!isNormalisedWeightsValid(weights) && !isNonNormalisedWeightsValid(weights)){
-            //System.out.println("Error: weights array invalid");
+        if (!isNormalisedWeightsValid(weights) && !isNonNormalisedWeightsValid(weights)) {
+            // System.out.println("Error: weights array invalid");
             return false;
         }
 
         // validate types array
         for (int i = 0; i < types.length; i++) {
             if (types[i] > 2 || types[i] < 0) {
-                //System.out.println("Error: types array invalid");
+                // System.out.println("Error: types array invalid");
                 return false;
             }
         }
 
         // ensure sub_weights array is valid
         // (each internal byte array is of length 5)
-        for (byte[] sub_weight : sub_weights){
-            if (sub_weight.length != 5){
-                //System.out.println("Error: sub weights array invalid");
+        for (byte[] sub_weight : sub_weights) {
+            if (sub_weight.length != 5) {
+                // System.out.println("Error: sub weights array invalid");
                 return false;
             }
         }
@@ -422,8 +421,8 @@ public class Validator {
     }
 
     /**
-     * check if a non-normalised weights array is valid; 
-     * ensure every weight falls within 0-7
+     * check if a non-normalised weights array is valid; ensure every weight falls
+     * within 0-7
      * 
      * @param weights weights array
      * @return valid state
@@ -447,8 +446,7 @@ public class Validator {
     }
 
     /**
-     * check if a normalised weights array is valid; 
-     * ensure every weight sums to 1.0
+     * check if a normalised weights array is valid; ensure every weight sums to 1.0
      * 
      * @param weights weights array
      * @return valid state
@@ -471,8 +469,7 @@ public class Validator {
     }
 
     /**
-     * host instance validity check; 
-     * host is valid if all of its fields are true
+     * host instance validity check; host is valid if all of its fields are true
      * 
      * @param host Host instance to be checked
      * @return Host validity state
@@ -534,8 +531,7 @@ public class Validator {
     }
 
     /**
-     * template validity check; 
-     * template is valid when all of its fields are valid
+     * template validity check; template is valid when all of its fields are valid
      * 
      * @param template template
      * @return template validity state
@@ -575,10 +571,10 @@ public class Validator {
             allValid = (allValid && isComponentValid(component));
         }
         // ensure each component is valid
-        if (!allValid){
+        if (!allValid) {
             return false;
         }
-        
+
         // template is valid when all of its fields are valid
         return true;
     }
@@ -654,7 +650,7 @@ public class Validator {
      */
     public boolean componentTypeIsValid(String type) {
         // ensure component type is not null
-        if (!stringIsValid(type)){
+        if (!stringIsValid(type)) {
             return false;
         }
         // ensure type is either "question", "radio", or "checkbox"
@@ -669,7 +665,7 @@ public class Validator {
      */
     public String sanitizeEventCode(String eventCode) {
         // ensure event code is valid
-        if (!eventCodeIsValid(eventCode)){
+        if (!eventCodeIsValid(eventCode)) {
             return null;
         }
         // return lowercase variant
@@ -684,7 +680,7 @@ public class Validator {
      */
     public String sanitizeTemplateCode(String templateCode) {
         // ensure template code is valid
-        if (!templateCodeIsValid(templateCode)){
+        if (!templateCodeIsValid(templateCode)) {
             return null;
         }
         // return lowercase variant
@@ -699,7 +695,7 @@ public class Validator {
      */
     public String sanitizeHostCode(String hostCode) {
         // ensure host code is valid
-        if (!hostCodeIsValid(hostCode)){
+        if (!hostCodeIsValid(hostCode)) {
             return null;
         }
         // return lowercase variant
@@ -715,33 +711,33 @@ public class Validator {
      * 
      * @param archivedEvent ArchivedEvent instance to be checked
      * @return archivedEvent validity state
-    */
+     */
     // public boolean isArchivedEventValid(ArchivedEvent archivedEvent) {
-    //     // ensure archived event is not null
-    //     if (archivedEvent == null) {
-    //         return false;
-    //     }
-    //     // ensure event ID is valid
-    //     if (!idIsValid(archivedEvent.getEventID())){
-    //         return false;
-    //     }
-    //     // ensure event author (host) ID is valid
-    //     if (!idIsValid(archivedEvent.getHostID())){
-    //         return false;
-    //     }
-    //     // ensure event description is valid
-    //     if (!eventTypeIsValid(archivedEvent.getType())){
-    //         return false;
-    //     }
-    //     // ensure event description is valid
-    //     if (!eventDescriptionIsValid(archivedEvent.getDescription())){
-    //         return false;
-    //     }
-    //     // ensure event title is valid
-    //     if (!eventTitleIsValid(archivedEvent.getTitle())){
-    //         return false;
-    //     }
-    //     // archived event is valid if all of its fields are valid
-    //     return true;
+    // // ensure archived event is not null
+    // if (archivedEvent == null) {
+    // return false;
+    // }
+    // // ensure event ID is valid
+    // if (!idIsValid(archivedEvent.getEventID())){
+    // return false;
+    // }
+    // // ensure event author (host) ID is valid
+    // if (!idIsValid(archivedEvent.getHostID())){
+    // return false;
+    // }
+    // // ensure event description is valid
+    // if (!eventTypeIsValid(archivedEvent.getType())){
+    // return false;
+    // }
+    // // ensure event description is valid
+    // if (!eventDescriptionIsValid(archivedEvent.getDescription())){
+    // return false;
+    // }
+    // // ensure event title is valid
+    // if (!eventTitleIsValid(archivedEvent.getTitle())){
+    // return false;
+    // }
+    // // archived event is valid if all of its fields are valid
+    // return true;
     // }
 }

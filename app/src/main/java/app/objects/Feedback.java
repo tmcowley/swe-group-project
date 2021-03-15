@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 public class Feedback {
 
     private int feedback_id;
@@ -305,7 +303,7 @@ public class Feedback {
             return false;
         }
         // ensure compounds are equal (null-safe)
-        if (!Objects.equals(this.compound, that.getCompound())){
+        if (!Objects.equals(this.compound, that.getCompound())) {
             return false;
         }
         // ensure key results arrays are equal

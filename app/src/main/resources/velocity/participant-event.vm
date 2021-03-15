@@ -86,7 +86,7 @@
 
             #else ## component size is empty
                 <form action="/event/participant/feedback" method="post">
-                <h1>How are you finding the ${template.getType()}?</h1>
+                <h1>How are you finding the ${eventType}?</h1>
                 <textarea id="feedbackData" name="feedbackData" placeholder="Feedback goes here."></textarea>
                 <h1>Please rate how you're feeling.</h1>
                 <!-- the images are radio buttons -->

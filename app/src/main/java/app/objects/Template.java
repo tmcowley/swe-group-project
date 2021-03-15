@@ -63,9 +63,10 @@ public class Template {
 
     /**
      * check if a template is empty (has no template components)
+     * 
      * @return template empty state
      */
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return (components == null || components.size() == 0);
     }
 

@@ -127,7 +127,7 @@ public class App {
             post("/participant/feedback", APIController.createFeedback);
         });
         path("/error", () -> {
-            get("/401", ViewUtil.unauthAccess);
+            get("/401", ViewUtil.nonAuthenticatedAccess);
             get("/404", ViewUtil.notFound);
             get("/406", ViewUtil.notAcceptable);
         });

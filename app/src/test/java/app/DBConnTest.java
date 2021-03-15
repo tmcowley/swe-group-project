@@ -149,7 +149,8 @@ public class DBConnTest {
 
         // create a template
 
-        TemplateComponent component = new TemplateComponent("name", "question", "prompt", true, 5, null, null, null, "response");
+        TemplateComponent component = new TemplateComponent("name", "question", "prompt", true, 5, null, null, null,
+                "response");
         component = db.createTemplateComponent(component);
         assertFalse(component == null);
         ArrayList<TemplateComponent> components = new ArrayList<>(1);
@@ -265,7 +266,8 @@ public class DBConnTest {
         int testHostID = testHost.getHostID();
 
         // create template component
-        TemplateComponent component = new TemplateComponent("name", "question", "prompt", true, 5, null, null, null, "response");
+        TemplateComponent component = new TemplateComponent("name", "question", "prompt", true, 5, null, null, null,
+                "response");
         component = db.createTemplateComponent(component);
         assertFalse(component == null);
         int component_id = component.getId();

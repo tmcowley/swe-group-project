@@ -70,7 +70,9 @@ public class TemplateComponent {
      * @param textResponse text response field following prompt null if type radio
      *                     or checkbox
      */
-    public TemplateComponent(int id, String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns, String textResponse) {
+    public TemplateComponent(int id, String name, String type, String prompt, Boolean tc_considered_in_sentiment,
+            Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns,
+            String textResponse) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -83,7 +85,8 @@ public class TemplateComponent {
         this.textResponse = textResponse;
     }
 
-    public TemplateComponent(String name, String type, String prompt, Boolean tc_considered_in_sentiment, Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns,
+    public TemplateComponent(String name, String type, String prompt, Boolean tc_considered_in_sentiment,
+            Integer tc_sentiment_weight, String[] options, Integer[] tc_options_pos, Boolean[] optionsAns,
             String textResponse) {
         this.name = name;
         this.type = type;
@@ -98,6 +101,7 @@ public class TemplateComponent {
 
     /**
      * check if a component is empty (has no prompt)
+     * 
      * @return empty state
      */
     public boolean isEmptyComponent() {
@@ -106,6 +110,7 @@ public class TemplateComponent {
 
     /**
      * check if a component is non-empty (has at least one component)
+     * 
      * @return non-empty state
      */
     public boolean isNotEmptyComponent() {
@@ -131,6 +136,7 @@ public class TemplateComponent {
     public Integer getId() {
         return this.id;
     }
+
     public Integer getID() {
         return this.id;
     }
@@ -258,6 +264,7 @@ public class TemplateComponent {
 
     /**
      * get options positive scores array
+     * 
      * @return options positive scores array
      */
     public Integer[] getTc_options_pos() {
@@ -266,6 +273,7 @@ public class TemplateComponent {
 
     /**
      * set options positive scores array
+     * 
      * @param tc_options_pos new options positive scores array
      */
     public void setTc_options_pos(Integer[] tc_options_pos) {
@@ -274,6 +282,7 @@ public class TemplateComponent {
 
     /**
      * get sentiment weight
+     * 
      * @return sentiment weight int
      */
     public Integer getTc_sentiment_weight() {
@@ -282,6 +291,7 @@ public class TemplateComponent {
 
     /**
      * set sentiment weight
+     * 
      * @param tc_sentiment_weight new sentiment weight
      */
     public void setTc_sentiment_weight(Integer tc_sentiment_weight) {
@@ -290,14 +300,16 @@ public class TemplateComponent {
 
     /**
      * check if component is for sentiment analysis
+     * 
      * @return for-SA state
      */
-    public boolean component_for_sentiment(){
-        return(BooleanUtils.isTrue(this.tc_considered_in_sentiment));
+    public boolean component_for_sentiment() {
+        return (BooleanUtils.isTrue(this.tc_considered_in_sentiment));
     }
 
     /**
      * get considered in sentiment boolean
+     * 
      * @return considered in sentiment boolean
      */
     public Boolean getTc_considered_in_sentiment() {
@@ -306,6 +318,7 @@ public class TemplateComponent {
 
     /**
      * set considered in sentiment state
+     * 
      * @param tc_considered_in_sentiment new considered in sentiment state
      */
     public void setTc_considered_in_sentiment(Boolean tc_considered_in_sentiment) {

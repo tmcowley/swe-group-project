@@ -50,7 +50,6 @@ public class ParticipantEventController {
             return null;
         }
         int event_id = event.getEventID();
-        int event_host_id = event.getHostID();
 
         // collect participant from session; ensure valid and exists
         Participant participant = session.attribute("participant");
@@ -59,7 +58,6 @@ public class ParticipantEventController {
             response.redirect("/error/401");
             return null;
         }
-        int participant_id = participant.getParticipantID();
 
         // set empty components lists (case event has no templates)
         ArrayList<TemplateComponent> questionComponents = new ArrayList<TemplateComponent>();
@@ -111,6 +109,7 @@ public class ParticipantEventController {
 
         // generate front-page model (place variables in front-end page)
         model.put("feedbacks", feedbacks);
+        model.put("eventType", event.getType());
         model.put("eventTitle", event.getTitle());
         model.put("eventDescription", event.getDescription());
         model.put("components", components);

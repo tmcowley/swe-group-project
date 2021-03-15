@@ -7,16 +7,11 @@ import app.objects.*;
 import app.sentimentanalysis.SentimentAnalyser;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 
 import spark.*;
 
 // for data validation
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang.ObjectUtils.Null;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
 public class APIController {
@@ -25,7 +20,7 @@ public class APIController {
     static Validator v = App.getInstance().getValidator();
 
     /**
-     * creates a new host following host sign-up
+     * API POST endpoint creating a new host (following from host sign-up)
      */
     public static Route createHost = (Request request, Response response) -> {
         System.out.println("\nNotice: createHost API endpoint recognized request");
@@ -125,26 +120,6 @@ public class APIController {
 
         // generate a timestamp for now
         Timestamp current = new Timestamp(System.currentTimeMillis());
-
-        /*
-         * // parse start and end times from event creation String[] start_time_string =
-         * request.queryParams("startTime").split(":"); String[] end_time_string =
-         * request.queryParams("endTime").split(":"); Calendar calendar =
-         * Calendar.getInstance(); calendar.set(Calendar.HOUR_OF_DAY,
-         * Integer.parseInt(start_time_string[0])); calendar.set(Calendar.MINUTE,
-         * Integer.parseInt(start_time_string[1])); calendar.set(Calendar.SECOND, 0);
-         * Date sTime =(Date) calendar.getTime(); calendar.set(Calendar.HOUR_OF_DAY,
-         * Integer.parseInt(end_time_string[0])); calendar.set(Calendar.MINUTE,
-         * Integer.parseInt(end_time_string[1])); calendar.set(Calendar.SECOND, 0); Date
-         * eTime =(Date) calendar.getTime(); Timestamp startTime = new
-         * Timestamp(sTime.getTime()); Timestamp endTime = new
-         * Timestamp(eTime.getTime()); Timestamp current = new
-         * Timestamp(System.currentTimeMillis()); if (startTime.compareTo(endTime) > 0
-         * || endTime.compareTo(current) < 0){ // note: testing discovered errors in
-         * this session.attribute("errorMessageCreateEvent",
-         * "Error: start and end time not in order");
-         * response.redirect("/host/create-event"); return null; }
-         */
 
         // validate input before database interaction
         if (!v.eventTitleIsValid(title)) {
@@ -313,14 +288,7 @@ public class APIController {
         }
         String anonymous_string = request.queryParams("anon");
 
-        // // strip empty or null components
-        // ArrayList<String> collected = new ArrayList<String>();
-        // for (String result : results){
-        //     if (StringUtils.isNotBlank(result)){
-        //         collected.add(result);
-        //     }
-        // }
-        // results = collected.toArray(new String[collected.size()]);
+        // get results length
         int results_length = results.length;
 
         Float[] weights = new Float[results_length];
@@ -404,7 +372,7 @@ public class APIController {
 
         // get host from session; ensure is valid and exists
         Host host = session.attribute("host");
-        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())) {
             System.out.println("Error:  host in session invalid or non-existent in database");
             response.redirect("/error/401");
             return null;
@@ -425,13 +393,14 @@ public class APIController {
 
         // template name valid; generate empty template in DB
         Template emptyTemplate = db.createEmptyTemplate(host_id, template_name, timestamp_now);
-        if (!v.isTemplateValid(emptyTemplate) || !db.templateCodeExists(emptyTemplate.getTemplateCode())){
+        if (!v.isTemplateValid(emptyTemplate) || !db.templateCodeExists(emptyTemplate.getTemplateCode())) {
             System.out.println("Error:  template creation failed");
             session.attribute("errorMessageCreateEmptyTemplate", "Error: template creation failed");
             response.redirect("/host/templates/new");
             return null;
-        } 
-        //System.out.println("Notice: created template code: " + emptyTemplate.getTemplateCode());
+        }
+        // System.out.println("Notice: created template code: " +
+        // emptyTemplate.getTemplateCode());
 
         // redirect to host templates page
         // (links to MyTemplatesController.servePage)
@@ -455,7 +424,7 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
-        //System.out.println("session valid");
+        // System.out.println("session valid");
 
         // ensure host exists in current session
         if (session.attribute("host") == null) {
@@ -463,19 +432,19 @@ public class APIController {
             response.redirect("/error/401");
             return null;
         }
-        //System.out.println("host in session");
+        // System.out.println("host in session");
 
         // get host from session
         Host host = session.attribute("host");
-        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())){
+        if (!v.isHostValid(host) || !db.hostCodeExists(host.getHostCode())) {
             System.out.println("Error:  host in session invalid or non-existent in database");
             response.redirect("/error/401");
             return null;
         }
         int host_id = host.getHostID();
-        //System.out.println("host in session valid, exists");
+        // System.out.println("host in session valid, exists");
 
-        //session.attribute("errorMessageCreateTemplate", "value");
+        // session.attribute("errorMessageCreateTemplate", "value");
 
         // get template code (stored in form); ensure exists in system
         String templateCode = request.queryParams("templateCode");
@@ -489,30 +458,31 @@ public class APIController {
         int template_author_id = template.getHostID();
 
         // ensure host authors template
-        if (host_id != template_author_id){
+        if (host_id != template_author_id) {
             System.out.println("Error:  you do not have access to the template");
             response.redirect("/host/templates");
             return null;
         }
 
         // for each component within the template
-        for (TemplateComponent component : template.getComponents()){
+        for (TemplateComponent component : template.getComponents()) {
 
             // collect component fields
-            String prompt = request.queryParams("component["+component.getID()+"][prompt]");
-            String name = request.queryParams("component["+component.getID()+"][name]");
-            String type = request.queryParams("component["+component.getID()+"][type]");
+            String prompt = request.queryParams("component[" + component.getID() + "][prompt]");
+            String name = request.queryParams("component[" + component.getID() + "][name]");
+            String type = request.queryParams("component[" + component.getID() + "][type]");
             Integer old_component_id = null;
-            try{
-                old_component_id = Integer.valueOf(request.queryParams("component["+component.getID()+"][component_id]"));
-            } catch (Exception e){
+            try {
+                old_component_id = Integer
+                        .valueOf(request.queryParams("component[" + component.getID() + "][component_id]"));
+            } catch (Exception e) {
                 old_component_id = component.getID();
-            } 
-            String consider_string = request.queryParams("component["+component.getID()+"][consider]");
+            }
+            String consider_string = request.queryParams("component[" + component.getID() + "][consider]");
             Boolean considered;
 
             // collect checkbox input
-            if (consider_string == null){
+            if (consider_string == null) {
                 considered = false;
             } else {
                 considered = true;
@@ -524,21 +494,21 @@ public class APIController {
             Integer[] optionPos = null;
 
             // store component weight for sentiment analysis
-            String weight_string = request.queryParams("component["+component.getID()+"][weight]");
+            String weight_string = request.queryParams("component[" + component.getID() + "][weight]");
             Integer weight = Integer.parseInt(weight_string);
 
             // if the component is an option type (question types already collected)
             if (component.getType().equals("radio") || component.getType().equals("checkbox")) {
 
                 // query array of options
-                options = request.queryParamsValues("options-"+component.getID()+"[]");
-                if (options == null){
+                options = request.queryParamsValues("options-" + component.getID() + "[]");
+                if (options == null) {
                     System.out.println("Notice: form inputs for option type not collected");
                 }
 
                 // query array of option positive scores
-                String[] options_pos_as_string = request.queryParamsValues("options-pos-"+component.getID()+"[]");
-                if (options_pos_as_string == null){
+                String[] options_pos_as_string = request.queryParamsValues("options-pos-" + component.getID() + "[]");
+                if (options_pos_as_string == null) {
                     options_pos_as_string = new String[0];
                 }
                 int array_len = options_pos_as_string.length;
@@ -550,25 +520,26 @@ public class APIController {
                 }
             }
 
-            TemplateComponent new_component = new TemplateComponent(name, type, prompt, considered, weight, options, optionPos, optionsAns, "");
+            TemplateComponent new_component = new TemplateComponent(name, type, prompt, considered, weight, options,
+                    optionPos, optionsAns, "");
             // ensure new component is valid
-            if (!v.isComponentValid(new_component)){
+            if (!v.isComponentValid(new_component)) {
                 System.out.println("Error:  filled component is invalid");
                 session.attribute("errorMessageCreateTemplate", "a component is invalid");
-                
+
                 // return to "/host/templates/edit/code"
                 // (links to TemplateEditController.servePage)
                 response.redirect("/host/templates/edit/code" + "?templateCode=" + templateCode);
             }
 
-            try{
+            try {
                 // store the updated component; ensure storage success
                 Boolean filled = fillComponent(db, template_id, old_component_id, new_component);
-                if (BooleanUtils.isNotTrue(filled)){
+                if (BooleanUtils.isNotTrue(filled)) {
                     System.out.println("Error:  component creation failed");
                 }
-                //System.out.println("Notice: component creation successful");
-            } catch (Exception e){
+                // System.out.println("Notice: component creation successful");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -579,23 +550,23 @@ public class APIController {
         return null;
     };
 
-
     /**
      * create a template component, derivative method of API
      */
-    public static Boolean fillComponent (DbConnection db, int template_id, int old_component_id, TemplateComponent component) {
+    public static Boolean fillComponent(DbConnection db, int template_id, int old_component_id,
+            TemplateComponent component) {
         System.out.println("\nNotice: fillComponent API derivative function called");
 
         // delete empty component in system
         Boolean empty_component_removed = db.deleteTemplateComponent(old_component_id);
-        if (BooleanUtils.isNotTrue(empty_component_removed)){
+        if (BooleanUtils.isNotTrue(empty_component_removed)) {
             System.out.println("Error:  empty component not removed");
             return false;
         }
 
         // add new, filled component; ensure valid
         component = db.createTemplateComponent(component);
-        if (!v.isComponentValid(component)){
+        if (!v.isComponentValid(component)) {
             System.out.println("Error:  filled component (after db insertion) is invalid");
             return false;
         }
@@ -603,7 +574,7 @@ public class APIController {
 
         // add component to template; ensure addition successful
         Boolean component_added_to_template = db.addComponentToTemplate(component_id, template_id);
-        if (BooleanUtils.isNotTrue(component_added_to_template)){
+        if (BooleanUtils.isNotTrue(component_added_to_template)) {
             System.out.println("Error:  new component not added to template");
             return false;
         }
@@ -673,9 +644,13 @@ public class APIController {
         if (componentType.equals("question")) {
             component = new TemplateComponent("component_name", "question", "", null, null, null, null, null, "");
         } else if (componentType.equals("checkbox")) {
-            component = new TemplateComponent("component_name", "checkbox", "", null, null, new String[default_option_count], new Integer[default_option_count], new Boolean[default_option_count], null);
+            component = new TemplateComponent("component_name", "checkbox", "", null, null,
+                    new String[default_option_count], new Integer[default_option_count],
+                    new Boolean[default_option_count], null);
         } else if (componentType.equals("radio")) {
-            component = new TemplateComponent("component_name", "radio", "", null, null, new String[default_option_count], new Integer[default_option_count], new Boolean[default_option_count], null);
+            component = new TemplateComponent("component_name", "radio", "", null, null,
+                    new String[default_option_count], new Integer[default_option_count],
+                    new Boolean[default_option_count], null);
         }
 
         // ensure component created is valid

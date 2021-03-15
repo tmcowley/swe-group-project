@@ -190,7 +190,8 @@ public class ValidatorTest {
         Timestamp timestamp_now = new Timestamp(System.currentTimeMillis());
 
         // create component of type question
-        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", true, 5, null, null, null, "Tom");
+        TemplateComponent question = new TemplateComponent(1, "get-name", "question", "What's your name?", true, 5,
+                null, null, null, "Tom");
         assertFalse(question == null);
 
         // add the component to components

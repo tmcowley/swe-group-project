@@ -1,0 +1,55 @@
+General Feedback:
+The presentations were, in general, fairly well done.
+The biggest issue was not demonstrating how the analysis worked.
+It is important to show these analytics are correct and come from a valid process.
+Many groups fell into the issue of not considering that a non-technical person will not necessarily know what sentiment is.
+Overall, few groups offered analytics beyond a graph showing sentiment.
+Some groups did not offer a proper introduction, nor a proper ending.
+Lack of face cameras, poor audio and inconsistent style between presenters was mostly ignored, given the challenges of making the video in a pandemic.
+
+The reports varied in quality, but the majority of groups covered all the expected points.
+As always, there were some instances of casual language, where the report read more like a presentation pitch than a formal document.
+The biggest issue, nearly uniform across the board, is a lack of proper validation for the sentiment analysis.
+Instead of using curated, externally validated, data sets to evaluate the analysis, many groups made their own.
+Unfortunately, none of you have the credentials to make accurate statements about the sentiment of sentences.
+While many will be obvious - it is important to have these things come from experts.
+Many groups also made vague claims of their UI being intuitive, without providing any evidence.
+Generally, the software development discussion was good, but many groups did not refer back to the formal techniques taught in the material.
+Some claimed they followed industry standards, but did not provide evidence of this or even reference the standards they referred to.
+Project management discussion varied, and many groups did not fully evaluate their methodology.
+Testing was usually thorough and well justified.
+------------------------------------------
+
+
+
+CS261 Feedback for Student ID 1807654
+------------------------------------------
+
+Presentation:
+Delivery: 4/5 
+Product Demo: 3/5 
+Customer Appeal: 3/5 
+Technical Content: 2/5 
+
+Total Mark = 12/20 
+
+
+Final Report:
+Readability: 7/10 
+Product Suitability: 6/10 
+Software Development: 6/10 
+Evaluation & Validation: 7/10 
+Project Management: 6/10 
+
+Total Mark = 32/50 
+
+Specific Feedback:
+Presentation:
+ Delivery was good, with a strong introduction to contextualise the project. The demo itself shows off the features well, though the display could be improved and the analytics currently lack depth. Technical content is lacking, the sentiment analysis is claimed to be robust, but the technologies used and validation of that analysis is not discussed in detail. The product meets the needs of the customer fairly well.   
+
+Final Report:
+ A well written report, that discusses the issues around this product’s development. Project management is discussed, including its failure, however while the report blames management, it could also highlight other issues and discuss how the solutions proposed do not come from next practices. Software development is similarly described. The actual development seems solid, but there is a lack of formal techniques applied to the process. The evaluation is fairly thorough and testing is reasonable - even if it was not complete. Some more thorough evaluation of the sentiment analysis could have been included. Overall, the product is fairly suitable, if lacking in features. 
+
+Deliverable 1 Mark (adjusted  for feedback): 70%
+Deliverable 2 Mark (adjusted for feedback): 63%
+Final Total Mark for Project:66%

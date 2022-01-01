@@ -1,5 +1,5 @@
 # ResModus: A *Live Event-Feedback* System
-An application allowing for real-time event feedback
+An application facilitating real-time event feedback
 
 ## Context
 * CS261 (Software Engineering) Group Project: Group 32
@@ -19,8 +19,6 @@ Back-end: [Spark Java](https://sparkjava.com/)<br>
 Database: [PostgreSQL v13.2](https://www.postgresql.org/)
 
 ## Set-up and Initialization
-
-<br>
 
 ### Database
 
@@ -60,8 +58,6 @@ pg_ctl -D /usr/local/var/postgres stop && brew services stop postgresql
 ```
 -->
 
-<br>
-
 ### Start-up
 
 Launch the web-app (after DB launch):
@@ -75,5 +71,3 @@ mvn exec:java;
 Run tests: `mvn test`
 
 Render website: visit [`http://localhost:4567/`](http://localhost:4567/)
-
-## Demonstration
